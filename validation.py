@@ -11,9 +11,9 @@ class ValidatedData(ABC):
 
     def __init__(self, value: Any, **kwargs: Any) -> None:
         """Initialize with a value and optional additional parameters, then validate."""
+        self.validate(value, **kwargs)  # Validate on initialization
         self.value = value  # Store the main value
         self.kwargs = kwargs  # Store additional parameters if any
-        self.validate(value, **kwargs)  # Validate on initialization
 
     def get(self) -> Any:
         """Return the main stored value only."""
