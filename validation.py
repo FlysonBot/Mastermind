@@ -95,7 +95,13 @@ class NumberOfDots(ValidatedData):
     
     def validate(self, value: Any) -> None:
         """Ensure the number of dots is a positive integer."""
-        if not isinstance(value, int) or value < 2:
+        if not isinstance(value, int):
+            try:
+                value = int(value)
+            except ValueError:
+                raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
+        
+        if value < 2:
             raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
 
 
@@ -104,6 +110,12 @@ class NumberOfColors(ValidatedData):
     
     def validate(self, value: Any) -> None:
         """Ensure the number of colors is an integer of at least 2."""
-        if not isinstance(value, int) or value < 2:
+        if not isinstance(value, int):
+            try:
+                value = int(value)
+            except ValueError:
+                raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
+        
+        if value < 2:
             raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
 
