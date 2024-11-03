@@ -1,5 +1,5 @@
 import unittest
-from .. import data_validation
+from ..data_validation import *
 
 class GameSettings(BaseModel):
     """Class to manage game settings with validated attributes."""

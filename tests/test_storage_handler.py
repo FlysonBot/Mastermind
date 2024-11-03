@@ -2,7 +2,7 @@ import os
 import json
 import unittest  # Module for writing and running unit tests
 from unittest.mock import patch, mock_open, MagicMock  # Mocks for testing
-from .. import storage_handler
+from ..storage_handler import *
 
 class TestUserData(unittest.TestCase):
     """Test suite for the UserData class."""
