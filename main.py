@@ -37,23 +37,30 @@ class GameSimulator:
                 print("Invalid option. Please try again.")
 
     def start_new_game(self):
-        print("\n--- Start New Game ---")
-        print("(1) Human vs Human")
-        print("(2) Human vs AI")
-        print("(3) Solve External Game")
-        game_type = input("Choose game type: ")
+        while True:
+            print("\n--- Start New Game ---")
+            print("(1) You vs Someone Else")
+            print("(2) You vs AI")
+            print("(3) AI vs You")
+            print("(4) Solve External Game")
+            print("(0) Return to Main Menu")
+            game_type = input("Choose game type: ")
 
-        if game_type not in ["1", "2", "3"]:
-            print("Invalid choice. Returning to main menu.")
-            return
+            if game_type not in ["1", "2", "3", "4", "0"]:
+                print("Invalid choice. Try again.")
+                continue
+            
+            if game_type == "0":
+                break  # return to main menu
+            
+            game_size = self.get_game_size()
 
-        game_size = self.get_game_size()
-        if game_size:
-            # Placeholder for starting the game with other models
-            print(f"Starting game of type {game_type} with game size: {game_size}")
-            # Example: GameEngine().start_game(game_type, game_size)
-            print("Game in progress...")
-            self.show_main_menu()  # Return to main menu after game ends
+            if game_size:
+                print(f"Starting game of type {game_type} with game size: {game_size}")
+                # Placeholder for starting the game with other models
+                # Example: GameEngine().start_game(game_type, game_size)
+                print("Game in progress...")
+                break  # return to main menu after game ended
 
     def get_game_size(self):
         try:
@@ -112,4 +119,3 @@ class GameSimulator:
 if __name__ == "__main__":
     game_simulator = GameSimulator()
     game_simulator.run()
-
