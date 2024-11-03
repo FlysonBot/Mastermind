@@ -1,3 +1,4 @@
+# modify to only convert to desired type when input is string
 from typing import Any
 from abc import ABC, abstractmethod
 
@@ -103,9 +104,12 @@ class NumberOfDots(ValidatedData):
     def validate(self, value: Any, **kwargs: Any) -> None:
         """Ensure the number of dots is a positive integer."""
         if not isinstance(value, int):
-            try:
-                value = int(value)
-            except ValueError:
+            if isinstance(value, str):
+                try:
+                    value = int(value)
+                except ValueError:
+                    raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
+            else:
                 raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
         
         if value < 2:
@@ -118,9 +122,12 @@ class NumberOfColors(ValidatedData):
     def validate(self, value: Any, **kwargs: Any) -> None:
         """Ensure the number of colors is an integer of at least 2."""
         if not isinstance(value, int):
-            try:
-                value = int(value)
-            except ValueError:
+            if isinstance(value, str):
+                try:
+                    value = int(value)
+                except ValueError:
+                    raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
+            else:
                 raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
         
         if value < 2:
@@ -133,9 +140,12 @@ class NumberOfGuessesMade(ValidatedData):
     def validate(self, value: Any, **kwargs: Any) -> None:
         """Ensure the number of guesses made is an integer of at least 0."""
         if not isinstance(value, int):
-            try:
-                value = int(value)
-            except ValueError:
+            if isinstance(value, str):
+                try:
+                    value = int(value)
+                except ValueError:
+                    raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
+            else:
                 raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
         
         if value < 0:
@@ -148,9 +158,12 @@ class MaximumAttemps(ValidatedData):
     def validate(self, value: Any, **kwargs: Any) -> None:
         """Ensure the maximum number of attempts is an integer of at least 1."""
         if not isinstance(value, int):
-            try:
-                value = int(value)
-            except ValueError:
+            if isinstance(value, str):
+                try:
+                    value = int(value)
+                except ValueError:
+                    raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
+            else:
                 raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
         
         if value < 1:
@@ -214,4 +227,3 @@ class FalseFuse(ValidatedData):
             raise self.ValidationError("Fuse cannot be set to True after initialization.")
         if value is not False:
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
-
