@@ -12,7 +12,7 @@ class GameSettings(BaseModel):
         self.number_of_guesses_made = 0
         self.maximum_attempts = 10
         self.game_mode = 'HvAI'
-        self.secret_code = (1, 2, 3)
+        self.secret_code = SecretCode((1, 2, 3), number_of_dots=5, number_of_colors=3)
         self.boolean_flag = None
         self.true_fuse = True
         self.false_fuse = False
