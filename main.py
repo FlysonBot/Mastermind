@@ -112,3 +112,4 @@ class GameSimulator:
 if __name__ == "__main__":
     game_simulator = GameSimulator()
     game_simulator.run()
+
