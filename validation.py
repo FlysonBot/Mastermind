@@ -32,71 +32,52 @@ class BaseModel:
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Validate and set attribute, automatically applying ValidatedData if possible."""
-        if hasattr(self, name):  # Check if the attribute already exists
-            attr = super().__getattribute__(name)  # Retrieve the attribute
-            if isinstance(attr, ValidatedData):  # Check if is validated type
-                attr.validate(value)  # Validate the new value
+        # If the attribute exists, validate directly (or skip validation if not validated type)
+        if hasattr(self, name):
+            attr = super().__getattribute__(name)
+            if isinstance(attr, ValidatedData):
+                attr.validate(value)
 
+        # If attribute doesn't exist, apply validation chain
         else:
-            if not isinstance(value, ValidatedData):  # Check if is not validated type
-                # If not, attempt to find a corresponding ValidatedData subclass
-                validated_class = self._find_validated_class(name)
+            value = self._apply_validations(name, value)
 
-                if validated_class:  # If a matching ValidatedData subclass exists
-                    value = validated_class(value)  # Initialize it with the value
-
-        # Set the attribute (either validated instance or raw value if no validation class found)
+        # Set the attribute (validated instance or original value if no validation needed)
         super().__setattr__(name, value)
 
     def __getattribute__(self, name: str) -> Any:
         """Retrieve attribute and return the underlying value for ValidatedData instances."""
-        attr = super().__getattribute__(name)
-        if isinstance(attr, ValidatedData):  # If it's a validated type
-            return attr.get()  # Return the value using the get method
-        return attr  # Otherwise return the attribute as is
-
-    @staticmethod
-    def _find_validated_class(name: str) -> Any:
-        """
-        Convert attribute name to class name and check if it's a ValidatedData subclass.
-        For example, 'number_of_dots' -> 'NumberOfDots'.
-        """
-        if name.isupper():  # Attribute name is all upper case (a constant)
-            return Constant  # Apply constant
+        value = super().__getattribute__(name)
         
-        # Convert snake_case name to CamelCase
-        class_name = ''.join(word.capitalize() for word in name.split('_'))
+        while isinstance(value, ValidatedData):  # While it's a validated type
+            value = value.get()  # Keep getting the inner value (peal off the validation)
+        
+        return value
 
-        # Check if a class with this name exists and is a subclass of ValidatedData
-        return globals().get(class_name) if issubclass(globals().get(class_name, object), ValidatedData) else None
+    def _apply_validations(self, name: str, value: Any) -> Any:
+        """
+        Dynamically wrap `value` with ValidatedData subclasses based on attribute name.
+        Chains multiple validations if needed (e.g., `Constant(NumberOfDots(value))`).
+        """
+        # Determine if a constant validation is needed
+        validations = []
+        
+        if name.isupper():  # Attribute name is all upper case (a constant)
+            validations.append(Constant)
+        
+        # Convert snake_case name to CamelCase for other specific validations
+        class_name = ''.join(word.capitalize() for word in name.lower().split('_'))
+        validation_class = globals().get(class_name)
 
+        # Check if the class exists and is a ValidatedData subclass
+        if validation_class and issubclass(validation_class, ValidatedData):
+            validations.append(validation_class)
 
-# ValidatedData Subclasses (Custom data types that are validated)
-class Constant(ValidatedData):
-    """A constant value that cannot be modified after initialization."""
+        # Apply validations in order (outermost to innermost wrapping)
+        for validation in reversed(validations):
+            value = validation(value)
 
-    def validate(self, value: Any) -> None:
-        """Ensure the constant value is not modified."""
-        if hasattr(self, 'value'):  # Check if value is already set
-            raise self.ValidationError("Cannot modify constant after initialization")
-
-
-class NumberOfDots(ValidatedData):
-    """Validated property for the number of dots."""
-    
-    def validate(self, value: Any) -> None:
-        """Ensure the number of dots is a positive integer."""
-        if not isinstance(value, int) or value < 2:
-            raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
-
-
-class NumberOfColors(ValidatedData):
-    """Validated property for the number of colors."""
-    
-    def validate(self, value: Any) -> None:
-        """Ensure the number of colors is an integer of at least 2."""
-        if not isinstance(value, int) or value < 2:
-            raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
+        return value
 
 
 # ValidatedData Subclasses (Custom data types that are validated)
@@ -126,3 +107,43 @@ class NumberOfColors(ValidatedData):
         if not isinstance(value, int) or value < 2:
             raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
 
+
+# Example Usage
+class GameSettings(BaseModel):
+    """Class to manage game settings with validated attributes."""
+    
+    def __init__(self):
+        # Initialize attributes (automatically applies validation if applicable)
+        self.CONSTANT_VALUE = 42  # Will be wrapped as Constant
+        self.number_of_dots = 5  # Will be wrapped as NumberOfDots
+        self.number_of_colors = 3  # Will be wrapped as NumberOfColors
+
+
+# Testing
+if __name__ == "__main__":
+    # Instance of the GameSettings class
+    settings = GameSettings()
+
+    print("Constant Value:", settings.CONSTANT_VALUE)  # Should print 42
+    try:
+        settings.CONSTANT_VALUE = 50  # Should raise ValidationError
+    except ValidatedData.ValidationError as e:
+        print("Validation Error:", e)
+
+    print("Number of Dots:", settings.number_of_dots)  # Should print 5
+    settings.number_of_dots = 10  # Valid modification
+    print("Updated Number of Dots:", settings.number_of_dots)
+
+    try:
+        settings.number_of_dots = -1  # Should raise ValidationError
+    except ValidatedData.ValidationError as e:
+        print("Validation Error:", e)
+
+    print("Number of Colors:", settings.number_of_colors)  # Should print 3
+    settings.number_of_colors = 4  # Valid modification
+    print("Updated Number of Colors:", settings.number_of_colors)
+
+    try:
+        settings.number_of_colors = 1  # Should raise ValidationError
+    except ValidatedData.ValidationError as e:
+        print("Validation Error:", e)

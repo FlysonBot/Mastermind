@@ -54,6 +54,29 @@ class TestGameSettings(unittest.TestCase):
         """Test that setting a non-integer number of colors raises an error."""
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.number_of_colors = "three"  # Should raise an error
+    
+    def test_valid_chain_validation(self):
+        """Test chaining constant and number of colors."""
+        del self.settings.number_of_colors  # Delete the original one first
+        self.settings.NUMBER_OF_COLORS = 3  # Chaining
+        self.assertEqual(self.settings.NUMBER_OF_COLORS, 3)
+    
+    def test_invalid_chain_validation(self):
+        """Test chaining constant and invalid number of dots raises error."""
+        del self.settings.number_of_dots  # Delete the original one first
+        with self.assertRaises(ValidatedData.ValidationError):
+            self.settings.NUMBER_OF_DOTS = -1  # Should raise an error
+    
+    def test_unvalidated_type(self):
+        """Test handling normal unvalidated type."""
+        self.settings.integer = 5  # normal int type
+        self.assertEqual(self.settings.integer, 5)
+        self.settings.float = 9.8  # normal float type
+        self.assertEqual(self.settings.float, 9.8)
+        self.settings.float = 1.2  # attempt to modify float
+        self.assertEqual(self.settings.float, 1.2)
+        self.settings.list = [1, 2]  # normal list
+        self.assertEqual(self.settings.list, [1, 2])
 
 
 if __name__ == '__main__':
