@@ -21,7 +21,8 @@ class ValidatedData(ABC):
     
     def update_kwargs(self, **kwargs: Any) -> None:
         """Update the stored kwargs with new values."""
-        self.kwargs.update(kwargs)
+        if kwargs:
+            self.kwargs.update(kwargs)
 
     @abstractmethod
     def validate(self, value: Any, **kwargs: Any) -> None:
