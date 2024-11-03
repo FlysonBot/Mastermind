@@ -205,7 +205,7 @@ class SecretCode(ValidatedData):
             raise self.MissingParameterError("Missing 'number_of_dots' parameter in kwargs.")
         if 'number_of_colors' not in self.kwargs:
             raise self.MissingParameterError("Missing 'number_of_colors' parameter in kwargs.")
-        NumberofDots(self.kwargs['number_of_dots'])  # Validation
+        NumberOfDots(self.kwargs['number_of_dots'])  # Validation
         NumberOfColors(self.kwargs['number_of_colors'])  # Validation
 
     def validate(self, value: Any) -> None:
