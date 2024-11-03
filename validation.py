@@ -15,12 +15,13 @@ class ValidatedData(ABC):
 
     def __init__(self, value: Any, **kwargs: Any) -> None:
         """Initialize with a value and optional additional parameters, then validate."""
-        self.validate(value, **kwargs)  # Validate on initialization
-        self.value = value  # Store the main value
-
         if kwargs:  # If there are kwargs
             self.kwargs = kwargs  # Store them
             self.validate_kwargs()  # And validate them
+        
+        self.validate(value)  # Validate on initialization
+        self.value = value  # Store the main value
+
 
     def get(self) -> Any:
         """Return the main stored value only."""
