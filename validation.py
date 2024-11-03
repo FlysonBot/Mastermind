@@ -119,3 +119,42 @@ class NumberOfColors(ValidatedData):
         if value < 2:
             raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
 
+
+class NumberOfGuessesMade(ValidatedData):
+    """Validated property for the number of guesses made during a game."""
+
+    def validate(self, value: Any) -> None:
+        """Ensure the number of guesses made is an integer of at least 0."""
+        if not isinstance(value, int):
+            try:
+                value = int(value)
+            except ValueError:
+                raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
+        
+        if value < 0:
+            raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
+
+
+class MaximumAttemps(ValidatedData):
+    """Validated property for the maximum number of attempts allowed per game."""
+
+    def validate(self, value: Any) -> None:
+        """Ensure the maximum number of attempts is an integer of at least 1."""
+        if not isinstance(value, int):
+            try:
+                value = int(value)
+            except ValueError:
+                raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
+        
+        if value < 1:
+            raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
+
+
+class GameMode(ValidatedData):
+    """Validated property for the game mode. Must be HvH, HvAI, AIvH, or AIvAI."""
+
+    def validate(self, value: Any) -> None:
+        """Ensure the game mode is one of the allowed values."""
+        allowed_modes = ['HvH', 'HvAI', 'AIvH', 'AIvAI']
+        if value not in allowed_modes:
+            raise self.ValidationError(f"Game mode must be one of {allowed_modes}.")
