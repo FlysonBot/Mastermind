@@ -1,5 +1,5 @@
-import unittest
-from unittest.mock import patch, mock_open, MagicMock
+import unittest  # Module for writing and running unit tests
+from unittest.mock import patch, mock_open, MagicMock  # Mocks for testing
 import os  # Module for interacting with the operating system
 import json  # Module for working with JSON data
 import glob  # Module for file pattern matching
