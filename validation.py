@@ -18,12 +18,14 @@ class ValidatedData(ABC):
     def get(self) -> Any:
         """Return the main stored value only."""
         return self.value
+    
+    def update_kwargs(self, **kwargs: Any) -> None:
+        """Update the stored kwargs with new values."""
+        self.kwargs.update(kwargs)
 
     @abstractmethod
     def validate(self, value: Any, **kwargs: Any) -> None:
         """Abstract method to validate the value. Must be implemented by subclasses."""
-        if kwargs:
-            self.kwargs.update(kwargs)
         pass
 
 
