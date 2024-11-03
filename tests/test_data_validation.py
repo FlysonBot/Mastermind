@@ -5,10 +5,10 @@ class GameSettings(BaseModel):
     """Class to manage game settings with validated attributes."""
     
     def __init__(self):
-        # Initialize validated attributes
-        self.constant_value = Constant(42)
-        self.number_of_dots = NumberOfDots(5)
-        self.number_of_colors = NumberOfColors(3)
+        # Initialize attributes (validation models will be automatically applied)
+        self.CONSTANT_VALUE = 42
+        self.number_of_dots = 5
+        self.number_of_colors = 3
 
 class TestGameSettings(unittest.TestCase):
     
@@ -18,12 +18,12 @@ class TestGameSettings(unittest.TestCase):
 
     def test_constant_initialization(self):
         """Test initialization of a constant value."""
-        self.assertEqual(self.settings.constant_value, 42)
+        self.assertEqual(self.settings.CONSTANT_VALUE, 42)
 
     def test_constant_modification_error(self):
         """Test that modifying a constant raises an error."""
         with self.assertRaises(ValidatedData.ValidationError):
-            self.settings.constant_value = 50  # Should raise an error
+            self.settings.CONSTANT_VALUE = 50  # Should raise an error
 
     def test_valid_number_of_dots(self):
         """Test setting a valid number of dots."""
