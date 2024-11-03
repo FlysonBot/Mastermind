@@ -165,3 +165,53 @@ class GameMode(ValidatedData):
         allowed_modes = ['HvH', 'HvAI', 'AIvH', 'AIvAI']
         if value not in allowed_modes:
             raise self.ValidationError(f"Game mode must be one of {allowed_modes}.")
+
+
+class SecretCode(ValidatedData):
+    """Validated property for the secret code."""
+
+    def validate(self, value: Any, **kwargs: Any) -> None:
+        """Ensure the secret code is a tuple of integers of the correct length."""
+        self.update_kwargs(**kwargs)
+        
+        if not isinstance(value, tuple):
+            raise self.ValidationError("Secret code must be a tuple of integers.")
+        
+        if len(value) != self.kwargs['number_of_dots']:
+            raise self.ValidationError(f"Secret code must have {self.kwargs['number_of_dots']} dots.")
+        
+        for dot in value:
+            if not isinstance(dot, int) or dot < 1 or dot > self.kwargs['number_of_colors']:
+                raise self.ValidationError("All dots in the secret code must be integers in the range [1, number_of_colors].")
+
+
+class Booleans(ValidatedData):
+    """Validated property for booleans."""
+
+    def validate(self, value: Any, **kwargs: Any) -> None:
+        """Ensure the value is a boolean or None."""
+        if value is not None and not isinstance(value, bool):
+            raise self.ValidationError("Booleans must be either True, False, or None.")
+
+
+class TrueFuse(ValidatedData):
+    """Validated property of a boolean that cannot be set to False after initialization."""
+
+    def validate(self, value: Any, **kwargs: Any) -> None:
+        """Ensure the fuse cannot be set to False after initialization."""
+        if value is False and hasattr(self, 'value'):
+            raise self.ValidationError("Fuse cannot be set to False after initialization.")
+        if value is not True:
+            raise self.ValidationError("Cannot set fuse to a non-boolean value.")
+
+
+class FalseFuse(ValidatedData):
+    """Validated property of a boolean that cannot be set to True after initialization."""
+
+    def validate(self, value: Any, **kwargs: Any) -> None:
+        """Ensure the fuse cannot be set to True after initialization."""
+        if value is True and hasattr(self, 'value'):
+            raise self.ValidationError("Fuse cannot be set to True after initialization.")
+        if value is not False:
+            raise self.ValidationError("Cannot set fuse to a non-boolean value.")
+
