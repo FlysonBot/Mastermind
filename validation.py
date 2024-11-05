@@ -51,17 +51,20 @@ class BaseModel:
             
             if isinstance(attr, ValidatedData):  # If is a validated type
                 if isinstance(value, ValidatedData):  # If input is validated
-                    if typeof(value) != typeof(attr):  # If not the same type
+                    if type(value) is not type(attr):  # If not the same type
                         raise ValidationError("Cannot assign a different type to a validated attribute.")
+                    # Continue to super().__setattr__ below
                 
                 else:  # If input is not validated
                     attr.validate(value)  # Validate it
+                    attr.value = value  # Update the value
+                    return  # return to avoid invoking super().__setattr__
 
         # If attribute doesn't exist, verify if input is a validated type
         elif not isinstance(value, ValidatedData):
             # Try to find a suitable validated type from attribute name
             value = self._apply_validations(name, value)
-        
+
         # If already validated, or cannot be validated, update the attribute
         super().__setattr__(name, value)
 
@@ -168,7 +171,7 @@ class NumberOfGuessesMade(ValidatedData):
             raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
 
 
-class MaximumAttemps(ValidatedData):
+class MaximumAttempts(ValidatedData):
     """Validated property for the maximum number of attempts allowed per game."""
 
     def validate(self, value: Any) -> None:
@@ -227,7 +230,7 @@ class Booleans(ValidatedData):
 
     def validate(self, value: Any) -> None:
         """Ensure the value is a boolean or None."""
-        if value is not None and not isinstance(value, bool):
+        if value not in [True, False, None]:
             raise self.ValidationError("Booleans must be either True, False, or None.")
 
 
@@ -236,9 +239,11 @@ class TrueFuse(ValidatedData):
 
     def validate(self, value: Any) -> None:
         """Ensure the fuse cannot be set to False after initialization."""
-        if value is False and hasattr(self, 'value'):
-            raise self.ValidationError("Fuse cannot be set to False after initialization.")
-        if value is not True:
+        if value is False:
+            if hasattr(self, 'value'):  # If already initialized
+                raise self.ValidationError("TrueFuse cannot be set to False after initialization.")
+            return  # otherwise it is valid, return to skip the next if statement
+        if value is not True:  # If value is not True or False
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
 
 
@@ -247,7 +252,9 @@ class FalseFuse(ValidatedData):
 
     def validate(self, value: Any) -> None:
         """Ensure the fuse cannot be set to True after initialization."""
-        if value is True and hasattr(self, 'value'):
-            raise self.ValidationError("Fuse cannot be set to True after initialization.")
+        if value is True:
+            if hasattr(self, 'value'):
+                raise self.ValidationError("FalseFuse cannot be set to True after initialization.")
+            return
         if value is not False:
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
