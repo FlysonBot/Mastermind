@@ -160,12 +160,15 @@ class TestGameSettings(unittest.TestCase):
         self.assertEqual(conint.get(), 5)
 
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(11, lt=10, gt=2)  # Should raise error
+            ConfinedInteger(11, lt=10, gt=2)
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(1, lt=10, gt=2)  # Should raise error
+            ConfinedInteger(1, lt=10, gt=2)
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(6, lt=5, gt=8)  # SHould raise error
-
+            ConfinedInteger(6, lt=5, gt=8)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(5, lt=10, gt=2, ge=2)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(5, lt=10, gt=2, le=10)
 
 if __name__ == '__main__':
     unittest.main()
