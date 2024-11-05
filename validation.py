@@ -19,9 +19,8 @@ class ValidatedData(ABC):
             self.kwargs = kwargs  # Store them
             self.validate_kwargs()  # And validate them
         
-        self.validate(value)  # Validate on initialization
-        self.value = value  # Store the main value
-
+        # Validate on initialization and update the value
+        self.value = self.validate(value)  # sometimes validate() return a different value
 
     def get(self) -> Any:
         """Return the main stored value only."""
@@ -30,7 +29,7 @@ class ValidatedData(ABC):
     @abstractmethod
     def validate(self, value: Any) -> None:
         """Abstract method to validate the value. Must be implemented by subclasses."""
-        pass
+        return value
     
     def validate_kwargs(self) -> None:
         """Abstract method to validate kwargs. Optionally implemented by subclasses."""
@@ -56,8 +55,7 @@ class BaseModel:
                     # Continue to super().__setattr__ below
                 
                 else:  # If input is not validated
-                    attr.validate(value)  # Validate it
-                    attr.value = value  # Update the value
+                    attr.value = attr.validate(value)  # Validate and update
                     return  # return to avoid invoking super().__setattr__
 
         # If attribute doesn't exist, verify if input is a validated type
@@ -111,6 +109,7 @@ class Constant(ValidatedData):
         """Ensure the constant value is not modified after initialization."""
         if hasattr(self, 'value'):
             raise self.ValidationError("Cannot modify constant after initialization.")
+        return value
 
     def _modify(self, new_value: Any) -> None:
         """Private method to modify constant value for testing purposes."""
@@ -125,6 +124,7 @@ class GameMode(ValidatedData):
         allowed_modes = ['HvH', 'HvAI', 'AIvH', 'AIvAI']
         if value not in allowed_modes:
             raise self.ValidationError(f"Game mode must be one of {allowed_modes}.")
+        return value
 
 
 class SecretCode(ValidatedData):
@@ -152,6 +152,7 @@ class SecretCode(ValidatedData):
             if not isinstance(dot, int) or dot < 1 or dot > self.kwargs['number_of_colors']:
                 raise self.ValidationError("All dots in the secret code must be integers in the range [1, number_of_colors].")
         
+        return value
 
 class Booleans(ValidatedData):
     """Validated property for booleans."""
@@ -160,6 +161,7 @@ class Booleans(ValidatedData):
         """Ensure the value is a boolean or None."""
         if value not in [True, False, None]:
             raise self.ValidationError("Booleans must be either True, False, or None.")
+        return value
 
 
 class TrueFuse(ValidatedData):
@@ -171,8 +173,11 @@ class TrueFuse(ValidatedData):
             if hasattr(self, 'value'):  # If already initialized
                 raise self.ValidationError("TrueFuse cannot be set to False after initialization.")
             return  # otherwise it is valid, return to skip the next if statement
+        
         if value is not True:  # If value is not True or False
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
+        
+        return value
 
 
 class FalseFuse(ValidatedData):
@@ -186,6 +191,8 @@ class FalseFuse(ValidatedData):
             return
         if value is not False:
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
+        
+        return value
 
 
 class ConfinedInteger(ValidatedData):
@@ -217,7 +224,7 @@ class ConfinedInteger(ValidatedData):
         if not isinstance(value, int):
             if isinstance(value, str):
                 try:
-                    value = int(value)  # a string of float will raise error here
+                    value = int(value)
                 except ValueError:
                     raise self.ValidationError("Value must be an integer.")
             else:
@@ -232,6 +239,8 @@ class ConfinedInteger(ValidatedData):
             raise self.ValidationError(f"Value must be greater than or equal to {self.kwargs['ge']}.")
         if 'gt' in self.kwargs and value <= self.kwargs['gt']:
             raise self.ValidationError(f"Value must be greater than {self.kwargs['gt']}.")
+        
+        return value
 
 class NumberOfDots(ConfinedInteger):
     """Validated property for the number of dots."""

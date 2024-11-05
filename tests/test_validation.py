@@ -125,7 +125,7 @@ class TestGameSettings(unittest.TestCase):
 
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.false_fuse = True  # Cannot set FalseFuse to True
-    
+
     def test_confined_integer(self):
         # Test with le
         conint = ConfinedInteger(5, le=10)
@@ -160,15 +160,60 @@ class TestGameSettings(unittest.TestCase):
         self.assertEqual(conint.get(), 5)
 
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(11, lt=10, gt=2)
+            ConfinedInteger(11, lt=10, gt=2)  # Should raise error
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(1, lt=10, gt=2)
+            ConfinedInteger(1, lt=10, gt=2)  # Should raise error
+
+    def test_string_conversion_confined_integer(self):
+        # Test with le
+        conint = ConfinedInteger("5", le=10)  # String input
+        self.assertEqual(conint.get(), 5)  # Should be converted to int
+        
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(6, lt=5, gt=8)
+            ConfinedInteger("11", le=10)  # Invalid string (out of range)
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(5, lt=10, gt=2, ge=2)
+            ConfinedInteger("abc", le=10)  # Invalid string (non-numeric)
+
+        # Test with lt
+        conint = ConfinedInteger("5", lt=10)  # String input
+        self.assertEqual(conint.get(), 5)  # Should be converted to int
+
         with self.assertRaises(ValidatedData.ValidationError):
-            ConfinedInteger(5, lt=10, gt=2, le=10)
+            ConfinedInteger("10", lt=10)  # Invalid string (out of range)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("abc", lt=10)  # Invalid string (non-numeric)
+
+
+        # Test with ge
+        conint = ConfinedInteger("5", ge=2)  # String input
+        self.assertEqual(conint.get(), 5)  # Should be converted to int
+
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("1", ge=2)  # Invalid string (out of range)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("abc", ge=2)  # Invalid string (non-numeric)
+
+
+        # Test with gt
+        conint = ConfinedInteger("5", gt=2)  # String input
+        self.assertEqual(conint.get(), 5)  # Should be converted to int
+
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("2", gt=2)  # Invalid string (out of range)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("abc", gt=2)  # Invalid string (non-numeric)
+
+        # Test with both lt and gt
+        conint = ConfinedInteger("5", lt=10, gt=2)  # String input
+        self.assertEqual(conint.get(), 5)  # Should be converted to int
+        
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("11", lt=10, gt=2)  # Invalid string (out of range)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("1", lt=10, gt=2)  # Invalid string (out of range)
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger("abc", lt=10, gt=2)  # Invalid string (non-numeric)
+
 
 if __name__ == '__main__':
     unittest.main()
