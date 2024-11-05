@@ -117,78 +117,6 @@ class Constant(ValidatedData):
         self.value = new_value
 
 
-class NumberOfDots(ValidatedData):
-    """Validated property for the number of dots."""
-    
-    def validate(self, value: Any) -> None:
-        """Ensure the number of dots is a positive integer."""
-        if not isinstance(value, int):
-            if isinstance(value, str):
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
-            else:
-                raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
-        
-        if value < 2:
-            raise self.ValidationError("Number of dots must be an integer greater than or equal to 2.")
-
-
-class NumberOfColors(ValidatedData):
-    """Validated property for the number of colors."""
-    
-    def validate(self, value: Any) -> None:
-        """Ensure the number of colors is an integer of at least 2."""
-        if not isinstance(value, int):
-            if isinstance(value, str):
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
-            else:
-                raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
-        
-        if value < 2:
-            raise self.ValidationError("Number of colors must be an integer greater than or equal to 2.")
-
-
-class NumberOfGuessesMade(ValidatedData):
-    """Validated property for the number of guesses made during a game."""
-
-    def validate(self, value: Any) -> None:
-        """Ensure the number of guesses made is an integer of at least 0."""
-        if not isinstance(value, int):
-            if isinstance(value, str):
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
-            else:
-                raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
-        
-        if value < 0:
-            raise self.ValidationError("Number of guesses made must be an integer greater than or equal to 0.")
-
-
-class MaximumAttempts(ValidatedData):
-    """Validated property for the maximum number of attempts allowed per game."""
-
-    def validate(self, value: Any) -> None:
-        """Ensure the maximum number of attempts is an integer of at least 1."""
-        if not isinstance(value, int):
-            if isinstance(value, str):
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
-            else:
-                raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
-        
-        if value < 1:
-            raise self.ValidationError("Maximum number of attempts must be an integer greater than or equal to 1.")
-
-
 class GameMode(ValidatedData):
     """Validated property for the game mode. Must be HvH, HvAI, AIvH, or AIvAI."""
 
@@ -285,8 +213,15 @@ class ConfinedInteger(ValidatedData):
     
     def validate(self, value: Any) -> None:
         """Ensure the value is an integer within the specified range."""
+        # add support for converting string representation to int
         if not isinstance(value, int):
-            raise self.ValidationError("Value must be an integer.")
+            if isinstance(value, str):
+                try:
+                    value = int(value)  # a string of float will raise error here
+                except ValueError:
+                    raise self.ValidationError("Value must be an integer.")
+            else:
+                raise self.ValidationError("Value must be an integer.")
         
         # Validate range
         if 'le' in self.kwargs and value > self.kwargs['le']:
@@ -297,3 +232,35 @@ class ConfinedInteger(ValidatedData):
             raise self.ValidationError(f"Value must be greater than or equal to {self.kwargs['ge']}.")
         if 'gt' in self.kwargs and value <= self.kwargs['gt']:
             raise self.ValidationError(f"Value must be greater than {self.kwargs['gt']}.")
+
+class NumberOfDots(ConfinedInteger):
+    """Validated property for the number of dots."""
+    
+    def __init__(self, value: Any) -> None:
+        """Initialize with a value and provide a constrain"""
+        super().__init__(value, ge=2)
+
+
+class NumberOfColors(ConfinedInteger):
+    """Validated property for the number of colors."""
+    
+    def __init__(self, value: Any) -> None:
+        """Initialize with a value and provide a constrain"""
+        super().__init__(value, ge=2)
+
+
+class NumberOfGuessesMade(ConfinedInteger):
+    """Validated property for the number of guesses made during a game."""
+
+    def __init__(self, value: Any) -> None:
+        """Initialize with a value and provide a constrain"""
+        super().__init__(value, ge=0)
+
+
+class MaximumAttempts(ConfinedInteger):
+    """Validated property for the maximum number of attempts allowed per game."""
+
+    def __init__(self, value: Any) -> None:
+        """Initialize with a value and provide a constrain"""
+        super().__init__(value, ge=1)
+
