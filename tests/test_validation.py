@@ -214,6 +214,9 @@ class TestGameSettings(unittest.TestCase):
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger("abc", lt=10, gt=2)  # Invalid string (non-numeric)
 
+    def test_replace_constant(self):
+        with self.assertRaises(ValidatedData.ValidationError):
+            self.settings.CONSTANT_VALUE = Constant(42)
 
 if __name__ == '__main__':
     unittest.main()

@@ -52,7 +52,10 @@ class BaseModel:
                 if isinstance(value, ValidatedData):  # If input is validated
                     if type(value) is not type(attr):  # If not the same type
                         raise ValidationError("Cannot assign a different type to a validated attribute.")
-                    # Continue to super().__setattr__ below
+                    # Try to update with the validated value (so custom validation method is invoked)
+                    # This prevent replacing constant with another constant, or instance with different kwargs
+                    attr.value = attr.validate(value.value)
+                    return
                 
                 else:  # If input is not validated
                     attr.value = attr.validate(value)  # Validate and update
