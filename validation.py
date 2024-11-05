@@ -258,3 +258,42 @@ class FalseFuse(ValidatedData):
             return
         if value is not False:
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
+
+
+class ConfinedInteger(ValidatedData):
+    """Validated property for an integer that must be within a specified range."""
+
+    def validate_kwargs(self) -> None:
+        """Ensure the kwargs contain the required keys."""
+        acceptable_args = ['lt', 'le', 'gt', 'ge']  # lt = less than, le = less than or equals to, etc.
+        
+        if len(self.kwargs) == 0:
+            raise self.MissingParameterError("Must provide at least one of 'lt', 'le', 'gt', or 'ge' parameter in kwargs.")
+        
+        for arg in self.kwargs:
+            if arg not in acceptable_args:
+                raise self.ValidationError(f"Invalid argument '{arg}'. Must be one of {acceptable_args} and cannot be repeated.")
+            acceptable_args.remove(arg)  # Remove the argument from the list of acceptable args
+        
+        if ('lt' in self.kwargs and 'le' in self.kwargs) or ('gt' in self.kwargs and 'ge' in self.kwargs):
+            raise self.ValidationError("Cannot have both 'lt' and 'le' or 'gt' and 'ge' in kwargs.")
+        
+        lower_limit = self.kwargs.get('ge', self.kwargs.get('gt', float('-inf')))
+        upper_limit = self.kwargs.get('le', self.kwargs.get('lt', float('inf')))
+        if lower_limit > upper_limit:
+            raise self.ValidationError("Lower limit cannot be higher than upper limit.")
+    
+    def validate(self, value: Any) -> None:
+        """Ensure the value is an integer within the specified range."""
+        if not isinstance(value, int):
+            raise self.ValidationError("Value must be an integer.")
+        
+        # Validate range
+        if 'le' in self.kwargs and value > self.kwargs['le']:
+            raise self.ValidationError(f"Value must be less than or equal to {self.kwargs['le']}.")
+        if 'lt' in self.kwargs and value >= self.kwargs['lt']:
+            raise self.ValidationError(f"Value must be less than {self.kwargs['lt']}.")
+        if 'ge' in self.kwargs and value < self.kwargs['ge']:
+            raise self.ValidationError(f"Value must be greater than or equal to {self.kwargs['ge']}.")
+        if 'gt' in self.kwargs and value <= self.kwargs['gt']:
+            raise self.ValidationError(f"Value must be greater than {self.kwargs['gt']}.")

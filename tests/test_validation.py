@@ -125,8 +125,47 @@ class TestGameSettings(unittest.TestCase):
 
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.false_fuse = True  # Cannot set FalseFuse to True
+    
+    def test_confined_integer(self):
+        # Test with le
+        conint = ConfinedInteger(5, le=10)
+        self.assertEqual(conint.get(), 5)
+        
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(11, le=10)  # Should raise error
+
+        # Test with lt
+        conint = ConfinedInteger(5, lt=10)
+        self.assertEqual(conint.get(), 5)
+        
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(10, lt=10)  # Should raise error
+
+        # Test with ge
+        conint = ConfinedInteger(5, ge=2)
+        self.assertEqual(conint.get(), 5)
+        
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(1, ge=2)  # Should raise error
+
+        # Test with gt
+        conint = ConfinedInteger(5, gt=2)
+        self.assertEqual(conint.get(), 5)
+
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(2, gt=2)  # Should raise error
+
+        # Test with both lt and gt
+        conint = ConfinedInteger(5, lt=10, gt=2)
+        self.assertEqual(conint.get(), 5)
+
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(11, lt=10, gt=2)  # Should raise error
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(1, lt=10, gt=2)  # Should raise error
+        with self.assertRaises(ValidatedData.ValidationError):
+            ConfinedInteger(6, lt=5, gt=8)  # SHould raise error
 
 
 if __name__ == '__main__':
     unittest.main()
-
