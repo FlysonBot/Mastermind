@@ -1,6 +1,8 @@
 from .validation import BaseModel
+from .utils import get_feedback
 from collections import deque
 from typing import Any, Optional
+from random import randint
 
 
 class Stack:
@@ -73,86 +75,226 @@ class Stack:
         return iter(self._stack)
 
 
-class _Board(BaseModel):
+class Game(BaseModel):
     """
-    A class to represent a Mastermind board. The board contain all
-    the guesses made by a player and the feedback for each guess.
+    A class to represent a Mastermind game.
     """
-    class EmptyBoardError(Exception):
-        """Custom exception for empty board."""
-        pass
+    # Board subclass
+    class _Board(BaseModel):
+        """
+        A class to represent a Mastermind board. The board contain all
+        the guesses made by a player and the feedback for each guess.
+        """
+        class EmptyBoardError(Exception):
+            """Custom exception for empty board."""
+            pass
 
-    def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
-        """
-        Initializes the board.
-        """
-        self.number_of_colors = number_of_colors
-        self.number_of_dots = number_of_dots
-        self.guesses = Stack()
-        self.feedbacks = Stack()
-        self.number_of_guesses_made = 0
-    
-    
-    # Accessors
-    def __len__(self) -> int:
-        """
-        Returns the number of guesses made.
-        """
-        return self.number_of_guesses_made
-    
-    def __getitem__(self, index: int) -> tuple:
-        """
-        Returns the guess and feedback at the given index.
-        Index is counted from the top, i.e. 0 represent the last.
-        """
-        return self.guesses[index], self.feedbacks[index]
-    
-    def last_guess(self) -> tuple:
-        """
-        Returns the last guess and its feedback.
-        """
-        # Check if board is empty
-        if self.number_of_guesses_made == 0:
-            raise self.EmptyBoardError("No guesses to return.")
+        def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
+            """
+            Initializes the board.
+            """
+            self.NUMBER_OF_COLORS = number_of_colors
+            self.NUMBER_OF_DOTS = number_of_dots
+            self._number_of_guesses_made = 0
+            self._guesses = Constant(Stack())  # avoid modification to the reference
+            self._feedbacks = Constant(Stack())  # stack is still modifiable
         
-        # Return
-        return self.guesses.top(), self.feedbacks.top()
+        
+        # Accessors
+        def __len__(self) -> int:
+            """
+            Returns the number of guesses made.
+            """
+            return self._number_of_guesses_made
+        
+        def __getitem__(self, index: int) -> tuple:
+            """
+            Returns the guess and feedback at the given index.
+            Index is counted from the top, i.e. 0 represent the last.
+            """
+            return self._guesses[index], self._feedbacks[index]
+        
+        def last_guess(self) -> tuple:
+            """
+            Returns the last guess and its feedback.
+            """
+            # Check if board is empty
+            if self._number_of_guesses_made == 0:
+                raise self.EmptyBoardError("No guesses to return.")
+            
+            # Return
+            return self._guesses.top(), self._feedbacks.top()
 
+
+        # Mutators
+        def add_guess(self, guess: tuple, feedback: tuple) -> None:
+            """
+            Adds a guess and its feedback to the board.
+            """
+            # Validate input
+            ValidGuess(guess, number_of_dots=self.NUMBER_OF_DOTS, number_of_colors=self.NUMBER_OF_COLORS)
+            ValidFeedback(feedback, number_of_dots=self.NUMBER_OF_DOTS)
+
+            # Make changes
+            self._guesses.push(guess)
+            self._feedbacks.push(feedback)
+            self._number_of_guesses_made += 1
+        
+        def remove_last_guess(self) -> tuple:
+            """
+            Undoes the last guess and its feedback.
+            """
+            # Check if board is empty
+            if self._number_of_guesses_made == 0:
+                raise self.EmptyBoardError("No guesses to remove.")
+            
+            # Make changes
+            guess = self._guesses.pop()
+            feedback = self._feedbacks.pop()
+            self._number_of_guesses_made -= 1
+
+            return guess, feedback
+            
+        def clear_board(self) -> None:
+            """
+            Clears the board.
+            """
+            self._guesses.clear_stack()
+            self._feedbacks.clear_stack()
+            self._number_of_guesses_made = 0
+
+    # Initialization
+    def __init__(self, number_of_colors: int, number_of_dots: int,
+                 maximum_attempts: int, game_mode: str) -> None:
+        """
+        Initializes the game.
+        """
+        self.MAXIMUM_ATTEMPTS = maximum_attempts
+        self.GAME_MODE = game_mode
+        self._board = self._Board(number_of_colors, number_of_dots)
+        self._game_started = TrueFuse(False)
+        self._win_status = Boolean(None)  # None = game still continuing
+    
+    
+    # Accessor
+    @property
+    def number_of_colors(self) -> int:
+        return self._board.NUMBER_OF_COLORS
+    
+    @property
+    def number_of_dots(self) -> int:
+        return self._board.NUMBER_OF_DOTS
+    
+    @property
+    def win_status(self) -> Optional[bool]:
+        return self._win_status
+    
+    @property
+    def game_started(self) -> bool:
+        return self._game_started
+
+    def __len__(self) -> int:
+        return len(self._board)
+    
 
     # Mutators
-    def add_guess(self, guess: tuple, feedback: tuple) -> None:
+    def set_secret_code(self, secret_code: tuple) -> None:
         """
-        Adds a guess and its feedback to the board.
+        Sets the secret code for the game.
         """
-        # Validate input
-        ValidGuess(guess, number_of_dots=self.number_of_dots, number_of_colors=self.number_of_colors)
-        ValidFeedback(feedback, number_of_dots=self.number_of_dots)
-
-        # Make changes
-        self.guesses.push(guess)
-        self.feedbacks.push(feedback)
-        self.number_of_guesses_made += 1
+        if self._game_started:
+            raise NotImplementedError("Cannot set secret code after game has started.")
+        
+        ValidGuess(secret_code, number_of_dots=self.number_of_dots,
+                   number_of_colors=self.number_of_colors)  # Validate
+        
+        self.SECRET_CODE = secret_code  # Set code and lock it as constant
     
-    def remove_last_guess(self) -> tuple:
+    def set_random_secret_code(self) -> None:
         """
-        Undoes the last guess and its feedback.
+        Sets a random secret code for the game.
         """
-        # Check if board is empty
-        if self.number_of_guesses_made == 0:
-            raise self.EmptyBoardError("No guesses to remove.")
+        if self._game_started:
+            raise NotImplementedError("Cannot set secret code after game has started.")
         
-        # Make changes
-        guess = self.guesses.pop()
-        feedback = self.feedbacks.pop()
-        self.number_of_guesses_made -= 1
+        self.SECRET_CODE = tuple(randint(1, self.number_of_colors) for _ in range(self.number_of_dots))
+    
+    def make_guess(self, guess: tuple, feedback: Optional[tuple] = None) -> None:
+        """
+        Makes a guess and updates the board.
+        """
+        if self._win_status is not None:
+            raise NotImplementedError("Cannot make guess after game has ended.")
+        if len(self._board) >= self.MAXIMUM_ATTEMPTS:
+            raise NotImplementedError("Cannot make guess after maximum attempts reached.")
+        if self.GAME_MODE == 'HvAI' and not hasattr(self, 'SECRET_CODE'):
+            raise NotImplementedError("Cannot make guess before secret code is set when playing against AI.")
+        
+        # Calculate feedback if not given
+        if feedback is None:
+            feedback = get_feedback(guess)
+        
+        # Add guess and feedback to board
+        self._board.add_guess(guess, feedback)  # User input is validated by board
+    
+    def update_win_status(self, win_status: bool) -> None:
+        """
+        Updates the win status of the game.
+        """
+        # No guess made yet, game haven't started
+        if len(self._board) == 0:
+            self._win_status = None  # None represent continuation of game
+        
+        # Secret code is set and match with the last guess
+        if hasattr(self, 'SECRET_CODE') and self._board.last_guess()[0] == self.SECRET_CODE:
+            self._win_status = True
+        
+        # Last feedback indicates a winning game
+        if self._board.last_guess()[1] == (self.number_of_dots, 0):
+            self._win_status = True
+        
+        # Otherwise game is either continuing or had lost
+        if len(self._board) == self.MAXIMUM_ATTEMPTS:  # maximum attempt reached
+            self._win_status = False  # Lost
 
-        return guess, feedback
+        else:  # Otherwise game must be continuing
+            self._win_status = None
         
-    def clear_board(self) -> None:
+        return self._win_status
+    
+    # Start the game
+    def start_game(self) -> None:
         """
-        Clears the board.
+        Starts the game.
         """
-        self.guesses.clear_stack()
-        self.feedbacks.clear_stack()
-        self.number_of_guesses_made = 0
+        # Check condition
+        if self._game_started:
+            raise NotImplementedError("Game has already started.")
+        self._game_started = True
+
+        # Find suitable player
+        if self.GAME_MODE == "HvH":  # Human against Human
+            self.PLAYER1 = HumanCracker()
+            self.PLAYER2 = HumanSetter()
+        elif self.GAME_MODE == "HvAI":  # Human against AI
+            self.PLAYER1 = HumanCracker()
+            self.PLAYER2 = AISetter()
+        elif self.GAME_MODE == "AIvH":  # AI against Human
+            self.PLAYER1 = AICracker()
+            self.PLAYER2 = HumanSetter()
+        else:  # GAME_MODE = "AIvAI", solving external game
+            self.PLAYER1 = AICracker()
+            self.PLAYER2 = ExternalSetter()
         
+        # Player Logic
+        pass  # TODO: implement player logic
+
+        # Output Result
+        self.update_win_status(self._win_status)
+        if self.win_status is None:
+            return  # game paused and exit
+        if self.win_status:
+            self.PLAYER1.win_message()
+        else:
+            self.PLAYER1.lose_message()
+
