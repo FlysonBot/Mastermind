@@ -130,8 +130,8 @@ class GameMode(ValidatedData):
         return value
 
 
-class SecretCode(ValidatedData):
-    """Validated property for the secret code."""
+class ValidGuess(ValidatedData):
+    """Validated property for a valid guess."""
 
     def validate_kwargs(self) -> None:
         """Ensure the kwargs contain the required keys."""
@@ -141,21 +141,46 @@ class SecretCode(ValidatedData):
             raise self.MissingParameterError("Missing 'number_of_colors' parameter in kwargs.")
         NumberOfDots(self.kwargs['number_of_dots'])  # Validation
         NumberOfColors(self.kwargs['number_of_colors'])  # Validation
-
+    
     def validate(self, value: Any) -> None:
-        """Ensure the secret code is a tuple of integers of the correct length."""
+        """Ensure the guess is a tuple of integers of the correct length."""
 
         if not isinstance(value, tuple):
-            raise self.ValidationError("Secret code must be a tuple of integers.")
+            raise self.ValidationError("Guess must be a tuple of integers.")
         
         if len(value) != self.kwargs['number_of_dots']:
-            raise self.ValidationError(f"Secret code must have {self.kwargs['number_of_dots']} dots.")
+            raise self.ValidationError(f"Guess must have {self.kwargs['number_of_dots']} dots.")
         
         for dot in value:
             if not isinstance(dot, int) or dot < 1 or dot > self.kwargs['number_of_colors']:
-                raise self.ValidationError("All dots in the secret code must be integers in the range [1, number_of_colors].")
+                raise self.ValidationError("All dots in the guess must be integers in the range [1, number_of_colors].")
+
+
+class ValidFeedback(ValidatedData):
+    """Validated property for a valid feedback."""
+
+    def validate_kwargs(self) -> None:
+        """Ensure the kwargs contain the required keys."""
+        if 'number_of_dots' not in self.kwargs:
+            raise self.MissingParameterError("Missing 'number_of_dots' parameter in kwargs.")
+        NumberOfDots(self.kwargs['number_of_dots'])  # Validation
+    
+    def validate(self, value: Any) -> None:
+        """Ensure the feedback is a tuple of integers of the correct length."""
+
+        if not isinstance(value, tuple):
+            raise self.ValidationError("Feedback must be a tuple of two integers.")
+        if not len(value) == 2:
+            raise self.ValidationError("Feedback must be a tuple of two integers.")
+        
+        try:
+            ConfinedInteger(value[0], ge=0, le=self.kwargs['number_of_dots'])
+            ConstrainedInteger(value[1], ge=0, le=self.kwargs['number_of_dots'])
+        except ValidatedData.ValidationError:
+            raise self.ValidationError("Feedback must be a tuple of integers in the range [0, number_of_dots].")
         
         return value
+
 
 class Booleans(ValidatedData):
     """Validated property for booleans."""
@@ -244,6 +269,7 @@ class ConfinedInteger(ValidatedData):
             raise self.ValidationError(f"Value must be greater than {self.kwargs['gt']}.")
         
         return value
+
 
 class NumberOfDots(ConfinedInteger):
     """Validated property for the number of dots."""

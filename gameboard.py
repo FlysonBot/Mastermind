@@ -1,5 +1,7 @@
+from .validation import BaseModel
 from collections import deque
 from typing import Any, Optional
+
 
 class Stack:
     """
@@ -70,3 +72,87 @@ class Stack:
         """Return an iterator for the stack."""
         return iter(self._stack)
 
+
+class _Board(BaseModel):
+    """
+    A class to represent a Mastermind board. The board contain all
+    the guesses made by a player and the feedback for each guess.
+    """
+    class EmptyBoardError(Exception):
+        """Custom exception for empty board."""
+        pass
+
+    def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
+        """
+        Initializes the board.
+        """
+        self.number_of_colors = number_of_colors
+        self.number_of_dots = number_of_dots
+        self.guesses = Stack()
+        self.feedbacks = Stack()
+        self.number_of_guesses_made = 0
+    
+    
+    # Accessors
+    def __len__(self) -> int:
+        """
+        Returns the number of guesses made.
+        """
+        return self.number_of_guesses_made
+    
+    def __getitem__(self, index: int) -> tuple:
+        """
+        Returns the guess and feedback at the given index.
+        Index is counted from the top, i.e. 0 represent the last.
+        """
+        return self.guesses[index], self.feedbacks[index]
+    
+    def last_guess(self) -> tuple:
+        """
+        Returns the last guess and its feedback.
+        """
+        # Check if board is empty
+        if self.number_of_guesses_made == 0:
+            raise self.EmptyBoardError("No guesses to return.")
+        
+        # Return
+        return self.guesses.top(), self.feedbacks.top()
+
+
+    # Mutators
+    def add_guess(self, guess: tuple, feedback: tuple) -> None:
+        """
+        Adds a guess and its feedback to the board.
+        """
+        # Validate input
+        ValidGuess(guess, number_of_dots=self.number_of_dots, number_of_colors=self.number_of_colors)
+        ValidFeedback(feedback, number_of_dots=self.number_of_dots)
+
+        # Make changes
+        self.guesses.push(guess)
+        self.feedbacks.push(feedback)
+        self.number_of_guesses_made += 1
+    
+    def remove_last_guess(self) -> tuple:
+        """
+        Undoes the last guess and its feedback.
+        """
+        # Check if board is empty
+        if self.number_of_guesses_made == 0:
+            raise self.EmptyBoardError("No guesses to remove.")
+        
+        # Make changes
+        guess = self.guesses.pop()
+        feedback = self.feedbacks.pop()
+        self.number_of_guesses_made -= 1
+
+        return guess, feedback
+        
+    def clear_board(self) -> None:
+        """
+        Clears the board.
+        """
+        self.guesses.clear_stack()
+        self.feedbacks.clear_stack()
+        self.number_of_guesses_made = 0
+        
