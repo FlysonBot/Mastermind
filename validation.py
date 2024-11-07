@@ -148,7 +148,7 @@ class ValidGuess(ValidatedData):
             try:
                 value = tuple(map(int, value))
             except ValueError:
-                raise self.ValidationError("Guess must be a tuple of integers.")
+                raise ValueError("Guess can only contain number from 0 to 9.")
 
         if not isinstance(value, (tuple, list)):
             raise self.ValidationError("Guess must be a tuple of integers.")
