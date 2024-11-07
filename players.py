@@ -22,34 +22,6 @@ class Player(ABC, BaseModel):
         """
         raise NotImplementedError("This method must be implemented in a subclass.")
 
-    @abstractmethod
-    def win_message(self) -> None:
-        """
-        Prints a message when the player wins.
-        """
-        pass
-
-    @abstractmethod
-    def lose_message(self) -> None:
-        """
-        Prints a message when the player loses.
-        """
-        pass
-
-
-class HumanCracker(Player):
-    """
-    A class to represent a human cracker.
-    """
-    pass
-
-
-class HumanSetter(Player):
-    """
-    A class to represent a human setter.
-    """
-    pass
-
 
 class CodeSetter(Player):
     """
