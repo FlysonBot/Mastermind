@@ -237,17 +237,11 @@ class Game(BaseModel):
         
         return self._win_status
     
-    # Start the game
-    def start_game(self) -> None:
+    # Game Control Methods
+    def find_players(self) -> None:
         """
-        Starts the game.
+        Find suitable player for a game based on the game mode.
         """
-        # Check condition
-        if self._game_started:
-            raise NotImplementedError("Game has already started.")
-        self._game_started = True
-
-        # Find suitable player
         if self.GAME_MODE == "HvH":  # Human against Human
             self.PLAYER1 = HumanCracker(self)
             self.PLAYER2 = HumanSetter(self)
@@ -260,15 +254,23 @@ class Game(BaseModel):
         else:  # GAME_MODE = "AIvAI", solving external game
             self.PLAYER1 = AICracker(self)
             self.PLAYER2 = ExternalSetter(self)
-        
-        # Player Logic
-        self.PLAYER1.set_secret_code()
-        while self.win_status is None:
-            guess = self.PLAYER2.obtain_guess()
-            feedback = self.PLAYER1.get_feedback(guess)
-            self.make_guess(guess, feedback)
 
-        # Output Result
+    def player_guessing_logic(self) -> None:
+        """
+        Call Player 2 to make guess and Player 1 to obtain feedback.
+        """
+        while self.win_status is None :  # While game is continuing
+            guess = self.PLAYER2.obtain_guess()  # Obtain guess
+            if guess is None:  # Player 2 quit
+                break  # exit the loop
+            feedback = self.PLAYER1.get_feedback(guess)  # Obtain feedback
+            self.make_guess(guess, feedback)  # Make guess
+            self.update_win_status(self._win_status)  # Update win status
+
+    def output_result(self) -> None:
+        """
+        Output the result of the game.
+        """
         self.update_win_status(self._win_status)
         if self.win_status is None:
             return  # game paused and exit
@@ -276,4 +278,36 @@ class Game(BaseModel):
             self.PLAYER1.win_message()
         else:
             self.PLAYER1.lose_message()
+
+    def start_game(self) -> None:
+        """
+        Starts the game.
+        """
+        # Check condition
+        if self._game_started:
+            raise NotImplementedError("Game has already started.")
+        self._game_started = True
+
+        # Player Logic
+        self.find_players()  # Find suitable player for the game
+        self.PLAYER1.set_secret_code()
+        self.player_guessing_logic()  # Player guessing logic
+
+        # Game Terminated
+        self.output_result()  # Output the result of the game
+
+    def resume_game(self) -> None:
+        """
+        Resumes the game.
+        """
+        # Check condition
+        if not self._game_started:
+            raise NotImplementedError("Game has not started yet.")
+        
+        # Player Logic
+        self.player_guessing_logic()  # Player guessing logic
+
+        # Game Terminated
+        self.output_result()  # Output the result of the game
+
 
