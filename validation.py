@@ -172,6 +172,15 @@ class ValidFeedback(ValidatedData):
     
     def validate(self, value: Any) -> None:
         """Ensure the feedback is a tuple of integers of the correct length."""
+        if isinstance(value, str):
+            try:
+                if "," in value:
+                    value = tuple(map(int, value.split(",")))  # 10, 11 -> (10, 11)
+                else:
+                    value = tuple(map(int, value))  # 21 -> (2, 1)
+            except ValueError:
+                raise ValueError("Feedback cannot contain non-numerical characters other than comma. "\
+                                 "For example: 21 = (2, 1); 10,11 -> (10, 11).")
 
         if not isinstance(value, tuple):
             raise self.ValidationError("Feedback must be a tuple of two integers.")
