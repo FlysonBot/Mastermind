@@ -275,9 +275,9 @@ class Game(BaseModel):
         if self.win_status is None:
             return  # game paused and exit
         if self.win_status:
-            self.PLAYER1.win_message()
+            self.PLAYER2.win_message()
         else:
-            self.PLAYER1.lose_message()
+            self.PLAYER2.lose_message()
 
     def start_game(self) -> None:
         """
