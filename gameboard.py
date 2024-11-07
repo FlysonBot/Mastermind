@@ -1,7 +1,8 @@
+# gameboard.py
 from .validation import BaseModel
 from .utils import get_feedback
 from collections import deque
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 from random import randint
 
 
@@ -197,43 +198,17 @@ class Game(BaseModel):
         return len(self._board)
     
 
-    # Mutators
-    def set_secret_code(self, secret_code: tuple) -> None:
-        """
-        Sets the secret code for the game.
-        """
-        if self._game_started:
-            raise NotImplementedError("Cannot set secret code after game has started.")
-        
-        ValidGuess(secret_code, number_of_dots=self.number_of_dots,
-                   number_of_colors=self.number_of_colors)  # Validate
-        
-        self.SECRET_CODE = secret_code  # Set code and lock it as constant
-    
-    def set_random_secret_code(self) -> None:
-        """
-        Sets a random secret code for the game.
-        """
-        if self._game_started:
-            raise NotImplementedError("Cannot set secret code after game has started.")
-        
-        self.SECRET_CODE = tuple(randint(1, self.number_of_colors) for _ in range(self.number_of_dots))
-    
-    def make_guess(self, guess: tuple, feedback: Optional[tuple] = None) -> None:
+    # Mutators      
+    def make_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
         """
         Makes a guess and updates the board.
         """
+        # Check condition
         if self._win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
         if len(self._board) >= self.MAXIMUM_ATTEMPTS:
             raise NotImplementedError("Cannot make guess after maximum attempts reached.")
-        if self.GAME_MODE == 'HvAI' and not hasattr(self, 'SECRET_CODE'):
-            raise NotImplementedError("Cannot make guess before secret code is set when playing against AI.")
-        
-        # Calculate feedback if not given
-        if feedback is None:
-            feedback = get_feedback(guess)
-        
+                
         # Add guess and feedback to board
         self._board.add_guess(guess, feedback)  # User input is validated by board
     
@@ -287,7 +262,11 @@ class Game(BaseModel):
             self.PLAYER2 = ExternalSetter(self)
         
         # Player Logic
-        pass  # TODO: implement player logic
+        self.PLAYER1.set_secret_code()
+        while self.win_status is None:
+            guess = self.PLAYER2.obtain_guess()
+            feedback = self.PLAYER1.get_feedback(guess)
+            self.make_guess(guess, feedback)
 
         # Output Result
         self.update_win_status(self._win_status)
