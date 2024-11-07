@@ -274,17 +274,17 @@ class Game(BaseModel):
 
         # Find suitable player
         if self.GAME_MODE == "HvH":  # Human against Human
-            self.PLAYER1 = HumanCracker()
-            self.PLAYER2 = HumanSetter()
+            self.PLAYER1 = HumanCracker(self)
+            self.PLAYER2 = HumanSetter(self)
         elif self.GAME_MODE == "HvAI":  # Human against AI
-            self.PLAYER1 = HumanCracker()
-            self.PLAYER2 = AISetter()
+            self.PLAYER1 = HumanCracker(self)
+            self.PLAYER2 = AISetter(self)
         elif self.GAME_MODE == "AIvH":  # AI against Human
-            self.PLAYER1 = AICracker()
-            self.PLAYER2 = HumanSetter()
+            self.PLAYER1 = AICracker(self)
+            self.PLAYER2 = HumanSetter(self)
         else:  # GAME_MODE = "AIvAI", solving external game
-            self.PLAYER1 = AICracker()
-            self.PLAYER2 = ExternalSetter()
+            self.PLAYER1 = AICracker(self)
+            self.PLAYER2 = ExternalSetter(self)
         
         # Player Logic
         pass  # TODO: implement player logic
