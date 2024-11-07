@@ -146,9 +146,15 @@ class ValidGuess(ValidatedData):
         """Ensure the guess is a tuple of integers of the correct length."""
         if isinstance(value, str):
             try:
-                value = tuple(map(int, value))
+                if "," in value:
+                    # 1,2,3,4,1,2 -> (1, 2, 3, 4, 1, 2)
+                    value = tuple(map(int, value.split(",")))
+                else:
+                    # 123412 -> (1, 2, 3, 4, 1, 2)
+                    value = tuple(map(int, value))
             except ValueError:
-                raise ValueError("Guess can only contain number from 0 to 9.")
+                raise ValueError("Guess cannot contain non-numerical number other than comma. "\
+                                 "For example: 123412 or 1,2,3,4,1,2 -> (1, 2, 3, 4, 1, 2).")
 
         if not isinstance(value, (tuple, list)):
             raise self.ValidationError("Guess must be a tuple of integers.")
