@@ -144,8 +144,13 @@ class ValidGuess(ValidatedData):
     
     def validate(self, value: Any) -> None:
         """Ensure the guess is a tuple of integers of the correct length."""
+        if isinstance(value, str):
+            try:
+                value = tuple(map(int, value))
+            except ValueError:
+                raise self.ValidationError("Guess must be a tuple of integers.")
 
-        if not isinstance(value, tuple):
+        if not isinstance(value, (tuple, list)):
             raise self.ValidationError("Guess must be a tuple of integers.")
         
         if len(value) != self.kwargs['number_of_dots']:
