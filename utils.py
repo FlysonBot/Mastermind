@@ -19,3 +19,17 @@ def get_feedback(self, guess: tuple, secret: tuple) -> list:
         list2[0] += min(count1, count2)  # list2[0] is white pegs count
     
     return list1[0], list2[0]  # return black and white pegs count
+
+class FStringTemplate:
+    """
+    A class to represent a formatted string template.
+    """
+
+    def __init__(self, template: str) -> None:
+        """Initialize with a template string."""
+        self.template = template
+    
+    def eval(self, **kwargs):
+        """Evaluate the template with the given keyword arguments."""
+        return self.template.format(**kwargs)
+
