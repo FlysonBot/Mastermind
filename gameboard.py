@@ -59,6 +59,7 @@ class Stack:
 class Game(BaseModel):
     """A class to represent a Mastermind game."""
     
+    # Board subclass to store board status
     class _Board(BaseModel):
         """A class to represent a Mastermind board. The board contain all
         the guesses made by a player and the feedback for each guess.
@@ -121,6 +122,7 @@ class Game(BaseModel):
         self._game_started = TrueFuse(False)
         self._win_status = Boolean(None)
 
+    # Accessors
     @property
     def number_of_colors(self) -> int:
         return self._board.NUMBER_OF_COLORS
@@ -140,6 +142,7 @@ class Game(BaseModel):
     def __len__(self) -> int:
         return len(self._board)
 
+    # Mutators
     def make_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
         """Makes a guess and updates the board."""
         if self._win_status is not None:
@@ -223,6 +226,7 @@ class Game(BaseModel):
         else:
             self.PLAYER2.lose_message()
 
+    # Game Flow Logic
     def start_game(self) -> Optional[str]:
         """Starts the game."""
         # Check Condition
