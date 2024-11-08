@@ -184,16 +184,32 @@ class Game(BaseModel):
             # Obtain guess
             guess = self.PLAYER2.obtain_guess()
 
-            # Process guess
+            # Process command
             if guess is "q":  # quit
                 break
             if guess is "d":  # discard
                 break
             if guess is "u":  # undo
-                pass
+                self.PLAYER1.undo()
+                self.PLAYER2.undo()
+                continue
             if guess is "r":  # redo
-                pass
+                self.PLAYER1.redo()
+                self.PLAYER2.redo()
+                continue
+            
+            # Get feedback
             feedback = self.PLAYER1.get_feedback(guess)
+
+            # Process command
+            if feedback is "q":  # quit
+                break
+            if feedback is "d":  # discard
+                break
+            if feedback is "u":  # undo
+                continue  # guess haven't been made yet, so skip = undo
+            
+            # Make Guess
             self.make_guess(guess, feedback)
             self.update_win_status(self._win_status)
 
@@ -235,3 +251,4 @@ class Game(BaseModel):
         # Post-termination Logc
         self.output_result()
         return command
+
