@@ -1,4 +1,3 @@
-# players.py
 from .validation import BaseModel, ValidGuess, ValidFeedback
 from .utils import FStringTemplate, get_feedback
 from abc import ABC, abstractmethod
@@ -9,82 +8,58 @@ from typing import Optional, Union
 
 # Abstract Class for Player Unit
 class Player(ABC, BaseModel):
-    """
-    A class to represent a player.
-    """
+    """A class to represent a player."""
 
     def __init__(self, game: Game) -> None:
-        """
-        Initializes the player.
-        """
+        """Initializes the player."""
         self.GAME = game
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
-        """
-        Obtains a guess from the player.
-        """
+        """Obtains a guess from the player."""
         raise NotImplementedError("This method must be implemented in a subclass.")
 
 
 class CodeSetter(Player):
-    """
-    A class to represent a code setter.
-    """
+    """A class to represent a code setter."""
     
     @abstractmethod
     def set_secret_code(self) -> None:
-        """
-        Sets the secret code for the game.
-        """
+        """Sets the secret code for the game."""
         pass
     
     @abstractmethod
     def get_feedback(self, guess: tuple) -> tuple:
-        """
-        Obtains feedback for a given guess.
-        """
+        """Obtains feedback for a given guess."""
         pass
 
 
 class CodeCracker(Player):
-    """
-    A class to represent a code cracker.
-    """
+    """A class to represent a code cracker."""
 
     def __init__(self, game: Game, win_msg: str, lose_msg: str) -> None:
-        """
-        Initializes the code cracker.
-        """
+        """Initializes the code cracker."""
         super().__init__(game)
         self.win_message = FStringTemplate(win_msg)
         self.lose_message = FStringTemplate(lose_msg)
 
     def win_message(self) -> None:
-        """
-        Prints a message when the game is won.
-        """
+        """Prints a message when the game is won."""
         print(self.win_message.eval(self.__dict__))
     
     def lose_message(self) -> None:
-        """
-        Prints a message when the game is lost.
-        """
+        """Prints a message when the game is lost."""
         print(self.lose_message.eval(self.__dict__))
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
-        """
-        Obtains a guess from the player.
-        """
+        """Obtains a guess from the player."""
         pass
     
 
 # Concrete Implementation of Different Players
 class HumanSetter(CodeSetter):
-    """
-    A class to represent a human code setter.
-    """
+    """A class to represent a human code setter."""
 
     def set_secret_code(self) -> Optional[str]:
         """
@@ -113,7 +88,7 @@ class HumanSetter(CodeSetter):
             except ValueError as e:
                 print(e)
                 print("To get more help, enter '?'")
-            else:  # Confrm password
+            else:  # Confirm password
                 confirm = getpass("Confirm the secret code: ")
                 if confirm != secret:
                     print("Code does not match. Try again.")
@@ -122,23 +97,17 @@ class HumanSetter(CodeSetter):
                 return
     
     def get_feedback(self, guess: tuple) -> tuple:
-        """
-        Obtains feedback for a given guess.
-        """
+        """Obtains feedback for a given guess."""
         if not hasattr(self, 'SECRET_CODE'):
             raise NotImplementedError("Secret code not set yet.")
         return get_feedback(guess, self.SECRET_CODE)
 
 
 class HumanCracker(CodeCracker):
-    """
-    A class to represent a human code cracker.
-    """
+    """A class to represent a human code cracker."""
 
     def __init__(self, game: Game) -> None:
-        """
-        Initializes the human code cracker.
-        """
+        """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {secret_code}."
         super().__init__(game, win_message, lose_message)
@@ -167,12 +136,12 @@ class HumanCracker(CodeCracker):
             if guess == "d":
                 print("Game discarded.")
                 return "d"
-            if secret == "q":  # quit
+            if guess == "q":  # quit
                 print("Game saved.")
                 return "q"
-            if secret == "u":  # undo
+            if guess == "u":  # undo
                 return "u"
-            if secret == "r":  # redo
+            if guess == "r":  # redo
                 return "r"
             
             try:
@@ -184,37 +153,27 @@ class HumanCracker(CodeCracker):
 
 
 class AISetter(CodeSetter):
-    """
-    A class to represent an AI code setter.
-    """
+    """A class to represent an AI code setter."""
     
     def set_secret_code(self) -> None:
-        """
-        Sets the secret code for the game.
-        """
+        """Sets the secret code for the game."""
         # Generate random code
         number_of_colors = self.GAME.number_of_colors
         number_of_dots = self.GAME.number_of_dots
         self.SECRET_CODE = tuple(randint(1, number_of_colors) for _ in range(number_of_dots))
     
     def get_feedback(self, guess: tuple) -> tuple:
-        """
-        Obtains feedback for a given guess.
-        """
+        """Obtains feedback for a given guess."""
         if not hasattr(self, 'SECRET_CODE'):
             raise NotImplementedError("Secret code not set yet.")
         return get_feedback(guess, self.SECRET_CODE)
 
 
 class ExternalSetter(CodeSetter):
-    """
-    A class to represent an external code setter.
-    """
+    """A class to represent an external code setter."""
     
     def set_secret_code(self) -> None:
-        """
-        Sets the secret code for the game.
-        """
+        """Sets the secret code for the game."""
         pass  # There is no code available for external game, skip it
     
     def get_feedback(self, guess: tuple) -> Union[tuple, str]:
@@ -241,10 +200,10 @@ class ExternalSetter(CodeSetter):
             if feedback == "d":
                 print("Game discarded.")
                 return "d"
-            if secret == "q":  # quit
+            if feedback == "q":  # quit
                 print("Game saved.")
                 return "q"
-            if secret == "u":  # undo
+            if feedback == "u":  # undo
                 return "u"
             
             try:
@@ -256,7 +215,5 @@ class ExternalSetter(CodeSetter):
 
 
 class AICracker(CodeCracker):
-    """
-    A class to represent an AI code cracker.
-    """
+    """A class to represent an AI code cracker."""
     pass  # TODO: Implement solver logic.
