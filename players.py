@@ -4,6 +4,7 @@ from .utils import FStringTemplate, get_feedback
 from abc import ABC, abstractmethod
 from getpass import getpass
 from random import randint
+from typing import Optional, Union
 
 
 # Abstract Class for Player Unit
@@ -85,9 +86,10 @@ class HumanSetter(CodeSetter):
     A class to represent a human code setter.
     """
 
-    def set_secret_code(self) -> None:
+    def set_secret_code(self) -> Optional[str]:
         """
         Sets the secret code for the game.
+        Return 'd' if player discarded the game. Otherwise doesn't return anything.
         """
         valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
         while True:
@@ -96,22 +98,28 @@ class HumanSetter(CodeSetter):
                 hint = f"""
                 Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
                 For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
+                Or, you can enter a command:
+                (?) for help
+                (d) to discard the game
                 """
                 print(hint)
                 continue
+            if secret == "d":
+                print("Game discarded.")
+                return "d"
             
             try:
                 valid_guess.value = valid_guess.validate(secret)
             except ValueError as e:
                 print(e)
-                print("To get more help, enter '?' for tips.")
+                print("To get more help, enter '?'")
             else:  # Confrm password
                 confirm = getpass("Confirm the secret code: ")
                 if confirm != secret:
                     print("Code does not match. Try again.")
                     continue
                 self.SECRET_CODE = valid_guess
-                break
+                return
     
     def get_feedback(self, guess: tuple) -> tuple:
         """
@@ -135,9 +143,10 @@ class HumanCracker(CodeCracker):
         lose_message = "Sorry, you lost. The secret code was {secret_code}."
         super().__init__(game, win_message, lose_message)
 
-    def obtain_guess(self) -> tuple:
+    def obtain_guess(self) -> Union[tuple, str]:
         """
         Obtains a guess from the player.
+        Could return the guess as tuple or command (d,q,u,r) as string.
         """
         valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
         while True:
@@ -146,17 +155,32 @@ class HumanCracker(CodeCracker):
                 hint = f"""
                 Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
                 For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
+                Or, you can enter a command:
+                (?) for help
+                (d) to discard the game
+                (q) to save and quit
+                (u) to undo
+                (r) to redo
                 """
                 print(hint)
                 continue
+            if guess == "d":
+                print("Game discarded.")
+                return "d"
+            if secret == "q":  # quit
+                print("Game saved.")
+                return "q"
+            if secret == "u":  # undo
+                return "u"
+            if secret == "r":  # redo
+                return "r"
             
             try:
                 valid_guess.value = valid_guess.validate(guess)
-                break
+                return valid_guess
             except ValueError as e:
                 print(e)
-                print("To get more help, enter '?' for tips.")
-        return valid_guess
+                print("To get more help, enter '?'")
 
 
 class AISetter(CodeSetter):
@@ -193,9 +217,10 @@ class ExternalSetter(CodeSetter):
         """
         pass  # There is no code available for external game, skip it
     
-    def get_feedback(self, guess: tuple) -> tuple:
+    def get_feedback(self, guess: tuple) -> Union[tuple, str]:
         """
         Obtains external feedback from the user.
+        Could return the feedback as tuple or command (d,q,u) as string.
         """
         valid_feedback = ValidFeedback((0,0), number_of_dots=self.GAME.number_of_dots)
         while True:
@@ -204,18 +229,30 @@ class ExternalSetter(CodeSetter):
                 hint = f"""
                 Enter a 2 digit number (optionally separated by comma) between 0 and {self.GAME.number_of_dots}.
                 The first digit represents the number of black pegs, the second represents the number of white pegs.
-                For example: 01 or 0,1 -> (0, 1) -> 0 black pegs, 1 white peg
+                For example: 01 or 0,1 -> (0, 1) -> 0 black pegs, 1 white peg.
+                Or, you can enter a command:
+                (?) for help
+                (d) to discard the game
+                (q) to save and quit
+                (u) to undo
                 """
                 print(hint)
                 continue
+            if feedback == "d":
+                print("Game discarded.")
+                return "d"
+            if secret == "q":  # quit
+                print("Game saved.")
+                return "q"
+            if secret == "u":  # undo
+                return "u"
             
             try:
                 valid_feedback.value = valid_feedback.validate(feedback)
-                break
+                return valid_feedback
             except ValueError as e:
                 print(e)
-                print("To get more help, enter '?' for tips.")
-        return valid_feedback
+                print("To get more help, enter '?'")
 
 
 class AICracker(CodeCracker):
