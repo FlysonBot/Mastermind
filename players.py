@@ -1,6 +1,8 @@
 # players.py
-from .validation import BaseModel
+from .validation import BaseModel, ValidGuess, ValidFeedback
+from .utils import FStringTemplate, get_feedback
 from abc import ABC, abstractmethod
+from getpass import getpass
 
 
 # Abstract Class for Player Unit
@@ -27,11 +29,139 @@ class CodeSetter(Player):
     """
     A class to represent a code setter.
     """
-    pass
+    
+    @abstractmethod
+    def set_secret_code(self) -> None:
+        """
+        Sets the secret code for the game.
+        """
+        pass
+    
+    @abstractmethod
+    def get_feedback(self, guess: tuple) -> tuple:
+        """
+        Obtains feedback for a given guess.
+        """
+        pass
 
 
 class CodeCracker(Player):
     """
     A class to represent a code cracker.
     """
-    pass
+
+    def __init__(self, game: Game, win_msg: str, lose_msg: str) -> None:
+        """
+        Initializes the code cracker.
+        """
+        super().__init__(game)
+        self.win_message = FStringTemplate(win_msg)
+        self.lose_message = FStringTemplate(lose_msg)
+
+    def win_message(self) -> None:
+        """
+        Prints a message when the game is won.
+        """
+        print(self.win_message.eval(self.__dict__))
+    
+    def lose_message(self) -> None:
+        """
+        Prints a message when the game is lost.
+        """
+        print(self.lose_message.eval(self.__dict__))
+
+    @abstractmethod
+    def obtain_guess(self) -> tuple:
+        """
+        Obtains a guess from the player.
+        """
+        pass
+    
+
+# Concrete Implementation of Different Players
+class HumanSetter(CodeSetter):
+    """
+    A class to represent a human code setter.
+    """
+    def __init__(self, game: Game) -> None:
+        """
+        Initializes the human code setter.
+        """
+        super().__init__(game)
+
+    def set_secret_code(self) -> None:
+        """
+        Sets the secret code for the game.
+        """
+        valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
+        while True:
+            secret = getpass("Enter the secret code: ")      
+            if secret == "?":
+                hint = f"""
+                Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
+                For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
+                """
+                print(hint)
+                continue
+            
+            try:
+                valid_guess.value = valid_guess.validate(secret)
+            except ValueError as e:
+                print(e)
+                print("To get more help, enter '?' for tips.")
+            else:  # Confrm password
+                confirm = getpass("Confirm the secret code: ")
+                if confirm != secret:
+                    print("Code does not match. Try again.")
+                    continue
+                self.SECRET_CODE = valid_guess
+                break
+
+    
+    def get_feedback(self, guess: tuple) -> tuple:
+        """
+        Obtains feedback for a given guess.
+        """
+        if not hasattr(self, 'SECRET_CODE'):
+            raise NotImplementedError("Secret code not set yet.")
+        return get_feedback(guess, self.SECRET_CODE)
+
+
+class HumanCracker(CodeCracker):
+    """
+    A class to represent a human code cracker.
+    """
+
+    def __init__(self, game: Game) -> None:
+        """
+        Initializes the human code cracker.
+        """
+        win_message = "Congratulations! You won in {step} steps!"
+        lose_message = "Sorry, you lost. The secret code was {secret_code}."
+        super().__init__(game, win_message, lose_message)
+
+    def obtain_guess(self) -> tuple:
+        """
+        Obtains a guess from the player.
+        """
+        valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
+        while True:
+            guess = input("Enter your guess: ")
+            if guess == "?":
+                hint = f"""
+                Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
+                For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
+                """
+                print(hint)
+                continue
+            
+            try:
+                valid_guess.value = valid_guess.validate(guess)
+            except ValueError as e:
+                print(e)
+                print("To get more help, enter '?' for tips.")
+            else:
+                break
+        return valid_guess
+
+
