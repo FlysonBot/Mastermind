@@ -178,12 +178,21 @@ class Game(BaseModel):
             self.PLAYER1 = AICracker(self)
             self.PLAYER2 = ExternalSetter(self)
 
-    def player_guessing_logic(self) -> None:
+    def player_guessing_logic(self) -> Optional[str]:
         """Call Player 2 to make guess and Player 1 to obtain feedback."""
         while self.win_status is None:
+            # Obtain guess
             guess = self.PLAYER2.obtain_guess()
-            if guess is None:
+
+            # Process guess
+            if guess is "q":  # quit
                 break
+            if guess is "d":  # discard
+                break
+            if guess is "u":  # undo
+                pass
+            if guess is "r":  # redo
+                pass
             feedback = self.PLAYER1.get_feedback(guess)
             self.make_guess(guess, feedback)
             self.update_win_status(self._win_status)
@@ -198,19 +207,31 @@ class Game(BaseModel):
         else:
             self.PLAYER2.lose_message()
 
-    def start_game(self) -> None:
+    def start_game(self) -> Optional[str]:
         """Starts the game."""
+        # Check Condition
         if self._game_started:
             raise NotImplementedError("Game has already started.")
+        
+        # Start Game
         self._game_started = True
         self.find_players()
         self.PLAYER1.set_secret_code()
-        self.player_guessing_logic()
+
+        command = self.player_guessing_logic()  # Sometimes user quit or discard
+
+        # Post-termination Logic
         self.output_result()
+        return command
 
     def resume_game(self) -> None:
         """Resumes the game."""
+        # Check Condition
         if not self._game_started:
             raise NotImplementedError("Game has not started yet.")
-        self.player_guessing_logic()
+        
+        command = self.player_guessing_logic()  # Play game and retrieve command
+        
+        # Post-termination Logc
         self.output_result()
+        return command
