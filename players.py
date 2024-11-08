@@ -55,7 +55,7 @@ class CodeCracker(Player):
     def obtain_guess(self) -> tuple:
         """Obtains a guess from the player."""
         pass
-    
+
 
 # Concrete Implementation of Different Players
 class HumanSetter(CodeSetter):
@@ -101,55 +101,6 @@ class HumanSetter(CodeSetter):
         if not hasattr(self, 'SECRET_CODE'):
             raise NotImplementedError("Secret code not set yet.")
         return get_feedback(guess, self.SECRET_CODE)
-
-
-class HumanCracker(CodeCracker):
-    """A class to represent a human code cracker."""
-
-    def __init__(self, game: Game) -> None:
-        """Initializes the human code cracker."""
-        win_message = "Congratulations! You won in {step} steps!"
-        lose_message = "Sorry, you lost. The secret code was {secret_code}."
-        super().__init__(game, win_message, lose_message)
-
-    def obtain_guess(self) -> Union[tuple, str]:
-        """
-        Obtains a guess from the player.
-        Could return the guess as tuple or command (d,q,u,r) as string.
-        """
-        valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
-        while True:
-            guess = input("Enter your guess: ")
-            if guess == "?":
-                hint = f"""
-                Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
-                For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
-                Or, you can enter a command:
-                (?) for help
-                (d) to discard the game
-                (q) to save and quit
-                (u) to undo
-                (r) to redo
-                """
-                print(hint)
-                continue
-            if guess == "d":
-                print("Game discarded.")
-                return "d"
-            if guess == "q":  # quit
-                print("Game saved.")
-                return "q"
-            if guess == "u":  # undo
-                return "u"
-            if guess == "r":  # redo
-                return "r"
-            
-            try:
-                valid_guess.value = valid_guess.validate(guess)
-                return valid_guess
-            except ValueError as e:
-                print(e)
-                print("To get more help, enter '?'")
 
 
 class AISetter(CodeSetter):
@@ -209,6 +160,55 @@ class ExternalSetter(CodeSetter):
             try:
                 valid_feedback.value = valid_feedback.validate(feedback)
                 return valid_feedback
+            except ValueError as e:
+                print(e)
+                print("To get more help, enter '?'")
+
+
+class HumanCracker(CodeCracker):
+    """A class to represent a human code cracker."""
+
+    def __init__(self, game: Game) -> None:
+        """Initializes the human code cracker."""
+        win_message = "Congratulations! You won in {step} steps!"
+        lose_message = "Sorry, you lost. The secret code was {secret_code}."
+        super().__init__(game, win_message, lose_message)
+
+    def obtain_guess(self) -> Union[tuple, str]:
+        """
+        Obtains a guess from the player.
+        Could return the guess as tuple or command (d,q,u,r) as string.
+        """
+        valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
+        while True:
+            guess = input("Enter your guess: ")
+            if guess == "?":
+                hint = f"""
+                Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
+                For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
+                Or, you can enter a command:
+                (?) for help
+                (d) to discard the game
+                (q) to save and quit
+                (u) to undo
+                (r) to redo
+                """
+                print(hint)
+                continue
+            if guess == "d":
+                print("Game discarded.")
+                return "d"
+            if guess == "q":  # quit
+                print("Game saved.")
+                return "q"
+            if guess == "u":  # undo
+                return "u"
+            if guess == "r":  # redo
+                return "r"
+            
+            try:
+                valid_guess.value = valid_guess.validate(guess)
+                return valid_guess
             except ValueError as e:
                 print(e)
                 print("To get more help, enter '?'")
