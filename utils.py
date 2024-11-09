@@ -1,7 +1,5 @@
 def get_feedback(self, guess: tuple, secret: tuple) -> list:
-    """
-    Returns the feedback for a given guess.
-    """
+    """Returns the feedback for a given guess."""
     # Optimized abstract algorithm (assuming correct input)
     list1 = [0] * (self.number_of_colors + 1)  # black pegs count + color count of guess
     list2 = [0] * (self.number_of_colors + 1)  # white pegs count + color count of secret
@@ -21,9 +19,7 @@ def get_feedback(self, guess: tuple, secret: tuple) -> list:
     return list1[0], list2[0]  # return black and white pegs count
 
 class FStringTemplate:
-    """
-    A class to represent a formatted string template.
-    """
+    """A class to represent a formatted string template."""
 
     def __init__(self, template: str) -> None:
         """Initialize with a template string."""
