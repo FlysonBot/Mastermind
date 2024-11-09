@@ -1,18 +1,21 @@
-class GameSimulator:
-    def __init__(self):
-        self.profile = None
-        self.saved_games = []  # To be loaded from DataManager later
+from typing import Optional, List, Dict, Union
 
-    def prepare(self):
+
+class GameSimulator:
+    def __init__(self) -> None:
+        self.profile: Optional[Dict[str, str]] = None
+        self.saved_games: List[str] = []  # To be loaded from DataManager later
+
+    def prepare(self) -> None:
         # Placeholder for the prepare function, you can add the list of preparation steps here later
         print("Preparing game environment...")
 
-    def create_new_user(self):
+    def create_new_user(self) -> None:
         # Placeholder function to create a new user
         print("Creating new user profile...")
         self.profile = {"username": "Player"}  # Example user profile (to be expanded)
 
-    def show_main_menu(self):
+    def show_main_menu(self) -> None:
         while True:
             print("\n--- Main Menu ---")
             print("(1) Start New Game")
@@ -36,7 +39,7 @@ class GameSimulator:
             else:
                 print("Invalid option. Please try again.")
 
-    def start_new_game(self):
+    def start_new_game(self) -> None:
         while True:
             print("\n--- Start New Game ---")
             print("(1) You vs Someone Else")
@@ -44,7 +47,7 @@ class GameSimulator:
             print("(3) AI vs You")
             print("(4) Solve External Game")
             print("(0) Return to Main Menu")
-            game_type = input("Choose game type: ")
+            game_type: str = input("Choose game type: ")
 
             if game_type not in ["1", "2", "3", "4", "0"]:
                 print("Invalid choice. Try again.")
@@ -62,16 +65,16 @@ class GameSimulator:
                 print("Game in progress...")
                 break  # return to main menu after game ended
 
-    def get_game_size(self):
+    def get_game_size(self) -> Optional[Dict[str, int]]:
         try:
-            colors = int(input("Enter number of colors: "))
-            dots = int(input("Enter number of dots in combination: "))
+            colors: int = int(input("Enter number of colors: "))
+            dots: int = int(input("Enter number of dots in combination: "))
             return {"colors": colors, "dots": dots}
         except ValueError:
             print("Invalid input. Please enter valid numbers.")
             return None
 
-    def load_saved_game(self):
+    def load_saved_game(self) -> None:
         # Placeholder: This will interact with DataManager to fetch saved games
         print("\n--- Load Saved Game ---")
         if not self.saved_games:
@@ -92,21 +95,21 @@ class GameSimulator:
         except ValueError:
             print("Invalid input. Please enter a number.")
 
-    def show_statistics(self):
+    def show_statistics(self) -> None:
         # Placeholder for displaying user statistics
         print("\n--- My Statistics ---")
         print("Statistics feature coming soon...")
 
-    def settings(self):
+    def settings(self) -> None:
         # Placeholder for settings functionality
         print("\n--- Settings ---")
         print("Settings feature coming soon...")
 
-    def save_and_exit(self):
+    def save_and_exit(self) -> None:
         # Placeholder for saving current state
         print("Saving progress and exiting. Goodbye!")
 
-    def run(self):
+    def run(self) -> None:
         self.prepare()
 
         if not self.profile:
