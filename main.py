@@ -1,10 +1,10 @@
-from typing import Optional, List, Dict, Union
+from typing import Optional, List, Dict
 
 
 class GameSimulator:
     def __init__(self) -> None:
-        self.profile: Optional[Dict[str, str]] = None
-        self.saved_games: List[str] = []  # To be loaded from DataManager later
+        self.profile = None  # User profile (initialized as None)
+        self.saved_games = []  # To be loaded from DataManager later
 
     def prepare(self) -> None:
         # Placeholder for the prepare function, you can add the list of preparation steps here later
@@ -47,7 +47,7 @@ class GameSimulator:
             print("(3) AI vs You")
             print("(4) Solve External Game")
             print("(0) Return to Main Menu")
-            game_type: str = input("Choose game type: ")
+            game_type = input("Choose game type: ")
 
             if game_type not in ["1", "2", "3", "4", "0"]:
                 print("Invalid choice. Try again.")
@@ -67,8 +67,8 @@ class GameSimulator:
 
     def get_game_size(self) -> Optional[Dict[str, int]]:
         try:
-            colors: int = int(input("Enter number of colors: "))
-            dots: int = int(input("Enter number of dots in combination: "))
+            colors = int(input("Enter number of colors: "))
+            dots = int(input("Enter number of dots in combination: "))
             return {"colors": colors, "dots": dots}
         except ValueError:
             print("Invalid input. Please enter valid numbers.")
