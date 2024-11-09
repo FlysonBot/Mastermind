@@ -13,6 +13,19 @@ class Player(ABC, BaseModel):
     def __init__(self, game: Game) -> None:
         """Initializes the player."""
         self.GAME = game
+        self.undo_stack = Stack()  # For undo and redo functionality
+
+    def undo(self) -> None:
+        """Update the undo stack so we can redo afterward."""
+        if len(self.GAME._board) == 0:
+            raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
+        self.undo_stack.push(self.GAME._board.last_guess())
+    
+    def redo(self) -> None:
+        """Pop from the undo stack and return the last guess."""
+        if len(self.undo_stack) == 0:
+            raise IndexError("Cannot undo from empty board.")
+        return self.undo_stack.pop()
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
@@ -22,7 +35,7 @@ class Player(ABC, BaseModel):
 
 class CodeSetter(Player):
     """A class to represent a code setter."""
-    
+
     @abstractmethod
     def set_secret_code(self) -> None:
         """Sets the secret code for the game."""
@@ -55,7 +68,7 @@ class CodeCracker(Player):
     def obtain_guess(self) -> tuple:
         """Obtains a guess from the player."""
         pass
-
+        
 
 # Concrete Implementation of Different Players
 class HumanSetter(CodeSetter):

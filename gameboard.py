@@ -64,6 +64,7 @@ class Game(BaseModel):
         """A class to represent a Mastermind board. The board contain all
         the guesses made by a player and the feedback for each guess.
         """
+
         class EmptyBoardError(Exception):
             """Custom exception for empty board."""
             pass
@@ -85,10 +86,25 @@ class Game(BaseModel):
             return self._guesses[index], self._feedbacks[index]
         
         def last_guess(self) -> tuple:
-            """Returns the last guess and its feedback."""
+            """Returns the last guess."""
             if self._number_of_guesses_made == 0:
                 raise self.EmptyBoardError("No guesses to return.")
-            return self._guesses.top(), self._feedbacks.top()
+            return self._guesses.top()
+        
+        def last_feedback(self) -> tuple:
+            """Returns the last feedback."""
+            if self._number_of_guesses_made == 0:
+                raise self.EmptyBoardError("No guesses to return.")
+            return self._feedbacks.top()
+
+        def remove_last(self) -> tuple:
+            """Undoes the last guess and its feedback."""
+            if self._number_of_guesses_made == 0:
+                raise self.EmptyBoardError("No guesses to remove.")
+            guess = self._guesses.pop()
+            feedback = self._feedbacks.pop()
+            self._number_of_guesses_made -= 1
+            return guess, feedback
 
         def add_guess(self, guess: tuple, feedback: tuple) -> None:
             """Adds a guess and its feedback to the board."""
@@ -97,22 +113,15 @@ class Game(BaseModel):
             self._guesses.push(guess)
             self._feedbacks.push(feedback)
             self._number_of_guesses_made += 1
-        
-        def remove_last_guess(self) -> tuple:
-            """Undoes the last guess and its feedback."""
-            if self._number_of_guesses_made == 0:
-                raise self.EmptyBoardError("No guesses to remove.")
-            guess = self._guesses.pop()
-            feedback = self._feedbacks.pop()
-            self._number_of_guesses_made -= 1
-            return guess, feedback
-            
+
         def clear_board(self) -> None:
             """Clears the board."""
             self._guesses.clear_stack()
             self._feedbacks.clear_stack()
             self._number_of_guesses_made = 0
 
+
+    # Initialization
     def __init__(self, number_of_colors: int, number_of_dots: int,
                  maximum_attempts: int, game_mode: str) -> None:
         """Initializes the game."""
@@ -184,7 +193,7 @@ class Game(BaseModel):
     def player_guessing_logic(self) -> Optional[str]:
         """Call Player 2 to make guess and Player 1 to obtain feedback."""
         while self.win_status is None:
-            # Obtain guess
+            # Obtain guess or command
             guess = self.PLAYER2.obtain_guess()
 
             # Process command
@@ -193,12 +202,14 @@ class Game(BaseModel):
             if guess is "d":  # discard
                 break
             if guess is "u":  # undo
-                self.PLAYER1.undo()
-                self.PLAYER2.undo()
+                self.PLAYER1.undo()  # Update undo stack for feedback
+                self.PLAYER2.undo()  # Update undo stack for guess
+                self._board.remove_last()  # Remove the guess and feedback
                 continue
             if guess is "r":  # redo
-                self.PLAYER1.redo()
-                self.PLAYER2.redo()
+                feedback = self.PLAYER1.redo()  # Retrieve from undo stack
+                guess = self.PLAYER2.redo()  # Retrieve from undo stack
+                self.make_guess(guess, feedback)  # Add guess and feedback back
                 continue
             
             # Get feedback
