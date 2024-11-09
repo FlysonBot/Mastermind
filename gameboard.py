@@ -1,8 +1,9 @@
-from .validation import BaseModel
-from .utils import get_feedback
 from collections import deque
-from typing import Any, Optional, Tuple
 from random import randint
+from typing import Any, Optional, Tuple
+
+from .utils import get_feedback
+from .validation import BaseModel
 
 
 class Stack:
