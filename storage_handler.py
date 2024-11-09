@@ -3,8 +3,10 @@ import json  # Module for working with JSON data
 import glob  # Module for file pattern matching
 from typing import Any  # Type hint for any value
 
+
 class UserData:
     """Static class to store user configs in a single file."""
+
     _data = {}  # Class-level dictionary to hold user data
     _file_path = "data/userdata.config"  # Path to the user data file
 
@@ -20,17 +22,17 @@ class UserData:
         cls._ensure_directory_exists()  # Ensure the directory is created
         # Check if the user data file exists
         if os.path.exists(cls._file_path):
-            with open(cls._file_path, 'r') as file:  # Open the file for reading
+            with open(cls._file_path, "r") as file:  # Open the file for reading
                 cls._data = json.load(file)  # Load JSON data into the dictionary
         else:
-            cls._data = {}  # If the file doesn't exist, initialize as an empty dictionary
+            cls._data = {}  # Initialize to empty dict if wil doesn't exist
 
     @classmethod
     def _save_data(cls) -> None:
         """Save user data to the config file."""
         cls._ensure_directory_exists()  # Ensure the directory is created
-        with open(cls._file_path, 'w') as file:  # Open the file for writing
-            json_string = json.dumps(cls._data)  # Serialize the dictionary to a JSON string
+        with open(cls._file_path, "w") as file:  # Open the file for writing
+            json_string = json.dumps(cls._data)  # Serialize dict to JSON string
             file.write(json_string)  # Write the entire string to the file
 
     @classmethod
@@ -53,12 +55,14 @@ class UserData:
         cls._data[key] = value  # Add or update the key-value pair in the dictionary
         cls._save_data()  # Save the updated dictionary to the file
 
+
 # Load existing data when the class is imported
 UserData._load_data()
 
 
 class Cache:
     """Static class to store cache to speed up computation in multiple files."""
+
     _cache_directory = "data"  # Directory to store cache files
 
     @classmethod
@@ -87,7 +91,7 @@ class Cache:
         file_path = cls._get_cache_file_path(key)  # Get the cache file path for the key
         # Check if the cache file exists
         if os.path.exists(file_path):
-            with open(file_path, 'r') as file:  # Open the cache file for reading
+            with open(file_path, "r") as file:  # Open the cache file for reading
                 return file.read()  # Return the contents of the cache file
         return None  # Return None if the cache file does not exist
 
@@ -95,6 +99,5 @@ class Cache:
     def set(cls, key: str, value: Any) -> Any:
         """Set a value in the cache."""
         file_path = cls._get_cache_file_path(key)  # Get the cache file path for the key
-        with open(file_path, 'w') as file:  # Open the cache file for writing
+        with open(file_path, "w") as file:  # Open the cache file for writing
             file.write(value)  # Write the value to the cache file
-

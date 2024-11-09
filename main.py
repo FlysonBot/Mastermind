@@ -49,10 +49,10 @@ class GameSimulator:
             if game_type not in ["1", "2", "3", "4", "0"]:
                 print("Invalid choice. Try again.")
                 continue
-            
+
             if game_type == "0":
                 break  # return to main menu
-            
+
             game_size = self.get_game_size()
 
             if game_size:
@@ -77,7 +77,7 @@ class GameSimulator:
         if not self.saved_games:
             print("No saved games available.")
             return
-        
+
         for idx, game in enumerate(self.saved_games, 1):
             print(f"({idx}) {game}")
         choice = input("Select a game to load: ")
@@ -113,8 +113,9 @@ class GameSimulator:
             self.create_new_user()
         else:
             print(f"Welcome back, {self.profile['username']}!")
-        
+
         self.show_main_menu()
+
 
 if __name__ == "__main__":
     game_simulator = GameSimulator()

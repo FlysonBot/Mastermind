@@ -1,9 +1,10 @@
 import unittest
 from ..validation import *
 
+
 class GameSettings(BaseModel):
     """Class to manage game settings with validated attributes."""
-    
+
     def __init__(self):
         # Initialize attributes (validation models will be automatically applied)
         self.CONSTANT_VALUE = 42
@@ -11,21 +12,22 @@ class GameSettings(BaseModel):
         self.number_of_colors = 3
         self.number_of_guesses_made = 0
         self.maximum_attempts = 10
-        self.game_mode = 'HvAI'
+        self.game_mode = "HvAI"
         self.secret_code = SecretCode((1, 2, 3), number_of_dots=3, number_of_colors=3)
         self.boolean_flag = Booleans(None)
         self.true_fuse = True
         self.false_fuse = False
 
+
 class TestGameSettings(unittest.TestCase):
-    
+
     def setUp(self):
         """Create a GameSettings instance for testing."""
         self.settings = GameSettings()
 
     def test_constant(self):
         self.assertEqual(self.settings.CONSTANT_VALUE, 42)
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.CONSTANT_VALUE = 50  # Should raise an error
 
@@ -41,19 +43,19 @@ class TestGameSettings(unittest.TestCase):
     def test_number_of_colors(self):
         self.settings.number_of_colors = 5
         self.assertEqual(self.settings.number_of_colors, 5)
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.number_of_colors = 1  # Should raise an error
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.number_of_colors = "three"  # Should raise an error
-    
+
     def test_chain_validation(self):
         self.settings.NUMBER_OF_COLORS = 3  # Chaining
         self.assertEqual(self.settings.NUMBER_OF_COLORS, 3)
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.NUMBER_OF_DOTS = -1  # Should raise an error
-    
+
     def test_unvalidated_type(self):
         """Test handling normal unvalidated type."""
         self.settings.integer = 5  # normal int type
@@ -84,13 +86,13 @@ class TestGameSettings(unittest.TestCase):
             self.settings.maximum_attempts = "ten"  # Non-integer string
 
     def test_game_mode(self):
-        self.settings.game_mode = 'AIvAI'
-        self.assertEqual(self.settings.game_mode, 'AIvAI')
+        self.settings.game_mode = "AIvAI"
+        self.assertEqual(self.settings.game_mode, "AIvAI")
 
         with self.assertRaises(ValidatedData.ValidationError):
-            self.settings.game_mode = 'QvQ'  # Invalid game mode
+            self.settings.game_mode = "QvQ"  # Invalid game mode
         with self.assertRaises(ValidatedData.ValidationError):
-            self.settings.game_mode = ''  # Empty string
+            self.settings.game_mode = ""  # Empty string
 
     def test_secret_code(self):
         self.settings.secret_code = (1, 2, 3)
@@ -130,21 +132,21 @@ class TestGameSettings(unittest.TestCase):
         # Test with le
         conint = ConfinedInteger(5, le=10)
         self.assertEqual(conint.get(), 5)
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger(11, le=10)  # Should raise error
 
         # Test with lt
         conint = ConfinedInteger(5, lt=10)
         self.assertEqual(conint.get(), 5)
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger(10, lt=10)  # Should raise error
 
         # Test with ge
         conint = ConfinedInteger(5, ge=2)
         self.assertEqual(conint.get(), 5)
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger(1, ge=2)  # Should raise error
 
@@ -168,7 +170,7 @@ class TestGameSettings(unittest.TestCase):
         # Test with le
         conint = ConfinedInteger("5", le=10)  # String input
         self.assertEqual(conint.get(), 5)  # Should be converted to int
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger("11", le=10)  # Invalid string (out of range)
         with self.assertRaises(ValidatedData.ValidationError):
@@ -183,7 +185,6 @@ class TestGameSettings(unittest.TestCase):
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger("abc", lt=10)  # Invalid string (non-numeric)
 
-
         # Test with ge
         conint = ConfinedInteger("5", ge=2)  # String input
         self.assertEqual(conint.get(), 5)  # Should be converted to int
@@ -192,7 +193,6 @@ class TestGameSettings(unittest.TestCase):
             ConfinedInteger("1", ge=2)  # Invalid string (out of range)
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger("abc", ge=2)  # Invalid string (non-numeric)
-
 
         # Test with gt
         conint = ConfinedInteger("5", gt=2)  # String input
@@ -206,7 +206,7 @@ class TestGameSettings(unittest.TestCase):
         # Test with both lt and gt
         conint = ConfinedInteger("5", lt=10, gt=2)  # String input
         self.assertEqual(conint.get(), 5)  # Should be converted to int
-        
+
         with self.assertRaises(ValidatedData.ValidationError):
             ConfinedInteger("11", lt=10, gt=2)  # Invalid string (out of range)
         with self.assertRaises(ValidatedData.ValidationError):
@@ -218,5 +218,6 @@ class TestGameSettings(unittest.TestCase):
         with self.assertRaises(ValidatedData.ValidationError):
             self.settings.CONSTANT_VALUE = Constant(42)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

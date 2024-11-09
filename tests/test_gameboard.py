@@ -1,6 +1,7 @@
 import unittest
 from ..gameboard import *
 
+
 class TestStack(unittest.TestCase):
 
     def setUp(self):
@@ -62,5 +63,6 @@ class TestStack(unittest.TestCase):
         items = list(self.stack)
         self.assertEqual(items, [1, 2])  # Note: Order is from bottom to top.
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

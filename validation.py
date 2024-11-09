@@ -1,16 +1,19 @@
 from typing import Any
 from abc import ABC, abstractmethod
 
+
 # Fundamental Classes
 class ValidatedData(ABC):
     """Base class for validated data types."""
 
     class ValidationError(Exception):
         """Custom exception for validation errors."""
+
         pass
-    
+
     class MissingParameterError(Exception):
         """Custom exception for missing kwargs key."""
+
         pass
 
     def __init__(self, value: Any, **kwargs: Any) -> None:
@@ -18,9 +21,9 @@ class ValidatedData(ABC):
         if kwargs:  # If there are kwargs
             self.kwargs = kwargs  # Store them
             self.validate_kwargs()  # And validate them
-        
+
         # Validate on initialization and update the value
-        self.value = self.validate(value)  # sometimes validate() return a different value
+        self.value = self.validate(value)  # sometimes it return a different value
 
     def get(self) -> Any:
         """Return the main stored value only."""
@@ -30,7 +33,7 @@ class ValidatedData(ABC):
     def validate(self, value: Any) -> None:
         """Abstract method to validate the value. Must be implemented by subclasses."""
         return value
-    
+
     def validate_kwargs(self) -> None:
         """Abstract method to validate kwargs. Optionally implemented by subclasses."""
         pass
@@ -47,16 +50,18 @@ class BaseModel:
         # If the attribute already exists
         if hasattr(self, name):
             attr = super().__getattribute__(name)  # Get the attribute
-            
+
             if isinstance(attr, ValidatedData):  # If is a validated type
                 if isinstance(value, ValidatedData):  # If input is validated
                     if type(value) is not type(attr):  # If not the same type
-                        raise ValidationError("Cannot assign a different type to a validated attribute.")
+                        raise ValidationError(
+                            "Cannot assign a different type to a validated attribute."
+                        )
                     # Try to update with the validated value (so custom validation method is invoked)
                     # This prevent replacing constant with another constant, or instance with different kwargs
                     attr.value = attr.validate(value.value)
                     return
-                
+
                 else:  # If input is not validated
                     attr.value = attr.validate(value)  # Validate and update
                     return  # return to avoid invoking super().__setattr__
@@ -72,10 +77,11 @@ class BaseModel:
     def __getattribute__(self, name: str) -> Any:
         """Retrieve attribute and return the underlying value for ValidatedData instances."""
         value = super().__getattribute__(name)
-        
+
         while isinstance(value, ValidatedData):  # While it's a validated type
-            value = value.get()  # Keep getting the inner value (peel off the validation)
-        
+            # Keep getting the inner value (peel off the validation)
+            value = value.get()
+
         return value
 
     def _apply_validations(self, name: str, value: Any) -> Any:
@@ -85,12 +91,12 @@ class BaseModel:
         """
         # Determine if a constant validation is needed
         validations = []
-        
+
         if name.isupper():  # Attribute name is all uppercase (a constant)
             validations.append(Constant)
-        
+
         # Convert snake_case name to CamelCase for other specific validations
-        class_name = ''.join(word.capitalize() for word in name.lower().split('_'))
+        class_name = "".join(word.capitalize() for word in name.lower().split("_"))
         validation_class = globals().get(class_name)
 
         # Check if the class exists and is a ValidatedData subclass
@@ -110,7 +116,7 @@ class Constant(ValidatedData):
 
     def validate(self, value: Any) -> None:
         """Ensure the constant value is not modified after initialization."""
-        if hasattr(self, 'value'):
+        if hasattr(self, "value"):
             raise self.ValidationError("Cannot modify constant after initialization.")
         return value
 
@@ -124,7 +130,7 @@ class GameMode(ValidatedData):
 
     def validate(self, value: Any) -> None:
         """Ensure the game mode is one of the allowed values."""
-        allowed_modes = ['HvH', 'HvAI', 'AIvH', 'AIvAI']
+        allowed_modes = ["HvH", "HvAI", "AIvH", "AIvAI"]
         if value not in allowed_modes:
             raise self.ValidationError(f"Game mode must be one of {allowed_modes}.")
         return value
@@ -135,13 +141,17 @@ class ValidGuess(ValidatedData):
 
     def validate_kwargs(self) -> None:
         """Ensure the kwargs contain the required keys."""
-        if 'number_of_dots' not in self.kwargs:
-            raise self.MissingParameterError("Missing 'number_of_dots' parameter in kwargs.")
-        if 'number_of_colors' not in self.kwargs:
-            raise self.MissingParameterError("Missing 'number_of_colors' parameter in kwargs.")
-        NumberOfDots(self.kwargs['number_of_dots'])  # Validation
-        NumberOfColors(self.kwargs['number_of_colors'])  # Validation
-    
+        if "number_of_dots" not in self.kwargs:
+            raise self.MissingParameterError(
+                "Missing 'number_of_dots' parameter in kwargs."
+            )
+        if "number_of_colors" not in self.kwargs:
+            raise self.MissingParameterError(
+                "Missing 'number_of_colors' parameter in kwargs."
+            )
+        NumberOfDots(self.kwargs["number_of_dots"])  # Validation
+        NumberOfColors(self.kwargs["number_of_colors"])  # Validation
+
     def validate(self, value: Any) -> None:
         """Ensure the guess is a tuple of integers of the correct length."""
         if isinstance(value, str):
@@ -153,18 +163,28 @@ class ValidGuess(ValidatedData):
                     # 123412 -> (1, 2, 3, 4, 1, 2)
                     value = tuple(map(int, value))
             except ValueError:
-                raise ValueError("Guess cannot contain non-numerical number other than comma. "\
-                                 "For example: 123412 or 1,2,3,4,1,2 -> (1, 2, 3, 4, 1, 2).")
+                raise ValueError(
+                    "Guess cannot contain non-numerical number other than comma. "
+                    "For example: 123412 or 1,2,3,4,1,2 -> (1, 2, 3, 4, 1, 2)."
+                )
 
         if not isinstance(value, (tuple, list)):
             raise self.ValidationError("Guess must be a tuple of integers.")
-        
-        if len(value) != self.kwargs['number_of_dots']:
-            raise self.ValidationError(f"Guess must have {self.kwargs['number_of_dots']} dots.")
-        
+
+        if len(value) != self.kwargs["number_of_dots"]:
+            raise self.ValidationError(
+                f"Guess must have {self.kwargs['number_of_dots']} dots."
+            )
+
         for dot in value:
-            if not isinstance(dot, int) or dot < 1 or dot > self.kwargs['number_of_colors']:
-                raise self.ValidationError("All dots in the guess must be integers in the range [1, number_of_colors].")
+            if (
+                not isinstance(dot, int)
+                or dot < 1
+                or dot > self.kwargs["number_of_colors"]
+            ):
+                raise self.ValidationError(
+                    "All dots in the guess must be integers in the range [1, number_of_colors]."
+                )
 
 
 class ValidFeedback(ValidatedData):
@@ -172,10 +192,12 @@ class ValidFeedback(ValidatedData):
 
     def validate_kwargs(self) -> None:
         """Ensure the kwargs contain the required keys."""
-        if 'number_of_dots' not in self.kwargs:
-            raise self.MissingParameterError("Missing 'number_of_dots' parameter in kwargs.")
-        NumberOfDots(self.kwargs['number_of_dots'])  # Validation
-    
+        if "number_of_dots" not in self.kwargs:
+            raise self.MissingParameterError(
+                "Missing 'number_of_dots' parameter in kwargs."
+            )
+        NumberOfDots(self.kwargs["number_of_dots"])  # Validation
+
     def validate(self, value: Any) -> None:
         """Ensure the feedback is a tuple of integers of the correct length."""
         if isinstance(value, str):
@@ -185,20 +207,24 @@ class ValidFeedback(ValidatedData):
                 else:
                     value = tuple(map(int, value))  # 21 -> (2, 1)
             except ValueError:
-                raise ValueError("Feedback cannot contain non-numerical characters other than comma. "\
-                                 "For example: 21 = (2, 1); 10,11 -> (10, 11).")
+                raise ValueError(
+                    "Feedback cannot contain non-numerical characters other than comma. "
+                    "For example: 21 = (2, 1); 10,11 -> (10, 11)."
+                )
 
         if not isinstance(value, tuple):
             raise self.ValidationError("Feedback must be a tuple of two integers.")
         if not len(value) == 2:
             raise self.ValidationError("Feedback must be a tuple of two integers.")
-        
+
         try:
-            ConfinedInteger(value[0], ge=0, le=self.kwargs['number_of_dots'])
-            ConstrainedInteger(value[1], ge=0, le=self.kwargs['number_of_dots'])
+            ConfinedInteger(value[0], ge=0, le=self.kwargs["number_of_dots"])
+            ConstrainedInteger(value[1], ge=0, le=self.kwargs["number_of_dots"])
         except ValidatedData.ValidationError:
-            raise self.ValidationError("Feedback must be a tuple of integers in the range [0, number_of_dots].")
-        
+            raise self.ValidationError(
+                "Feedback must be a tuple of integers in the range [0, number_of_dots]."
+            )
+
         return value
 
 
@@ -218,13 +244,15 @@ class TrueFuse(ValidatedData):
     def validate(self, value: Any) -> None:
         """Ensure the fuse cannot be set to False after initialization."""
         if value is False:
-            if hasattr(self, 'value'):  # If already initialized
-                raise self.ValidationError("TrueFuse cannot be set to False after initialization.")
+            if hasattr(self, "value"):  # If already initialized
+                raise self.ValidationError(
+                    "TrueFuse cannot be set to False after initialization."
+                )
             return  # otherwise it is valid, return to skip the next if statement
-        
+
         if value is not True:  # If value is not True or False
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
-        
+
         return value
 
 
@@ -234,12 +262,14 @@ class FalseFuse(ValidatedData):
     def validate(self, value: Any) -> None:
         """Ensure the fuse cannot be set to True after initialization."""
         if value is True:
-            if hasattr(self, 'value'):
-                raise self.ValidationError("FalseFuse cannot be set to True after initialization.")
+            if hasattr(self, "value"):
+                raise self.ValidationError(
+                    "FalseFuse cannot be set to True after initialization."
+                )
             return
         if value is not False:
             raise self.ValidationError("Cannot set fuse to a non-boolean value.")
-        
+
         return value
 
 
@@ -248,24 +278,35 @@ class ConfinedInteger(ValidatedData):
 
     def validate_kwargs(self) -> None:
         """Ensure the kwargs contain the required keys."""
-        acceptable_args = ['lt', 'le', 'gt', 'ge']  # lt = less than, le = less than or equals to, etc.
-        
+        # lt = less than, le = less than or equals to, etc.
+        acceptable_args = ["lt", "le", "gt", "ge"]
+
         if len(self.kwargs) == 0:
-            raise self.MissingParameterError("Must provide at least one of 'lt', 'le', 'gt', or 'ge' parameter in kwargs.")
-        
+            raise self.MissingParameterError(
+                "Must provide at least one of 'lt', 'le', 'gt', or 'ge' parameter in kwargs."
+            )
+
         for arg in self.kwargs:
             if arg not in acceptable_args:
-                raise self.ValidationError(f"Invalid argument '{arg}'. Must be one of {acceptable_args} and cannot be repeated.")
-            acceptable_args.remove(arg)  # Remove the argument from the list of acceptable args
-        
-        if ('lt' in self.kwargs and 'le' in self.kwargs) or ('gt' in self.kwargs and 'ge' in self.kwargs):
-            raise self.ValidationError("Cannot have both 'lt' and 'le' or 'gt' and 'ge' in kwargs.")
-        
-        lower_limit = self.kwargs.get('ge', self.kwargs.get('gt', float('-inf')))
-        upper_limit = self.kwargs.get('le', self.kwargs.get('lt', float('inf')))
+                raise self.ValidationError(
+                    f"Invalid argument '{arg}'. Must be one of {acceptable_args} and cannot be repeated."
+                )
+
+            # Remove the argument from the list of acceptable args
+            acceptable_args.remove(arg)
+
+        if ("lt" in self.kwargs and "le" in self.kwargs) or (
+            "gt" in self.kwargs and "ge" in self.kwargs
+        ):
+            raise self.ValidationError(
+                "Cannot have both 'lt' and 'le' or 'gt' and 'ge' in kwargs."
+            )
+
+        lower_limit = self.kwargs.get("ge", self.kwargs.get("gt", float("-inf")))
+        upper_limit = self.kwargs.get("le", self.kwargs.get("lt", float("inf")))
         if lower_limit > upper_limit:
             raise self.ValidationError("Lower limit cannot be higher than upper limit.")
-    
+
     def validate(self, value: Any) -> None:
         """Ensure the value is an integer within the specified range."""
         # add support for converting string representation to int
@@ -277,23 +318,29 @@ class ConfinedInteger(ValidatedData):
                     raise self.ValidationError("Value must be an integer.")
             else:
                 raise self.ValidationError("Value must be an integer.")
-        
+
         # Validate range
-        if 'le' in self.kwargs and value > self.kwargs['le']:
-            raise self.ValidationError(f"Value must be less than or equal to {self.kwargs['le']}.")
-        if 'lt' in self.kwargs and value >= self.kwargs['lt']:
+        if "le" in self.kwargs and value > self.kwargs["le"]:
+            raise self.ValidationError(
+                f"Value must be less than or equal to {self.kwargs['le']}."
+            )
+        if "lt" in self.kwargs and value >= self.kwargs["lt"]:
             raise self.ValidationError(f"Value must be less than {self.kwargs['lt']}.")
-        if 'ge' in self.kwargs and value < self.kwargs['ge']:
-            raise self.ValidationError(f"Value must be greater than or equal to {self.kwargs['ge']}.")
-        if 'gt' in self.kwargs and value <= self.kwargs['gt']:
-            raise self.ValidationError(f"Value must be greater than {self.kwargs['gt']}.")
-        
+        if "ge" in self.kwargs and value < self.kwargs["ge"]:
+            raise self.ValidationError(
+                f"Value must be greater than or equal to {self.kwargs['ge']}."
+            )
+        if "gt" in self.kwargs and value <= self.kwargs["gt"]:
+            raise self.ValidationError(
+                f"Value must be greater than {self.kwargs['gt']}."
+            )
+
         return value
 
 
 class NumberOfDots(ConfinedInteger):
     """Validated property for the number of dots."""
-    
+
     def __init__(self, value: Any) -> None:
         """Initialize with a value and provide a constrain"""
         super().__init__(value, ge=2)
@@ -301,7 +348,7 @@ class NumberOfDots(ConfinedInteger):
 
 class NumberOfColors(ConfinedInteger):
     """Validated property for the number of colors."""
-    
+
     def __init__(self, value: Any) -> None:
         """Initialize with a value and provide a constrain"""
         super().__init__(value, ge=2)
@@ -321,4 +368,3 @@ class MaximumAttempts(ConfinedInteger):
     def __init__(self, value: Any) -> None:
         """Initialize with a value and provide a constrain"""
         super().__init__(value, ge=1)
-

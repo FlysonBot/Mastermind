@@ -7,7 +7,7 @@ from random import randint
 
 class Stack:
     """An implementation of a stack data structure using deque."""
-    
+
     def __init__(self, data: Optional[list] = None) -> None:
         """Initializes the stack."""
         self._stack = deque(data) if data else deque()
@@ -58,7 +58,7 @@ class Stack:
 
 class Game(BaseModel):
     """A class to represent a Mastermind game."""
-    
+
     # Board subclass to store board status
     class _Board(BaseModel):
         """A class to represent a Mastermind board. The board contain all
@@ -67,6 +67,7 @@ class Game(BaseModel):
 
         class EmptyBoardError(Exception):
             """Custom exception for empty board."""
+
             pass
 
         def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
@@ -80,17 +81,17 @@ class Game(BaseModel):
         def __len__(self) -> int:
             """Returns the number of guesses made."""
             return self._number_of_guesses_made
-        
+
         def __getitem__(self, index: int) -> tuple:
             """Returns the guess and feedback at the given index."""
             return self._guesses[index], self._feedbacks[index]
-        
+
         def last_guess(self) -> tuple:
             """Returns the last guess."""
             if self._number_of_guesses_made == 0:
                 raise self.EmptyBoardError("No guesses to return.")
             return self._guesses.top()
-        
+
         def last_feedback(self) -> tuple:
             """Returns the last feedback."""
             if self._number_of_guesses_made == 0:
@@ -108,7 +109,11 @@ class Game(BaseModel):
 
         def add_guess(self, guess: tuple, feedback: tuple) -> None:
             """Adds a guess and its feedback to the board."""
-            ValidGuess(guess, number_of_dots=self.NUMBER_OF_DOTS, number_of_colors=self.NUMBER_OF_COLORS)
+            ValidGuess(
+                guess,
+                number_of_dots=self.NUMBER_OF_DOTS,
+                number_of_colors=self.NUMBER_OF_COLORS,
+            )
             ValidFeedback(feedback, number_of_dots=self.NUMBER_OF_DOTS)
             self._guesses.push(guess)
             self._feedbacks.push(feedback)
@@ -120,10 +125,14 @@ class Game(BaseModel):
             self._feedbacks.clear_stack()
             self._number_of_guesses_made = 0
 
-
     # Initialization
-    def __init__(self, number_of_colors: int, number_of_dots: int,
-                 maximum_attempts: int, game_mode: str) -> None:
+    def __init__(
+        self,
+        number_of_colors: int,
+        number_of_dots: int,
+        maximum_attempts: int,
+        game_mode: str,
+    ) -> None:
         """Initializes the game."""
         self.MAXIMUM_ATTEMPTS = maximum_attempts
         self.GAME_MODE = game_mode
@@ -135,15 +144,15 @@ class Game(BaseModel):
     @property
     def number_of_colors(self) -> int:
         return self._board.NUMBER_OF_COLORS
-    
+
     @property
     def number_of_dots(self) -> int:
         return self._board.NUMBER_OF_DOTS
-    
+
     @property
     def win_status(self) -> Optional[bool]:
         return self._win_status
-    
+
     @property
     def game_started(self) -> bool:
         return self._game_started
@@ -157,14 +166,19 @@ class Game(BaseModel):
         if self._win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
         if len(self._board) >= self.MAXIMUM_ATTEMPTS:
-            raise NotImplementedError("Cannot make guess after maximum attempts reached.")
+            raise NotImplementedError(
+                "Cannot make guess after maximum attempts reached."
+            )
         self._board.add_guess(guess, feedback)
 
     def update_win_status(self, win_status: bool) -> None:
         """Updates the win status of the game."""
         if len(self._board) == 0:
             self._win_status = None
-        if hasattr(self, 'SECRET_CODE') and self._board.last_guess()[0] == self.SECRET_CODE:
+        if (
+            hasattr(self, "SECRET_CODE")
+            and self._board.last_guess()[0] == self.SECRET_CODE
+        ):
             self._win_status = True
         if self._board.last_guess()[1] == (self.number_of_dots, 0):
             self._win_status = True
@@ -172,7 +186,7 @@ class Game(BaseModel):
             self._win_status = False
         else:
             self._win_status = None
-        
+
         return self._win_status
 
     def find_players(self) -> None:
@@ -211,7 +225,7 @@ class Game(BaseModel):
                 guess = self.PLAYER2.redo()  # Retrieve from undo stack
                 self.make_guess(guess, feedback)  # Add guess and feedback back
                 continue
-            
+
             # Get feedback
             feedback = self.PLAYER1.get_feedback(guess)
 
@@ -222,7 +236,7 @@ class Game(BaseModel):
                 break
             if feedback is "u":  # undo
                 continue  # guess haven't been made yet, so skip = undo
-            
+
             # Make Guess
             self.make_guess(guess, feedback)
             self.update_win_status(self._win_status)
@@ -243,7 +257,7 @@ class Game(BaseModel):
         # Check Condition
         if self._game_started:
             raise NotImplementedError("Game has already started.")
-        
+
         # Start Game
         self._game_started = True
         self.find_players()
@@ -260,10 +274,9 @@ class Game(BaseModel):
         # Check Condition
         if not self._game_started:
             raise NotImplementedError("Game has not started yet.")
-        
+
         command = self.player_guessing_logic()  # Play game and retrieve command
-        
+
         # Post-termination Logc
         self.output_result()
         return command
-

@@ -20,7 +20,7 @@ class Player(ABC, BaseModel):
         if len(self.GAME._board) == 0:
             raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
         self.undo_stack.push(self.GAME._board.last_guess())
-    
+
     def redo(self) -> None:
         """Pop from the undo stack and return the last guess."""
         if len(self.undo_stack) == 0:
@@ -40,7 +40,7 @@ class CodeSetter(Player):
     def set_secret_code(self) -> None:
         """Sets the secret code for the game."""
         pass
-    
+
     @abstractmethod
     def get_feedback(self, guess: tuple) -> tuple:
         """Obtains feedback for a given guess."""
@@ -59,7 +59,7 @@ class CodeCracker(Player):
     def win_message(self) -> None:
         """Prints a message when the game is won."""
         print(self.win_message.eval(self.__dict__))
-    
+
     def lose_message(self) -> None:
         """Prints a message when the game is lost."""
         print(self.lose_message.eval(self.__dict__))
@@ -68,7 +68,7 @@ class CodeCracker(Player):
     def obtain_guess(self) -> tuple:
         """Obtains a guess from the player."""
         pass
-        
+
 
 # Concrete Implementation of Different Players
 class HumanSetter(CodeSetter):
@@ -79,9 +79,13 @@ class HumanSetter(CodeSetter):
         Sets the secret code for the game.
         Return 'd' if player discarded the game. Otherwise doesn't return anything.
         """
-        valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
+        valid_guess = ValidGuess(
+            [1] * self.GAME.number_of_dots,
+            number_of_dots=self.GAME.number_of_dots,
+            number_of_colors=self.GAME.number_of_colors,
+        )
         while True:
-            secret = getpass("Enter the secret code: ")      
+            secret = getpass("Enter the secret code: ")
             if secret == "?":
                 hint = f"""
                 Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
@@ -95,7 +99,7 @@ class HumanSetter(CodeSetter):
             if secret == "d":
                 print("Game discarded.")
                 return "d"
-            
+
             try:
                 valid_guess.value = valid_guess.validate(secret)
             except ValueError as e:
@@ -108,44 +112,46 @@ class HumanSetter(CodeSetter):
                     continue
                 self.SECRET_CODE = valid_guess
                 return
-    
+
     def get_feedback(self, guess: tuple) -> tuple:
         """Obtains feedback for a given guess."""
-        if not hasattr(self, 'SECRET_CODE'):
+        if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
         return get_feedback(guess, self.SECRET_CODE)
 
 
 class AISetter(CodeSetter):
     """A class to represent an AI code setter."""
-    
+
     def set_secret_code(self) -> None:
         """Sets the secret code for the game."""
         # Generate random code
         number_of_colors = self.GAME.number_of_colors
         number_of_dots = self.GAME.number_of_dots
-        self.SECRET_CODE = tuple(randint(1, number_of_colors) for _ in range(number_of_dots))
-    
+        self.SECRET_CODE = tuple(
+            randint(1, number_of_colors) for _ in range(number_of_dots)
+        )
+
     def get_feedback(self, guess: tuple) -> tuple:
         """Obtains feedback for a given guess."""
-        if not hasattr(self, 'SECRET_CODE'):
+        if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
         return get_feedback(guess, self.SECRET_CODE)
 
 
 class ExternalSetter(CodeSetter):
     """A class to represent an external code setter."""
-    
+
     def set_secret_code(self) -> None:
         """Sets the secret code for the game."""
         pass  # There is no code available for external game, skip it
-    
+
     def get_feedback(self, guess: tuple) -> Union[tuple, str]:
         """
         Obtains external feedback from the user.
         Could return the feedback as tuple or command (d,q,u) as string.
         """
-        valid_feedback = ValidFeedback((0,0), number_of_dots=self.GAME.number_of_dots)
+        valid_feedback = ValidFeedback((0, 0), number_of_dots=self.GAME.number_of_dots)
         while True:
             feedback = input("Enter the feedback: ")
             if feedback == "?":
@@ -169,7 +175,7 @@ class ExternalSetter(CodeSetter):
                 return "q"
             if feedback == "u":  # undo
                 return "u"
-            
+
             try:
                 valid_feedback.value = valid_feedback.validate(feedback)
                 return valid_feedback
@@ -192,7 +198,11 @@ class HumanCracker(CodeCracker):
         Obtains a guess from the player.
         Could return the guess as tuple or command (d,q,u,r) as string.
         """
-        valid_guess = ValidGuess([1]*self.GAME.number_of_dots, number_of_dots=self.GAME.number_of_dots, number_of_colors=self.GAME.number_of_colors)
+        valid_guess = ValidGuess(
+            [1] * self.GAME.number_of_dots,
+            number_of_dots=self.GAME.number_of_dots,
+            number_of_colors=self.GAME.number_of_colors,
+        )
         while True:
             guess = input("Enter your guess: ")
             if guess == "?":
@@ -218,7 +228,7 @@ class HumanCracker(CodeCracker):
                 return "u"
             if guess == "r":  # redo
                 return "r"
-            
+
             try:
                 valid_guess.value = valid_guess.validate(guess)
                 return valid_guess
@@ -229,4 +239,5 @@ class HumanCracker(CodeCracker):
 
 class AICracker(CodeCracker):
     """A class to represent an AI code cracker."""
+
     pass  # TODO: Implement solver logic.
