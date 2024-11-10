@@ -1,3 +1,5 @@
+from typing import Optional
+
 def get_feedback(self, guess: tuple, secret: tuple) -> list:
     """Returns the feedback for a given guess."""
     # Optimized abstract algorithm (assuming correct input)
