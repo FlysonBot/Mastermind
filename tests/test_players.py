@@ -13,19 +13,6 @@ class TestPlayers(unittest.TestCase):
         """Initialize a basic Game instance for testing purposes."""
         self.game = Game(number_of_colors=6, number_of_dots=4, maximum_attempts=10, game_mode="HvH")
 
-    # Tests for the Player class
-    def test_player_undo_no_last_guess(self):
-        """Test Player's undo method when the board is empty."""
-        player = Player(self.game)
-        with self.assertRaises(self.game._board.EmptyBoardError):
-            player.undo()
-
-    def test_player_redo_empty_stack(self):
-        """Test Player's redo method when the undo stack is empty."""
-        player = Player(self.game)
-        with self.assertRaises(IndexError):
-            player.redo()
-
     # Tests for HumanSetter
     @patch("players.getpass", return_value="1234")
     def test_human_setter_set_secret_code_valid(self, mock_getpass):
@@ -107,6 +94,69 @@ class TestPlayers(unittest.TestCase):
         cracker = HumanCracker(self.game)
         cracker.win_message()
         mock_print.assert_called_once_with("Congratulations! You won in 0 steps!")
+
+    # Tests for undo and redo functionality
+    def test_undo_with_guesses(self):
+        """Test undo functionality with multiple undos."""
+        cracker = HumanCracker(self.game)
+        setter = HumanSetter(self.game)
+        self.game._board.add_guess((1, 2, 3, 4), (1, 1))
+        self.game._board.add_guess((2, 3, 4, 1), (1, 0))
+        self.game._board.add_guess((2, 3, 4, 4), (1, 1))
+        self.game._board.add_guess((2, 4, 4, 4), (1, 2))
+        for _ in range(3):
+            cracker.undo()
+            setter.undo()
+            self.game._board.remove_last()
+        self.assertEqual(cracker.undo_stack[0], (2, 3, 4, 1))
+        self.assertEqual(cracker.undo_stack[1], (2, 3, 4, 4))
+        self.assertEqual(cracker.undo_stack[2], (2, 4, 4, 4))
+        self.assertEqual(setter.undo_stack[0], (1, 0))
+        self.assertEqual(setter.undo_stack[1], (1, 1))
+        self.assertEqual(setter.undo_stack[2], (1, 2))
+        self.assertEqual(len(cracker.undo_stack), 3)
+        self.assertEqual(len(setter.undo_stack), 3)
+    
+    def test_redo_with_undone_guess(self):
+        """Test redo functionality after undo to confirm guesses are actually being redo."""
+        cracker = HumanCracker(self.game)
+        setter = HumanSetter(self.game)
+        self.game._board.add_guess((1, 2, 3, 4), (1, 1))
+        self.game._board.add_guess((2, 3, 4, 1), (1, 0))
+        self.game._board.add_guess((2, 3, 4, 4), (1, 1))
+        self.game._board.add_guess((2, 4, 4, 4), (1, 2))
+        for _ in range(3):
+            cracker.undo()
+            setter.undo()
+            self.game._board.remove_last()
+        cracker.redo()
+        setter.redo()
+        self.assertEqual(cracker.undo_stack[0], (2, 3, 4, 4))
+        self.assertEqual(cracker.undo_stack[1], (2, 4, 4, 4))
+        self.assertEqual(setter.undo_stack[0], (1, 1))
+        self.assertEqual(setter.undo_stack[1], (1, 2))
+        self.assertEqual(len(cracker.undo_stack), 2)
+        self.assertEqual(len(setter.undo_stack), 2)
+        cracker.redo()
+        setter.redo()
+        self.assertEqual(cracker.undo_stack[0], (2, 4, 4, 4))
+        self.assertEqual(setter.undo_stack[0], (1, 2))
+        self.assertEqual(len(cracker.undo_stack), 1)
+        self.assertEqual(len(setter.undo_stack), 1)
+        cracker.redo()
+        setter.redo()
+        self.assertEqual(len(cracker.undo_stack), 0)
+        self.assertEqual(len(setter.undo_stack), 0)
+
+    def test_redo_no_action_when_stack_empty(self):
+        """Test redo raise error without an undo first."""
+        cracker = HumanCracker(self.game)
+        setter = HumanSetter(self.game)
+
+        self.game._board.add_guess((1, 2, 3, 4), (1, 1))
+        self.game._board.add_guess((2, 3, 4, 1), (1, 0))
+        with self.assertRaises(IndexError):
+            cracker.redo()
 
 
 # Run the tests
