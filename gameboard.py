@@ -3,7 +3,8 @@ from random import randint
 from typing import Any, Optional, Tuple
 
 from .utils import get_feedback
-from .validation import BaseModel
+from .validation import *
+from .players import *
 
 
 class Stack:
@@ -136,7 +137,7 @@ class Game(BaseModel):
         self.GAME_MODE = game_mode
         self._board = self._Board(number_of_colors, number_of_dots)
         self._game_started = TrueFuse(False)
-        self._win_status = Boolean(None)
+        self._win_status = Booleans(None)
 
     # Accessors
     @property
