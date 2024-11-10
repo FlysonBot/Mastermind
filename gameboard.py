@@ -164,9 +164,9 @@ class Game(BaseModel):
 
             # Process commands
             if guess == "q":  # quit
-                break
+                return "q"
             if guess == "d":  # discard
-                break
+                return "d"
             if guess == "u":  # undo
                 self.PLAYER_CRACKER.undo()
                 self.PLAYER_SETTER.undo()
