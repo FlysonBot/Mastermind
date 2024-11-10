@@ -49,16 +49,16 @@ class CodeCracker(Player):
     def __init__(self, game: 'Game', win_msg: str, lose_msg: str) -> None:
         """Initializes the code cracker."""
         super().__init__(game)
-        self.win_message = FStringTemplate(win_msg)
-        self.lose_message = FStringTemplate(lose_msg)
+        self._win_message = FStringTemplate(win_msg)
+        self._lose_message = FStringTemplate(lose_msg)
 
     def win_message(self) -> None:
         """Prints a message when the game is won."""
-        print(self.win_message.eval(self.__dict__))
+        print(self._win_message.eval(self.__dict__))
 
     def lose_message(self) -> None:
         """Prints a message when the game is lost."""
-        print(self.lose_message.eval(self.__dict__))
+        print(self._lose_message.eval(self.__dict__))
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
