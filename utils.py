@@ -1,11 +1,11 @@
 from collections import deque
 from typing import Any, Optional, Tuple
 
-def get_feedback(self, guess: tuple, secret: tuple) -> list:
+def get_feedback(guess: tuple, secret: tuple, number_of_colors: int) -> list:
     """Returns the feedback for a given guess."""
     # Optimized abstract algorithm (assuming correct input)
-    list1 = [0] * (self.number_of_colors + 1)  # black pegs + color count of guess
-    list2 = [0] * (self.number_of_colors + 1)  # white pegs + color count of secret
+    list1 = [0] * (number_of_colors + 1)  # black pegs + color count of guess
+    list2 = [0] * (number_of_colors + 1)  # white pegs + color count of secret
 
     # Count colors in guess and secret code
     for dot1, dot2 in zip(guess, secret):

@@ -113,7 +113,7 @@ class HumanSetter(CodeSetter):
         """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
-        return get_feedback(guess, self.SECRET_CODE)
+        return get_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
 class AISetter(CodeSetter):
@@ -132,7 +132,7 @@ class AISetter(CodeSetter):
         """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
-        return get_feedback(guess, self.SECRET_CODE)
+        return get_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
 class ExternalSetter(CodeSetter):
