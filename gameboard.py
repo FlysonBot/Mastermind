@@ -144,23 +144,23 @@ class Game(BaseModel):
     def find_players(self) -> None:
         """Find suitable players for a game based on the game mode."""
         if self.GAME_MODE == "HvH":
-            self.PLAYER1 = HumanCracker(self)
-            self.PLAYER2 = HumanSetter(self)
+            self.PLAYER_CRACKER = HumanCracker(self)
+            self.PLAYER_SETTER = HumanSetter(self)
         elif self.GAME_MODE == "HvAI":
-            self.PLAYER1 = HumanCracker(self)
-            self.PLAYER2 = AISetter(self)
+            self.PLAYER_CRACKER = HumanCracker(self)
+            self.PLAYER_SETTER = AISetter(self)
         elif self.GAME_MODE == "AIvH":
-            self.PLAYER1 = AICracker(self)
-            self.PLAYER2 = HumanSetter(self)
+            self.PLAYER_CRACKER = AICracker(self)
+            self.PLAYER_SETTER = HumanSetter(self)
         else:
-            self.PLAYER1 = AICracker(self)
-            self.PLAYER2 = ExternalSetter(self)
+            self.PLAYER_CRACKER = AICracker(self)
+            self.PLAYER_SETTER = ExternalSetter(self)
 
     def player_guessing_logic(self) -> Optional[str]:
-        """Call Player 2 to make guess and Player 1 to obtain feedback."""
+        """Call players to obtain guess and feedback."""
         while self.win_status is None:
             # Obtain guess or command
-            guess = self.PLAYER2.obtain_guess()
+            guess = self.PLAYER_CRACKER.obtain_guess()
 
             # Process commands
             if guess == "q":  # quit
@@ -168,18 +168,18 @@ class Game(BaseModel):
             if guess == "d":  # discard
                 break
             if guess == "u":  # undo
-                self.PLAYER1.undo()
-                self.PLAYER2.undo()
+                self.PLAYER_CRACKER.undo()
+                self.PLAYER_SETTER.undo()
                 self._board.remove_last()
                 continue
             if guess == "r":  # redo
-                feedback = self.PLAYER1.redo()
-                guess = self.PLAYER2.redo()
+                guess = self.PLAYER_CRACKER.redo()
+                feedback = self.PLAYER_SETTER.redo()
                 self.submit_guess(guess, feedback)
                 continue
 
             # Get feedback
-            feedback = self.PLAYER1.get_feedback(guess)
+            feedback = self.PLAYER_SETTER.get_feedback(guess)
 
             # Process command
             if feedback == "q":  # quit
@@ -199,9 +199,9 @@ class Game(BaseModel):
         if self.win_status is None:
             return
         if self.win_status:
-            self.PLAYER2.win_message()
+            self.PLAYER_CRACKER.win_message()
         else:
-            self.PLAYER2.lose_message()
+            self.PLAYER_CRACKER.lose_message()
 
     # Game Flow Logic
     def start_game(self) -> Optional[str]:
@@ -213,7 +213,7 @@ class Game(BaseModel):
         # Start Game
         self._game_started = True
         self.find_players()
-        self.PLAYER1.set_secret_code()
+        self.PLAYER_CRACKER.set_secret_code()
 
         command = self.player_guessing_logic()  # Handle player actions
 
