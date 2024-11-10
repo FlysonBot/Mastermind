@@ -30,6 +30,10 @@ class Player(ABC, BaseModel):
         if len(self.undo_stack) == 0:
             raise IndexError("Cannot undo from empty board.")
         return self.undo_stack.pop()
+    
+    def clear_undo(self) -> None:
+        """Clear the undo stack."""
+        self.undo_stack.clear()
 
 
 class CodeSetter(Player):

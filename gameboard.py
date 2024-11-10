@@ -118,6 +118,8 @@ class Game(BaseModel):
             raise NotImplementedError(
                 "Cannot make guess after maximum attempts reached."
             )
+        self.PLAYER_CRACKER.clear_undo()
+        self.PLAYER_SETTER.clear_undo()
         self._board.add_guess(guess, feedback)
 
     def update_win_status(self) -> Optional[bool]:
