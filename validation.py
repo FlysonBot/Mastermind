@@ -219,7 +219,7 @@ class ValidFeedback(ValidatedData):
 
         try:
             ConfinedInteger(value[0], ge=0, le=self.kwargs["number_of_dots"])
-            ConstrainedInteger(value[1], ge=0, le=self.kwargs["number_of_dots"])
+            ConfinedInteger(value[1], ge=0, le=self.kwargs["number_of_dots"])
         except ValidatedData.ValidationError:
             raise self.ValidationError(
                 "Feedback must be a tuple of integers in the range [0, number_of_dots]."
