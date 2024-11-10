@@ -178,6 +178,9 @@ class ExternalSetter(CodeSetter):
             except ValueError as e:
                 print(e)
                 print("To get more help, enter '?'")
+            except valid_feedback.ValidationError:
+                print(f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})")
+                print("To get more help, enter '?'")
 
 
 class HumanCracker(CodeCracker):
@@ -230,6 +233,9 @@ class HumanCracker(CodeCracker):
                 return valid_guess.value
             except ValueError as e:
                 print(e)
+                print("To get more help, enter '?'")
+            except valid_guess.ValidationError:
+                print(f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]")
                 print("To get more help, enter '?'")
 
 
