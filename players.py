@@ -174,7 +174,7 @@ class ExternalSetter(CodeSetter):
 
             try:
                 valid_feedback.value = valid_feedback.validate(feedback)
-                return valid_feedback
+                return valid_feedback.value
             except ValueError as e:
                 print(e)
                 print("To get more help, enter '?'")
@@ -227,7 +227,7 @@ class HumanCracker(CodeCracker):
 
             try:
                 valid_guess.value = valid_guess.validate(guess)
-                return valid_guess
+                return valid_guess.value
             except ValueError as e:
                 print(e)
                 print("To get more help, enter '?'")
