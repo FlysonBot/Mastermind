@@ -11,7 +11,7 @@ from .validation import BaseModel, ValidFeedback, ValidGuess
 class Player(ABC, BaseModel):
     """A class to represent a player."""
 
-    def __init__(self, game: 'Game') -> None:
+    def __init__(self, game: "Game") -> None:
         """Initializes the player."""
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
@@ -21,7 +21,9 @@ class Player(ABC, BaseModel):
         """Update the undo stack with item so we can redo afterward."""
         if len(self.GAME._board) == 0:
             raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
-        self.undo_stack.push(item)  # item can be guess or feedback, varies by player type
+        self.undo_stack.push(
+            item
+        )  # item can be guess or feedback, varies by player type
 
     def redo(self) -> None:
         """Pop from the undo stack and return the last guess."""
@@ -51,7 +53,7 @@ class CodeSetter(Player):
 class CodeCracker(Player):
     """A class to represent a code cracker."""
 
-    def __init__(self, game: 'Game', win_msg: str, lose_msg: str) -> None:
+    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:
         """Initializes the code cracker."""
         super().__init__(game)
         self._win_message = FStringTemplate(win_msg)
@@ -188,14 +190,16 @@ class ExternalSetter(CodeSetter):
                 print(e)
                 print("To get more help, enter '?'")
             except valid_feedback.ValidationError:
-                print(f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})")
+                print(
+                    f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})"
+                )
                 print("To get more help, enter '?'")
 
 
 class HumanCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
-    def __init__(self, game: 'Game') -> None:
+    def __init__(self, game: "Game") -> None:
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {secret_code}."
@@ -244,7 +248,9 @@ class HumanCracker(CodeCracker):
                 print(e)
                 print("To get more help, enter '?'")
             except valid_guess.ValidationError:
-                print(f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]")
+                print(
+                    f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]"
+                )
                 print("To get more help, enter '?'")
 
 

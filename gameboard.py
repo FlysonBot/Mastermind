@@ -2,9 +2,9 @@ from collections import deque
 from random import randint
 from typing import Any, Optional, Tuple
 
+from .players import *
 from .utils import get_feedback, Stack
 from .validation import *
-from .players import *
 
 
 class Game(BaseModel):
@@ -16,6 +16,7 @@ class Game(BaseModel):
 
         class EmptyBoardError(Exception):
             """Custom exception for empty board."""
+
             pass
 
         def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
@@ -125,16 +126,19 @@ class Game(BaseModel):
             self._win_status = None
             return None
 
-        last_guess, last_feedback = self._board.last_guess(), self._board.last_feedback()
-        
+        last_guess, last_feedback = (
+            self._board.last_guess(),
+            self._board.last_feedback(),
+        )
+
         if hasattr(self, "SECRET_CODE") and last_guess == self.SECRET_CODE:
             self._win_status = True
             return True
-        
+
         elif last_feedback == (self.number_of_dots, 0):
             self._win_status = True
             return True
-        
+
         elif len(self._board) == self.MAXIMUM_ATTEMPTS:
             self._win_status = False
             return False

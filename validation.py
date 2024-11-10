@@ -188,6 +188,7 @@ class ValidGuess(ValidatedData):
 
         return value
 
+
 class ValidFeedback(ValidatedData):
     """Validated property for a valid feedback."""
 
