@@ -28,11 +28,6 @@ class Player(ABC, BaseModel):
             raise IndexError("Cannot undo from empty board.")
         return self.undo_stack.pop()
 
-    @abstractmethod
-    def obtain_guess(self) -> tuple:
-        """Obtains a guess from the player."""
-        raise NotImplementedError("This method must be implemented in a subclass.")
-
 
 class CodeSetter(Player):
     """A class to represent a code setter."""
