@@ -152,7 +152,7 @@ class ValidGuess(ValidatedData):
         NumberOfDots(self.kwargs["number_of_dots"])  # Validation
         NumberOfColors(self.kwargs["number_of_colors"])  # Validation
 
-    def validate(self, value: Any) -> None:
+    def validate(self, value: Any) -> tuple:
         """Ensure the guess is a tuple of integers of the correct length."""
         if isinstance(value, str):
             try:
@@ -186,6 +186,7 @@ class ValidGuess(ValidatedData):
                     "All dots in the guess must be integers in the range [1, number_of_colors]."
                 )
 
+        return value
 
 class ValidFeedback(ValidatedData):
     """Validated property for a valid feedback."""
