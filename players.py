@@ -11,7 +11,7 @@ from .validation import BaseModel, ValidFeedback, ValidGuess
 class Player(ABC, BaseModel):
     """A class to represent a player."""
 
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: 'Game') -> None:
         """Initializes the player."""
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
@@ -51,7 +51,7 @@ class CodeSetter(Player):
 class CodeCracker(Player):
     """A class to represent a code cracker."""
 
-    def __init__(self, game: Game, win_msg: str, lose_msg: str) -> None:
+    def __init__(self, game: 'Game', win_msg: str, lose_msg: str) -> None:
         """Initializes the code cracker."""
         super().__init__(game)
         self.win_message = FStringTemplate(win_msg)
@@ -188,7 +188,7 @@ class ExternalSetter(CodeSetter):
 class HumanCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: 'Game') -> None:
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {secret_code}."
