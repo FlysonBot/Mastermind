@@ -54,11 +54,11 @@ class CodeCracker(Player):
 
     def win_message(self) -> None:
         """Prints a message when the game is won."""
-        print(self._win_message.eval(self.__dict__))
+        print(self._win_message.eval(step=len(self.GAME)))
 
     def lose_message(self) -> None:
         """Prints a message when the game is lost."""
-        print(self._lose_message.eval(self.__dict__))
+        print(self._lose_message.eval(step=len(self.GAME)))
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
@@ -243,3 +243,4 @@ class AICracker(CodeCracker):
     """A class to represent an AI code cracker."""
 
     pass  # TODO: Implement solver logic.
+.
