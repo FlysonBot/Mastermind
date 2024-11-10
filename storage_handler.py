@@ -28,7 +28,7 @@ class UserData:
             cls._data = {}  # Initialize to empty dict if wil doesn't exist
 
     @classmethod
-    def _save_data(cls) -> None:
+    def save_data(cls) -> None:
         """Save user data to the config file."""
         cls._ensure_directory_exists()  # Ensure the directory is created
         with open(cls._file_path, "w") as file:  # Open the file for writing
@@ -39,7 +39,7 @@ class UserData:
     def clear_all(cls) -> None:
         """Clear all user data."""
         cls._data.clear()  # Clear the dictionary
-        cls._save_data()  # Save the empty dictionary to the file
+        cls.save_data()  # Save the empty dictionary to the file
 
     @classmethod
     def __getattr__(cls, key: str) -> Any:
@@ -50,10 +50,10 @@ class UserData:
         return None
 
     @classmethod
-    def set(cls, key: str, value: Any) -> None:
-        """Set a value in the user data dictionary."""
+    def __setattr__(cls, key: str, value: Any) -> None:
+        """Allow direct modification of keys in the data dictionary."""
         cls._data[key] = value  # Add or update the key-value pair in the dictionary
-        cls._save_data()  # Save the updated dictionary to the file
+        cls.save_data()  # Save the updated dictionary to the file
 
 
 # Load existing data when the class is imported
