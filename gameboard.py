@@ -213,7 +213,7 @@ class Game(BaseModel):
         # Start Game
         self._game_started = True
         self.find_players()
-        self.PLAYER_CRACKER.set_secret_code()
+        self.PLAYER_SETTER.set_secret_code()
 
         command = self.player_guessing_logic()  # Handle player actions
 
