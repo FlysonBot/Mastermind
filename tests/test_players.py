@@ -157,7 +157,23 @@ class TestPlayers(unittest.TestCase):
         self.game._board.add_guess((2, 3, 4, 1), (1, 0))
         with self.assertRaises(IndexError):
             cracker.redo()
-
+    
+    def test_undo_stack_cleared_after_new_guess(self):
+        """Test undo stack is being cleared after submitting a new guess."""
+        self.game._game_started = True
+        self.game.find_players()
+        cracker = self.game.PLAYER_CRACKER
+        setter = self.game.PLAYER_SETTER
+        self.game.submit_guess((1, 2, 3, 4), (1, 1))
+        self.game.submit_guess((2, 3, 4, 1), (1, 0))
+        cracker.undo()
+        setter.undo()
+        self.assertEqual(len(cracker.undo_stack), 1)
+        self.assertEqual(len(setter.undo_stack), 1)
+        
+        self.game.submit_guess((1, 2, 3, 4), (1, 1))
+        self.assertEqual(len(cracker.undo_stack), 0)
+        self.assertEqual(len(setter.undo_stack), 0)
 
 # Run the tests
 if __name__ == '__main__':
