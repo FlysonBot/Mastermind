@@ -243,4 +243,3 @@ class AICracker(CodeCracker):
     """A class to represent an AI code cracker."""
 
     pass  # TODO: Implement solver logic.
-.
