@@ -1,4 +1,5 @@
-from typing import Optional
+from collections import deque
+from typing import Any, Optional, Tuple
 
 def get_feedback(self, guess: tuple, secret: tuple) -> list:
     """Returns the feedback for a given guess."""
