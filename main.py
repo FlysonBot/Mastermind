@@ -32,7 +32,7 @@ class UserMenus:
             print("\n\n\n" + header)  # print 3 empty lines and the header
             for key, value in cls.menu.items():  # print the options
                 print(f"({key}) {value}")
-            print("-"*len(header) + "\n")  # print the separator
+            print("-" * len(header) + "\n")  # print the separator
 
         @classmethod
         def get_option(cls) -> str:
@@ -48,26 +48,26 @@ class UserMenus:
                     cls.display()
                     print("Invalid option. Try again.")
 
-
     class MainMenu(Menu):
         """The main menu."""
+
         menu = {
             "1": "Start New Game",
             "2": "Load Saved Game",
             "3": "My Statistics",
             "4": "Settings",
-            "0": "Save and Exit"
+            "0": "Save and Exit",
         }
-    
 
     class NewGameMenu(Menu):
         """The menu for starting a new game."""
+
         menu = {
             "1": "You vs Someone Else",
             "2": "You vs AI",
             "3": "AI vs You",
             "4": "Solve External Game",
-            "0": "Return to Main Menu"
+            "0": "Return to Main Menu",
         }
 
 
@@ -96,7 +96,7 @@ class MainUI:
     """Class to handle the user menu interface."""
 
     def __new__(cls):
-        if not hasattr(cls, 'instance'):
+        if not hasattr(cls, "instance"):
             cls.instance = super(CrawlerSingleton, cls).__new__(cls)
         return cls.instance
 
@@ -110,19 +110,19 @@ class MainUI:
         if choice == "Start New Game":
             self.new_game_menu()
             return True
-        
+
         elif choice == "Load Saved Game":
             self.saved_game_menu()
             return True
-        
+
         elif choice == "My Statistics":
             raise NotImplementedError("Statistics not implemented yet.")
             return True
-        
+
         elif choice == "Settings":
             raise NotImplementedError("Settings not implemented yet.")
             return True
-        
+
         elif choice == "Save and Exit":
             return False  # terminate the loop
 
@@ -146,7 +146,7 @@ class MainUI:
             return False  # terminate the loop
         else:
             raise Exception("Unexpected invalid choice.")
-        
+
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
         pass
