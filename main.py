@@ -1,125 +1,125 @@
-from typing import Optional, List, Dict
+from abc import ABC, abstractmethod
+from typing import Any
 
+
+class UserProfile:
+    """An utility class to store and access user profile data."""
+
+    @classmethod
+    def create_new_user(cls):
+        pass
+
+
+class UserSettings:
+    """An utility class to store and access user settings."""
+
+
+class UserMenus:
+    """A collection of user menus."""
+
+    class Menu(ABC):
+        """An user menu template. Menu being stored as dictionary."""
+
+        def __new__(cls):
+            raise NotImplementedError("Cannot instantiate menu.")
+
+        def __call__(self, length):
+            assert len(self) == length, "Menu length mismatch."
+            return self.get_option()
+
+        def __len__(self):
+            return len(self.menu)
+
+        @classmethod
+        def display(cls) -> None:
+            """Display the menu."""
+            header = f"--- {cls.__name__} ---"
+
+            print("\n\n\n" + header)  # print 3 empty lines and the header
+            for key, value in cls.menu.items():  # print the options
+                print(f"({key}) {value}")
+            print("-"*len(header) + "\n")  # print the separator
+
+        @classmethod
+        def get_option(cls) -> str:
+            """Get the user's option."""
+
+            cls.display()
+            while True:
+                option = input("Select an option: ")
+                if option in cls.menu:
+                    # Return the key can avoid potential mismatch when editing menu
+                    return cls.menu[option]
+                else:
+                    cls.display()
+                    print("Invalid option. Try again.")
+
+
+    class MainMenu(Menu):
+        """The main menu."""
+        menu = {
+            "1": "Start New Game",
+            "2": "Load Saved Game",
+            "3": "My Statistics",
+            "4": "Settings",
+            "0": "Save and Exit"
+        }
+    
+
+    class NewGameMenu(Menu):
+        """The menu for starting a new game."""
+        menu = {
+            "1": "You vs Someone Else",
+            "2": "You vs AI",
+            "3": "AI vs You",
+            "4": "Solve External Game",
+            "0": "Return to Main Menu"
+        }
+
+
+class GameStatistics:
+    """An utility class to compute and display game statistics."""
 
 class GameSimulator:
-    def __init__(self) -> None:
-        self.profile = None  # User profile (initialized as None)
-        self.saved_games = []  # To be loaded from DataManager later
 
-    def prepare(self) -> None:
-        # Placeholder for the prepare function, you can add the list of preparation steps here later
-        print("Preparing game environment...")
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(CrawlerSingleton, cls).__new__(cls)
+        return cls.instance
 
-    def create_new_user(self) -> None:
-        # Placeholder function to create a new user
-        print("Creating new user profile...")
-        self.profile = {"username": "Player"}  # Example user profile (to be expanded)
+    def main_menu(self):
+        """Display the main menu and handle user input."""
+        choice = UserMenus.MainMenu()(5)
 
-    def show_main_menu(self) -> None:
-        while True:
-            print("\n--- Main Menu ---")
-            print("(1) Start New Game")
-            print("(2) Load Saved Game")
-            print("(3) My Statistics")
-            print("(4) Settings")
-            print("(0) Save and Exit")
-            choice = input("Select an option: ")
+        if choice == "Start New Game":
+            self.start_new_game()
+        elif choice == "Load Saved Game":
+            self.load_saved_game()
+        elif choice == "My Statistics":
+            self.show_statistics()
+        elif choice == "Settings":
+            self.settings()
+        elif choice == "Save and Exit":
+            self.save_and_exit()
 
-            if choice == "1":
-                self.start_new_game()
-            elif choice == "2":
-                self.load_saved_game()
-            elif choice == "3":
-                self.show_statistics()
-            elif choice == "4":
-                self.settings()
-            elif choice == "0":
-                self.save_and_exit()
-                break
-            else:
-                print("Invalid option. Please try again.")
+    def new_game(self):
+        """Display the new game menu and handle user input."""
+        choice = UserMenus.NewGameMenu()(5)
 
-    def start_new_game(self) -> None:
-        while True:
-            print("\n--- Start New Game ---")
-            print("(1) You vs Someone Else")
-            print("(2) You vs AI")
-            print("(3) AI vs You")
-            print("(4) Solve External Game")
-            print("(0) Return to Main Menu")
-            game_type = input("Choose game type: ")
+        if choice == "You vs Someone Else":
+            pass
+        elif choice == "You vs AI":
+            pass
+        elif choice == "AI vs You":
+            pass
+        elif choice == "Solve External Game":
+            pass
+        elif choice == "Return to Main Menu":
+            self.main_menu()
 
-            if game_type not in ["1", "2", "3", "4", "0"]:
-                print("Invalid choice. Try again.")
-                continue
-
-            if game_type == "0":
-                break  # return to main menu
-
-            game_size = self.get_game_size()
-
-            if game_size:
-                print(f"Starting game of type {game_type} with game size: {game_size}")
-                # Placeholder for starting the game with other models
-                # Example: GameEngine().start_game(game_type, game_size)
-                print("Game in progress...")
-                break  # return to main menu after game ended
-
-    def get_game_size(self) -> Optional[Dict[str, int]]:
-        try:
-            colors = int(input("Enter number of colors: "))
-            dots = int(input("Enter number of dots in combination: "))
-            return {"colors": colors, "dots": dots}
-        except ValueError:
-            print("Invalid input. Please enter valid numbers.")
-            return None
-
-    def load_saved_game(self) -> None:
-        # Placeholder: This will interact with DataManager to fetch saved games
-        print("\n--- Load Saved Game ---")
-        if not self.saved_games:
-            print("No saved games available.")
-            return
-
-        for idx, game in enumerate(self.saved_games, 1):
-            print(f"({idx}) {game}")
-        choice = input("Select a game to load: ")
-        try:
-            game_index = int(choice) - 1
-            if 0 <= game_index < len(self.saved_games):
-                selected_game = self.saved_games[game_index]
-                print(f"Loading game: {selected_game}")
-                # Example: GameEngine().load_game(selected_game)
-            else:
-                print("Invalid choice. Returning to main menu.")
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-
-    def show_statistics(self) -> None:
-        # Placeholder for displaying user statistics
-        print("\n--- My Statistics ---")
-        print("Statistics feature coming soon...")
-
-    def settings(self) -> None:
-        # Placeholder for settings functionality
-        print("\n--- Settings ---")
-        print("Settings feature coming soon...")
-
-    def save_and_exit(self) -> None:
-        # Placeholder for saving current state
-        print("Saving progress and exiting. Goodbye!")
-
-    def run(self) -> None:
-        self.prepare()
-
-        if not self.profile:
-            self.create_new_user()
-        else:
-            print(f"Welcome back, {self.profile['username']}!")
-
-        self.show_main_menu()
+    def run(self):
+        pass
 
 
 if __name__ == "__main__":
-    game_simulator = GameSimulator()
-    game_simulator.run()
+    GameSimulator().run()

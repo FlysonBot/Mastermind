@@ -158,6 +158,7 @@ class Game(BaseModel):
     def __len__(self) -> int:
         return len(self._board)
 
+    # Mutators
     def submit_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
         """Submits a guess and updates the board."""
         if self._win_status is not None:
