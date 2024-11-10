@@ -3,7 +3,7 @@ from getpass import getpass
 from random import randint
 from typing import Optional, Union
 
-from .utils import FStringTemplate, get_feedback
+from .utils import FStringTemplate, get_feedback, Stack
 from .validation import BaseModel, ValidFeedback, ValidGuess
 
 
