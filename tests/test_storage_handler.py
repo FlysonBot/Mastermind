@@ -3,7 +3,7 @@ import os
 import unittest  # Module for writing and running unit tests
 
 from unittest.mock import MagicMock, mock_open, patch  # Mocks for testing
-from ..storage_handler import *
+from mastermind.storage_handler import *
 
 
 class TestUserData(unittest.TestCase):

@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from .gameboard import Game
-from .players import Player, CodeSetter, CodeCracker, HumanSetter, AISetter, ExternalSetter, HumanCracker, AICracker
-from .utils import Stack, get_feedback
-from .validation import ValidGuess, ValidFeedback
+from mastermind.gameboard import Game
+from mastermind.players import Player, CodeSetter, CodeCracker, HumanSetter, AISetter, ExternalSetter, HumanCracker, AICracker
+from mastermind.utils import Stack, get_feedback
+from mastermind.validation import ValidGuess, ValidFeedback
 
 
 class TestPlayers(unittest.TestCase):

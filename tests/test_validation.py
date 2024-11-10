@@ -1,6 +1,6 @@
 import unittest
 
-from ..validation import *
+from mastermind.validation import *
 
 
 class GameSettings(BaseModel):

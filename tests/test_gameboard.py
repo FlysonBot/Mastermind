@@ -1,9 +1,9 @@
 import unittest
 
 from unittest.mock import MagicMock
-from ..gameboard import *
-from ..validation import *
-from ..players import HumanCracker, HumanSetter, AISetter, AICracker, ExternalSetter
+from mastermind.gameboard import *
+from mastermind.validation import *
+from mastermind.players import HumanCracker, HumanSetter, AISetter, AICracker, ExternalSetter
 
 class TestGameboard(unittest.TestCase):
 

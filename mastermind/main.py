@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from .storage_handler import UserData
+from mastermind.storage_handler import UserData
 
 
 class UserSettings:
