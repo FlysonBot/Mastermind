@@ -14,9 +14,6 @@ class UserMenus:
     class Menu(ABC):
         """An user menu template. Menu being stored as dictionary."""
 
-        def __new__(cls):
-            raise NotImplementedError("Cannot instantiate menu.")
-
         def __call__(self, length):
             assert len(self) == length, "Menu length mismatch."
             return self.get_option()
@@ -78,6 +75,7 @@ class GameStatistics:
 class GameHandler:
     """Communication between MainUI and the gameboard."""
 
+    @classmethod
     def start_new_game(cls, game_mode: str) -> None:
         """Start a new game."""
         if game_mode == "HvH":
