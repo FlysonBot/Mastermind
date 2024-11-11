@@ -86,7 +86,7 @@ class TestUserData(unittest.TestCase):
     @patch("os.makedirs")
     def test_set_data(self, mock_makedirs, mock_open):
         """Test setting a new key-value pair in the user data."""
-        UserData().new_key = 'new_value'  # Set a new key-value pair
+        UserData().new_key = "new_value"  # Set a new key-value pair
 
         # Verify that the new data is correctly stored
         self.assertEqual(UserData().new_key, "new_value")

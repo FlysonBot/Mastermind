@@ -11,7 +11,7 @@ class UserData:
     _data = {}  # Dictionary to hold user data
     _file_path = "data/userdata.config"  # Path to the user data file
 
-    def __new__(cls) -> 'UserData':
+    def __new__(cls) -> "UserData":
         if cls._instance is None:
             cls._instance = super(UserData, cls).__new__(cls)
             cls._instance._load_data()  # Load data on instantiation
@@ -51,7 +51,11 @@ class UserData:
 
     def __setattr__(self, key: str, value: Any) -> None:
         """Allow direct modification of keys in the data dictionary."""
-        if key in ['_instance', '_data', '_file_path']:  # Prevent overriding class attributes
+        if key in [
+            "_instance",
+            "_data",
+            "_file_path",
+        ]:  # Prevent overriding class attributes
             super().__setattr__(key, value)
         else:
             self._data[key] = value
