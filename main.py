@@ -97,7 +97,7 @@ class MainUI:
 
     def __new__(cls):
         if not hasattr(cls, "instance"):
-            cls.instance = super(CrawlerSingleton, cls).__new__(cls)
+            cls.instance = super(MainUI, cls).__new__(cls)
         return cls.instance
 
     def main_menu(self) -> bool:
@@ -161,4 +161,4 @@ class MainUI:
 
 
 if __name__ == "__main__":
-    GameSimulator().run()
+    MainUI().run()
