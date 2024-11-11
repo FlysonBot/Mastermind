@@ -1,14 +1,9 @@
-import sys
-import os
 import unittest
 
-# Add the project root directory to `sys.path`
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 if __name__ == "__main__":
-    # Discover and run all tests in the tests directory
+    # Discover and run all tests in the tests package
     loader = unittest.TestLoader()
-    suite = loader.discover('tests')
+    suite = loader.discover('tests')  # Looks in tests/ for all test files
 
     runner = unittest.TextTestRunner()
     runner.run(suite)
