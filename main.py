@@ -157,7 +157,7 @@ class MainUI:
         while self.main_menu():
             pass  # keep calling self.main_menu() untill it return False
         print("Thank you for playing!")
-        UserData.save_data()
+        UserData().save_data()
 
 
 if __name__ == "__main__":
