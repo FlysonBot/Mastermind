@@ -54,7 +54,7 @@ class BaseModel:
             if isinstance(attr, ValidatedData):  # If is a validated type
                 if isinstance(value, ValidatedData):  # If input is validated
                     if type(value) is not type(attr):  # If not the same type
-                        raise ValidationError(
+                        raise ValidatedData.ValidationError(
                             "Cannot assign a different type to a validated attribute."
                         )
                     # Try to update with the validated value (so custom validation method is invoked)
