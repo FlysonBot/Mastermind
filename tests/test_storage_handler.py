@@ -1,8 +1,8 @@
 import json
 import os
-import unittest  # Module for writing and running unit tests
+import unittest
 
-from unittest.mock import MagicMock, mock_open, patch  # Mocks for testing
+from unittest.mock import MagicMock, mock_open, patch
 from mastermind.storage_handler import *
 
 

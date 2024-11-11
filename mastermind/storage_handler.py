@@ -1,7 +1,7 @@
-import glob  # Module for file pattern matching
-import json  # Module for working with JSON data
-import os  # Module for interacting with the operating system
-from typing import Any  # Type hint for any value
+import glob
+import json
+import os
+from typing import Any
 
 
 class UserData:
