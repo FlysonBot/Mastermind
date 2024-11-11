@@ -27,15 +27,15 @@ class TestUserData(unittest.TestCase):
         )
 
         # Call the method to load data
-        UserData._load_data()
+        UserData()._load_data()
 
         # Check if the data was loaded correctly into the _data dictionary
-        self.assertEqual(UserData._data, {"key": "value"})
+        self.assertEqual(UserData()._data, {"key": "value"})
 
         # Verify that the directory creation was attempted
         mock_makedirs.assert_called_once()
         # Verify that the file was opened for reading
-        mock_open.assert_called_once_with(UserData._file_path, "r")
+        mock_open.assert_called_once_with(UserData()._file_path, "r")
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.path.exists")
@@ -46,10 +46,10 @@ class TestUserData(unittest.TestCase):
         mock_exists.return_value = False
 
         # Call the method to load data
-        UserData._load_data()
+        UserData()._load_data()
 
         # Check that the data is initialized as an empty dictionary
-        self.assertEqual(UserData._data, {})
+        self.assertEqual(UserData()._data, {})
 
         # Verify that the directory was created
         mock_makedirs.assert_called_once()
@@ -58,16 +58,16 @@ class TestUserData(unittest.TestCase):
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.makedirs")
-    def test_save_data(self, mock_makedirs, mock_open):
+    def testsave_data(self, mock_makedirs, mock_open):
         """Test saving data to the user data file."""
-        UserData._data = {"key": "value"}  # Set some data to save
+        UserData()._data = {"key": "value"}  # Set some data to save
 
-        UserData._save_data()  # Call the method to save data
+        UserData().save_data()  # Call the method to save data
 
         # Ensure the directory was created
         mock_makedirs.assert_called_once()
         # Check that the file was opened for writing
-        mock_open.assert_called_once_with(UserData._file_path, "w")
+        mock_open.assert_called_once_with(UserData()._file_path, "w")
 
         # Retrieve the file handle
         handle = mock_open()
@@ -86,17 +86,17 @@ class TestUserData(unittest.TestCase):
     @patch("os.makedirs")
     def test_set_data(self, mock_makedirs, mock_open):
         """Test setting a new key-value pair in the user data."""
-        UserData.set("new_key", "new_value")  # Set a new key-value pair
+        UserData().new_key = 'new_value'  # Set a new key-value pair
 
         # Verify that the new data is correctly stored
-        self.assertEqual(UserData._data["new_key"], "new_value")
-        mock_open.assert_called_once_with(UserData._file_path, "w")
+        self.assertEqual(UserData().new_key, "new_value")
+        mock_open.assert_called_once_with(UserData()._file_path, "w")
 
         # Retrieve the file handle and check the write calls
         handle = mock_open()
 
         expected_data = json.dumps(
-            {"key": "value", "new_key": "new_value"}
+            {"new_key": "new_value"}
         )  # Prepare the expected output
         write_calls = handle.write.call_args_list  # Get the list of calls made to write
 
@@ -111,15 +111,15 @@ class TestUserData(unittest.TestCase):
     def test_clear_all(self, mock_makedirs, mock_open):
         """Test clearing all user data."""
         # Initialize some data
-        UserData._data = {"key": "value"}
+        UserData()._data = {"key": "value"}
 
         # Call the method to clear all data
-        UserData.clear_all()
+        UserData().clear_all()
 
         # Ensure the data is cleared
-        self.assertEqual(UserData._data, {})
+        self.assertEqual(UserData()._data, {})
         # Check that the file was opened for writing (to save the empty data)
-        mock_open.assert_called_once_with(UserData._file_path, "w")
+        mock_open.assert_called_once_with(UserData()._file_path, "w")
         # Verify that an empty dictionary was saved
         mock_open().write.assert_called_once_with(json.dumps({}))
 
