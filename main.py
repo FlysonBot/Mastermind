@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from .storage_handler import UserData
+from mastermind.storage_handler import UserData
 
 
 class UserSettings:
@@ -157,7 +157,7 @@ class MainUI:
         while self.main_menu():
             pass  # keep calling self.main_menu() untill it return False
         print("Thank you for playing!")
-        UserData.save_data()
+        UserData().save_data()
 
 
 if __name__ == "__main__":

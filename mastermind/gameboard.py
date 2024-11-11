@@ -2,9 +2,9 @@ from collections import deque
 from random import randint
 from typing import Any, Optional, Tuple
 
-from .players import *
-from .utils import get_feedback, Stack
-from .validation import *
+from mastermind.players import *
+from mastermind.utils import get_feedback, Stack
+from mastermind.validation import *
 
 
 class Game(BaseModel):

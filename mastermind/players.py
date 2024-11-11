@@ -3,8 +3,8 @@ from getpass import getpass
 from random import randint
 from typing import Optional, Union
 
-from .utils import FStringTemplate, get_feedback, Stack
-from .validation import BaseModel, ValidFeedback, ValidGuess
+from mastermind.utils import FStringTemplate, get_feedback, Stack
+from mastermind.validation import BaseModel, ValidFeedback, ValidGuess
 
 
 # Abstract Class for Player Unit

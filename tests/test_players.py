@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from .gameboard import Game
-from .players import Player, CodeSetter, CodeCracker, HumanSetter, AISetter, ExternalSetter, HumanCracker, AICracker
-from .utils import Stack, get_feedback
-from .validation import ValidGuess, ValidFeedback
+from mastermind.gameboard import Game
+from mastermind.players import Player, CodeSetter, CodeCracker, HumanSetter, AISetter, ExternalSetter, HumanCracker, AICracker
+from mastermind.utils import Stack, get_feedback
+from mastermind.validation import ValidGuess, ValidFeedback
 
 
 class TestPlayers(unittest.TestCase):
@@ -14,14 +14,14 @@ class TestPlayers(unittest.TestCase):
         self.game = Game(number_of_colors=6, number_of_dots=4, maximum_attempts=10, game_mode="HvH")
 
     # Tests for HumanSetter
-    @patch("players.getpass", return_value="1234")
+    @patch("mastermind.players.getpass", return_value="1234")
     def test_human_setter_set_secret_code_valid(self, mock_getpass):
         """Test HumanSetter setting a valid secret code."""
         setter = HumanSetter(self.game)
         self.assertIsNone(setter.set_secret_code())
         self.assertEqual(setter.SECRET_CODE, (1, 2, 3, 4))
 
-    @patch("players.getpass", side_effect=["?", "1234", "1234"])
+    @patch("mastermind.players.getpass", side_effect=["?", "1234", "1234"])
     def test_human_setter_help_command(self, mock_getpass):
         """Test HumanSetter help command (?) during code entry."""
         setter = HumanSetter(self.game)
