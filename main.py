@@ -153,7 +153,7 @@ class MainUI:
         """Run the game."""
         print("Welcome to Mastermind!")
         while self.main_menu():
-            pass  # keep calling self.main_menu() untill it return False
+            pass  # keep calling self.main_menu() until it return False
         print("Thank you for playing!")
         UserData().save_data()
 

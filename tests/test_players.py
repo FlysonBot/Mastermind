@@ -116,7 +116,7 @@ class TestPlayers(unittest.TestCase):
 
     # Tests for undo and redo functionality
     def test_undo_with_guesses(self):
-        """Test undo functionality with multiple undos."""
+        """Test undo functionality with multiple undo."""
         cracker = HumanCracker(self.game)
         setter = HumanSetter(self.game)
         self.game._board.add_guess((1, 2, 3, 4), (1, 1))
