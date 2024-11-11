@@ -1,5 +1,5 @@
-import json
 import os
+import pickle
 import unittest
 
 from unittest.mock import MagicMock, mock_open, patch
@@ -18,11 +18,10 @@ class TestUserData(unittest.TestCase):
     @patch("os.makedirs")  # Mock os.makedirs to prevent actual directory creation
     def test_load_data_file_exists(self, mock_makedirs, mock_exists, mock_open):
         """Test loading data when the user data file exists."""
-        # Setup the mock to simulate the existence of the file
-        mock_exists.return_value = True
+        mock_exists.return_value = True  # Simulate file existence
 
-        # Simulate reading JSON data from the file
-        mock_open.return_value.__enter__.return_value.read.return_value = json.dumps(
+        # Simulate reading pickled data from the file
+        mock_open.return_value.__enter__.return_value.read.return_value = pickle.dumps(
             {"key": "value"}
         )
 
@@ -32,18 +31,17 @@ class TestUserData(unittest.TestCase):
         # Check if the data was loaded correctly into the _data dictionary
         self.assertEqual(UserData()._data, {"key": "value"})
 
-        # Verify that the directory creation was attempted
+        # Verify directory creation was attempted
         mock_makedirs.assert_called_once()
-        # Verify that the file was opened for reading
-        mock_open.assert_called_once_with(UserData()._file_path, "r")
+        # Verify file was opened for reading in binary mode
+        mock_open.assert_called_once_with(UserData()._file_path, "rb")
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.path.exists")
     @patch("os.makedirs")
     def test_load_data_file_not_exists(self, mock_makedirs, mock_exists, mock_open):
         """Test loading data when the user data file does not exist."""
-        # Simulate that the file does not exist
-        mock_exists.return_value = False
+        mock_exists.return_value = False  # Simulate that file does not exist
 
         # Call the method to load data
         UserData()._load_data()
@@ -51,36 +49,30 @@ class TestUserData(unittest.TestCase):
         # Check that the data is initialized as an empty dictionary
         self.assertEqual(UserData()._data, {})
 
-        # Verify that the directory was created
+        # Verify directory creation
         mock_makedirs.assert_called_once()
-        # Ensure that the file was not opened since it doesn't exist
+        # Ensure the file was not opened since it doesn't exist
         mock_open.assert_not_called()
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.makedirs")
-    def testsave_data(self, mock_makedirs, mock_open):
+    def test_save_data(self, mock_makedirs, mock_open):
         """Test saving data to the user data file."""
         UserData()._data = {"key": "value"}  # Set some data to save
 
         UserData().save_data()  # Call the method to save data
 
-        # Ensure the directory was created
+        # Ensure directory was created
         mock_makedirs.assert_called_once()
-        # Check that the file was opened for writing
-        mock_open.assert_called_once_with(UserData()._file_path, "w")
+        # Check that the file was opened for writing in binary mode
+        mock_open.assert_called_once_with(UserData()._file_path, "wb")
 
         # Retrieve the file handle
         handle = mock_open()
 
-        # Verify that the expected data was written (check the call list)
-        expected_data = json.dumps({"key": "value"})  # Prepare the expected output
-        write_calls = handle.write.call_args_list  # Get the list of calls made to write
-
-        # Check if the expected data was in the calls to write
-        self.assertTrue(
-            any(expected_data in str(call) for call in write_calls),
-            f"Expected write call with {expected_data} not found. Calls: {write_calls}",
-        )
+        # Verify expected data was pickled and written
+        expected_data = pickle.dumps({"key": "value"})  # Expected output
+        handle.write.assert_called_once_with(expected_data)
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.makedirs")
@@ -88,40 +80,32 @@ class TestUserData(unittest.TestCase):
         """Test setting a new key-value pair in the user data."""
         UserData().new_key = "new_value"  # Set a new key-value pair
 
-        # Verify that the new data is correctly stored
+        # Verify new data is correctly stored
         self.assertEqual(UserData().new_key, "new_value")
-        mock_open.assert_called_once_with(UserData()._file_path, "w")
+        mock_open.assert_called_once_with(UserData()._file_path, "wb")
 
         # Retrieve the file handle and check the write calls
         handle = mock_open()
-
-        expected_data = json.dumps(
-            {"new_key": "new_value"}
-        )  # Prepare the expected output
-        write_calls = handle.write.call_args_list  # Get the list of calls made to write
-
-        # Check if the expected data was in the calls to write
-        self.assertTrue(
-            any(expected_data in str(call) for call in write_calls),
-            f"Expected write call with {expected_data} not found. Calls: {write_calls}",
-        )
+        expected_data = pickle.dumps(
+            {"key": "value", "new_key": "new_value"}
+        )  # Expected output
+        handle.write.assert_called_once_with(expected_data)
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.makedirs")
     def test_clear_all(self, mock_makedirs, mock_open):
         """Test clearing all user data."""
-        # Initialize some data
-        UserData()._data = {"key": "value"}
+        UserData()._data = {"key": "value"}  # Initialize some data
 
         # Call the method to clear all data
         UserData().clear_all()
 
-        # Ensure the data is cleared
+        # Ensure data is cleared
         self.assertEqual(UserData()._data, {})
-        # Check that the file was opened for writing (to save the empty data)
-        mock_open.assert_called_once_with(UserData()._file_path, "w")
-        # Verify that an empty dictionary was saved
-        mock_open().write.assert_called_once_with(json.dumps({}))
+        # Check that the file was opened for writing in binary mode
+        mock_open.assert_called_once_with(UserData()._file_path, "wb")
+        # Verify an empty dictionary was pickled and saved
+        mock_open().write.assert_called_once_with(pickle.dumps({}))
 
 
 class TestCache(unittest.TestCase):
@@ -139,12 +123,12 @@ class TestCache(unittest.TestCase):
         # Call the method to set a cache value
         Cache.set(key, value)
 
-        # Build the expected file path for the cache file
+        # Build expected file path for the cache file
         expected_path = os.path.join(Cache._cache_directory, f"{key}.cache")
-        # Verify that the file was opened for writing
-        mock_open.assert_called_once_with(expected_path, "w")
-        # Check that the value was correctly written to the file
-        mock_open().write.assert_called_once_with(value)
+        # Verify file was opened for writing in binary mode
+        mock_open.assert_called_once_with(expected_path, "wb")
+        # Check value was correctly pickled and written to the file
+        mock_open().write.assert_called_once_with(pickle.dumps(value))
 
     @patch(
         "builtins.open", new_callable=mock_open
@@ -154,44 +138,46 @@ class TestCache(unittest.TestCase):
     def test_get_cache_exists(self, mock_makedirs, mock_exists, mock_open):
         """Test retrieving a value from the cache when the file exists."""
         key = "test_key"  # Key to retrieve from the cache
-        mock_exists.return_value = True  # Simulate that the cache file exists
+        mock_exists.return_value = True  # Simulate that cache file exists
 
         # Simulate reading from the cache file
-        mock_open.return_value.__enter__.return_value.read.return_value = "cached_value"
+        mock_open.return_value.__enter__.return_value.read.return_value = pickle.dumps(
+            "cached_value"
+        )
 
         # Call the method to get the cache value
         result = Cache.__getattr__(key)
 
-        # Build the expected file path for the cache file
+        # Build expected file path for the cache file
         expected_path = os.path.join(Cache._cache_directory, f"{key}.cache")
-        # Check that the returned result matches the expected cached value
+        # Check returned result matches expected cached value
         self.assertEqual(result, "cached_value")
-        # Verify that the cache file was opened for reading
-        mock_open.assert_called_once_with(expected_path, "r")
+        # Verify cache file was opened for reading in binary mode
+        mock_open.assert_called_once_with(expected_path, "rb")
 
     @patch("os.path.exists")  # Mock to check file existence
     def test_get_cache_not_exists(self, mock_exists):
         """Test retrieving a value from the cache when the file does not exist."""
         key = "nonexistent_key"  # Key that does not exist in the cache
-        mock_exists.return_value = False  # Simulate that the cache file does not exist
+        mock_exists.return_value = False  # Simulate cache file does not exist
 
         # Call the method to get the cache value
         result = Cache.__getattr__(key)
 
-        # Ensure that None is returned when the file does not exist
+        # Ensure None is returned when the file does not exist
         self.assertIsNone(result)
 
     @patch("glob.glob")  # Mock the glob function to simulate file listing
     @patch("os.remove")  # Mock os.remove to avoid file deletion
     def test_clear_cache(self, mock_remove, mock_glob):
         """Test clearing all cache files."""
-        # Simulate that two cache files exist
+        # Simulate two cache files exist
         mock_glob.return_value = ["data/test1.cache", "data/test2.cache"]
 
-        # Call the method to clear the cache
+        # Call method to clear cache
         Cache.clear_cache()
 
-        # Verify that the remove function was called for both files
+        # Verify remove function was called for both files
         self.assertEqual(mock_remove.call_count, 2)
 
 

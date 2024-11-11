@@ -1,6 +1,6 @@
 import glob
-import json
 import os
+import pickle
 from typing import Any
 
 
@@ -23,20 +23,19 @@ class UserData:
         os.makedirs("data", exist_ok=True)
 
     def _load_data(self) -> None:
-        """Load user data from the config file."""
+        """Load user data from the config file using pickle."""
         self._ensure_directory_exists()  # Ensure the directory is created
         if os.path.exists(self._file_path):
-            with open(self._file_path, "r") as file:
-                self._data = json.load(file)
+            with open(self._file_path, "rb") as file:
+                self._data = pickle.load(file)
         else:
             self._data = {}
 
     def save_data(self) -> None:
-        """Save user data to the config file."""
+        """Save user data to the config file using pickle."""
         self._ensure_directory_exists()  # Ensure the directory is created
-        with open(self._file_path, "w") as file:
-            json_string = json.dumps(self._data)
-            file.write(json_string)
+        with open(self._file_path, "wb") as file:
+            pickle.dump(self._data, file)
 
     def clear_all(self) -> None:
         """Clear all user data."""
@@ -70,36 +69,31 @@ class Cache:
     @classmethod
     def _ensure_directory_exists(cls) -> None:
         """Ensure the cache directory exists."""
-        # Create the 'data' directory if it does not already exist
         os.makedirs(cls._cache_directory, exist_ok=True)
 
     @classmethod
     def _get_cache_file_path(cls, key: str) -> str:
         """Get the file path for the given cache key."""
-        # Construct the full path for the cache file corresponding to the key
-        # i.e Cache.key will be stored in data/key.cache
         return os.path.join(cls._cache_directory, f"{key}.cache")
 
     @classmethod
     def clear_cache(cls) -> None:
         """Clear all cache files."""
-        # Remove all cache files in the 'data' directory matching the *.cache pattern
         for cache_file in glob.glob(os.path.join(cls._cache_directory, "*.cache")):
-            os.remove(cache_file)  # Delete the cache file
+            os.remove(cache_file)
 
     @classmethod
     def __getattr__(cls, key: str) -> Any:
-        """Allow direct access to cache keys."""
-        file_path = cls._get_cache_file_path(key)  # Get the cache file path for the key
-        # Check if the cache file exists
+        """Allow direct access to cache keys using pickle."""
+        file_path = cls._get_cache_file_path(key)
         if os.path.exists(file_path):
-            with open(file_path, "r") as file:  # Open the cache file for reading
-                return file.read()  # Return the contents of the cache file
-        return None  # Return None if the cache file does not exist
+            with open(file_path, "rb") as file:
+                return pickle.load(file)
+        return None
 
     @classmethod
     def set(cls, key: str, value: Any) -> Any:
-        """Set a value in the cache."""
-        file_path = cls._get_cache_file_path(key)  # Get the cache file path for the key
-        with open(file_path, "w") as file:  # Open the cache file for writing
-            file.write(value)  # Write the value to the cache file
+        """Set a value in the cache using pickle."""
+        file_path = cls._get_cache_file_path(key)
+        with open(file_path, "wb") as file:
+            pickle.dump(value, file)
