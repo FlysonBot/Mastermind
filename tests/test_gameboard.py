@@ -54,6 +54,7 @@ class TestGameboard(unittest.TestCase):
     def test_submit_guess(self):
         """Test submitting a guess."""
         self.board.add_guess = MagicMock()
+        self.game.find_players()
         guess = (1, 2, 3, 4)
         feedback = (2, 1)
         self.game.submit_guess(guess, feedback)
