@@ -3,35 +3,37 @@ from getpass import getpass
 from random import randint
 from typing import Optional, Union
 
-from .utils import FStringTemplate, get_feedback
-from .validation import BaseModel, ValidFeedback, ValidGuess
+from mastermind.utils import FStringTemplate, get_feedback, Stack
+from mastermind.validation import BaseModel, ValidFeedback, ValidGuess
 
 
 # Abstract Class for Player Unit
 class Player(ABC, BaseModel):
     """A class to represent a player."""
 
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: "Game") -> None:
         """Initializes the player."""
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
 
-    def undo(self) -> None:
-        """Update the undo stack so we can redo afterward."""
+    @abstractmethod
+    def undo(self, item: tuple) -> None:
+        """Update the undo stack with item so we can redo afterward."""
         if len(self.GAME._board) == 0:
             raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
-        self.undo_stack.push(self.GAME._board.last_guess())
+        self.undo_stack.push(
+            item
+        )  # item can be guess or feedback, varies by player type
 
     def redo(self) -> None:
         """Pop from the undo stack and return the last guess."""
         if len(self.undo_stack) == 0:
             raise IndexError("Cannot undo from empty board.")
         return self.undo_stack.pop()
-
-    @abstractmethod
-    def obtain_guess(self) -> tuple:
-        """Obtains a guess from the player."""
-        raise NotImplementedError("This method must be implemented in a subclass.")
+    
+    def clear_undo(self) -> None:
+        """Clear the undo stack."""
+        self.undo_stack.clear()
 
 
 class CodeSetter(Player):
@@ -47,28 +49,36 @@ class CodeSetter(Player):
         """Obtains feedback for a given guess."""
         pass
 
+    def undo(self) -> None:
+        """Update the undo stack with last feedback."""
+        super().undo(self.GAME._board.last_feedback())
+
 
 class CodeCracker(Player):
     """A class to represent a code cracker."""
 
-    def __init__(self, game: Game, win_msg: str, lose_msg: str) -> None:
+    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:
         """Initializes the code cracker."""
         super().__init__(game)
-        self.win_message = FStringTemplate(win_msg)
-        self.lose_message = FStringTemplate(lose_msg)
+        self._win_message = FStringTemplate(win_msg)
+        self._lose_message = FStringTemplate(lose_msg)
 
     def win_message(self) -> None:
         """Prints a message when the game is won."""
-        print(self.win_message.eval(self.__dict__))
+        print(self._win_message.eval(step=len(self.GAME)))
 
     def lose_message(self) -> None:
         """Prints a message when the game is lost."""
-        print(self.lose_message.eval(self.__dict__))
+        print(self._lose_message.eval(step=len(self.GAME)))
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
         """Obtains a guess from the player."""
         pass
+
+    def undo(self) -> None:
+        """Update the undo stack with last guess"""
+        super().undo(self.GAME._board.last_guess())
 
 
 # Concrete Implementation of Different Players
@@ -118,7 +128,7 @@ class HumanSetter(CodeSetter):
         """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
-        return get_feedback(guess, self.SECRET_CODE)
+        return get_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
 class AISetter(CodeSetter):
@@ -137,7 +147,7 @@ class AISetter(CodeSetter):
         """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
-        return get_feedback(guess, self.SECRET_CODE)
+        return get_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
 class ExternalSetter(CodeSetter):
@@ -179,16 +189,21 @@ class ExternalSetter(CodeSetter):
 
             try:
                 valid_feedback.value = valid_feedback.validate(feedback)
-                return valid_feedback
+                return valid_feedback.value
             except ValueError as e:
                 print(e)
+                print("To get more help, enter '?'")
+            except valid_feedback.ValidationError:
+                print(
+                    f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})"
+                )
                 print("To get more help, enter '?'")
 
 
 class HumanCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: "Game") -> None:
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {secret_code}."
@@ -232,9 +247,14 @@ class HumanCracker(CodeCracker):
 
             try:
                 valid_guess.value = valid_guess.validate(guess)
-                return valid_guess
+                return valid_guess.value
             except ValueError as e:
                 print(e)
+                print("To get more help, enter '?'")
+            except valid_guess.ValidationError:
+                print(
+                    f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]"
+                )
                 print("To get more help, enter '?'")
 
 

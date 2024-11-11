@@ -1,63 +1,61 @@
-import glob  # Module for file pattern matching
-import json  # Module for working with JSON data
-import os  # Module for interacting with the operating system
-from typing import Any  # Type hint for any value
+import glob
+import json
+import os
+from typing import Any
 
 
 class UserData:
-    """Static class to store user configs in a single file."""
+    """Singleton class to store user configs in a single file."""
 
-    _data = {}  # Class-level dictionary to hold user data
+    _instance = None  # Class-level attribute for the singleton instance
+    _data = {}  # Dictionary to hold user data
     _file_path = "data/userdata.config"  # Path to the user data file
+
+    def __new__(cls) -> 'UserData':
+        if cls._instance is None:
+            cls._instance = super(UserData, cls).__new__(cls)
+            cls._instance._load_data()  # Load data on instantiation
+        return cls._instance
 
     @classmethod
     def _ensure_directory_exists(cls) -> None:
         """Ensure the data directory exists."""
-        # Create the 'data' directory if it does not already exist
         os.makedirs("data", exist_ok=True)
 
-    @classmethod
-    def _load_data(cls) -> None:
+    def _load_data(self) -> None:
         """Load user data from the config file."""
-        cls._ensure_directory_exists()  # Ensure the directory is created
-        # Check if the user data file exists
-        if os.path.exists(cls._file_path):
-            with open(cls._file_path, "r") as file:  # Open the file for reading
-                cls._data = json.load(file)  # Load JSON data into the dictionary
+        self._ensure_directory_exists()  # Ensure the directory is created
+        if os.path.exists(self._file_path):
+            with open(self._file_path, "r") as file:
+                self._data = json.load(file)
         else:
-            cls._data = {}  # Initialize to empty dict if wil doesn't exist
+            self._data = {}
 
-    @classmethod
-    def save_data(cls) -> None:
+    def save_data(self) -> None:
         """Save user data to the config file."""
-        cls._ensure_directory_exists()  # Ensure the directory is created
-        with open(cls._file_path, "w") as file:  # Open the file for writing
-            json_string = json.dumps(cls._data)  # Serialize dict to JSON string
-            file.write(json_string)  # Write the entire string to the file
+        self._ensure_directory_exists()  # Ensure the directory is created
+        with open(self._file_path, "w") as file:
+            json_string = json.dumps(self._data)
+            file.write(json_string)
 
-    @classmethod
-    def clear_all(cls) -> None:
+    def clear_all(self) -> None:
         """Clear all user data."""
-        cls._data.clear()  # Clear the dictionary
-        cls.save_data()  # Save the empty dictionary to the file
+        self._data.clear()
+        self.save_data()
 
-    @classmethod
-    def __getattr__(cls, key: str) -> Any:
+    def __getattr__(self, key: str) -> Any:
         """Allow access to keys in the data dictionary."""
-        # If the requested key exists in the data, return its value; otherwise, return None
-        if key in cls._data:
-            return cls._data[key]
-        return None
+        if key in self._data:
+            return self._data[key]
+        raise AttributeError(f"{key} not found.")
 
-    @classmethod
-    def __setattr__(cls, key: str, value: Any) -> None:
+    def __setattr__(self, key: str, value: Any) -> None:
         """Allow direct modification of keys in the data dictionary."""
-        cls._data[key] = value  # Add or update the key-value pair in the dictionary
-        cls.save_data()  # Save the updated dictionary to the file
-
-
-# Load existing data when the class is imported
-UserData._load_data()
+        if key in ['_instance', '_data', '_file_path']:  # Prevent overriding class attributes
+            super().__setattr__(key, value)
+        else:
+            self._data[key] = value
+            self.save_data()
 
 
 class Cache:
