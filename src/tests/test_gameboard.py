@@ -1,14 +1,11 @@
 import unittest
 
 from unittest.mock import MagicMock
-from mastermind.gameboard import *
-from mastermind.validation import *
+from mastermind.gameboard import Game
 from mastermind.players import (
     HumanCracker,
     HumanSetter,
     AISetter,
-    AICracker,
-    ExternalSetter,
 )
 
 

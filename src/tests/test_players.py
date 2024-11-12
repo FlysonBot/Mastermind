@@ -1,19 +1,13 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from mastermind.gameboard import Game
 from mastermind.players import (
-    Player,
-    CodeSetter,
-    CodeCracker,
     HumanSetter,
     AISetter,
     ExternalSetter,
     HumanCracker,
-    AICracker,
 )
-from mastermind.utils import Stack, get_feedback
-from mastermind.validation import ValidGuess, ValidFeedback
 
 
 class TestPlayers(unittest.TestCase):
@@ -115,7 +109,7 @@ class TestPlayers(unittest.TestCase):
         mock_print.assert_called_once_with("Congratulations! You won in 0 steps!")
 
     # Tests for undo and redo functionality
-    def test_undo_with_guesses(self):
+    def test_undo_with_guesses(self):  # sourcery skip: class-extract-method
         """Test undo functionality with multiple undo."""
         cracker = HumanCracker(self.game)
         setter = HumanSetter(self.game)
@@ -137,6 +131,7 @@ class TestPlayers(unittest.TestCase):
         self.assertEqual(len(setter.undo_stack), 3)
 
     def test_redo_with_undone_guess(self):
+        # sourcery skip: extract-duplicate-method
         """Test redo functionality after undo to confirm guesses are actually being redo."""
         cracker = HumanCracker(self.game)
         setter = HumanSetter(self.game)

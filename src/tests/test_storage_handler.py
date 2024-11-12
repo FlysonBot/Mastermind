@@ -2,8 +2,9 @@ import os
 import pickle
 import unittest
 
-from unittest.mock import MagicMock, mock_open, patch
-from mastermind.storage_handler import *
+from unittest.mock import mock_open, patch
+
+from mastermind.storage_handler import Cache, UserData
 
 
 class TestUserData(unittest.TestCase):
