@@ -1,0 +1,18 @@
+{
+    "recommendations": [
+        "davidanson.vscode-markdownlint",
+        "ms-python.black-formatter",
+        "streetsidesoftware.code-spell-checker",
+        "njpwerner.autodocstring",
+        "visualstudioexptteam.vscodeintellicode",
+        "hbenl.vscode-test-explorer",
+        "ms-python.isort",
+        "dart-code.flutter",
+        "sourcery.sourcery",
+        "ryanluker.vscode-coverage-gutters"
+    ],
+    "unwantedRecommendations": [
+        "ms-azuretools.vscode-docker",
+        "github.copilot"
+    ]
+}
