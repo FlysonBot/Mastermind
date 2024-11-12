@@ -50,11 +50,11 @@ class UserData:
 
     def __setattr__(self, key: str, value: Any) -> None:
         """Allow direct modification of keys in the data dictionary."""
-        if key in [
+        if key in {
             "_instance",
             "_data",
             "_file_path",
-        ]:  # Prevent overriding class attributes
+        }:  # Prevent overriding class attributes
             super().__setattr__(key, value)
         else:
             self._data[key] = value

@@ -1,10 +1,20 @@
-from collections import deque
-from random import randint
-from typing import Any, Optional, Tuple
+from typing import Optional, Tuple
 
-from mastermind.players import *
-from mastermind.utils import get_feedback, Stack
-from mastermind.validation import *
+from mastermind.players import (
+    AICracker,
+    AISetter,
+    ExternalSetter,
+    HumanCracker,
+    HumanSetter,
+)
+from mastermind.utils import Stack
+from mastermind.validation import (
+    BaseModel,
+    Booleans,
+    TrueFuse,
+    ValidFeedback,
+    ValidGuess,
+)
 
 
 class Game(BaseModel):
@@ -210,7 +220,7 @@ class Game(BaseModel):
             self.PLAYER_CRACKER.lose_message()
 
     # Game Flow Logic
-    def start_game(self) -> Optional[str]:
+    def start_game(self) -> Optional[str]:  # sourcery skip: class-extract-method
         """Starts the game."""
         # Check Condition
         if self._game_started:

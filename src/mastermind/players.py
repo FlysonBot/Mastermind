@@ -1,17 +1,17 @@
+# Abstract Class for Player Unit
 from abc import ABC, abstractmethod
 from getpass import getpass
 from random import randint
 from typing import Optional, Union
 
-from mastermind.utils import FStringTemplate, get_feedback, Stack
+from mastermind.utils import FStringTemplate, Stack, get_feedback
 from mastermind.validation import BaseModel, ValidFeedback, ValidGuess
 
 
-# Abstract Class for Player Unit
 class Player(ABC, BaseModel):
     """A class to represent a player."""
 
-    def __init__(self, game: "Game") -> None:
+    def __init__(self, game: "Game") -> None:  # type: ignore
         """Initializes the player."""
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
@@ -57,7 +57,7 @@ class CodeSetter(Player):
 class CodeCracker(Player):
     """A class to represent a code cracker."""
 
-    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:
+    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore
         """Initializes the code cracker."""
         super().__init__(game)
         self._win_message = FStringTemplate(win_msg)
@@ -203,7 +203,7 @@ class ExternalSetter(CodeSetter):
 class HumanCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
-    def __init__(self, game: "Game") -> None:
+    def __init__(self, game: "Game") -> None:  # type: ignore
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {secret_code}."

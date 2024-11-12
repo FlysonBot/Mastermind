@@ -60,13 +60,12 @@ class BaseModel:
                     # Try to update with the validated value (so custom validation method is invoked)
                     # This prevent replacing constant with another constant, or instance with different kwargs
                     attr.value = attr.validate(value.value)
-                    return
 
                 else:  # If input is not validated
                     attr.value = attr.validate(value)  # Validate and update
-                    return  # return to avoid invoking super().__setattr__
 
-        # If attribute doesn't exist, verify if input is a validated type
+                return
+
         elif not isinstance(value, ValidatedData):
             # Try to find a suitable validated type from attribute name
             value = self._apply_validations(name, value)
@@ -162,11 +161,11 @@ class ValidGuess(ValidatedData):
                 else:
                     # 123412 -> (1, 2, 3, 4, 1, 2)
                     value = tuple(map(int, value))
-            except ValueError:
+            except ValueError as e:
                 raise ValueError(
                     "Guess cannot contain non-numerical number other than comma. "
                     "For example: 123412 or 1,2,3,4,1,2 -> (1, 2, 3, 4, 1, 2)."
-                )
+                ) from e
 
         if not isinstance(value, (tuple, list)):
             raise self.ValidationError("Guess must be a tuple of integers.")
@@ -208,24 +207,24 @@ class ValidFeedback(ValidatedData):
                     value = tuple(map(int, value.split(",")))  # 10, 11 -> (10, 11)
                 else:
                     value = tuple(map(int, value))  # 21 -> (2, 1)
-            except ValueError:
+            except ValueError as e:
                 raise ValueError(
                     "Feedback cannot contain non-numerical characters other than comma. "
                     "For example: 21 = (2, 1); 10,11 -> (10, 11)."
-                )
+                ) from e
 
         if not isinstance(value, tuple):
             raise self.ValidationError("Feedback must be a tuple of two integers.")
-        if not len(value) == 2:
+        if len(value) != 2:
             raise self.ValidationError("Feedback must be a tuple of two integers.")
 
         try:
             ConfinedInteger(value[0], ge=0, le=self.kwargs["number_of_dots"])
             ConfinedInteger(value[1], ge=0, le=self.kwargs["number_of_dots"])
-        except ValidatedData.ValidationError:
+        except ValidatedData.ValidationError as e:
             raise self.ValidationError(
                 "Feedback must be a tuple of integers in the range [0, number_of_dots]."
-            )
+            ) from e
 
         return value
 
@@ -313,13 +312,14 @@ class ConfinedInteger(ValidatedData):
         """Ensure the value is an integer within the specified range."""
         # add support for converting string representation to int
         if not isinstance(value, int):
-            if isinstance(value, str):
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise self.ValidationError("Value must be an integer.")
-            else:
+
+            if not isinstance(value, str):
                 raise self.ValidationError("Value must be an integer.")
+
+            try:
+                value = int(value)
+            except ValueError as e:
+                raise self.ValidationError("Value must be an integer.") from e
 
         # Validate range
         if "le" in self.kwargs and value > self.kwargs["le"]:
