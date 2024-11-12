@@ -3,7 +3,6 @@
         "davidanson.vscode-markdownlint",
         "ms-python.black-formatter",
         "streetsidesoftware.code-spell-checker",
-        "njpwerner.autodocstring",
         "visualstudioexptteam.vscodeintellicode",
         "hbenl.vscode-test-explorer",
         "ms-python.isort",
