@@ -7,7 +7,6 @@
         "visualstudioexptteam.vscodeintellicode",
         "hbenl.vscode-test-explorer",
         "ms-python.isort",
-        "dart-code.flutter",
         "sourcery.sourcery",
         "ryanluker.vscode-coverage-gutters"
     ],
