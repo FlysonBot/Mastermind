@@ -8,7 +8,8 @@
         "littlefoxteam.vscode-python-test-adapter",
         "ms-python.isort",
         "sourcery.sourcery",
-        "ryanluker.vscode-coverage-gutters"
+        "ryanluker.vscode-coverage-gutters",
+        "seunlanlege.action-buttons"
     ],
     "unwantedRecommendations": [
         "ms-azuretools.vscode-docker",
