@@ -41,9 +41,8 @@ class UserMenus:
                 if option in cls.menu:
                     # Return the key can avoid potential mismatch when editing menu
                     return cls.menu[option]
-                else:
-                    cls.display()
-                    print("Invalid option. Try again.")
+                cls.display()
+                print("Invalid option. Try again.")
 
     class MainMenu(Menu):
         """The main menu."""
@@ -87,7 +86,7 @@ class GameHandler:
         elif game_mode == "AIvAI":
             pass
         else:
-            raise Exception("Unexpected invalid game mode.")
+            raise AssertionError("Unexpected invalid game mode.")
 
 
 class MainUI:
@@ -143,7 +142,7 @@ class MainUI:
         elif choice == "Return to Main Menu":
             return False  # terminate the loop
         else:
-            raise Exception("Unexpected invalid choice.")
+            raise AssertionError("Unexpected invalid choice.")
 
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
