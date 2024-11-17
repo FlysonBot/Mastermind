@@ -110,7 +110,7 @@ class UserMenus:
             """Display the menu."""
             cls.print_header()
 
-            if game_history := GameHistory.retrieve_game_history():
+            if (game_history := GameHistory.retrieve_game_history()) is not None:
                 print(game_history)
             else:
                 print("No game history found.")
@@ -141,7 +141,7 @@ class GameHistory:
         if "saved_games" not in UserData():  # if the list is empty
             UserData().saved_games = []  # initialize the list
 
-        UserData().saved_games += cls.get_meta_data(game)  # store the meta data
+        UserData().saved_games.append(cls.get_meta_data(game))  # store the meta data
 
     @classmethod
     def retrieve_game_history(cls) -> pd.DataFrame:
@@ -154,11 +154,13 @@ class GameHistory:
         # Building the history table
         history["Mode"] = dataframe["game_mode"]
         history["Dimension"] = (
-            dataframe["number_of_dots"] + "x" + dataframe["number_of_dots"]
+            dataframe["number_of_dots"].astype(str) + "x" + dataframe["number_of_dots"].astype(str)
         )
-        dataframe["win_status"].replace({True: "W", False: "L", None: " "})
+        dataframe["win_status"] = dataframe["win_status"].replace(
+            {True: "W", False: "L", None: " "}
+        )
         history["Attempt"] = (
-            dataframe["win_status"]
+            dataframe["win_status"].astype(str)
             + " "
             + dataframe["amount_attempted"].astype(str)
             + "/"
