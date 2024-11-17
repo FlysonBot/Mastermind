@@ -206,7 +206,7 @@ class HumanCracker(CodeCracker):
     def __init__(self, game: "Game") -> None:  # type: ignore
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
-        lose_message = "Sorry, you lost. The secret code was {secret_code}."
+        lose_message = "Sorry, you lost. The secret code was {step}."
         super().__init__(game, win_message, lose_message)
 
     def obtain_guess(self) -> Union[tuple, str]:

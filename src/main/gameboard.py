@@ -204,7 +204,7 @@ class Game(BaseModel):
             self.PLAYER_SETTER = ExternalSetter(self)
 
     def player_guessing_logic(self) -> Optional[str]:
-        """Handle the lgoci for player guessing."""
+        """Handle the logic for player guessing."""
         while self.win_status is None:
             # Obtain guess or command from cracker player
             guess = self.PLAYER_CRACKER.obtain_guess()
