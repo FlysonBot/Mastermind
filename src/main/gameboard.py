@@ -1,20 +1,8 @@
 from typing import Optional, Tuple
 
-from main.players import (
-    AICracker,
-    AISetter,
-    ExternalSetter,
-    HumanCracker,
-    HumanSetter,
-)
+from main.players import AICracker, AISetter, ExternalSetter, HumanCracker, HumanSetter
 from main.utils import Stack
-from main.validation import (
-    BaseModel,
-    Booleans,
-    TrueFuse,
-    ValidFeedback,
-    ValidGuess,
-)
+from main.validation import BaseModel, Booleans, TrueFuse, ValidFeedback, ValidGuess
 
 
 class Game(BaseModel):
@@ -60,7 +48,6 @@ class Game(BaseModel):
             board.add_guess((1, 2, 3, 4), (1, 0))
             last_guess = board.last_guess()
         """
-
 
         class EmptyBoardError(Exception):
             """Custom exception for empty board."""

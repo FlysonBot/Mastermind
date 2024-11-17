@@ -12,13 +12,22 @@ class UserMenus:
     """A collection of user menus."""
 
     class Menu(ABC):
-        """An user menu template. Menu being stored as dictionary."""
+        """
+        An abstract base class for creating interactive menus.
+
+        This class provides a structure for displaying a menu,
+        and getting user options. It serves as a foundation for
+        specific menu implementations by defining common behaviors
+        for displaying options and handling user input.
+        """
 
         def __call__(self, length):
+            """Display the menu and get the user's option when called."""
             assert len(self) == length, "Menu length mismatch."
             return self.get_option()
 
         def __len__(self):
+            """Return the number of options in the menu."""
             return len(self.menu)
 
         @classmethod
