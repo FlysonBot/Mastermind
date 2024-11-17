@@ -92,19 +92,34 @@ class TestUserData(unittest.TestCase):
         )  # Expected output
         handle.write.assert_called_once_with(expected_data)
 
-    @patch("builtins.open", new_callable=mock_open)
     @patch("os.makedirs")
-    def test_clear_all(self, mock_makedirs, mock_open):
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data=pickle.dumps({"key": "value"}),
+    )
+    def test_clear_all(self, mock_open, mock_makedirs):
         """Test clearing all user data."""
-        UserData()._data = {"key": "value"}  # Initialize some data
+        user_data = UserData()  # Initialize UserData, this will load the mock data
+
+        # Ensure the initial data is loaded correctly
+        self.assertEqual(user_data._data, {"key": "value"})
 
         # Call the method to clear all data
-        UserData().clear_all()
+        user_data.clear_all()
 
         # Ensure data is cleared
-        self.assertEqual(UserData()._data, {})
-        # Check that the file was opened for writing in binary mode
-        mock_open.assert_called_once_with(UserData()._file_path, "wb")
+        self.assertEqual(user_data._data, {})
+
+        # Check that the file was opened for reading and writing
+        self.assertEqual(mock_open.call_count, 2)  # Ensure open was called twice
+
+        # Check that the first call was for reading
+        mock_open.assert_any_call(user_data._file_path, "rb")
+
+        # Check that the second call was for writing
+        mock_open.assert_any_call(user_data._file_path, "wb")
+
         # Verify an empty dictionary was pickled and saved
         mock_open().write.assert_called_once_with(pickle.dumps({}))
 
