@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from main.storage_handler import UserData
+from main.validation import MaximumAttempts, NumberOfColors, NumberOfDots, ValidatedData
+from main.gameboard import Game
 
 
 class UserSettings:
@@ -84,18 +86,48 @@ class GameHandler:
     """Communication between MainUI and the gameboard."""
 
     @classmethod
+    def validate_input(cls, prompt: str, validator: ValidatedData) -> Any:
+        """Get user input and validate it."""
+        while True:
+            try:
+                user_input = input("\n" + prompt)
+                if validator(user_input):
+                    return user_input
+                else:
+                    print("Invalid input. Please try again.")
+
+            except Exception as e:
+                print(f"Invalid input. {e}")
+
+    @classmethod
+    def get_game_parameters(cls) -> tuple[int, int, int]:
+        """Get the number of colors, number of dots, and number of rounds from user."""
+        num_of_colors = cls.validate_input(
+            "Enter the number of colors (2-10): ", NumberOfColors
+        )
+        num_of_dots = cls.validate_input(
+            "Enter the number of dots (2-10): ", NumberOfDots
+        )
+        max_attempts = cls.validate_input(
+            "Enter the maximum number of attempts: ", MaximumAttempts
+        )
+        return num_of_colors, num_of_dots, max_attempts
+
+    @classmethod
     def start_new_game(cls, game_mode: str) -> None:
         """Start a new game."""
-        if game_mode == "HvH":
-            pass
-        elif game_mode == "HvAI":
-            pass
-        elif game_mode == "AIvH":
-            pass
-        elif game_mode == "AIvAI":
-            pass
-        else:
+        if game_mode not in ["HvH", "HvAI", "AIvH", "AIvAI"]:
             raise AssertionError("Unexpected invalid game mode.")
+        
+        parameters = cls.get_game_parameters()  # get user input
+        game = Game(*parameters, game_mode)  # create a new game
+        game.start_game()  # start the game
+        cls.save_game(game)  # save the game
+    
+    @classmethod
+    def save_game(cls, game: Game) -> None:
+        """Save the game to a file."""
+        if 
 
 
 class MainUI:
@@ -132,7 +164,7 @@ class MainUI:
         elif choice == "Save and Exit":
             return False  # terminate the loop
 
-    def new_game_menu(self):
+    def new_game_menu(self) -> bool:
         """Display the new game menu and handle user input."""
         choice = UserMenus.NewGameMenu()(5)
 
