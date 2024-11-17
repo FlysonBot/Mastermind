@@ -133,6 +133,7 @@ class GameHistory:
             "win_status": game.win_status,
             "guesses": game._board._guesses,
             "feedback": game._board._feedbacks,
+            **({"game": game} if game.win_status is None else {}),
         }
 
     @classmethod
