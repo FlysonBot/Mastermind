@@ -9,7 +9,7 @@ from main.validation import BaseModel, ValidFeedback, ValidGuess
 
 
 class Player(ABC, BaseModel):
-    """A class to represent a player."""
+    """An abstract class to represent a player."""
 
     def __init__(self, game: "Game") -> None:  # type: ignore
         """Initializes the player."""
@@ -18,7 +18,7 @@ class Player(ABC, BaseModel):
 
     @abstractmethod
     def undo(self, item: tuple) -> None:
-        """Update the undo stack with item so we can redo afterward."""
+        """Push the item to the undo stack."""
         if len(self.GAME._board) == 0:
             raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
         self.undo_stack.push(
@@ -26,7 +26,7 @@ class Player(ABC, BaseModel):
         )  # item can be guess or feedback, varies by player type
 
     def redo(self) -> None:
-        """Pop from the undo stack and return the last guess."""
+        """Pop and return the last guess from undo stack."""
         if len(self.undo_stack) == 0:
             raise IndexError("Cannot undo from empty board.")
         return self.undo_stack.pop()
@@ -37,7 +37,7 @@ class Player(ABC, BaseModel):
 
 
 class CodeSetter(Player):
-    """A class to represent a code setter."""
+    """An abstract class to represent a code setter."""
 
     @abstractmethod
     def set_secret_code(self) -> None:
@@ -55,7 +55,7 @@ class CodeSetter(Player):
 
 
 class CodeCracker(Player):
-    """A class to represent a code cracker."""
+    """An abstract class to represent a code cracker."""
 
     def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore
         """Initializes the code cracker."""

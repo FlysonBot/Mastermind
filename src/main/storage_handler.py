@@ -5,13 +5,30 @@ from typing import Any
 
 
 class UserData:
-    """Singleton class to store user configs in a single file."""
+    """
+    A singleton class to manage user data storage and retrieval.
+
+    This class provides a centralized way to load, save, and manipulate
+    user data from a configuration file. It ensures that only one instance
+    of the class exists and allows access to user data through dynamic attributes.
+
+    Attributes:
+        _instance (UserData): The singleton instance of the UserData class.
+        _data (dict): A dictionary to hold user data.
+        _file_path (str): The path to the user data configuration file.
+
+    Examples:
+        user_data = UserData()
+        user_data.username = "JohnDoe"
+        print(user_data.username)
+    """
 
     _instance = None  # Class-level attribute for the singleton instance
     _data = {}  # Dictionary to hold user data
     _file_path = "data/userdata.config"  # Path to the user data file
 
     def __new__(cls) -> "UserData":
+        """Return the single instance of the UserData class."""
         if cls._instance is None:
             cls._instance = super(UserData, cls).__new__(cls)
             cls._instance._load_data()  # Load data on instantiation
@@ -62,7 +79,20 @@ class UserData:
 
 
 class Cache:
-    """Static class to store cache to speed up computation in multiple files."""
+    """
+    A class to manage caching of data using files.
+
+    This class provides methods to store, retrieve, and clear cached data
+    in a specified directory. It allows for easy access to cached values
+    through dynamic attributes and ensures that the cache directory exists.
+
+    Attributes:
+        _cache_directory (str): The directory where cache files are stored.
+
+    Examples:
+        Cache.set("user_data", {"name": "John", "age": 30})
+        user_data = Cache.user_data
+    """
 
     _cache_directory = "data"  # Directory to store cache files
 

@@ -41,12 +41,28 @@ class ValidatedData(ABC):
 
 class BaseModel:
     """
-    Base class for models that use validated attributes.
-    Overrides __getattribute__ and __setattr__ to enforce validation.
+    BaseModel provides a framework for managing attributes with validation.
+
+    This class ensures that attributes are validated upon assignment and
+    retrieves their underlying values when accessed.
     """
 
     def __setattr__(self, name: str, value: Any) -> None:
-        """Validate and set attribute, automatically applying ValidatedData if possible."""
+        """
+        Validate and set attribute, automatically applying ValidatedData if possible.
+
+        This method checks if the attribute already exists and applies validation rules.
+        If the attribute is of type ValidatedData, it ensures that the new value is
+        compatible and validated before assignment.
+
+        Args:
+            name (str): The name of the attribute to set.
+            value (Any): The value to assign to the attribute.
+
+        Raises:
+            ValidatedData.ValidationError: If attempting to assign a different type to a validated attribute.
+        """
+
         # If the attribute already exists
         if hasattr(self, name):
             attr = super().__getattribute__(name)  # Get the attribute
@@ -74,7 +90,19 @@ class BaseModel:
         super().__setattr__(name, value)
 
     def __getattribute__(self, name: str) -> Any:
-        """Retrieve attribute and return the underlying value for ValidatedData instances."""
+        """
+        Retrieve attribute and return the underlying value for ValidatedData instances.
+
+        This method overrides the default attribute access to return the inner value
+        of ValidatedData instances, effectively "peeling off" any validation layers.
+
+        Args:
+            name (str): The name of the attribute to retrieve.
+
+        Returns:
+            Any: The underlying value of the attribute, without validation wrappers.
+        """
+
         value = super().__getattribute__(name)
 
         while isinstance(value, ValidatedData):  # While it's a validated type
@@ -86,8 +114,18 @@ class BaseModel:
     def _apply_validations(self, name: str, value: Any) -> Any:
         """
         Dynamically wrap `value` with ValidatedData subclasses based on attribute name.
-        Chains multiple validations if needed (e.g., `Constant(NumberOfDots(value))`).
+
+        This method determines the appropriate validation classes to apply based on the attribute name,
+        allowing for flexible and dynamic validation chaining.
+
+        Args:
+            name (str): The name of the attribute for which to apply validations.
+            value (Any): The value to validate and potentially wrap.
+
+        Returns:
+            Any: The validated and wrapped value.
         """
+
         # Determine if a constant validation is needed
         validations = []
 
