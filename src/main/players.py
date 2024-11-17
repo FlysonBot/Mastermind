@@ -1,24 +1,24 @@
+# Abstract Class for Player Unit
 from abc import ABC, abstractmethod
 from getpass import getpass
 from random import randint
 from typing import Optional, Union
 
-from mastermind.utils import FStringTemplate, get_feedback, Stack
-from mastermind.validation import BaseModel, ValidFeedback, ValidGuess
+from main.utils import FStringTemplate, Stack, get_feedback
+from main.validation import BaseModel, ValidFeedback, ValidGuess
 
 
-# Abstract Class for Player Unit
 class Player(ABC, BaseModel):
-    """A class to represent a player."""
+    """An abstract class to represent a player."""
 
-    def __init__(self, game: "Game") -> None:
+    def __init__(self, game: "Game") -> None:  # type: ignore
         """Initializes the player."""
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
 
     @abstractmethod
     def undo(self, item: tuple) -> None:
-        """Update the undo stack with item so we can redo afterward."""
+        """Push the item to the undo stack."""
         if len(self.GAME._board) == 0:
             raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
         self.undo_stack.push(
@@ -26,18 +26,18 @@ class Player(ABC, BaseModel):
         )  # item can be guess or feedback, varies by player type
 
     def redo(self) -> None:
-        """Pop from the undo stack and return the last guess."""
+        """Pop and return the last guess from undo stack."""
         if len(self.undo_stack) == 0:
             raise IndexError("Cannot undo from empty board.")
         return self.undo_stack.pop()
-    
+
     def clear_undo(self) -> None:
         """Clear the undo stack."""
         self.undo_stack.clear()
 
 
 class CodeSetter(Player):
-    """A class to represent a code setter."""
+    """An abstract class to represent a code setter."""
 
     @abstractmethod
     def set_secret_code(self) -> None:
@@ -55,9 +55,9 @@ class CodeSetter(Player):
 
 
 class CodeCracker(Player):
-    """A class to represent a code cracker."""
+    """An abstract class to represent a code cracker."""
 
-    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:
+    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore
         """Initializes the code cracker."""
         super().__init__(game)
         self._win_message = FStringTemplate(win_msg)
@@ -203,10 +203,10 @@ class ExternalSetter(CodeSetter):
 class HumanCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
-    def __init__(self, game: "Game") -> None:
+    def __init__(self, game: "Game") -> None:  # type: ignore
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
-        lose_message = "Sorry, you lost. The secret code was {secret_code}."
+        lose_message = "Sorry, you lost. The secret code was {step}."
         super().__init__(game, win_message, lose_message)
 
     def obtain_guess(self) -> Union[tuple, str]:

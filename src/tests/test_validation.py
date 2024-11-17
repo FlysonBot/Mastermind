@@ -1,6 +1,13 @@
 import unittest
 
-from mastermind.validation import *
+from main.validation import (
+    BaseModel,
+    Booleans,
+    ConfinedInteger,
+    Constant,
+    ValidatedData,
+    ValidGuess,
+)
 
 
 class GameSettings(BaseModel):

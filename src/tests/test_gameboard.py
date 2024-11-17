@@ -1,15 +1,21 @@
 import unittest
 
 from unittest.mock import MagicMock
-from mastermind.gameboard import *
-from mastermind.validation import *
-from mastermind.players import HumanCracker, HumanSetter, AISetter, AICracker, ExternalSetter
+from main.gameboard import Game
+from main.players import (
+    HumanCracker,
+    HumanSetter,
+    AISetter,
+)
+
 
 class TestGameboard(unittest.TestCase):
 
     # Setup method to create a fresh Game instance before each test
     def setUp(self):
-        self.game = Game(number_of_colors=6, number_of_dots=4, maximum_attempts=10, game_mode="HvH")
+        self.game = Game(
+            number_of_colors=6, number_of_dots=4, maximum_attempts=10, game_mode="HvH"
+        )
         self.board = self.game._board
 
     # Tests for the _Board class
@@ -94,7 +100,7 @@ class TestGameboard(unittest.TestCase):
         self.game.PLAYER_SETTER = MagicMock()
         self.game.PLAYER_CRACKER.obtain_guess.return_value = "q"
         self.assertEqual(self.game.player_guessing_logic(), "q")
-        
+
     def test_player_guessing_logic_discard(self):
         """Test player_guessing_logic with quit command."""
         self.game.PLAYER_CRACKER = MagicMock()
@@ -134,6 +140,7 @@ class TestGameboard(unittest.TestCase):
         self.game.find_players.assert_called_once()
         self.game.PLAYER_SETTER.set_secret_code.assert_called_once()
 
+
 # Run the test suite
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

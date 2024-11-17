@@ -1,35 +1,42 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-from mastermind.gameboard import Game
-from mastermind.players import Player, CodeSetter, CodeCracker, HumanSetter, AISetter, ExternalSetter, HumanCracker, AICracker
-from mastermind.utils import Stack, get_feedback
-from mastermind.validation import ValidGuess, ValidFeedback
+from main.gameboard import Game
+from main.players import (
+    HumanSetter,
+    AISetter,
+    ExternalSetter,
+    HumanCracker,
+)
 
 
 class TestPlayers(unittest.TestCase):
-    
+
     def setUp(self):
         """Initialize a basic Game instance for testing purposes."""
-        self.game = Game(number_of_colors=6, number_of_dots=4, maximum_attempts=10, game_mode="HvH")
+        self.game = Game(
+            number_of_colors=6, number_of_dots=4, maximum_attempts=10, game_mode="HvH"
+        )
 
     # Tests for HumanSetter
-    @patch("mastermind.players.getpass", return_value="1234")
+    @patch("main.players.getpass", return_value="1234")
     def test_human_setter_set_secret_code_valid(self, mock_getpass):
         """Test HumanSetter setting a valid secret code."""
         setter = HumanSetter(self.game)
         self.assertIsNone(setter.set_secret_code())
         self.assertEqual(setter.SECRET_CODE, (1, 2, 3, 4))
 
-    @patch("mastermind.players.getpass", side_effect=["?", "1234", "1234"])
+    @patch("main.players.getpass", side_effect=["?", "1234", "1234"])
     def test_human_setter_help_command(self, mock_getpass):
         """Test HumanSetter help command (?) during code entry."""
         setter = HumanSetter(self.game)
         with patch("builtins.print") as mock_print:
             setter.set_secret_code()
             print_log = str(mock_print.call_args_list)
-            
-            self.assertIn("Enter a 4-digit number with digit ranging from 1 to 6", print_log)
+
+            self.assertIn(
+                "Enter a 4-digit number with digit ranging from 1 to 6", print_log
+            )
 
     def test_human_setter_get_feedback_no_code(self):
         """Test get_feedback raises error if secret code isn't set."""
@@ -43,7 +50,11 @@ class TestPlayers(unittest.TestCase):
         setter = AISetter(self.game)
         setter.set_secret_code()
         self.assertEqual(len(setter.SECRET_CODE), self.game.number_of_dots)
-        self.assertTrue(all(1 <= digit <= self.game.number_of_colors for digit in setter.SECRET_CODE))
+        self.assertTrue(
+            all(
+                1 <= digit <= self.game.number_of_colors for digit in setter.SECRET_CODE
+            )
+        )
 
     def test_ai_setter_get_feedback(self):
         """Test AISetter feedback generation."""
@@ -60,14 +71,14 @@ class TestPlayers(unittest.TestCase):
         with patch("builtins.print") as mock_print:
             feedback = setter.get_feedback((1, 2, 3, 4))
             print_log = str(mock_print.call_args_list)
-            
+
             self.assertIn("To get more help, enter '?'", print_log)
             self.assertIn("Enter a 2 digit number", print_log)
             self.assertIn("(?) for help", print_log)
             self.assertIn("Feedback must consist of 2 integer in range", print_log)
-            
+
             self.assertEqual(feedback, (0, 1))
-            self.assertEqual(setter.get_feedback((1, 2, 3, 4)), (0,1))
+            self.assertEqual(setter.get_feedback((1, 2, 3, 4)), (0, 1))
             self.assertEqual(setter.get_feedback((1, 2, 3, 4)), "q")
             self.assertEqual(setter.get_feedback((1, 2, 3, 4)), "d")
 
@@ -79,12 +90,14 @@ class TestPlayers(unittest.TestCase):
         with patch("builtins.print") as mock_print:
             valid_guess = cracker.obtain_guess()
             print_log = str(mock_print.call_args_list)
-            
-            self.assertIn("To get more help, enter '?'", str(mock_print.call_args_list[1]))
+
+            self.assertIn(
+                "To get more help, enter '?'", str(mock_print.call_args_list[1])
+            )
             self.assertIn("Enter a 4-digit", print_log)
             self.assertIn("Guess must consist of 4 integers in range [1, 6]", print_log)
-            
-            #self.assertEqual(valid_guess, (1, 2, 3, 4))
+
+            # self.assertEqual(valid_guess, (1, 2, 3, 4))
             self.assertEqual(cracker.obtain_guess(), "u")
             self.assertEqual(cracker.obtain_guess(), "d")
 
@@ -96,8 +109,8 @@ class TestPlayers(unittest.TestCase):
         mock_print.assert_called_once_with("Congratulations! You won in 0 steps!")
 
     # Tests for undo and redo functionality
-    def test_undo_with_guesses(self):
-        """Test undo functionality with multiple undos."""
+    def test_undo_with_guesses(self):  # sourcery skip: class-extract-method
+        """Test undo functionality with multiple undo."""
         cracker = HumanCracker(self.game)
         setter = HumanSetter(self.game)
         self.game._board.add_guess((1, 2, 3, 4), (1, 1))
@@ -116,8 +129,9 @@ class TestPlayers(unittest.TestCase):
         self.assertEqual(setter.undo_stack[2], (1, 2))
         self.assertEqual(len(cracker.undo_stack), 3)
         self.assertEqual(len(setter.undo_stack), 3)
-    
+
     def test_redo_with_undone_guess(self):
+        # sourcery skip: extract-duplicate-method
         """Test redo functionality after undo to confirm guesses are actually being redo."""
         cracker = HumanCracker(self.game)
         setter = HumanSetter(self.game)
@@ -157,7 +171,7 @@ class TestPlayers(unittest.TestCase):
         self.game._board.add_guess((2, 3, 4, 1), (1, 0))
         with self.assertRaises(IndexError):
             cracker.redo()
-    
+
     def test_undo_stack_cleared_after_new_guess(self):
         """Test undo stack is being cleared after submitting a new guess."""
         self.game._game_started = True
@@ -170,11 +184,12 @@ class TestPlayers(unittest.TestCase):
         setter.undo()
         self.assertEqual(len(cracker.undo_stack), 1)
         self.assertEqual(len(setter.undo_stack), 1)
-        
+
         self.game.submit_guess((1, 2, 3, 4), (1, 1))
         self.assertEqual(len(cracker.undo_stack), 0)
         self.assertEqual(len(setter.undo_stack), 0)
 
+
 # Run the tests
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

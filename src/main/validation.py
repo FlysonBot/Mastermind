@@ -41,12 +41,28 @@ class ValidatedData(ABC):
 
 class BaseModel:
     """
-    Base class for models that use validated attributes.
-    Overrides __getattribute__ and __setattr__ to enforce validation.
+    BaseModel provides a framework for managing attributes with validation.
+
+    This class ensures that attributes are validated upon assignment and
+    retrieves their underlying values when accessed.
     """
 
     def __setattr__(self, name: str, value: Any) -> None:
-        """Validate and set attribute, automatically applying ValidatedData if possible."""
+        """
+        Validate and set attribute, automatically applying ValidatedData if possible.
+
+        This method checks if the attribute already exists and applies validation rules.
+        If the attribute is of type ValidatedData, it ensures that the new value is
+        compatible and validated before assignment.
+
+        Args:
+            name (str): The name of the attribute to set.
+            value (Any): The value to assign to the attribute.
+
+        Raises:
+            ValidatedData.ValidationError: If attempting to assign a different type to a validated attribute.
+        """
+
         # If the attribute already exists
         if hasattr(self, name):
             attr = super().__getattribute__(name)  # Get the attribute
@@ -54,19 +70,18 @@ class BaseModel:
             if isinstance(attr, ValidatedData):  # If is a validated type
                 if isinstance(value, ValidatedData):  # If input is validated
                     if type(value) is not type(attr):  # If not the same type
-                        raise ValidationError(
+                        raise ValidatedData.ValidationError(
                             "Cannot assign a different type to a validated attribute."
                         )
                     # Try to update with the validated value (so custom validation method is invoked)
                     # This prevent replacing constant with another constant, or instance with different kwargs
                     attr.value = attr.validate(value.value)
-                    return
 
                 else:  # If input is not validated
                     attr.value = attr.validate(value)  # Validate and update
-                    return  # return to avoid invoking super().__setattr__
 
-        # If attribute doesn't exist, verify if input is a validated type
+                return
+
         elif not isinstance(value, ValidatedData):
             # Try to find a suitable validated type from attribute name
             value = self._apply_validations(name, value)
@@ -75,7 +90,19 @@ class BaseModel:
         super().__setattr__(name, value)
 
     def __getattribute__(self, name: str) -> Any:
-        """Retrieve attribute and return the underlying value for ValidatedData instances."""
+        """
+        Retrieve attribute and return the underlying value for ValidatedData instances.
+
+        This method overrides the default attribute access to return the inner value
+        of ValidatedData instances, effectively "peeling off" any validation layers.
+
+        Args:
+            name (str): The name of the attribute to retrieve.
+
+        Returns:
+            Any: The underlying value of the attribute, without validation wrappers.
+        """
+
         value = super().__getattribute__(name)
 
         while isinstance(value, ValidatedData):  # While it's a validated type
@@ -87,8 +114,18 @@ class BaseModel:
     def _apply_validations(self, name: str, value: Any) -> Any:
         """
         Dynamically wrap `value` with ValidatedData subclasses based on attribute name.
-        Chains multiple validations if needed (e.g., `Constant(NumberOfDots(value))`).
+
+        This method determines the appropriate validation classes to apply based on the attribute name,
+        allowing for flexible and dynamic validation chaining.
+
+        Args:
+            name (str): The name of the attribute for which to apply validations.
+            value (Any): The value to validate and potentially wrap.
+
+        Returns:
+            Any: The validated and wrapped value.
         """
+
         # Determine if a constant validation is needed
         validations = []
 
@@ -162,11 +199,11 @@ class ValidGuess(ValidatedData):
                 else:
                     # 123412 -> (1, 2, 3, 4, 1, 2)
                     value = tuple(map(int, value))
-            except ValueError:
+            except ValueError as e:
                 raise ValueError(
                     "Guess cannot contain non-numerical number other than comma. "
                     "For example: 123412 or 1,2,3,4,1,2 -> (1, 2, 3, 4, 1, 2)."
-                )
+                ) from e
 
         if not isinstance(value, (tuple, list)):
             raise self.ValidationError("Guess must be a tuple of integers.")
@@ -208,24 +245,24 @@ class ValidFeedback(ValidatedData):
                     value = tuple(map(int, value.split(",")))  # 10, 11 -> (10, 11)
                 else:
                     value = tuple(map(int, value))  # 21 -> (2, 1)
-            except ValueError:
+            except ValueError as e:
                 raise ValueError(
                     "Feedback cannot contain non-numerical characters other than comma. "
                     "For example: 21 = (2, 1); 10,11 -> (10, 11)."
-                )
+                ) from e
 
         if not isinstance(value, tuple):
             raise self.ValidationError("Feedback must be a tuple of two integers.")
-        if not len(value) == 2:
+        if len(value) != 2:
             raise self.ValidationError("Feedback must be a tuple of two integers.")
 
         try:
             ConfinedInteger(value[0], ge=0, le=self.kwargs["number_of_dots"])
             ConfinedInteger(value[1], ge=0, le=self.kwargs["number_of_dots"])
-        except ValidatedData.ValidationError:
+        except ValidatedData.ValidationError as e:
             raise self.ValidationError(
                 "Feedback must be a tuple of integers in the range [0, number_of_dots]."
-            )
+            ) from e
 
         return value
 
@@ -313,13 +350,14 @@ class ConfinedInteger(ValidatedData):
         """Ensure the value is an integer within the specified range."""
         # add support for converting string representation to int
         if not isinstance(value, int):
-            if isinstance(value, str):
-                try:
-                    value = int(value)
-                except ValueError:
-                    raise self.ValidationError("Value must be an integer.")
-            else:
+
+            if not isinstance(value, str):
                 raise self.ValidationError("Value must be an integer.")
+
+            try:
+                value = int(value)
+            except ValueError as e:
+                raise self.ValidationError("Value must be an integer.") from e
 
         # Validate range
         if "le" in self.kwargs and value > self.kwargs["le"]:
