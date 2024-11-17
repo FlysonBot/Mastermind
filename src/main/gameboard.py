@@ -1,14 +1,14 @@
 from typing import Optional, Tuple
 
-from mastermind.players import (
+from main.players import (
     AICracker,
     AISetter,
     ExternalSetter,
     HumanCracker,
     HumanSetter,
 )
-from mastermind.utils import Stack
-from mastermind.validation import (
+from main.utils import Stack
+from main.validation import (
     BaseModel,
     Booleans,
     TrueFuse,

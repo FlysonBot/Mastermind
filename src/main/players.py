@@ -4,8 +4,8 @@ from getpass import getpass
 from random import randint
 from typing import Optional, Union
 
-from mastermind.utils import FStringTemplate, Stack, get_feedback
-from mastermind.validation import BaseModel, ValidFeedback, ValidGuess
+from main.utils import FStringTemplate, Stack, get_feedback
+from main.validation import BaseModel, ValidFeedback, ValidGuess
 
 
 class Player(ABC, BaseModel):
