@@ -131,8 +131,8 @@ class GameHistory:
             "amount_attempted": len(game),
             "amount_allowed": game.MAXIMUM_ATTEMPTS,
             "win_status": game.win_status,
-            "guesses": game._Board._guesses,
-            "feedback": game._Board._feedbacks,
+            "guesses": game._board._guesses,
+            "feedback": game._board._feedbacks,
         }
 
     @classmethod
