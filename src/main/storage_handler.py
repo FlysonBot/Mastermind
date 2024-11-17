@@ -80,7 +80,7 @@ class UserData:
         else:
             self._data[key] = value
             self.save_data()
-    
+
     def __contains__(self, key: str) -> bool:
         """Check if a key exists in the data dictionary."""
         return key in self._data

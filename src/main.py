@@ -127,7 +127,9 @@ class GameHandler:
     @classmethod
     def save_game(cls, game: Game) -> None:
         """Save the game to a file."""
-        if 
+        if "saved_game" not in UserData():  # if the list is empty
+            UserData().saved_game = []  # initialize the list
+        UserData().save_game += game  # add the game to the list
 
 
 class MainUI:
