@@ -1,5 +1,6 @@
 from collections import deque
 from typing import Any, Optional, Tuple
+import pandas as pd
 
 
 def get_feedback(guess: tuple, secret: tuple, number_of_colors: int) -> list:
@@ -21,6 +22,26 @@ def get_feedback(guess: tuple, secret: tuple, number_of_colors: int) -> list:
         list2[0] += min(count1, count2)  # list2[0] is white pegs count
 
     return list1[0], list2[0]  # return black and white pegs count
+
+
+def render_dataframe(df: pd.DataFrame):
+    # Calculate maximum width for each column
+    col_widths = [
+        max(len(str(df[col].name)), df[col].astype(str).map(len).max())
+        for col in df.columns
+    ]
+
+    # Print the header with dynamic widths
+    header = df.columns
+    print(" ".join(f"{header[i]:<{col_widths[i]}}" for i in range(len(header))))
+
+    # Print each row with dynamic widths
+    for index, row in df.iterrows():
+        print(
+            " ".join(
+                f"{str(row[col]):<{col_widths[i]}}" for i, col in enumerate(df.columns)
+            )
+        )
 
 
 class FStringTemplate:
