@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+import pandas as pd
+
+from main.gameboard import Game
 from main.storage_handler import UserData
 from main.validation import MaximumAttempts, NumberOfColors, NumberOfDots, ValidatedData
-from main.gameboard import Game
 
 
 class UserSettings:
@@ -33,14 +35,33 @@ class UserMenus:
             return len(self.menu)
 
         @classmethod
-        def display(cls) -> None:
-            """Display the menu."""
-            header = f"--- {cls.__name__} ---"
+        def get_name(cls) -> str:
+            return cls.name if hasattr(cls, "name") else cls.__name__
 
+        @classmethod
+        def print_header(cls) -> None:
+            """Print the header of the menu."""
+            header: str = f"--- {cls.get_name()} ---"
             print("\n\n\n" + header)  # print 3 empty lines and the header
+
+        @classmethod
+        def print_options(cls) -> None:
+            """Print the options of the menu."""
             for key, value in cls.menu.items():  # print the options
                 print(f"({key}) {value}")
+
+        @classmethod
+        def print_separator(cls) -> None:
+            """Print the separator of the menu."""
+            header: str = f"--- {cls.get_name()} ---"
             print("-" * len(header) + "\n")  # print the separator
+
+        @classmethod
+        def display(cls) -> None:
+            """Display the menu."""
+            cls.print_header()
+            cls.print_options()
+            cls.print_separator()
 
         @classmethod
         def get_option(cls) -> str:
@@ -58,10 +79,11 @@ class UserMenus:
     class MainMenu(Menu):
         """The main menu."""
 
+        name = "Main Menu"
         menu = {
             "1": "Start New Game",
             "2": "Load Saved Game",
-            "3": "My Statistics",
+            "3": "Game History",
             "4": "Settings",
             "0": "Save and Exit",
         }
@@ -69,6 +91,7 @@ class UserMenus:
     class NewGameMenu(Menu):
         """The menu for starting a new game."""
 
+        name = "New Game Menu"
         menu = {
             "1": "You vs Someone Else",
             "2": "You vs AI",
@@ -77,9 +100,72 @@ class UserMenus:
             "0": "Return to Main Menu",
         }
 
+    class GameHistoryMenu(Menu):
+        """The menu for displaying game history"""
 
-class GameStatistics:
-    """An utility class to compute and display game statistics."""
+        name = "Game History"
+
+        @classmethod
+        def display(cls) -> None:
+            """Display the menu."""
+            cls.print_header()
+
+            if game_history := GameHistory.retrieve_game_history():
+                print(game_history)
+            else:
+                print("No game history found.")
+
+            cls.print_separator()
+
+
+class GameHistory:
+    """Store and retrieve game history."""
+
+    @classmethod
+    def get_meta_data(cls, game: Game) -> dict:
+        """Generate meta data for the game."""
+        return {
+            "game_mode": game.GAME_MODE,
+            "number_of_dots": game.number_of_dots,
+            "number_of_colors": game.number_of_colors,
+            "amount_attempted": len(game),
+            "amount_allowed": game.MAXIMUM_ATTEMPTS,
+            "win_status": game.win_status,
+            "guesses": game._Board._guesses,
+            "feedback": game._Board._feedbacks,
+        }
+
+    @classmethod
+    def save_game(cls, game: Game) -> None:
+        """Save the game to a file."""
+        if "saved_games" not in UserData():  # if the list is empty
+            UserData().saved_games = []  # initialize the list
+
+        UserData().saved_games += cls.get_meta_data(game)  # store the meta data
+
+    @classmethod
+    def retrieve_game_history(cls) -> pd.DataFrame:
+        if not UserData().saved_games:  # checking
+            return None
+
+        dataframe = pd.DataFrame(UserData().saved_games)  # convert to dataframe
+        history = pd.DataFrame()  # holder for new dataframe
+
+        # Building the history table
+        history["Mode"] = dataframe["game_mode"]
+        history["Dimension"] = (
+            dataframe["number_of_dots"] + "x" + dataframe["number_of_dots"]
+        )
+        dataframe["win_status"].replace({True: "W", False: "L", None: " "})
+        history["Attempt"] = (
+            dataframe["win_status"]
+            + " "
+            + dataframe["amount_attempted"].astype(str)
+            + "/"
+            + dataframe["amount_allowed"].astype(str)
+        )
+
+        return history
 
 
 class GameHandler:
@@ -118,18 +204,11 @@ class GameHandler:
         """Start a new game."""
         if game_mode not in ["HvH", "HvAI", "AIvH", "AIvAI"]:
             raise AssertionError("Unexpected invalid game mode.")
-        
+
         parameters = cls.get_game_parameters()  # get user input
         game = Game(*parameters, game_mode)  # create a new game
         game.start_game()  # start the game
-        cls.save_game(game)  # save the game
-    
-    @classmethod
-    def save_game(cls, game: Game) -> None:
-        """Save the game to a file."""
-        if "saved_game" not in UserData():  # if the list is empty
-            UserData().saved_game = []  # initialize the list
-        UserData().save_game += game  # add the game to the list
+        GameHistory.save_game(game)  # save the game
 
 
 class MainUI:
@@ -155,8 +234,9 @@ class MainUI:
             self.saved_game_menu()
             return True
 
-        elif choice == "My Statistics":
-            raise NotImplementedError("Statistics not implemented yet.")
+        elif choice == "Game History":
+            UserMenus.GameHistoryMenu.display()
+            input("\nPress Enter to continue...")
             return True
 
         elif choice == "Settings":
