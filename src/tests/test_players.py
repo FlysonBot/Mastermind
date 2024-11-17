@@ -19,14 +19,14 @@ class TestPlayers(unittest.TestCase):
         )
 
     # Tests for HumanSetter
-    @patch("mastermind.players.getpass", return_value="1234")
+    @patch("main.players.getpass", return_value="1234")
     def test_human_setter_set_secret_code_valid(self, mock_getpass):
         """Test HumanSetter setting a valid secret code."""
         setter = HumanSetter(self.game)
         self.assertIsNone(setter.set_secret_code())
         self.assertEqual(setter.SECRET_CODE, (1, 2, 3, 4))
 
-    @patch("mastermind.players.getpass", side_effect=["?", "1234", "1234"])
+    @patch("main.players.getpass", side_effect=["?", "1234", "1234"])
     def test_human_setter_help_command(self, mock_getpass):
         """Test HumanSetter help command (?) during code entry."""
         setter = HumanSetter(self.game)
