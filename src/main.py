@@ -154,17 +154,17 @@ class GameHistory:
         # Building the history table
         history["Mode"] = dataframe["game_mode"]
         history["Dimension"] = (
-            dataframe["number_of_dots"].astype(str) + "x" + dataframe["number_of_dots"].astype(str)
-        )
+            dataframe["number_of_colors"].astype(str) + "x" + dataframe["number_of_dots"].astype(str)
+        )  # express the colors and dots together as a dimension
         dataframe["win_status"] = dataframe["win_status"].replace(
-            {True: "W", False: "L", None: " "}
-        )
+            {True: "W", False: "L", None: "C"}  # win, lost, continue
+        )  # change the win status to human readable format
         history["Attempt"] = (
-            dataframe["win_status"].astype(str)
-            + " "
-            + dataframe["amount_attempted"].astype(str)
+            dataframe["amount_attempted"].astype(str)
             + "/"
             + dataframe["amount_allowed"].astype(str)
+            + " "
+            + dataframe["win_status"].astype(str)
         )
 
         return history
