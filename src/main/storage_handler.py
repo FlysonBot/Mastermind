@@ -20,7 +20,9 @@ class UserData:
     Examples:
         user_data = UserData()
         user_data.username = "JohnDoe"
+        user_data["email"] = "john@example.com"
         print(user_data.username)
+        print(user_data["email"])
     """
 
     _instance = None  # Class-level attribute for the singleton instance
@@ -60,10 +62,12 @@ class UserData:
         self.save_data()
 
     def __getattr__(self, key: str) -> Any:
-        """Allow access to keys in the data dictionary."""
-        if key in self._data:
-            return self._data[key]
-        raise AttributeError(f"{key} not found.")
+        """
+        Retrieve a value from the data dictionary based on the provided key.
+        Allow for direct retrieval using dot or bracket notation.
+        Return None if key doesn't exist.
+        """
+        return self._data[key] if key in self._data else None
 
     def __setattr__(self, key: str, value: Any) -> None:
         """Allow direct modification of keys in the data dictionary."""
