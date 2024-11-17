@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
-from typing import Any
+from abc import ABC
+from typing import Any, List, Optional
 
 import pandas as pd
 
 from main.gameboard import Game
 from main.storage_handler import UserData
+from main.utils import render_dataframe
 from main.validation import MaximumAttempts, NumberOfColors, NumberOfDots, ValidatedData
 
 
@@ -25,12 +26,17 @@ class UserMenus:
         for displaying options and handling user input.
         """
 
-        def __call__(self, length):
+        menu = {}
+
+        def __call__(self, length) -> str:
             """Display the menu and get the user's option when called."""
-            assert len(self) == length, "Menu length mismatch."
+            real_length = len(self)
+            assert (
+                real_length == length
+            ), f"Menu length mismatch. Provided {length}, should be {real_length}"
             return self.get_option()
 
-        def __len__(self):
+        def __len__(self) -> int:
             """Return the number of options in the menu."""
             return len(self.menu)
 
@@ -39,9 +45,23 @@ class UserMenus:
             return cls.name if hasattr(cls, "name") else cls.__name__
 
         @classmethod
+        def get_width(cls) -> str:
+            if hasattr(cls, "width"):
+                return cls.width
+
+            menu_length = (
+                max(len(f"({key}) {value}") for key, value in cls.menu.items())
+                if cls.menu
+                else 0
+            )
+
+            return max(len(cls.get_name()) + 8, menu_length)
+
+        @classmethod
         def print_header(cls) -> None:
             """Print the header of the menu."""
-            header: str = f"--- {cls.get_name()} ---"
+            dashes = "-" * ((cls.get_width() - len(cls.get_name()) - 1) // 2)
+            header: str = f"{dashes} {cls.get_name()} {dashes}"
             print("\n\n\n" + header)  # print 3 empty lines and the header
 
         @classmethod
@@ -53,8 +73,10 @@ class UserMenus:
         @classmethod
         def print_separator(cls) -> None:
             """Print the separator of the menu."""
-            header: str = f"--- {cls.get_name()} ---"
-            print("-" * len(header) + "\n")  # print the separator
+            width = ((cls.get_width() - len(cls.get_name()) - 1) // 2 + 1) * 2 + len(
+                cls.get_name()
+            )
+            print("-" * width + "\n")  # print the separator
 
         @classmethod
         def display(cls) -> None:
@@ -72,9 +94,14 @@ class UserMenus:
                 option = input("Select an option: ")
                 if option in cls.menu:
                     # Return the key can avoid potential mismatch when editing menu
-                    return cls.menu[option]
+                    return cls.return_key(option)
                 cls.display()
                 print("Invalid option. Try again.")
+
+        @classmethod
+        def return_key(cls, option: str) -> str:
+            """Return the value of the option. Can be changed in subclasses."""
+            return cls.menu[option]
 
     class MainMenu(Menu):
         """The main menu."""
@@ -104,6 +131,7 @@ class UserMenus:
         """The menu for displaying game history"""
 
         name = "Game History"
+        width = 25
 
         @classmethod
         def display(cls) -> None:
@@ -111,18 +139,53 @@ class UserMenus:
             cls.print_header()
 
             if (game_history := GameHistory.retrieve_game_history()) is not None:
-                print(game_history)
+                render_dataframe(game_history)
             else:
                 print("No game history found.")
 
             cls.print_separator()
+
+    class ResumeGameMenu(Menu):
+        """The menu for resuming a saved game."""
+
+        name = "Resume Game"
+        menu = {}
+        width = 27
+
+        def __call__(self, length: int) -> str:
+            UserMenus.ResumeGameMenu.menu = {
+                str(index + 1): ""
+                for index in range(len(GameHandler.list_continuable_games()))
+            }
+            UserMenus.ResumeGameMenu.menu["0"] = "Return to Main Menu"
+            return super().__call__(length)
+
+        @classmethod
+        def display(cls) -> None:
+            """Display the menu."""
+            cls.print_header()
+
+            if (game_history := GameHandler.retrieve_continuable_games()) is not None:
+                game_history.index = [f"({i+1})" for i in game_history.index]
+                render_dataframe(game_history)
+            else:
+                print("No continuable game found.")
+
+            print("\n(0) Return to Main Menu")
+
+            cls.print_separator()
+
+        @classmethod
+        def return_key(cls, option: str) -> str:
+            """Return the game index for resuming and updating."""
+            return "return" if int(option) == 0 else int(option) - 1
 
 
 class GameHistory:
     """Store and retrieve game history."""
 
     @classmethod
-    def get_meta_data(cls, game: Game) -> dict:
+    def generate_meta_data(cls, game: Game) -> dict:
         """Generate meta data for the game."""
         return {
             "game_mode": game.GAME_MODE,
@@ -142,33 +205,13 @@ class GameHistory:
         if "saved_games" not in UserData():  # if the list is empty
             UserData().saved_games = []  # initialize the list
 
-        UserData().saved_games.append(cls.get_meta_data(game))  # store the meta data
+        UserData().saved_games.append(
+            cls.generate_meta_data(game)
+        )  # store the meta data
 
     @classmethod
-    def retrieve_game_history(cls) -> pd.DataFrame:
-        if not UserData().saved_games:  # checking
-            return None
-
-        dataframe = pd.DataFrame(UserData().saved_games)  # convert to dataframe
-        history = pd.DataFrame()  # holder for new dataframe
-
-        # Building the history table
-        history["Mode"] = dataframe["game_mode"]
-        history["Dimension"] = (
-            dataframe["number_of_colors"].astype(str) + "x" + dataframe["number_of_dots"].astype(str)
-        )  # express the colors and dots together as a dimension
-        dataframe["win_status"] = dataframe["win_status"].replace(
-            {True: "W", False: "L", None: "C"}  # win, lost, continue
-        )  # change the win status to human readable format
-        history["Attempt"] = (
-            dataframe["amount_attempted"].astype(str)
-            + "/"
-            + dataframe["amount_allowed"].astype(str)
-            + " "
-            + dataframe["win_status"].astype(str)
-        )
-
-        return history
+    def retrieve_game_history(cls) -> Optional[pd.DataFrame]:
+        return GameHandler.game_listing(UserData().saved_games)
 
 
 class GameHandler:
@@ -212,6 +255,68 @@ class GameHandler:
         game = Game(*parameters, game_mode)  # create a new game
         game.start_game()  # start the game
         GameHistory.save_game(game)  # save the game
+
+    @classmethod
+    def list_continuable_games(cls, return_index: bool = False) -> List[dict]:
+        """Get the saved game from the user."""
+        saved_games = UserData().saved_games
+
+        if not return_index:
+            return [game for game in saved_games if game["win_status"] is None]
+
+        else:
+            return [
+                index
+                for index, game in enumerate(saved_games)
+                if game["win_status"] is None
+            ]
+
+    @classmethod
+    def retrieve_continuable_games(cls) -> Optional[pd.DataFrame]:
+        """List the saved game from the user as pandas table."""
+        return cls.game_listing(cls.list_continuable_games())
+
+    @classmethod
+    def game_listing(cls, games: List[dict]) -> Optional[pd.DataFrame]:
+        if not games:  # no games
+            return None
+
+        dataframe = pd.DataFrame(games)  # convert to dataframe
+        listing = pd.DataFrame()  # holder for new dataframe
+
+        # Building the listing
+        dataframe["win_status"] = dataframe["win_status"].replace(
+            {True: "W", False: "L", None: " "}  # win, lost, continue
+        )  # change the win status to human readable format
+
+        listing["Mode"] = dataframe["game_mode"]
+        listing["Dimension"] = (
+            dataframe["number_of_colors"].astype(str)
+            + "x"
+            + dataframe["number_of_dots"].astype(str)
+        )  # express the colors and dots together as a dimension
+        listing["Attempts"] = (
+            dataframe["win_status"].astype(str)
+            + " "
+            + dataframe["amount_attempted"].astype(str)
+            + "/"
+            + dataframe["amount_allowed"].astype(str)
+        )
+
+        return listing
+
+    @classmethod
+    def resume_game(cls, game_index: int) -> None:
+        """Resume a saved game."""
+        # Retrieve game
+        saved_games = UserData().saved_games
+        game = UserData().saved_games[game_index]["game"]
+
+        # Resume game
+        game.resume_game()
+
+        # Update saved games
+        UserData().saved_games[game_index] = GameHistory().generate_meta_data(game)
 
 
 class MainUI:
@@ -272,7 +377,17 @@ class MainUI:
 
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
-        pass
+        choice = UserMenus.ResumeGameMenu()(
+            len(GameHandler.list_continuable_games()) + 1
+        )
+
+        if choice == "return":
+            return False  # return to main menu
+
+        game_index = GameHandler.list_continuable_games(return_index=True)[choice]
+        GameHandler.resume_game(game_index)
+
+        return True
 
     def run(self):
         """Run the game."""
