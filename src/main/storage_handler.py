@@ -61,16 +61,12 @@ class UserData:
         self._data.clear()
         self.save_data()
 
-    def __getattr__(self, key: str) -> Any:
-        """
-        Retrieve a value from the data dictionary based on the provided key.
-        Allow for direct retrieval using dot or bracket notation.
-        Return None if key doesn't exist.
-        """
+    def _retrieve_item(self, key: str) -> Any:
+        """Retrieve an item from the data dictionary."""
         return self._data[key] if key in self._data else None
 
-    def __setattr__(self, key: str, value: Any) -> None:
-        """Allow direct modification of keys in the data dictionary."""
+    def _modify_item(self, key: str, value: Any) -> None:
+        """Modify an item in the data dictionary."""
         if key in {
             "_instance",
             "_data",
@@ -80,6 +76,36 @@ class UserData:
         else:
             self._data[key] = value
             self.save_data()
+
+    def __getattr__(self, key: str) -> Any:
+        """
+        Retrieve a value from the data dictionary based on the provided key.
+        Allow for direct retrieval using dot notation.
+        Return None if key doesn't exist.
+        """
+        return self._retrieve_item(key)
+
+    def __getitem__(self, key: str) -> Any:
+        """
+        Retrieve a value from the data dictionary based on the provided key.
+        Allow for retrieval using square bracket notation.
+        Return None if key doesn't exist.
+        """
+        return self._retrieve_item(key)
+
+    def __setattr__(self, key: str, value: Any) -> None:
+        """
+        Modify a value from the data dictionary based on the provided key.
+        Allow for direct modification using dot notation.
+        """
+        self._modify_item(key, value)
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        """
+        Modify a value from the data dictionary based on the provided key.
+        Allow for modification using square bracket notation.
+        """
+        self._modify_item(key, value)
 
     def __contains__(self, key: str) -> bool:
         """Check if a key exists in the data dictionary."""
