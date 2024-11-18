@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from game.gameboard import Game
-from players.players import (
+from mastermind.game.gameboard import Game
+from mastermind.players.players import (
     HumanSetter,
     AISetter,
     ExternalSetter,
