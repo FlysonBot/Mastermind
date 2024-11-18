@@ -1,6 +1,6 @@
 import unittest
 
-from main.validation import (
+from validation.validation import (
     BaseModel,
     Booleans,
     ConfinedInteger,

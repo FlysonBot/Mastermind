@@ -1,8 +1,8 @@
 from typing import Optional, Tuple
 
-from main.players import AICracker, AISetter, ExternalSetter, HumanCracker, HumanSetter
-from main.utils import Stack
-from main.validation import BaseModel, Booleans, TrueFuse, ValidFeedback, ValidGuess
+from players.players import AICracker, AISetter, ExternalSetter, HumanCracker, HumanSetter
+from utils.utils import Stack
+from validation.validation import BaseModel, Booleans, TrueFuse, ValidFeedback, ValidGuess
 
 
 class Game(BaseModel):
