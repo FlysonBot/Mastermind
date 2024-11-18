@@ -1,2 +1,2 @@
-from .persistent_cache import PersistentCache
-from .user_data import UserData
+from mastermind.storage.persistent_cache import PersistentCache
+from mastermind.storage.user_data import UserData

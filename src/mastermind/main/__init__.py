@@ -1,1 +1,1 @@
-from .main import *
+from mastermind.main.main import *

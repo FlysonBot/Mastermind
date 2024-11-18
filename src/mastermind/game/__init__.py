@@ -1,1 +1,1 @@
-from .game import Game
+from mastermind.game.game import Game

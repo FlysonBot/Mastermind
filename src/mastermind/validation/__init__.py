@@ -1,1 +1,1 @@
-from .validation import *
+from mastermind.validation.validation import *
