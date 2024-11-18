@@ -1,6 +1,7 @@
 from typing import Tuple
-from mastermind.utils.stack import Stack
-from mastermind.validation.validation import BaseModel, ValidFeedback, ValidGuess
+
+from mastermind.utils import Stack
+from mastermind.validation import BaseModel, ValidFeedback, ValidGuess
 
 
 class GameBoard(BaseModel):

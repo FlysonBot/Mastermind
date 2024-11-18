@@ -1,7 +1,7 @@
 from typing import Union
 
 from mastermind.players.abstract_player import CodeSetter
-from mastermind.validation.validation import ValidFeedback
+from mastermind.validation import ValidFeedback
 
 
 class ExternalSetter(CodeSetter):
