@@ -3,10 +3,10 @@ from typing import Any, List, Optional
 
 import pandas as pd
 
-from mastermind.game import Game
-from mastermind.storage import UserData
-from mastermind.utils import render_dataframe
-from mastermind.validation import (
+from src.game import Game
+from src.storage import UserData
+from src.utils import render_dataframe
+from src.validation import (
     MaximumAttempts,
     NumberOfColors,
     NumberOfDots,

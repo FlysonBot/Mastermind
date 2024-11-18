@@ -1,14 +1,14 @@
 from typing import Optional, Tuple
 
-from mastermind.game.board import GameBoard
-from mastermind.players import (
+from src.game.board import GameBoard
+from src.players import (
     AICracker,
     AISetter,
     ExternalSetter,
     HumanCracker,
     HumanSetter,
 )
-from mastermind.validation import BaseModel, Booleans, TrueFuse
+from src.validation import BaseModel, Booleans, TrueFuse
 
 
 class Game(BaseModel):

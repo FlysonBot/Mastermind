@@ -1,6 +1,6 @@
 import unittest
 
-from mastermind.validation.validation import (
+from src.validation import (
     BaseModel,
     Booleans,
     ConfinedInteger,

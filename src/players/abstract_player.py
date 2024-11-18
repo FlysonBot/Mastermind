@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from mastermind.utils import FStringTemplate, Stack
-from mastermind.validation import BaseModel
+from src.utils import FStringTemplate, Stack
+from src.validation import BaseModel
 
 
 class Player(ABC, BaseModel):

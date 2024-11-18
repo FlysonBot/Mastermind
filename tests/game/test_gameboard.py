@@ -1,8 +1,8 @@
 import unittest
 
 from unittest.mock import MagicMock
-from mastermind.game.gameboard import Game
-from mastermind.players.players import (
+from src.game import Game
+from src.players import (
     HumanCracker,
     HumanSetter,
     AISetter,

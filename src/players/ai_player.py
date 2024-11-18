@@ -1,7 +1,7 @@
 from random import randint
 
-from mastermind.players.abstract_player import CodeCracker, CodeSetter
-from mastermind.utils import get_feedback
+from src.players.abstract_player import CodeCracker, CodeSetter
+from src.utils import get_feedback
 
 
 class AISetter(CodeSetter):

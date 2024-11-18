@@ -4,7 +4,7 @@ import unittest
 
 from unittest.mock import mock_open, patch
 
-from mastermind.storage.storage_handler import Cache, UserData
+from src.storage import Cache, UserData
 
 
 class TestUserData(unittest.TestCase):

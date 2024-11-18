@@ -1,9 +1,9 @@
 from getpass import getpass
 from typing import Optional, Union
 
-from mastermind.players.abstract_player import CodeCracker, CodeSetter
-from mastermind.utils import get_feedback
-from mastermind.validation import ValidGuess
+from src.players.abstract_player import CodeCracker, CodeSetter
+from src.utils import get_feedback
+from src.validation import ValidGuess
 
 
 class HumanSetter(CodeSetter):
