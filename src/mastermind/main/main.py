@@ -3,10 +3,15 @@ from typing import Any, List, Optional
 
 import pandas as pd
 
-from game.gameboard import Game
-from storage.storage_handler import UserData
-from utils.utils import render_dataframe
-from validation.validation import MaximumAttempts, NumberOfColors, NumberOfDots, ValidatedData
+from mastermind.game import Game
+from mastermind.storage import UserData
+from mastermind.utils import render_dataframe
+from mastermind.validation import (
+    MaximumAttempts,
+    NumberOfColors,
+    NumberOfDots,
+    ValidatedData,
+)
 
 
 class UserSettings:
