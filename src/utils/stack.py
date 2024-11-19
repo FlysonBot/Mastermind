@@ -1,3 +1,7 @@
+from collections import deque
+from typing import Any, Optional
+
+
 class Stack:
     """An implementation of a stack data structure using deque."""
 
