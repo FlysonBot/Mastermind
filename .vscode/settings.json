@@ -18,5 +18,8 @@
     "isort.args": [
         "--profile",
         "black"
-    ]
+    ],
+    "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${workspaceFolder}"
+    }
 }
