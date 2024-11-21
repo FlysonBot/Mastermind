@@ -4,7 +4,7 @@ from typing import Any, List, Optional
 import pandas as pd
 
 from src.game import Game
-from src.storage import UserData
+from src.storage import UserDataManager
 from src.utils import render_dataframe
 from src.validation import (
     MaximumAttempts,
@@ -143,7 +143,7 @@ class UserMenus:
             """Display the menu."""
             cls.print_header()
 
-            if (game_history := GameHistory.retrieve_game_history()) is not None:
+            if (game_history := GameHistoryManager.retrieve_game_history()) is not None:
                 render_dataframe(game_history)
             else:
                 print("No game history found.")
@@ -160,7 +160,7 @@ class UserMenus:
         def __call__(self, length: int) -> str:
             UserMenus.ResumeGameMenu.menu = {
                 str(index + 1): ""
-                for index in range(len(GameHandler.list_continuable_games()))
+                for index in range(len(GameController.list_continuable_games()))
             }
             UserMenus.ResumeGameMenu.menu["0"] = "Return to Main Menu"
             return super().__call__(length)
@@ -170,7 +170,9 @@ class UserMenus:
             """Display the menu."""
             cls.print_header()
 
-            if (game_history := GameHandler.retrieve_continuable_games()) is not None:
+            if (
+                game_history := GameController.retrieve_continuable_games()
+            ) is not None:
                 game_history.index = [f"({i+1})" for i in game_history.index]
                 render_dataframe(game_history)
             else:
@@ -186,7 +188,7 @@ class UserMenus:
             return "return" if int(option) == 0 else int(option) - 1
 
 
-class GameHistory:
+class GameHistoryManager:
     """Store and retrieve game history."""
 
     @classmethod
@@ -207,19 +209,19 @@ class GameHistory:
     @classmethod
     def save_game(cls, game: Game) -> None:
         """Save the game to a file."""
-        if "saved_games" not in UserData():  # if the list is empty
-            UserData().saved_games = []  # initialize the list
+        if "saved_games" not in UserDataManager():  # if the list is empty
+            UserDataManager().saved_games = []  # initialize the list
 
-        UserData().saved_games.append(
+        UserDataManager().saved_games.append(
             cls.generate_meta_data(game)
         )  # store the meta data
 
     @classmethod
     def retrieve_game_history(cls) -> Optional[pd.DataFrame]:
-        return GameHandler.game_listing(UserData().saved_games)
+        return GameController.game_listing(UserDataManager().saved_games)
 
 
-class GameHandler:
+class GameController:
     """Communication between MainUI and the gameboard."""
 
     @classmethod
@@ -259,12 +261,12 @@ class GameHandler:
         parameters = cls.get_game_parameters()  # get user input
         game = Game(*parameters, game_mode)  # create a new game
         game.start_game()  # start the game
-        GameHistory.save_game(game)  # save the game
+        GameHistoryManager.save_game(game)  # save the game
 
     @classmethod
     def list_continuable_games(cls, return_index: bool = False) -> List[dict]:
         """Get the saved game from the user."""
-        saved_games = UserData().saved_games
+        saved_games = UserDataManager().saved_games
 
         if not return_index:
             return [game for game in saved_games if game["win_status"] is None]
@@ -314,14 +316,16 @@ class GameHandler:
     def resume_game(cls, game_index: int) -> None:
         """Resume a saved game."""
         # Retrieve game
-        saved_games = UserData().saved_games
-        game = UserData().saved_games[game_index]["game"]
+        saved_games = UserDataManager().saved_games
+        game = UserDataManager().saved_games[game_index]["game"]
 
         # Resume game
         game.resume_game()
 
         # Update saved games
-        UserData().saved_games[game_index] = GameHistory().generate_meta_data(game)
+        UserDataManager().saved_games[game_index] = (
+            GameHistoryManager().generate_meta_data(game)
+        )
 
 
 class MainUI:
@@ -364,16 +368,16 @@ class MainUI:
         choice = UserMenus.NewGameMenu()(5)
 
         if choice == "You vs Someone Else":
-            GameHandler.start_new_game("HvH")
+            GameController.start_new_game("HvH")
             return True
         elif choice == "You vs AI":
-            GameHandler.start_new_game("HvAI")
+            GameController.start_new_game("HvAI")
             return True
         elif choice == "AI vs You":
-            GameHandler.start_new_game("AIvH")
+            GameController.start_new_game("AIvH")
             return True
         elif choice == "Solve External Game":
-            GameHandler.start_new_game("AIvAI")
+            GameController.start_new_game("AIvAI")
             return True
         elif choice == "Return to Main Menu":
             return False  # terminate the loop
@@ -383,14 +387,14 @@ class MainUI:
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
         choice = UserMenus.ResumeGameMenu()(
-            len(GameHandler.list_continuable_games()) + 1
+            len(GameController.list_continuable_games()) + 1
         )
 
         if choice == "return":
             return False  # return to main menu
 
-        game_index = GameHandler.list_continuable_games(return_index=True)[choice]
-        GameHandler.resume_game(game_index)
+        game_index = GameController.list_continuable_games(return_index=True)[choice]
+        GameController.resume_game(game_index)
 
         return True
 
@@ -400,7 +404,7 @@ class MainUI:
         while self.main_menu():
             pass  # keep calling self.main_menu() until it return False
         print("Thank you for playing!")
-        UserData().save_data()
+        UserDataManager().save_data()
 
 
 if __name__ == "__main__":

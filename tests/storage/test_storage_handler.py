@@ -3,7 +3,7 @@ import pickle
 import unittest
 from unittest.mock import mock_open, patch
 
-from src.storage import Cache, UserData
+from src.storage import Cache, UserDataManager
 
 
 class TestUserData(unittest.TestCase):
@@ -26,15 +26,15 @@ class TestUserData(unittest.TestCase):
         )
 
         # Call the method to load data
-        UserData()._load_data()
+        UserDataManager()._load_data()
 
         # Check if the data was loaded correctly into the _data dictionary
-        self.assertEqual(UserData()._data, {"key": "value"})
+        self.assertEqual(UserDataManager()._data, {"key": "value"})
 
         # Verify directory creation was attempted
         mock_makedirs.assert_called_once()
         # Verify file was opened for reading in binary mode
-        mock_open.assert_called_once_with(UserData()._file_path, "rb")
+        mock_open.assert_called_once_with(UserDataManager()._file_path, "rb")
 
     @patch("builtins.open", new_callable=mock_open)
     @patch("os.path.exists")
@@ -44,10 +44,10 @@ class TestUserData(unittest.TestCase):
         mock_exists.return_value = False  # Simulate that file does not exist
 
         # Call the method to load data
-        UserData()._load_data()
+        UserDataManager()._load_data()
 
         # Check that the data is initialized as an empty dictionary
-        self.assertEqual(UserData()._data, {})
+        self.assertEqual(UserDataManager()._data, {})
 
         # Verify directory creation
         mock_makedirs.assert_called_once()
@@ -58,14 +58,14 @@ class TestUserData(unittest.TestCase):
     @patch("os.makedirs")
     def test_save_data(self, mock_makedirs, mock_open):
         """Test saving data to the user data file."""
-        UserData()._data = {"key": "value"}  # Set some data to save
+        UserDataManager()._data = {"key": "value"}  # Set some data to save
 
-        UserData().save_data()  # Call the method to save data
+        UserDataManager().save_data()  # Call the method to save data
 
         # Ensure directory was created
         mock_makedirs.assert_called_once()
         # Check that the file was opened for writing in binary mode
-        mock_open.assert_called_once_with(UserData()._file_path, "wb")
+        mock_open.assert_called_once_with(UserDataManager()._file_path, "wb")
 
         # Retrieve the file handle
         handle = mock_open()
@@ -78,11 +78,11 @@ class TestUserData(unittest.TestCase):
     @patch("os.makedirs")
     def test_set_data(self, mock_makedirs, mock_open):
         """Test setting a new key-value pair in the user data."""
-        UserData().new_key = "new_value"  # Set a new key-value pair
+        UserDataManager().new_key = "new_value"  # Set a new key-value pair
 
         # Verify new data is correctly stored
-        self.assertEqual(UserData().new_key, "new_value")
-        mock_open.assert_called_once_with(UserData()._file_path, "wb")
+        self.assertEqual(UserDataManager().new_key, "new_value")
+        mock_open.assert_called_once_with(UserDataManager()._file_path, "wb")
 
         # Retrieve the file handle and check the write calls
         handle = mock_open()
@@ -99,7 +99,9 @@ class TestUserData(unittest.TestCase):
     )
     def test_clear_all(self, mock_open, mock_makedirs):
         """Test clearing all user data."""
-        user_data = UserData()  # Initialize UserData, this will load the mock data
+        user_data = (
+            UserDataManager()
+        )  # Initialize UserData, this will load the mock data
 
         # Ensure the initial data is loaded correctly
         self.assertEqual(user_data._data, {"key": "value"})

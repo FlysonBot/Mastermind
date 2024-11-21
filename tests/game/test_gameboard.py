@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 
 from src.game import Game
 from src.players import (
-    AISetter,
-    HumanCracker,
-    HumanSetter,
+    AICodeSetter,
+    HumanCodeCracker,
+    HumanCodeSetter,
 )
 
 
@@ -59,7 +59,7 @@ class TestGameboard(unittest.TestCase):
     def test_submit_guess(self):
         """Test submitting a guess."""
         self.board.add_guess = MagicMock()
-        self.game.find_players()
+        self.game.initialize_players()
         guess = (1, 2, 3, 4)
         feedback = (2, 1)
         self.game.submit_guess(guess, feedback)
@@ -69,49 +69,49 @@ class TestGameboard(unittest.TestCase):
         """Test win condition when last guess matches secret code."""
         self.game.SECRET_CODE = (1, 2, 3, 4)
         self.board.add_guess(self.game.SECRET_CODE, (4, 0))
-        self.assertTrue(self.game.update_win_status())
+        self.assertTrue(self.game.check_and_update_win_status())
         self.assertTrue(self.game.win_status)
 
     def test_update_win_status_loss(self):
         """Test loss condition when maximum attempts are reached without matching code."""
         for _ in range(self.game.MAXIMUM_ATTEMPTS):
             self.board.add_guess((1, 2, 3, 5), (0, 2))
-        self.assertFalse(self.game.update_win_status())
+        self.assertFalse(self.game.check_and_update_win_status())
         self.assertFalse(self.game.win_status)
 
     def test_find_players_HvH(self):
         """Test player initialization for Human vs Human game mode."""
-        self.game.find_players()
-        self.assertIsInstance(self.game.PLAYER_CRACKER, HumanCracker)
-        self.assertIsInstance(self.game.PLAYER_SETTER, HumanSetter)
+        self.game.initialize_players()
+        self.assertIsInstance(self.game.PLAYER_CRACKER, HumanCodeCracker)
+        self.assertIsInstance(self.game.PLAYER_SETTER, HumanCodeSetter)
 
     def test_find_players_HvAI(self):
         """Test player initialization for Human vs AI game mode."""
         del self.game.GAME_MODE
         self.game.GAME_MODE = "HvAI"
-        self.game.find_players()
-        self.assertIsInstance(self.game.PLAYER_CRACKER, HumanCracker)
-        self.assertIsInstance(self.game.PLAYER_SETTER, AISetter)
+        self.game.initialize_players()
+        self.assertIsInstance(self.game.PLAYER_CRACKER, HumanCodeCracker)
+        self.assertIsInstance(self.game.PLAYER_SETTER, AICodeSetter)
 
     def test_player_guessing_logic_quit(self):
         """Test player_guessing_logic with quit command."""
         self.game.PLAYER_CRACKER = MagicMock()
         self.game.PLAYER_SETTER = MagicMock()
         self.game.PLAYER_CRACKER.obtain_guess.return_value = "q"
-        self.assertEqual(self.game.player_guessing_logic(), "q")
+        self.assertEqual(self.game.process_player_guessing(), "q")
 
     def test_player_guessing_logic_discard(self):
         """Test player_guessing_logic with quit command."""
         self.game.PLAYER_CRACKER = MagicMock()
         self.game.PLAYER_SETTER = MagicMock()
         self.game.PLAYER_CRACKER.obtain_guess.return_value = "d"
-        self.assertEqual(self.game.player_guessing_logic(), "d")
+        self.assertEqual(self.game.process_player_guessing(), "d")
 
     def test_output_result_win(self):
         """Test output result when game is won."""
         self.game.PLAYER_CRACKER = MagicMock()
         self.game._win_status = True
-        self.game.update_win_status = lambda: None
+        self.game.check_and_update_win_status = lambda: None
         self.game.output_result()
         self.game.PLAYER_CRACKER.win_message.assert_called_once()
 
@@ -119,7 +119,7 @@ class TestGameboard(unittest.TestCase):
         """Test output result when game is lost."""
         self.game.PLAYER_CRACKER = MagicMock()
         self.game._win_status = False
-        self.game.update_win_status = lambda: None
+        self.game.check_and_update_win_status = lambda: None
         self.game.output_result()
         self.game.PLAYER_CRACKER.lose_message.assert_called_once()
 
@@ -131,12 +131,12 @@ class TestGameboard(unittest.TestCase):
 
     def test_start_game_initialization(self):
         """Test start_game initializes the game properly."""
-        self.game.find_players = MagicMock()
+        self.game.initialize_players = MagicMock()
         self.game.PLAYER_SETTER = MagicMock()
-        self.game.player_guessing_logic = MagicMock(return_value=None)
+        self.game.process_player_guessing = MagicMock(return_value=None)
         self.game.start_game()
         self.assertTrue(self.game._game_started)
-        self.game.find_players.assert_called_once()
+        self.game.initialize_players.assert_called_once()
         self.game.PLAYER_SETTER.set_secret_code.assert_called_once()
 
 

@@ -4,7 +4,7 @@ import pickle
 from typing import Any
 
 
-class PersistentCache:
+class PersistentCacheManager:
     """
     A class to manage caching of data using files.
 

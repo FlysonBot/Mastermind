@@ -1,10 +1,10 @@
 from random import randint
 
 from src.players.abstract_player import CodeCracker, CodeSetter
-from src.utils import get_feedback
+from src.utils import generate_feedback
 
 
-class AISetter(CodeSetter):
+class AICodeSetter(CodeSetter):
     """A class to represent an AI code setter."""
 
     def set_secret_code(self) -> None:
@@ -19,10 +19,10 @@ class AISetter(CodeSetter):
         """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
-        return get_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
+        return generate_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
-class AICracker(CodeCracker):
+class AICodeCracker(CodeCracker):
     """A class to represent an AI code cracker."""
 
     pass  # TODO: Implement solver logic.

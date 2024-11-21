@@ -10,7 +10,7 @@ from src.validation.base.exceptions import (
 class TrueFuse(StateValidator[bool]):
     """A boolean that can only be set to True once. Can be initialized to False."""
 
-    def validate(self, value: Any) -> bool:
+    def validate_value(self, value: Any) -> bool:
         """Validate the initial value and set the fuse."""
         if not isinstance(value, bool):
             raise TypeValidationError(

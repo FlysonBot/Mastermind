@@ -3,7 +3,7 @@ import pickle
 from typing import Any
 
 
-class UserData:
+class UserDataManager:
     """
     A singleton class to manage user data storage and retrieval.
 
@@ -28,10 +28,10 @@ class UserData:
     _data = {}  # Dictionary to hold user data
     _file_path = "data/userdata.config"  # Path to the user data file
 
-    def __new__(cls) -> "UserData":
+    def __new__(cls) -> "UserDataManager":
         """Return the single instance of the UserData class."""
         if cls._instance is None:
-            cls._instance = super(UserData, cls).__new__(cls)
+            cls._instance = super(UserDataManager, cls).__new__(cls)
             cls._instance._load_data()  # Load data on instantiation
         return cls._instance
 

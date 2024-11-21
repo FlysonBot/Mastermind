@@ -3,11 +3,11 @@ from typing import Optional, Union
 
 from src.game.game import Game
 from src.players.abstract_player import CodeCracker, CodeSetter
-from src.utils import get_feedback
+from src.utils import generate_feedback
 from src.validation import ValidGuess
 
 
-class HumanSetter(CodeSetter):
+class HumanCodeSetter(CodeSetter):
     """A class to represent a human code setter."""
 
     def set_secret_code(self) -> Optional[str]:
@@ -53,10 +53,10 @@ class HumanSetter(CodeSetter):
         """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
-        return get_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
+        return generate_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
-class HumanCracker(CodeCracker):
+class HumanCodeCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
     def __init__(self, game: Game) -> None:

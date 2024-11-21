@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import pandas as pd
 
-from src.main.main import GameHandler, GameHistory
+from src.main.main import GameController, GameHistoryManager
 from src.ui.menu.data_menu import DataDisplayMenu
 from src.ui.menu.option_menu import OptionMenu
 from src.utils import render_dataframe
@@ -35,7 +35,7 @@ class GameHistoryMenu(DataDisplayMenu):
     width = 25
 
     def _fetch_data(self) -> Optional[pd.DataFrame]:
-        return GameHistory.retrieve_game_history()
+        return GameHistoryManager.retrieve_game_history()
 
     def _render_data(self, data: pd.DataFrame) -> None:
         render_dataframe(data)
@@ -53,13 +53,13 @@ class ResumeGameMenu(DataDisplayMenu):
     width = 27
 
     def __init__(self):
-        games = GameHandler.list_continuable_games()
+        games = GameController.list_continuable_games()
         self.menu = {"0": "Return to Main Menu"}
         for i in range(len(games)):
             self.menu[str(i + 1)] = ""
 
     def _fetch_data(self) -> Optional[pd.DataFrame]:
-        return GameHandler.retrieve_continuable_games()
+        return GameController.retrieve_continuable_games()
 
     def _render_data(self, data: pd.DataFrame) -> None:
         data.index = [f"({i+1})" for i in data.index]

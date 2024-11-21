@@ -24,8 +24,8 @@ class _GameValidationUtils:
 
     @staticmethod
     def validate_arguments(instance) -> None:
-        NumberOfDots().validate(instance.n_of_dots)
-        NumberOfColors().validate(instance.n_of_colors)
+        NumberOfDots().validate_value(instance.n_of_dots)
+        NumberOfColors().validate_value(instance.n_of_colors)
 
 
 class ValidCombination(ValidationModel[Tuple[int, ...]]):
@@ -39,7 +39,7 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             n_of_colors=number_of_colors,
         )
 
-    def validate(self, value: Any) -> Tuple[int, ...]:
+    def validate_value(self, value: Any) -> Tuple[int, ...]:
         if isinstance(value, str):
             value = self.convert(value)
 
@@ -60,6 +60,7 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
                     f"Dots must be integers between 1 and {self.n_of_colors}"
                 )
 
+
 class ValidFeedback(ValidationModel[Tuple[int, int]]):
     """Validates game feedback."""
 
@@ -79,7 +80,7 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
         except ValueError as e:
             raise InputConversionError("Invalid feedback format") from e
 
-    def validate(self, value: Any) -> Tuple[int, int]:
+    def validate_value(self, value: Any) -> Tuple[int, int]:
         if isinstance(value, str):
             value = self.convert(value)
 

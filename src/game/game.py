@@ -2,11 +2,11 @@ from typing import Optional, Tuple
 
 from src.game.board import GameBoard
 from src.players import (
-    AICracker,
-    AISetter,
-    ExternalSetter,
-    HumanCracker,
-    HumanSetter,
+    AICodeCracker,
+    AICodeSetter,
+    ExternalCodeSetter,
+    HumanCodeCracker,
+    HumanCodeSetter,
 )
 from src.validation import BaseModel, Booleans, TrueFuse
 
@@ -106,7 +106,7 @@ class Game(BaseModel):
         self.PLAYER_SETTER.clear_undo()
         self._board.add_guess(guess, feedback)
 
-    def update_win_status(self) -> Optional[bool]:
+    def check_and_update_win_status(self) -> Optional[bool]:
         """Updates the win status of the game."""
         if len(self._board) == 0:
             self._win_status = None
@@ -123,22 +123,22 @@ class Game(BaseModel):
         # When non of the above is true, game continues
         return self._win_status
 
-    def find_players(self) -> None:
+    def initialize_players(self) -> None:
         """Determines and assigns players based on the game mode."""
         if self.GAME_MODE == "HvH":
-            self.PLAYER_CRACKER = HumanCracker(self)
-            self.PLAYER_SETTER = HumanSetter(self)
+            self.PLAYER_CRACKER = HumanCodeCracker(self)
+            self.PLAYER_SETTER = HumanCodeSetter(self)
         elif self.GAME_MODE == "HvAI":
-            self.PLAYER_CRACKER = HumanCracker(self)
-            self.PLAYER_SETTER = AISetter(self)
+            self.PLAYER_CRACKER = HumanCodeCracker(self)
+            self.PLAYER_SETTER = AICodeSetter(self)
         elif self.GAME_MODE == "AIvH":
-            self.PLAYER_CRACKER = AICracker(self)
-            self.PLAYER_SETTER = HumanSetter(self)
+            self.PLAYER_CRACKER = AICodeCracker(self)
+            self.PLAYER_SETTER = HumanCodeSetter(self)
         else:
-            self.PLAYER_CRACKER = AICracker(self)
-            self.PLAYER_SETTER = ExternalSetter(self)
+            self.PLAYER_CRACKER = AICodeCracker(self)
+            self.PLAYER_SETTER = ExternalCodeSetter(self)
 
-    def player_guessing_logic(self) -> Optional[str]:
+    def process_player_guessing(self) -> Optional[str]:
         """Handle the logic for player guessing."""
         while self.win_status is None:
             # Obtain guess or command from cracker player
@@ -173,11 +173,11 @@ class Game(BaseModel):
 
             # Submit guess and feedback
             self.submit_guess(guess, feedback)
-            self.update_win_status()
+            self.check_and_update_win_status()
 
     def output_result(self) -> None:
         """Print the result of the game."""
-        self.update_win_status()
+        self.check_and_update_win_status()
         if self.win_status is None:
             return
         if self.win_status:
@@ -194,10 +194,10 @@ class Game(BaseModel):
 
         # Start Game
         self._game_started = True
-        self.find_players()
+        self.initialize_players()
         self.PLAYER_SETTER.set_secret_code()
 
-        command = self.player_guessing_logic()  # Handle player actions
+        command = self.process_player_guessing()  # Handle player actions
 
         # Post-termination Logic
         self.output_result()
@@ -209,7 +209,7 @@ class Game(BaseModel):
         if not self._game_started:
             raise NotImplementedError("Game has not started yet.")
 
-        command = self.player_guessing_logic()  # Handle player actions
+        command = self.process_player_guessing()  # Handle player actions
 
         # Post-termination Logic
         self.output_result()

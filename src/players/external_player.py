@@ -4,7 +4,7 @@ from src.players.abstract_player import CodeSetter
 from src.validation import ValidFeedback
 
 
-class ExternalSetter(CodeSetter):
+class ExternalCodeSetter(CodeSetter):
     """A class to represent an external code setter."""
 
     def set_secret_code(self) -> None:
@@ -42,7 +42,7 @@ class ExternalSetter(CodeSetter):
                 return "u"
 
             try:
-                valid_feedback.value = valid_feedback.validate(feedback)
+                valid_feedback.value = valid_feedback.validate_value(feedback)
                 return valid_feedback.value
             except ValueError as e:
                 print(e)

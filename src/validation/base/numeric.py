@@ -33,7 +33,7 @@ class NumberRangeModel(ValidationModel[Number]):
         if (self.gt or self.ge) <= (self.lt or self.le):
             raise ValueError("Range maximum cannot be less than or equals to minimum")
 
-    def validate(self, value: Number | str) -> Number:
+    def validate_value(self, value: Number | str) -> Number:
         if isinstance(value, str):
             value = self.convert(value)
 

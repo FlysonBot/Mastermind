@@ -1,11 +1,11 @@
-from src.players.ai_player import AICracker, AISetter
-from src.players.external_player import ExternalSetter
-from src.players.human_player import HumanCracker, HumanSetter
+from src.players.ai_player import AICodeCracker, AICodeSetter
+from src.players.external_player import ExternalCodeSetter
+from src.players.human_player import HumanCodeCracker, HumanCodeSetter
 
 __all__ = [
-    "AICracker",
-    "AISetter",
-    "HumanCracker",
-    "HumanSetter",
-    "ExternalSetter",
+    "AICodeCracker",
+    "AICodeSetter",
+    "HumanCodeCracker",
+    "HumanCodeSetter",
+    "ExternalCodeSetter",
 ]

@@ -8,7 +8,7 @@ class Validator(ABC, Generic[T]):
     """Base class for all validators."""
 
     @abstractmethod
-    def validate(self, value: Any) -> T:
+    def validate_value(self, value: Any) -> T:
         """Validate and potentially transform the input value."""
         pass
 
@@ -31,7 +31,7 @@ class StateValidator(Validator[T], ABC):
     """Validator that maintains state and validates modifications."""
 
     def __init__(self, value: Any):
-        self._value = self.validate(value)
+        self._value = self.validate_value(value)
 
     @abstractmethod
     def validate_modifications(self, new_value: Any) -> None:
