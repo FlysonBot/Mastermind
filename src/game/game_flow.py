@@ -11,11 +11,9 @@ class GameFlow:
 
     def start_game(self) -> Optional[str]:  # sourcery skip: class-extract-method
         """Starts the game."""
-        # Check Condition
         if self._game_started:
             raise NotImplementedError("Game has already started.")
 
-        # Start Game
         self._game_started = True
         self.initialize_players()
         self.PLAYER_SETTER.set_secret_code()
@@ -24,7 +22,6 @@ class GameFlow:
 
     def resume_game(self) -> Optional[str]:
         """Resumes the game."""
-        # Check Condition
         if not self._game_started:
             raise NotImplementedError("Game has not started yet.")
 

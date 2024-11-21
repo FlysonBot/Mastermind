@@ -32,6 +32,7 @@ class GameBoard(BaseModel):
         """Initializes the board."""
         self.NUMBER_OF_COLORS = number_of_colors
         self.NUMBER_OF_DOTS = number_of_dots
+
         self._number_of_guesses_made = 0
         self._guesses = Stack()
         self._feedbacks = Stack()
@@ -48,19 +49,23 @@ class GameBoard(BaseModel):
         """Returns the last guess."""
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to return.")
+
         return self._guesses.top()
 
     def last_feedback(self) -> Tuple:
         """Returns the last feedback."""
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to return.")
+
         return self._feedbacks.top()
 
     def remove_last(self) -> Tuple:
         """Undoes the last guess and its feedback."""
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to remove.")
+
         self._number_of_guesses_made -= 1
+
         return self._guesses.pop(), self._feedbacks.pop()
 
     def add_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
@@ -70,7 +75,9 @@ class GameBoard(BaseModel):
             number_of_dots=self.NUMBER_OF_DOTS,
             number_of_colors=self.NUMBER_OF_COLORS,
         )
+
         ValidFeedback(feedback, number_of_dots=self.NUMBER_OF_DOTS)
+
         self._guesses.push(guess)
         self._feedbacks.push(feedback)
         self._number_of_guesses_made += 1
