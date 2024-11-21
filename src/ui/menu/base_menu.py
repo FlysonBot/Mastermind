@@ -15,12 +15,7 @@ class BaseMenu(ABC):
     @property
     def width(self) -> int:
         """Calculate menu width dynamically unless overridden."""
-        menu_length = (
-            max(len(f"({key}) {value}") for key, value in self.menu.items())
-            if self.menu
-            else 0
-        )
-        return max(len(self.name) + 8, menu_length)
+        return max((len(key) for key in self.menu.keys()), default=len(self.name) + 8)
 
     def display(self) -> None:
         """Template method defining menu display flow."""
@@ -29,8 +24,8 @@ class BaseMenu(ABC):
         self._print_separator()
 
     def _print_header(self) -> None:
-        dashes = "-" * ((self.width - len(self.name) - 1) // 2)
-        print(f"\n\n\n{dashes} {self.name} {dashes}")
+        width = (self.width - len(self.name) - 1) // 2
+        print(f"\n\n\n{'-' * width} {self.name} {'-' * width}")
 
     @abstractmethod
     def _print_content(self) -> None:

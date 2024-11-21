@@ -50,6 +50,5 @@ class PersistentCache:
     @classmethod
     def set(cls, key: str, value: Any) -> Any:
         """Set a value in the cache using pickle."""
-        file_path = cls._get_cache_file_path(key)
-        with open(file_path, "wb") as file:
+        with open(cls._get_cache_file_path(key), "wb") as file:
             pickle.dump(value, file)

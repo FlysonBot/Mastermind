@@ -10,10 +10,9 @@ class AISetter(CodeSetter):
     def set_secret_code(self) -> None:
         """Sets the secret code for the game."""
         # Generate random code
-        number_of_colors = self.GAME.number_of_colors
-        number_of_dots = self.GAME.number_of_dots
         self.SECRET_CODE = tuple(
-            randint(1, number_of_colors) for _ in range(number_of_dots)
+            randint(1, self.GAME.number_of_colors)
+            for _ in range(self.GAME.number_of_dots)
         )
 
     def get_feedback(self, guess: tuple) -> tuple:

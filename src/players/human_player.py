@@ -1,6 +1,7 @@
 from getpass import getpass
 from typing import Optional, Union
 
+from src.game.game import Game
 from src.players.abstract_player import CodeCracker, CodeSetter
 from src.utils import get_feedback
 from src.validation import ValidGuess
@@ -58,7 +59,7 @@ class HumanSetter(CodeSetter):
 class HumanCracker(CodeCracker):
     """A class to represent a human code cracker."""
 
-    def __init__(self, game: "Game") -> None:  # type: ignore
+    def __init__(self, game: Game) -> None:
         """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {step}."

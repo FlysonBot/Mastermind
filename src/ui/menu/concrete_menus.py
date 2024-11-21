@@ -53,11 +53,10 @@ class ResumeGameMenu(DataDisplayMenu):
     width = 27
 
     def __init__(self):
-        self.menu = {
-            str(index + 1): ""
-            for index in range(len(GameHandler.list_continuable_games()))
-        }
-        self.menu["0"] = "Return to Main Menu"
+        games = GameHandler.list_continuable_games()
+        self.menu = {"0": "Return to Main Menu"}
+        for i in range(len(games)):
+            self.menu[str(i + 1)] = ""
 
     def _fetch_data(self) -> Optional[pd.DataFrame]:
         return GameHandler.retrieve_continuable_games()

@@ -60,10 +60,8 @@ class GameBoard(BaseModel):
         """Undoes the last guess and its feedback."""
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to remove.")
-        guess = self._guesses.pop()
-        feedback = self._feedbacks.pop()
         self._number_of_guesses_made -= 1
-        return guess, feedback
+        return self._guesses.pop(), self._feedbacks.pop()
 
     def add_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
         """Adds a guess and its feedback to the board."""

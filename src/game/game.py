@@ -11,6 +11,23 @@ from src.players import (
 from src.validation import BaseModel, Booleans, TrueFuse
 
 
+class _Utils:
+    @staticmethod
+    def last_guess_is_secret(game: "Game") -> bool:
+        return (
+            hasattr(game, "SECRET_CODE")
+            and game._board.last_guess() == game.SECRET_CODE
+        )
+
+    @staticmethod
+    def last_feedback_is_perfect(game: "Game") -> bool:
+        return game._board.last_feedback() == (game.number_of_dots, 0)
+
+    @staticmethod
+    def reached_maximum_attempts(game: "Game") -> bool:
+        return len(game._board) == game.MAXIMUM_ATTEMPTS
+
+
 class Game(BaseModel):
     """
     A class to represent a Mastermind game, managing the game state and player interactions.
@@ -93,26 +110,18 @@ class Game(BaseModel):
         """Updates the win status of the game."""
         if len(self._board) == 0:
             self._win_status = None
-            return None
 
-        last_guess, last_feedback = (
-            self._board.last_guess(),
-            self._board.last_feedback(),
-        )
-
-        if hasattr(self, "SECRET_CODE") and last_guess == self.SECRET_CODE:
+        if _Utils.last_guess_is_secret(self):
             self._win_status = True
-            return True
 
-        elif last_feedback == (self.number_of_dots, 0):
+        elif _Utils.last_feedback_is_perfect(self):
             self._win_status = True
-            return True
 
-        elif len(self._board) == self.MAXIMUM_ATTEMPTS:
+        elif _Utils.reached_maximum_attempts(self):
             self._win_status = False
-            return False
 
-        return self._win_status  # Game continued
+        # When non of the above is true, game continues
+        return self._win_status
 
     def find_players(self) -> None:
         """Determines and assigns players based on the game mode."""

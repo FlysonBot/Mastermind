@@ -43,10 +43,11 @@ class UserData:
     def _load_data(self) -> None:
         """Load user data from the config file using pickle."""
         self._ensure_directory_exists()  # Ensure the directory is created
-        if os.path.exists(self._file_path):
+        try:
             with open(self._file_path, "rb") as file:
                 self._data = pickle.load(file)
-        else:
+
+        except FileNotFoundError:  # on first run
             self._data = {}
 
     def save_data(self) -> None:

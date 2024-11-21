@@ -1,28 +1,31 @@
 def render_dataframe(df):
-    # Include index column in width calculation
-    index_width = max(
+    # Calculate widths
+    col_widths = [_calculate_index_width(df)] + _calculate_column_widths(df)
+
+    # Print header
+    _print_row(_prepare_header(df), col_widths)
+
+    # Print rows
+    for index, row in df.iterrows():
+        _print_row([str(index)] + [str(row[col]) for col in df.columns], col_widths)
+
+
+def _calculate_index_width(df):
+    return max(
         len(str(df.index.name) if df.index.name else ""),
         df.index.astype(str).map(len).max(),
     )
-    col_widths = [index_width]
-    
-    # Calculate widths for each DataFrame column
-    for col in df.columns:
-        col_width = max(len(str(col)), df[col].astype(str).map(len).max())
-        col_widths.append(col_width)
 
-    # Prepare header: include index name if it exists, otherwise add a space
-    header = [df.index.name or " "]  # Space for index title if none
-    header.extend(df.columns)
 
-    # Print the header with dynamic widths
-    print(" ".join(f"{header[i]:<{col_widths[i]}}" for i in range(len(header))))
+def _calculate_column_widths(df):
+    return [
+        max(len(str(col)), df[col].astype(str).map(len).max()) for col in df.columns
+    ]
 
-    # Print each row with dynamic widths
-    for index, row in df.iterrows():
-        row_values = [str(index)] + [str(row[col]) for col in df.columns]
-        print(
-            " ".join(
-                f"{row_values[i]:<{col_widths[i]}}" for i in range(len(row_values))
-            )
-        )
+
+def _prepare_header(df):
+    return [df.index.name or " "] + list(df.columns)
+
+
+def _print_row(values, widths):
+    print(" ".join(f"{values[i]:<{widths[i]}}" for i in range(len(values))))

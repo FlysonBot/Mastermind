@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from src.game import Game
 from src.utils import FStringTemplate, Stack
 from src.validation import BaseModel
 
@@ -7,7 +8,7 @@ from src.validation import BaseModel
 class Player(ABC, BaseModel):
     """An abstract class to represent a player."""
 
-    def __init__(self, game: "Game") -> None:  # type: ignore
+    def __init__(self, game: Game) -> None:  # type: ignore
         """Initializes the player."""
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
@@ -17,9 +18,9 @@ class Player(ABC, BaseModel):
         """Push the item to the undo stack."""
         if len(self.GAME._board) == 0:
             raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
-        self.undo_stack.push(
-            item
-        )  # item can be guess or feedback, varies by player type
+
+        # Item can be guess or feedback, varies by player type
+        self.undo_stack.push(item)
 
     def redo(self) -> None:
         """Pop and return the last guess from undo stack."""

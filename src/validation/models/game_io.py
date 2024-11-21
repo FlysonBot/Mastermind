@@ -55,11 +55,10 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             raise ValueError(f"Combination must have {self.n_of_dots} dots")
 
         for dot in combination:
-            if dot < 1 or dot > self.n_of_colors or not isinstance(dot, int):
+            if not isinstance(dot, int) or dot < 1 or dot > self.n_of_colors:
                 raise ValueError(
                     f"Dots must be integers between 1 and {self.n_of_colors}"
                 )
-
 
 class ValidFeedback(ValidationModel[Tuple[int, int]]):
     """Validates game feedback."""
