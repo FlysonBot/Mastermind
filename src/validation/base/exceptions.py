@@ -32,4 +32,3 @@ class InvalidModificationError(ValidationError):
     """Raised when attempting to modify an object in an invalid way."""
 
     pass
-

@@ -1,4 +1,3 @@
-from types import NoneType
 from typing import Any
 
 from src.validation.base.base import StateValidator

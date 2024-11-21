@@ -28,7 +28,6 @@ class GameSettings(BaseModel):
 
 
 class TestGameSettings(unittest.TestCase):
-
     def setUp(self):
         """Create a GameSettings instance for testing."""
         self.settings = GameSettings()

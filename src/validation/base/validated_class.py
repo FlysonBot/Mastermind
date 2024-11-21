@@ -5,7 +5,6 @@ from src.validation.base.base import StateValidator
 
 
 class ValidatedClass(ABC):
-
     def __getattribute__(self, name: str) -> Any:
         value = super().__getattribute__(name)
 
@@ -15,7 +14,6 @@ class ValidatedClass(ABC):
         return value
 
     def __setattr__(self, name: str, value: Any) -> None:
-
         if hasattr(self, name):
             attr = super().__getattribute__(name)
 

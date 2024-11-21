@@ -1,16 +1,15 @@
 import unittest
-
 from unittest.mock import MagicMock
+
 from src.game import Game
 from src.players import (
+    AISetter,
     HumanCracker,
     HumanSetter,
-    AISetter,
 )
 
 
 class TestGameboard(unittest.TestCase):
-
     # Setup method to create a fresh Game instance before each test
     def setUp(self):
         self.game = Game(

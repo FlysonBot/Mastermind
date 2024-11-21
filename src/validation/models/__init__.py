@@ -1,9 +1,9 @@
 from src.validation.models.game_io import ValidCombination, ValidFeedback
 from src.validation.models.numeric import (
+    MaximumAttempts,
     NumberOfColors,
     NumberOfDots,
     NumberOfGuessesMade,
-    MaximumAttempts,
 )
 
 __all__ = [

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from numbers import Number
-from typing import Any, Optional
+from typing import Optional
 
 from src.validation.base.base import ValidationModel
 from src.validation.base.exceptions import (

@@ -3,15 +3,14 @@ from unittest.mock import patch
 
 from src.game import Game
 from src.players import (
-    HumanSetter,
     AISetter,
     ExternalSetter,
     HumanCracker,
+    HumanSetter,
 )
 
 
 class TestPlayers(unittest.TestCase):
-
     def setUp(self):
         """Initialize a basic Game instance for testing purposes."""
         self.game = Game(
