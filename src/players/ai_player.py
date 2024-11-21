@@ -5,10 +5,7 @@ from src.utils import generate_feedback
 
 
 class AICodeSetter(CodeSetter):
-    """A class to represent an AI code setter."""
-
     def set_secret_code(self) -> None:
-        """Sets the secret code for the game."""
         # Generate random code
         self.SECRET_CODE = tuple(
             randint(1, self.GAME.number_of_colors)
@@ -16,13 +13,10 @@ class AICodeSetter(CodeSetter):
         )
 
     def get_feedback(self, guess: tuple) -> tuple:
-        """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
         return generate_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
 class AICodeCracker(CodeCracker):
-    """A class to represent an AI code cracker."""
-
     pass  # TODO: Implement solver logic.

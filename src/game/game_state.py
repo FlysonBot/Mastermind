@@ -13,16 +13,14 @@ class GameState:
         maximum_attempts: int,
         game_mode: str,
     ) -> None:
-        """Initializes the game."""
         self.MAXIMUM_ATTEMPTS = maximum_attempts
         self.GAME_MODE = game_mode
-        
+
         self._board = GameBoard(number_of_colors, number_of_dots)
         self._game_started = TrueFuse(False)
         self._win_status = None
 
     def check_and_update_win_status(self) -> Optional[bool]:
-        """Updates the win status of the game."""
         if len(self._board) == 0:
             self._win_status = None
 
@@ -39,15 +37,14 @@ class GameState:
         return self._win_status
 
     def output_result(self, PLAYER_CRACKER: CodeCracker) -> None:
-        """Print the result of the game."""
         self.check_and_update_win_status()
-        
+
         if self.win_status is None:
             return
-        
+
         if self.win_status:
             PLAYER_CRACKER.win_message()
-        
+
         else:
             PLAYER_CRACKER.lose_message()
 

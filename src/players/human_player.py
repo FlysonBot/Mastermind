@@ -8,13 +8,7 @@ from src.validation import ValidGuess
 
 
 class HumanCodeSetter(CodeSetter):
-    """A class to represent a human code setter."""
-
     def set_secret_code(self) -> Optional[str]:
-        """
-        Sets the secret code for the game.
-        Return 'd' if player discarded the game. Otherwise doesn't return anything.
-        """
         valid_guess = ValidGuess(
             [1] * self.GAME.number_of_dots,
             number_of_dots=self.GAME.number_of_dots,
@@ -50,26 +44,18 @@ class HumanCodeSetter(CodeSetter):
                 return
 
     def get_feedback(self, guess: tuple) -> tuple:
-        """Obtains feedback for a given guess."""
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
         return generate_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
 class HumanCodeCracker(CodeCracker):
-    """A class to represent a human code cracker."""
-
     def __init__(self, game: Game) -> None:
-        """Initializes the human code cracker."""
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {step}."
         super().__init__(game, win_message, lose_message)
 
     def obtain_guess(self) -> Union[tuple, str]:
-        """
-        Obtains a guess from the player.
-        Could return the guess as tuple or command (d,q,u,r) as string.
-        """
         valid_guess = ValidGuess(
             [1] * self.GAME.number_of_dots,
             number_of_dots=self.GAME.number_of_dots,

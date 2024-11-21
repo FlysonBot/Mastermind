@@ -1,5 +1,4 @@
 def generate_feedback(guess: tuple, secret: tuple, number_of_colors: int) -> list:
-    """Returns the feedback for a given guess."""
     # Optimized abstract algorithm (assuming correct input)
     list1 = [0] * (number_of_colors + 1)  # black pegs + color count of guess
     list2 = [0] * (number_of_colors + 1)  # white pegs + color count of secret

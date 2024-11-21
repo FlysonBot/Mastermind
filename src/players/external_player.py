@@ -5,17 +5,10 @@ from src.validation import ValidFeedback
 
 
 class ExternalCodeSetter(CodeSetter):
-    """A class to represent an external code setter."""
-
     def set_secret_code(self) -> None:
-        """Sets the secret code for the game."""
         pass  # There is no code available for external game, skip it
 
     def get_feedback(self, guess: tuple) -> Union[tuple, str]:
-        """
-        Obtains external feedback from the user.
-        Could return the feedback as tuple or command (d,q,u) as string.
-        """
         valid_feedback = ValidFeedback((0, 0), number_of_dots=self.GAME.number_of_dots)
         while True:
             feedback = input("Enter the feedback: ")

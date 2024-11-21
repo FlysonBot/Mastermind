@@ -10,7 +10,6 @@ class GameFlow:
         self.player_logic = player_logic
 
     def start_game(self) -> Optional[str]:  # sourcery skip: class-extract-method
-        """Starts the game."""
         if self._game_started:
             raise NotImplementedError("Game has already started.")
 
@@ -21,7 +20,6 @@ class GameFlow:
         return self._play_game()
 
     def resume_game(self) -> Optional[str]:
-        """Resumes the game."""
         if not self._game_started:
             raise NotImplementedError("Game has not started yet.")
 

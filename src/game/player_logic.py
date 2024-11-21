@@ -19,7 +19,6 @@ class PlayerLogic:
         return self.game_state.GAME_MODE
 
     def initialize_players(self) -> None:
-        """Determines and assigns players based on the game mode."""
         if self.GAME_MODE == "HvH":
             self.PLAYER_CRACKER = HumanCodeCracker(self)
             self.PLAYER_SETTER = HumanCodeSetter(self)
@@ -37,7 +36,6 @@ class PlayerLogic:
             self.PLAYER_SETTER = ExternalCodeSetter(self)
 
     def process_player_guessing(self) -> Optional[str]:
-        """Handle the logic for player guessing."""
         while self.game_state.win_status is None:
             # Obtain guess or command from cracker player
             guess = self.PLAYER_CRACKER.obtain_guess()
@@ -74,13 +72,6 @@ class PlayerLogic:
             self.game_state.check_and_update_win_status()
 
     def submit_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
-        """
-        Submits a player's guess and updates the game board with the corresponding feedback.
-
-        This function checks if the game is still ongoing and if the maximum number of
-        attempts has not been reached before adding the guess and feedback to the board.
-        It also clears any undo actions for both the guesser and the setter.
-        """
         if self._win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
 

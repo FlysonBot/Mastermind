@@ -9,11 +9,8 @@ from src.validation.models.numeric import NumberOfColors, NumberOfDots
 
 
 class _GameValidationUtils:
-    """Utility class for game validation."""
-
     @staticmethod
     def convert(value: str) -> Tuple[int, ...]:
-        """Convert string input to tuple of integers."""
         try:
             if "," in value:  # i.e. "1,2,3"
                 return tuple(map(int, value.split(",")))
@@ -29,8 +26,6 @@ class _GameValidationUtils:
 
 
 class ValidCombination(ValidationModel[Tuple[int, ...]]):
-    """Validates a color combination."""
-
     def __init__(self, number_of_dots: int, number_of_colors: int) -> None:
         self.convert = lambda value: _GameValidationUtils.convert(value)
         self.validate_arguments = lambda: _GameValidationUtils.validate_arguments(self)
@@ -62,8 +57,6 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
 
 
 class ValidFeedback(ValidationModel[Tuple[int, int]]):
-    """Validates game feedback."""
-
     def __init__(self, number_of_dots: int) -> None:
         super().__init__(number_of_dots=number_of_dots)
 
@@ -72,7 +65,6 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
             raise ValueError("number_of_dots is required")
 
     def convert(self, value: str) -> Tuple[int, int]:
-        """Convert string input to tuple of two integers."""
         try:
             if "," in value:
                 return tuple(map(int, value.split(",")))
