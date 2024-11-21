@@ -10,7 +10,7 @@ class Game:
     def __init__(self, number_of_colors, number_of_dots, maximum_attempts, game_mode):
         self._board = GameBoard(number_of_colors, number_of_dots)
         self._state = GameState(self._board, maximum_attempts)
-        self._player_logic = PlayerLogic()(game_mode, self)
+        self._player_logic = PlayerLogic(self)
         self._game_flow = GameFlow(self._state, self._player_logic)
 
     def start_game(self) -> Optional[str]:

@@ -1,7 +1,7 @@
 from typing import Union
 
 from src.players.abstract_player import CodeSetter
-from src.validation import ValidFeedback
+from src.validation import ValidFeedback, ValidationError
 
 
 class ExternalCodeSetter(CodeSetter):
@@ -40,7 +40,7 @@ class ExternalCodeSetter(CodeSetter):
             except ValueError as e:
                 print(e)
                 print("To get more help, enter '?'")
-            except valid_feedback.ValidationError:
+            except ValidationError:
                 print(
                     f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})"
                 )
