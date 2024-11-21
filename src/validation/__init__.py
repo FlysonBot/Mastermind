@@ -6,12 +6,26 @@ from src.validation.models import (
     ValidCombination,
     ValidFeedback,
 )
+from src.validation.base import (
+    InputConversionError,
+    InvalidModificationError,
+    MissingParameterError,
+    RangeError,
+    TypeValidationError,
+    ValidationError,
+)
 
 __all__ = [
-    "ValidCombination",
-    "ValidFeedback",
+    "MaximumAttempts",
     "NumberOfColors",
     "NumberOfDots",
     "NumberOfGuessesMade",
-    "MaximumAttempts",
+    "ValidCombination",
+    "ValidFeedback",
+    "InputConversionError",
+    "InvalidModificationError",
+    "MissingParameterError",
+    "RangeError",
+    "TypeValidationError",
+    "ValidationError",
 ]
