@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.game.game_state import GameParameter
+from src.game.game_parameter import GameParameter
 from src.game.player_logic import PlayerLogic
 
 
