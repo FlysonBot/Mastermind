@@ -9,8 +9,24 @@ from src.validation.models.numeric import NumberOfColors, NumberOfDots
 
 
 class _GameValidationUtils:
+    """
+    Utility class for validating game-related inputs.
+    """
+
     @staticmethod
     def convert(value: str) -> Tuple[int, ...]:
+        """
+        Converts a string representation of a combination or feedback into a tuple of integers.
+
+        Args:
+            value (str): The string value to be converted.
+
+        Returns:
+            Tuple[int, ...]: The converted tuple of integers.
+
+        Raises:
+            InputConversionError: If the input string cannot be converted to a valid tuple of integers.
+        """
         try:
             if "," in value:  # i.e. "1,2,3"
                 return tuple(map(int, value.split(",")))
@@ -21,12 +37,29 @@ class _GameValidationUtils:
 
     @staticmethod
     def validate_arguments(instance) -> None:
+        """
+        Validates the arguments used to initialize the game-related validation models.
+
+        Args:
+            instance: The instance of the game-related validation model.
+        """
         NumberOfDots().validate_value(instance.n_of_dots)
         NumberOfColors().validate_value(instance.n_of_colors)
 
 
 class ValidCombination(ValidationModel[Tuple[int, ...]]):
+    """
+    A ValidationModel that validates a combination of dots in a game.
+
+    Attributes:
+        n_of_dots (int): The number of dots in the combination.
+        n_of_colors (int): The number of colors available for the dots.
+    """
+
     def __init__(self, number_of_dots: int, number_of_colors: int) -> None:
+        """
+        Initializes the ValidCombination with the number of dots and colors.
+        """
         self.convert = lambda value: _GameValidationUtils.convert(value)
         self.validate_arguments = lambda: _GameValidationUtils.validate_arguments(self)
         super().__init__(
@@ -35,6 +68,19 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
         )
 
     def validate_value(self, value: Any) -> Tuple[int, ...]:
+        """
+        Validates the given combination and returns the validated combination.
+
+        Args:
+            value (Any): The combination to be validated.
+
+        Returns:
+            Tuple[int, ...]: The validated combination.
+
+        Raises:
+            TypeValidationError: If the combination is not a tuple or list of integers.
+            ValueError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
+        """
         if isinstance(value, str):
             value = self.convert(value)
 
@@ -46,6 +92,15 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
         return tuple(value)
 
     def validate_combination(self, combination: Tuple[int, ...]) -> None:
+        """
+        Validates the individual dots in the combination.
+
+        Args:
+            combination (Tuple[int, ...]): The combination to be validated.
+
+        Raises:
+            ValueError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
+        """
         if len(combination) != self.n_of_dots:
             raise ValueError(f"Combination must have {self.n_of_dots} dots")
 
@@ -57,14 +112,42 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
 
 
 class ValidFeedback(ValidationModel[Tuple[int, int]]):
+    """
+    A ValidationModel that validates the feedback for a game.
+
+    Attributes:
+        number_of_dots (int): The number of dots in the combination.
+    """
+
     def __init__(self, number_of_dots: int) -> None:
+        """
+        Initializes the ValidFeedback with the number of dots.
+        """
         super().__init__(number_of_dots=number_of_dots)
 
     def validate_arguments(self) -> None:
+        """
+        Validates the arguments used to initialize the ValidFeedback.
+
+        Raises:
+            ValueError: If the number_of_dots parameter is missing.
+        """
         if not hasattr(self, "number_of_dots"):
             raise ValueError("number_of_dots is required")
 
     def convert(self, value: str) -> Tuple[int, int]:
+        """
+        Converts a string representation of a feedback into a tuple of two integers.
+
+        Args:
+            value (str): The string value to be converted.
+
+        Returns:
+            Tuple[int, int]: The converted tuple of two integers.
+
+        Raises:
+            InputConversionError: If the input string cannot be converted to a valid tuple of two integers.
+        """
         try:
             if "," in value:
                 return tuple(map(int, value.split(",")))
@@ -73,6 +156,19 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
             raise InputConversionError("Invalid feedback format") from e
 
     def validate_value(self, value: Any) -> Tuple[int, int]:
+        """
+        Validates the given feedback and returns the validated feedback.
+
+        Args:
+            value (Any): The feedback to be validated.
+
+        Returns:
+            Tuple[int, int]: The validated feedback.
+
+        Raises:
+            TypeValidationError: If the feedback is not a tuple of two integers.
+            ValueError: If the feedback values are not within the valid range.
+        """
         if isinstance(value, str):
             value = self.convert(value)
 

@@ -11,6 +11,16 @@ from src.validation.base.exceptions import (
 
 
 class NumberRangeModel(ValidationModel[Number]):
+    """
+    A ValidationModel that validates numeric values within a specified range.
+
+    Attributes:
+        gt (Optional[Number]): The minimum value (exclusive).
+        lt (Optional[Number]): The maximum value (exclusive).
+        ge (Optional[Number]): The minimum value (inclusive).
+        le (Optional[Number]): The maximum value (inclusive).
+    """
+
     def __init__(
         self,
         gt: Optional[Number] = None,
@@ -18,9 +28,15 @@ class NumberRangeModel(ValidationModel[Number]):
         ge: Optional[Number] = None,
         le: Optional[Number] = None,
     ) -> None:
+        """
+        Initializes the NumberRangeModel with the specified range constraints.
+        """
         super().__init__(gt=gt, lt=lt, ge=ge, le=le)
 
     def validate_arguments(self) -> None:
+        """
+        Validates the range constraints provided to the NumberRangeModel.
+        """
         if self.gt and self.ge:
             raise ValueError("gt and ge cannot be used together")
 
@@ -31,6 +47,20 @@ class NumberRangeModel(ValidationModel[Number]):
             raise ValueError("Range maximum cannot be less than or equals to minimum")
 
     def validate_value(self, value: Number | str) -> Number:
+        """
+        Validates the given value and returns the validated value.
+
+        Args:
+            value (Number | str): The value to be validated.
+
+        Returns:
+            Number: The validated value.
+
+        Raises:
+            TypeValidationError: If the value is not a number or a string.
+            InputConversionError: If the value cannot be converted to the expected numeric type.
+            RangeError: If the value is outside the specified range.
+        """
         if isinstance(value, str):
             value = self.convert(value)
 
@@ -43,9 +73,30 @@ class NumberRangeModel(ValidationModel[Number]):
 
     @abstractmethod
     def convert(self, value: str) -> Number:
+        """
+        Converts the given string value to the expected numeric type.
+
+        Args:
+            value (str): The string value to be converted.
+
+        Returns:
+            Number: The converted numeric value.
+
+        Raises:
+            InputConversionError: If the value cannot be converted to the expected numeric type.
+        """
         pass
 
     def validate_range(self, value: Number) -> None:
+        """
+        Validates that the given value is within the specified range.
+
+        Args:
+            value (Number): The value to be validated.
+
+        Raises:
+            RangeError: If the value is outside the specified range.
+        """
         if self.gt and value <= self.gt:
             raise RangeError(f"Value must be greater than {self.gt}")
         if self.ge and value < self.ge:
@@ -57,7 +108,23 @@ class NumberRangeModel(ValidationModel[Number]):
 
 
 class ConstrainedInteger(NumberRangeModel[int]):
+    """
+    A NumberRangeModel that validates integer values within a specified range.
+    """
+
     def convert(self, value: str) -> int:
+        """
+        Converts the given string value to an integer.
+
+        Args:
+            value (str): The string value to be converted.
+
+        Returns:
+            int: The converted integer value.
+
+        Raises:
+            InputConversionError: If the value cannot be converted to an integer.
+        """
         try:
             return int(value)
         except ValueError as e:
@@ -65,7 +132,23 @@ class ConstrainedInteger(NumberRangeModel[int]):
 
 
 class ConstrainedFloat(NumberRangeModel[float]):
+    """
+    A NumberRangeModel that validates float values within a specified range.
+    """
+
     def convert(self, value: str) -> float:
+        """
+        Converts the given string value to a float.
+
+        Args:
+            value (str): The string value to be converted.
+
+        Returns:
+            float: The converted float value.
+
+        Raises:
+            InputConversionError: If the value cannot be converted to a float.
+        """
         try:
             return float(value)
         except ValueError as e:
