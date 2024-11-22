@@ -6,15 +6,13 @@ from src.validation import TrueFuse
 
 class GameParameter:
     """
-    Represents the current state of the Mastermind-like game.
-
-    The GameState class manages the game board, the game mode, the maximum number of attempts, and the win status.
+    Represents the state of the Mastermind game.
 
     Args:
-        number_of_colors (int): The number of colors available in the game.
-        number_of_dots (int): The number of dots (or pegs) in each guess.
+        number_of_colors (int): The number of colors in the game.
+        number_of_dots (int): The number of dots in each combination.
         maximum_attempts (int): The maximum number of attempts allowed in the game.
-        game_mode (str): The game mode, which can be "HvH", "HvAI", "AIvH", or "AIvAI".
+        game_mode (str): The game mode, such as "HvH", "HvAI", "AIvH", or "AIvAI".
     """
 
     def __init__(
@@ -33,10 +31,10 @@ class GameParameter:
 
     def check_and_update_win_status(self) -> bool | None:
         """
-        Checks the current state of the game and updates the win status.
+        Checks the game state and updates the win status.
 
         Returns:
-            bool | None: The updated win status (True if the player has won, False if the player has lost, or None if the game is still in progress).
+            bool | None: The win status, or None if the game is still in progress.
         """
 
         if self._last_guess_is_secret(self):
@@ -73,13 +71,22 @@ class GameParameter:
         return len(self._board)
 
     def _last_guess_is_secret(self) -> bool:
+        """
+        Checks if the last guess made on the game board matches the secret code.
+        """
         return (
             hasattr(self, "SECRET_CODE")
             and self._board.last_guess() == self.SECRET_CODE
         )
 
     def _last_feedback_is_perfect(self) -> bool:
+        """
+        Checks if the feedback for the last guess is perfect (all dots in the correct position).
+        """
         return self._board.last_feedback() == (self.number_of_dots, 0)
 
     def _reached_maximum_attempts(self) -> bool:
+        """
+        Checks if the maximum number of attempts has been reached.
+        """
         return len(self._board) == self.MAXIMUM_ATTEMPTS

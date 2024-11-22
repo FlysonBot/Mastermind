@@ -23,8 +23,9 @@ class GameBoard(BaseModel):
 
     class EmptyBoardError(Exception):
         """
-        Exception raised when there are no guesses on the game board.
+        Exception raised when trying to access the game board when it is empty.
         """
+
         pass
 
     def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
@@ -43,7 +44,7 @@ class GameBoard(BaseModel):
 
     def __getitem__(self, index: int) -> Tuple:
         """
-        Returns the guess and feedback at the given index.
+        Returns the guess and feedback at the specified index.
         """
         return self._guesses[index], self._feedbacks[index]
 
@@ -51,10 +52,12 @@ class GameBoard(BaseModel):
         """
         Returns the last guess made on the game board.
 
-        Raises:
-            EmptyBoardError: If there are no guesses to retrieve.
-        """
+        Returns:
+            Tuple: A tuple representation of the last guess.
 
+        Raises:
+            EmptyBoardError: If there are no guesses on the game board.
+        """
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to return.")
 
@@ -64,10 +67,12 @@ class GameBoard(BaseModel):
         """
         Returns the feedback for the last guess made on the game board.
 
-        Raises:
-            EmptyBoardError: If there are no guesses to retrieve.
-        """
+        Returns:
+            Tuple: A tuple representation of the last feedback.
 
+        Raises:
+            EmptyBoardError: If there are no guesses on the game board.
+        """
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to return.")
 
@@ -78,12 +83,11 @@ class GameBoard(BaseModel):
         Removes the last guess and feedback from the game board.
 
         Returns:
-            Tuple: The last guess and feedback.
+            Tuple: The removed guess and feedback.
 
         Raises:
-            EmptyBoardError: If there are no guesses to remove.
+            EmptyBoardError: If there are no guesses on the game board.
         """
-
         if self._number_of_guesses_made == 0:
             raise self.EmptyBoardError("No guesses to remove.")
 
@@ -93,13 +97,12 @@ class GameBoard(BaseModel):
 
     def add_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
         """
-        Adds a new guess and feedback to the game board.
+        Adds a new guess and its corresponding feedback to the game board.
 
         Args:
             guess (Tuple[int, ...]): The new guess.
             feedback (Tuple[int, ...]): The feedback for the new guess.
         """
-
         ValidGuess(
             guess,
             number_of_dots=self.NUMBER_OF_DOTS,

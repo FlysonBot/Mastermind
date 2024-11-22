@@ -6,13 +6,11 @@ from src.game.player_logic import PlayerLogic
 
 class GameFlow:
     """
-    Manages the flow of the Mastermind-like game.
-
-    The GameFlow class is responsible for starting and resuming the game, as well as handling the game loop and outputting the final result.
+    Manages the flow of the Mastermind game.
 
     Args:
-        game_state (GameState): The current state of the game.
-        player_logic (PlayerLogic): The logic for the players in the game.
+        game_state (GameState): The state of the game.
+        player_logic (PlayerLogic): The logic for the players.
     """
 
     def __init__(self, game_state: GameParameter, player_logic: PlayerLogic) -> None:
@@ -21,12 +19,11 @@ class GameFlow:
 
     def start_game(self) -> Optional[str]:
         """
-        Starts a new game.
+        Starts the game.
 
         Returns:
-            Optional[str]: A command from the user (e.g., "q" for quit, "d" for discard) if the game is terminated.
+            Optional[str]: A command from the player, if any.
         """
-
         if self._game_started:
             raise NotImplementedError("Game has already started.")
 
@@ -38,12 +35,11 @@ class GameFlow:
 
     def resume_game(self) -> Optional[str]:
         """
-        Resumes a previously started game.
+        Resumes the game.
 
         Returns:
-            Optional[str]: A command from the user (e.g., "q" for quit, "d" for discard) if the game is terminated.
+            Optional[str]: A command from the player, if any.
         """
-
         if not self._game_started:
             raise NotImplementedError("Game has not started yet.")
 
@@ -51,10 +47,10 @@ class GameFlow:
 
     def _play_game(self) -> Optional[str]:
         """
-        Plays the game and retrieves any user command.
+        Plays the game and retrieves a command from the player, if any.
 
         Returns:
-            Optional[str]: A command from the user (e.g., "q" for quit, "d" for discard) if the game is terminated.
+            Optional[str]: A command from the player, if any.
         """
 
         command = self.player_logic.process_player_guessing()
@@ -64,9 +60,8 @@ class GameFlow:
 
     def output_result(self) -> None:
         """
-        Outputs the result of the game, including the win/loss status.
+        Outputs the result of the game.
         """
-
         self.game_state.check_and_update_win_status()
 
         if self.win_status is None:

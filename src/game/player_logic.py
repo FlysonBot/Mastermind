@@ -12,12 +12,10 @@ from src.players import (
 
 class PlayerLogic:
     """
-    Handles the logic for the players in the Mastermind-like game.
-
-    The PlayerLogic class is responsible for initializing the appropriate player types (human or AI) based on the game mode, and for processing the player's guessing and feedback.
+    Manages the logic for the players in the Mastermind game.
 
     Args:
-        game (GameState): The current state of the game.
+        game (GameState): The state of the game.
     """
 
     def __init__(self, game: GameParameter) -> None:
@@ -28,8 +26,9 @@ class PlayerLogic:
         return self.game_state.GAME_MODE
 
     def initialize_players(self) -> None:
-        """Selects and initializes the appropriate player types based on the game mode."""
-
+        """
+        Initializes the players based on the game mode.
+        """
         game_mode_mapping = {
             "HvH": (HumanCodeCracker, HumanCodeSetter),
             "HvAI": (HumanCodeCracker, AICodeSetter),
@@ -44,12 +43,11 @@ class PlayerLogic:
 
     def process_player_guessing(self) -> Optional[str]:
         """
-        Processes the player's guessing and feedback.
+        Processes the player's guessing logic.
 
         Returns:
-            Optional[str]: A command from the user (e.g., "q" for quit, "d" for discard) if the game is terminated.
+            Optional[str]: A command from the player, if any.
         """
-
         while self.game_state.win_status is None:
             guess = self.PLAYER_CRACKER.obtain_guess()
 
@@ -75,24 +73,32 @@ class PlayerLogic:
             self.game_state.check_and_update_win_status()
 
     def _undo_logic(self) -> None:
+        """
+        Handles the undo logic.
+        """
         self.PLAYER_CRACKER.undo()
         self.PLAYER_SETTER.undo()
         self.game_state._board.remove_last()
 
     def _redo_logic(self) -> None:
+        """
+        Handles the redo logic.
+        """
         guess = self.PLAYER_CRACKER.redo()
         feedback = self.PLAYER_SETTER.redo()
         self.submit_guess(guess, feedback)
 
     def submit_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
         """
-        Submits a new guess and feedback to the game board.
+        Submits a guess and its corresponding feedback to the game board.
 
         Args:
-            guess (Tuple[int, ...]): The new guess.
-            feedback (Tuple[int, ...]): The feedback for the new guess.
-        """
+            guess (Tuple[int, ...]): The guess to be submitted.
+            feedback (Tuple[int, ...]): The feedback for the guess.
 
+        Raises:
+            NotImplementedError: If the game has ended.
+        """
         if self._win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
 
