@@ -22,5 +22,6 @@
     "terminal.integrated.env.linux": {
         "PYTHONPATH": "${workspaceFolder}"
     },
-    "makefile.makefilePath": "docs/Makefile"
+    "makefile.makefilePath": "docs/Makefile",
+    "makefile.configureOnOpen": false
 }
