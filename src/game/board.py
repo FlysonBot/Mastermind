@@ -22,8 +22,9 @@ class GameBoard(BaseModel):
     """
 
     class EmptyBoardError(Exception):
-        """Exception raised when there are no guesses on the game board."""
-
+        """
+        Exception raised when there are no guesses on the game board.
+        """
         pass
 
     def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
@@ -35,11 +36,15 @@ class GameBoard(BaseModel):
         self._feedbacks = Stack()
 
     def __len__(self) -> int:
-        """Returns the number of guesses made on the game board."""
+        """
+        Returns the number of guesses made on the game board.
+        """
         return self._number_of_guesses_made
 
     def __getitem__(self, index: int) -> Tuple:
-        """Returns the guess and feedback at the given index."""
+        """
+        Returns the guess and feedback at the given index.
+        """
         return self._guesses[index], self._feedbacks[index]
 
     def last_guess(self) -> Tuple:
@@ -108,8 +113,9 @@ class GameBoard(BaseModel):
         self._number_of_guesses_made += 1
 
     def clear(self) -> None:
-        """Clears the game board, removing all guesses and feedbacks."""
-
+        """
+        Clears the game board, removing all guesses and feedbacks.
+        """
         self._guesses.clear()
         self._feedbacks.clear()
         self._number_of_guesses_made = 0

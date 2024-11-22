@@ -63,7 +63,9 @@ class GameFlow:
         return command
 
     def output_result(self) -> None:
-        """Outputs the result of the game, including the win/loss status."""
+        """
+        Outputs the result of the game, including the win/loss status.
+        """
 
         self.game_state.check_and_update_win_status()
 
