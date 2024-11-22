@@ -1,4 +1,20 @@
+"""
+This module defines the generate_feedback function, which takes a guess and a secret code, and returns the number of black and white pegs.
+"""
+
+
 def generate_feedback(guess: tuple, secret: tuple, number_of_colors: int) -> list:
+    """
+    Generates feedback based on the guess and the secret code.
+
+    Args:
+        guess (tuple): The player's guess.
+        secret (tuple): The secret code.
+        number_of_colors (int): The number of colors in the game.
+
+    Returns:
+        list: A list containing the number of black and white pegs.
+    """
     # Optimized abstract algorithm (assuming correct input)
     list1 = [0] * (number_of_colors + 1)  # black pegs + color count of guess
     list2 = [0] * (number_of_colors + 1)  # white pegs + color count of secret
