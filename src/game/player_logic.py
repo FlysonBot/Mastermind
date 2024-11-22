@@ -19,7 +19,6 @@ class PlayerLogic:
         return self.game_state.GAME_MODE
 
     def initialize_players(self) -> None:
-        # Mapping of game modes to player classes
         game_mode_mapping = {
             "HvH": (HumanCodeCracker, HumanCodeSetter),
             "HvAI": (HumanCodeCracker, AICodeSetter),
@@ -27,7 +26,6 @@ class PlayerLogic:
             "AIvAI": (AICodeCracker, ExternalCodeSetter),
         }
 
-        # Assign the correct classes based on the game mode
         if self.GAME_MODE in game_mode_mapping:
             self.PLAYER_CRACKER, self.PLAYER_SETTER = (
                 cls(self) for cls in game_mode_mapping[self.GAME_MODE]
@@ -35,10 +33,9 @@ class PlayerLogic:
 
     def process_player_guessing(self) -> Optional[str]:
         while self.game_state.win_status is None:
-            # Obtain guess or command from cracker player
             guess = self.PLAYER_CRACKER.obtain_guess()
 
-            # Process commands from cracker player
+            # Process commands
             if guess in {"q", "d"}:  # quit or discard
                 return guess
             if guess == "u":  # undo
@@ -48,16 +45,14 @@ class PlayerLogic:
                 self._redo_logic()
                 continue
 
-            # Get feedback from setter player
             feedback = self.PLAYER_SETTER.get_feedback(guess)
 
-            # Process command from setter player
+            # Process command
             if feedback in {"q", "d"}:  # quit or discard
                 break
             if feedback == "u":  # undo
                 continue  # since guess haven't been submitted, skip = undo
 
-            # Submit guess and feedback
             self.submit_guess(guess, feedback)
             self.game_state.check_and_update_win_status()
 

@@ -30,5 +30,17 @@ class GameFlow:
         command = self.player_logic.process_player_guessing()
 
         # After game is terminated
-        self.game_state.output_result(self.player_logic.PLAYER_CRACKER)
+        self.output_result()
         return command
+
+    def output_result(self) -> None:
+        self.game_state.check_and_update_win_status()
+
+        if self.win_status is None:
+            return
+
+        if self.win_status:
+            self.player_logic.PLAYER_CRACKER.win_message()
+
+        else:
+            self.player_logic.PLAYER_CRACKER.lose_message()

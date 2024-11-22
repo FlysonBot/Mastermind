@@ -1,7 +1,6 @@
 from typing import Optional
 
 from src.game.board import GameBoard
-from src.players.abstract_player import CodeCracker
 from src.validation import TrueFuse
 
 
@@ -35,18 +34,6 @@ class GameState:
 
         # When non of the above is true, game continues
         return self._win_status
-
-    def output_result(self, PLAYER_CRACKER: CodeCracker) -> None:
-        self.check_and_update_win_status()
-
-        if self.win_status is None:
-            return
-
-        if self.win_status:
-            PLAYER_CRACKER.win_message()
-
-        else:
-            PLAYER_CRACKER.lose_message()
 
     @property
     def number_of_colors(self) -> int:
