@@ -4,7 +4,19 @@ from src.game.board import GameBoard
 from src.validation import TrueFuse
 
 
-class GameState:
+class GameParameter:
+    """
+    Represents the current state of the Mastermind-like game.
+
+    The GameState class manages the game board, the game mode, the maximum number of attempts, and the win status.
+
+    Args:
+        number_of_colors (int): The number of colors available in the game.
+        number_of_dots (int): The number of dots (or pegs) in each guess.
+        maximum_attempts (int): The maximum number of attempts allowed in the game.
+        game_mode (str): The game mode, which can be "HvH", "HvAI", "AIvH", or "AIvAI".
+    """
+
     def __init__(
         self,
         number_of_colors: int,
@@ -19,9 +31,13 @@ class GameState:
         self._game_started = TrueFuse(False)
         self._win_status = None
 
-    def check_and_update_win_status(self) -> Optional[bool]:
-        if len(self._board) == 0:
-            self._win_status = None
+    def check_and_update_win_status(self) -> bool | None:
+        """
+        Checks the current state of the game and updates the win status.
+
+        Returns:
+            bool | None: The updated win status (True if the player has won, False if the player has lost, or None if the game is still in progress).
+        """
 
         if self._last_guess_is_secret(self):
             self._win_status = True
@@ -31,8 +47,10 @@ class GameState:
 
         elif self._reached_maximum_attempts(self):
             self._win_status = False
+        
+        else:
+            self._win_status = None
 
-        # When non of the above is true, game continues
         return self._win_status
 
     @property

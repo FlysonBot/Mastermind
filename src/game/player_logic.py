@@ -1,6 +1,6 @@
 from typing import Optional, Tuple
 
-from src.game.game_state import GameState
+from src.game.game_state import GameParameter
 from src.players import (
     AICodeCracker,
     AICodeSetter,
@@ -11,7 +11,16 @@ from src.players import (
 
 
 class PlayerLogic:
-    def __init__(self, game: GameState) -> None:
+    """
+    Handles the logic for the players in the Mastermind-like game.
+
+    The PlayerLogic class is responsible for initializing the appropriate player types (human or AI) based on the game mode, and for processing the player's guessing and feedback.
+
+    Args:
+        game (GameState): The current state of the game.
+    """
+
+    def __init__(self, game: GameParameter) -> None:
         self.game_state = game
 
     @property
@@ -19,6 +28,8 @@ class PlayerLogic:
         return self.game_state.GAME_MODE
 
     def initialize_players(self) -> None:
+        """Selects and initializes the appropriate player types based on the game mode."""
+
         game_mode_mapping = {
             "HvH": (HumanCodeCracker, HumanCodeSetter),
             "HvAI": (HumanCodeCracker, AICodeSetter),
@@ -32,6 +43,13 @@ class PlayerLogic:
             )
 
     def process_player_guessing(self) -> Optional[str]:
+        """
+        Processes the player's guessing and feedback.
+
+        Returns:
+            Optional[str]: A command from the user (e.g., "q" for quit, "d" for discard) if the game is terminated.
+        """
+
         while self.game_state.win_status is None:
             guess = self.PLAYER_CRACKER.obtain_guess()
 
@@ -67,6 +85,14 @@ class PlayerLogic:
         self.submit_guess(guess, feedback)
 
     def submit_guess(self, guess: Tuple[int, ...], feedback: Tuple[int, ...]) -> None:
+        """
+        Submits a new guess and feedback to the game board.
+
+        Args:
+            guess (Tuple[int, ...]): The new guess.
+            feedback (Tuple[int, ...]): The feedback for the new guess.
+        """
+
         if self._win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
 
