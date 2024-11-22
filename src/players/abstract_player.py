@@ -27,7 +27,7 @@ class Player(ABC, BaseModel):
         self.undo_stack.clear()
 
 
-class CodeSetter(Player):
+class CodeSetter(Player, ABC):
     @abstractmethod
     def set_secret_code(self) -> None:
         pass
@@ -40,7 +40,7 @@ class CodeSetter(Player):
         super().undo(self.GAME._board.last_feedback())
 
 
-class CodeCracker(Player):
+class CodeCracker(Player, ABC):
     def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore
         super().__init__(game)
         self._win_message = FStringTemplate(win_msg)
