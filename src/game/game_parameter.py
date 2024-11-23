@@ -1,10 +1,10 @@
 from typing import Optional
 
 from src.game.board import GameBoard
-from src.validation import TrueFuse
+from src.validation import TrueFuse, ValidatedClass
 
 
-class GameParameter:
+class GameParameter(ValidatedClass):
     """
     Represents the state of the Mastermind game.
 
@@ -26,7 +26,7 @@ class GameParameter:
         self.GAME_MODE = game_mode
 
         self._board = GameBoard(number_of_colors, number_of_dots)
-        self._game_started = TrueFuse(False)
+        self._game_started = TrueFuse(False)  # validation enforced by ValidatedClass
         self._win_status = None
 
     def check_and_update_win_status(self) -> bool | None:
