@@ -4,6 +4,7 @@ from src.validation.base import (
     InputConversionError,
     TypeValidationError,
     ValidationModel,
+    RangeError,
 )
 from src.validation.models.numeric import NumberOfColors, NumberOfDots
 
@@ -79,7 +80,7 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
 
         Raises:
             TypeValidationError: If the combination is not a tuple or list of integers.
-            ValueError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
+            RangeError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
         """
         if isinstance(value, str):
             value = self.convert(value)
@@ -99,14 +100,14 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             combination (Tuple[int, ...]): The combination to be validated.
 
         Raises:
-            ValueError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
+            RangeError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
         """
         if len(combination) != self.n_of_dots:
-            raise ValueError(f"Combination must have {self.n_of_dots} dots")
+            raise RangeError(f"Combination must have {self.n_of_dots} dots")
 
         for dot in combination:
             if not isinstance(dot, int) or dot < 1 or dot > self.n_of_colors:
-                raise ValueError(
+                raise RangeError(
                     f"Dots must be integers between 1 and {self.n_of_colors}"
                 )
 
