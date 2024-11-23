@@ -10,7 +10,7 @@ from src.validation import (
     MaximumAttempts,
     NumberOfColors,
     NumberOfDots,
-    ValidatedData,
+    Validator,
 )
 
 
@@ -225,7 +225,7 @@ class GameController:
     """Communication between MainUI and the gameboard."""
 
     @classmethod
-    def validate_input(cls, prompt: str, validator: ValidatedData) -> Any:
+    def validate_input(cls, prompt: str, validator: Validator) -> Any:
         """Get user input and validate it."""
         while True:
             try:
