@@ -8,17 +8,18 @@ from src.validation.base import (
     StateValidator,
     TrueFuse,
     TypeValidationError,
-    ValidationModel,
-    ValidationError,
     ValidatedClass,
+    ValidationError,
+    ValidationModel,
+    Validator,
 )
 from src.validation.models import (
-    ValidCombination,
-    ValidFeedback,
+    MaximumAttempts,
     NumberOfColors,
     NumberOfDots,
     NumberOfGuessesMade,
-    MaximumAttempts,
+    ValidCombination,
+    ValidFeedback,
 )
 
 __all__ = [
@@ -31,13 +32,14 @@ __all__ = [
     "StateValidator",
     "TrueFuse",
     "TypeValidationError",
-    "ValidationModel",
-    "ValidationError",
     "ValidatedClass",
-    "ValidCombination",
-    "ValidFeedback",
+    "ValidationError",
+    "ValidationModel",
+    "Validator",
+    "MaximumAttempts",
     "NumberOfColors",
     "NumberOfDots",
     "NumberOfGuessesMade",
-    "MaximumAttempts",
+    "ValidCombination",
+    "ValidFeedback",
 ]
