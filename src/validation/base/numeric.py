@@ -45,8 +45,11 @@ class NumberRangeModel(ValidationModel[T]):
         if self.lt and self.le:
             raise ValueError("lt and le cannot be used together")
 
-        if (self.gt or self.ge) <= (self.lt or self.le):
-            raise ValueError("Range maximum cannot be less than or equals to minimum")
+        min_value = self.gt or self.ge
+        max_value = self.lt or self.le
+
+        if min_value and max_value and min_value >= max_value:
+            raise ValueError("Range maximum cannot be less than or equal to minimum")
 
     def validate_value(self, value: Number | str) -> Number:
         """
