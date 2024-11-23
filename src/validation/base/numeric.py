@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from numbers import Number
-from typing import Optional
+from typing import Optional, TypeVar
 
 from src.validation.base.base import ValidationModel
 from src.validation.base.exceptions import (
@@ -9,8 +9,10 @@ from src.validation.base.exceptions import (
     TypeValidationError,
 )
 
+T = TypeVar("T", bound=Number)
 
-class NumberRangeModel(ValidationModel[Number]):
+
+class NumberRangeModel(ValidationModel[T]):
     """
     A ValidationModel that validates numeric values within a specified range.
 
