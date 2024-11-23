@@ -1,10 +1,10 @@
 from typing import Tuple
 
 from src.utils import Stack
-from src.validation import BaseModel, ValidFeedback, ValidGuess
+from src.validation import ValidatedClass, ValidFeedback, ValidCombination
 
 
-class GameBoard(BaseModel):
+class GameBoard(ValidatedClass):
     """
     Represents the game board for a Mastermind game.
 
@@ -103,7 +103,7 @@ class GameBoard(BaseModel):
             guess (Tuple[int, ...]): The new guess.
             feedback (Tuple[int, ...]): The feedback for the new guess.
         """
-        ValidGuess(
+        ValidCombination(
             guess,
             number_of_dots=self.NUMBER_OF_DOTS,
             number_of_colors=self.NUMBER_OF_COLORS,
