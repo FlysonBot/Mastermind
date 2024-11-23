@@ -3,18 +3,20 @@ from typing import Optional, Union
 
 from src.players.abstract_player import CodeCracker, CodeSetter
 from src.utils import generate_feedback
-from src.validation import ValidGuess
+from src.validation import ValidCombination
+from src.validation.base.exceptions import RangeError, TypeValidationError
 
 
 class HumanCodeSetter(CodeSetter):
     def set_secret_code(self) -> Optional[str]:
-        valid_guess = ValidGuess(
-            [1] * self.GAME.number_of_dots,
+        valid_guess = ValidCombination(
             number_of_dots=self.GAME.number_of_dots,
             number_of_colors=self.GAME.number_of_colors,
         )
+
         while True:
             secret = getpass("Enter the secret code: ")
+
             if secret == "?":
                 hint = f"""
                 Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
@@ -25,26 +27,38 @@ class HumanCodeSetter(CodeSetter):
                 """
                 print(hint)
                 continue
+
             if secret == "d":
                 print("Game discarded.")
                 return "d"
 
             try:
-                valid_guess.value = valid_guess.validate(secret)
-            except ValueError as e:
+                valid_guess.validate_value(secret)
+
+            except TypeValidationError as e:
                 print(e)
                 print("To get more help, enter '?'")
+
+            except RangeError:
+                print(
+                    f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]"
+                )
+                print("To get more help, enter '?'")
+
             else:  # Confirm password
                 confirm = getpass("Confirm the secret code: ")
+
                 if confirm != secret:
                     print("Code does not match. Try again.")
                     continue
-                self.SECRET_CODE = valid_guess
+
+                self.SECRET_CODE = valid_guess.validate_value(secret)
                 return
 
     def get_feedback(self, guess: tuple) -> tuple:
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
+
         return generate_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
 
 
@@ -55,13 +69,14 @@ class HumanCodeCracker(CodeCracker):
         super().__init__(game, win_message, lose_message)
 
     def obtain_guess(self) -> Union[tuple, str]:
-        valid_guess = ValidGuess(
-            [1] * self.GAME.number_of_dots,
+        valid_guess = ValidCombination(
             number_of_dots=self.GAME.number_of_dots,
             number_of_colors=self.GAME.number_of_colors,
         )
+
         while True:
             guess = input("Enter your guess: ")
+
             if guess == "?":
                 hint = f"""
                 Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
@@ -75,6 +90,7 @@ class HumanCodeCracker(CodeCracker):
                 """
                 print(hint)
                 continue
+
             if guess == "d":
                 print("Game discarded.")
                 return "d"
@@ -87,12 +103,13 @@ class HumanCodeCracker(CodeCracker):
                 return "r"
 
             try:
-                valid_guess.value = valid_guess.validate(guess)
-                return valid_guess.value
-            except ValueError as e:
+                return valid_guess.validate_value(guess)
+
+            except TypeValidationError as e:
                 print(e)
                 print("To get more help, enter '?'")
-            except valid_guess.ValidationError:
+
+            except RangeError:
                 print(
                     f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]"
                 )
