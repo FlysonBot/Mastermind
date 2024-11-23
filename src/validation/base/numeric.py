@@ -39,16 +39,16 @@ class NumberRangeModel(ValidationModel[T]):
         """
         Validates the range constraints provided to the NumberRangeModel.
         """
-        if self.gt and self.ge:
+        if self.gt is not None and self.ge is not None:
             raise ValueError("gt and ge cannot be used together")
 
-        if self.lt and self.le:
+        if self.lt is not None and self.le is not None:
             raise ValueError("lt and le cannot be used together")
 
         min_value = self.gt or self.ge
         max_value = self.lt or self.le
 
-        if min_value and max_value and min_value >= max_value:
+        if min_value is not None and max_value is not None and min_value >= max_value:
             raise ValueError("Range maximum cannot be less than or equal to minimum")
 
     def validate_value(self, value: Number | str) -> Number:
@@ -102,13 +102,13 @@ class NumberRangeModel(ValidationModel[T]):
         Raises:
             RangeError: If the value is outside the specified range.
         """
-        if self.gt and value <= self.gt:
+        if self.gt is not None and value <= self.gt:
             raise RangeError(f"Value must be greater than {self.gt}")
-        if self.ge and value < self.ge:
+        if self.ge is not None and value < self.ge:
             raise RangeError(f"Value must be greater than or equal to {self.ge}")
-        if self.lt and value >= self.lt:
+        if self.lt is not None and value >= self.lt:
             raise RangeError(f"Value must be less than {self.lt}")
-        if self.le and value > self.le:
+        if self.le is not None and value > self.le:
             raise RangeError(f"Value must be less than or equal to {self.le}")
 
 
@@ -132,6 +132,7 @@ class ConstrainedInteger(NumberRangeModel[int]):
         """
         try:
             return int(value)
+        
         except ValueError as e:
             raise InputConversionError("Invalid input for integer conversion") from e
 
@@ -156,5 +157,6 @@ class ConstrainedFloat(NumberRangeModel[float]):
         """
         try:
             return float(value)
+        
         except ValueError as e:
             raise InputConversionError("Invalid input for float conversion") from e
