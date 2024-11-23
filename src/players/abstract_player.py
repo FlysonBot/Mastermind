@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
 from src.utils import FStringTemplate, Stack
-from src.validation import BaseModel
 
 
-class Player(ABC, BaseModel):
+class Player(ABC):
     def __init__(self, game: "Game") -> None:  # type: ignore  # noqa: F821
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
