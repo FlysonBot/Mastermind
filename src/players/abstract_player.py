@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 
-from src.game import Game
 from src.utils import FStringTemplate, Stack
 from src.validation import BaseModel
 
 
 class Player(ABC, BaseModel):
-    def __init__(self, game: Game) -> None:  # type: ignore
+    def __init__(self, game: "Game") -> None:  # type: ignore  # noqa: F821
         self.GAME = game
         self.undo_stack = Stack()  # For undo and redo functionality
 
@@ -41,7 +40,7 @@ class CodeSetter(Player, ABC):
 
 
 class CodeCracker(Player, ABC):
-    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore
+    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore  # noqa: F821
         super().__init__(game)
         self._win_message = FStringTemplate(win_msg)
         self._lose_message = FStringTemplate(lose_msg)
