@@ -102,6 +102,7 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             combination (Tuple[int, ...]): The combination to be validated.
 
         Raises:
+            TypeValidationError: If the combination is not a tuple or list of integers.
             RangeError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
         """
         if len(combination) != self.n_of_dots:
