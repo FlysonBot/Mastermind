@@ -20,7 +20,7 @@
         "black"
     ],
     "terminal.integrated.env.linux": {
-        "PYTHONPATH": "${workspaceFolder}"
+        "PYTHONPATH": "${FOLDER_NAME:workspaceFolder}"
     },
     "makefile.makefilePath": "docs/Makefile",
     "makefile.configureOnOpen": false
