@@ -41,3 +41,9 @@ class Game:
             Optional[str]: A command from the player, if any.
         """
         return self._game_flow.resume_game()
+
+    def __len__(self) -> int:
+        """
+        Returns the number of attempts made in the game.
+        """
+        return len(self._board)
