@@ -37,15 +37,16 @@ class GameParameter(ValidatedClass):
             bool | None: The win status, or None if the game is still in progress.
         """
 
-        if self._last_guess_is_secret(self):
+        if len(self) == 0:
+            self._win_status = None
+            return self._win_status
+
+        if self._last_guess_is_secret() or self._last_feedback_is_perfect():
             self._win_status = True
 
-        elif self._last_feedback_is_perfect(self):
-            self._win_status = True
-
-        elif self._reached_maximum_attempts(self):
+        elif self._reached_maximum_attempts():
             self._win_status = False
-        
+
         else:
             self._win_status = None
 
