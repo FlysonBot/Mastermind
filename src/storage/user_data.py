@@ -31,10 +31,10 @@ class UserDataManager:
     @classmethod
     def _ensure_directory_exists(cls) -> None:
         """This method creates the directory if it does not already exist."""
-        directory = os.path.dirname(cls._file_path)
-        if not directory:
+        if directory := os.path.dirname(cls._file_path):
+            os.makedirs(directory, exist_ok=True)
+        else:
             raise ValueError("cls._file_path must include a directory component")
-        os.makedirs(directory, exist_ok=True)
 
     def _load_data(self) -> None:
         """
