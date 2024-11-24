@@ -30,6 +30,19 @@ class TestFStringTemplate(unittest.TestCase):
         formatted_string = template.eval(name="Alice", age=30, city="New York")
         self.assertEqual(formatted_string, "Hello, Alice! You are 30 years old.")
 
+    def test_empty_template(self):
+        template = FStringTemplate("")
+        self.assertEqual(template.eval(), "")
+
+    def test_nested_brackets(self):
+        template = FStringTemplate("{{name}}")
+        self.assertEqual(template.eval(name="Alice"), "{name}")
+
+    def test_invalid_expression(self):
+        template = FStringTemplate("{1+}")
+        with self.assertRaises(KeyError):
+            template.eval()
+
 
 if __name__ == "__main__":
     unittest.main()
