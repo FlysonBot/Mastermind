@@ -36,14 +36,29 @@ class TestPersistentCacheManager(unittest.TestCase):
         expected_path = os.path.join(self.cache_dir, f"{test_key}.cache")
         self.assertEqual(file_path, expected_path)
 
-    def test_set_and_get(self):
-        """Test that values can be set and retrieved from the cache"""
+    def test_set_and_get_within_instance(self):
+        """Test that values can be set and retrieved within the same instance"""
         test_key = "test_key"
         test_value = {"data": [1, 2, 3]}
-        PersistentCacheManager.set(test_key, test_value)
-        retrieved_value = PersistentCacheManager.__getattr__(test_key)
+        manager = PersistentCacheManager()
+        manager.set(test_key, test_value)
+        retrieved_value = manager.__getattr__(test_key)
         self.assertEqual(retrieved_value, test_value)
 
+    def test_persistence_across_instances(self):
+        """Test that values persist across different instances of PersistentCacheManager"""
+        test_key = "test_key"
+        test_value = {"data": [1, 2, 3]}
+
+        # Set value with the first instance
+        first_manager = PersistentCacheManager()
+        first_manager.set(test_key, test_value)
+
+        # Retrieve value with a new instance
+        second_manager = PersistentCacheManager()
+        retrieved_value = second_manager.__getattr__(test_key)
+        self.assertEqual(retrieved_value, test_value)
+    
     def test_get_non_existent_key(self):
         """Test that getting a non-existent key returns None"""
         self.assertIsNone(PersistentCacheManager.__getattr__("non_existent_key"))
