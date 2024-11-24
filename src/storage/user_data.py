@@ -77,7 +77,9 @@ class UserDataManager:
 
     def _modify_item(self, key: str, value: Any) -> None:
         """
-        Modifies the value associated with the given key, and saves the changes.
+        Modify the value associated with the given key in the internal dictionary.
+        If the key is one of the instance attribute, it modify that instead.
+        After modifying the internal dictionary, it saves the changes to the file.
 
         Args:
             key (str): The key to modify the value for.

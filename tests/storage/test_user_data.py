@@ -1,8 +1,8 @@
 import os
+import pickle
+import tempfile
 import unittest
 from unittest.mock import patch
-import tempfile
-import pickle
 
 from src.storage.user_data import UserDataManager
 
@@ -32,12 +32,17 @@ class TestUserDataManager(unittest.TestCase):
 
     def test_load_data(self):
         """Test that data is loaded from the file"""
-        with patch("builtins.open", unittest.mock.mock_open(read_data=pickle.dumps(self.test_data))):
+        with patch(
+            "builtins.open",
+            unittest.mock.mock_open(read_data=pickle.dumps(self.test_data)),
+        ):
             manager = UserDataManager()
             manager._load_data()
             self.assertEqual(manager._data, self.test_data)
 
-        with patch("builtins.open", unittest.mock.mock_open(read_data=b"corrupted data")):
+        with patch(
+            "builtins.open", unittest.mock.mock_open(read_data=b"corrupted data")
+        ):
             manager = UserDataManager()
             self.assertRaises(pickle.UnpicklingError, manager._load_data)
 
