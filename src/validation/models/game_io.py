@@ -2,9 +2,9 @@ from typing import Any, Tuple
 
 from src.validation.base import (
     InputConversionError,
+    RangeError,
     TypeValidationError,
     ValidationModel,
-    RangeError,
 )
 from src.validation.models.numeric import NumberOfColors, NumberOfDots
 
@@ -86,7 +86,9 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             value = self.convert(value)
 
         if not isinstance(value, (tuple, list)):
-            raise TypeValidationError("A combination must be a tuple of integers")
+            raise TypeValidationError(
+                "A combination must be a tuple or list of integers"
+            )
 
         self.validate_combination(value)
 
@@ -106,10 +108,11 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             raise RangeError(f"Combination must have {self.n_of_dots} dots")
 
         for dot in combination:
-            if not isinstance(dot, int) or dot < 1 or dot > self.n_of_colors:
-                raise RangeError(
-                    f"Dots must be integers between 1 and {self.n_of_colors}"
-                )
+            if not isinstance(dot, int):
+                raise TypeValidationError("Dots must be integers")
+
+            elif dot < 1 or dot > self.n_of_colors:
+                raise RangeError(f"Dots must be between 1 and {self.n_of_colors}")
 
 
 class ValidFeedback(ValidationModel[Tuple[int, int]]):
@@ -131,10 +134,9 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
         Validates the arguments used to initialize the ValidFeedback.
 
         Raises:
-            ValueError: If the number_of_dots parameter is missing.
+            RangeError: If the number_of_dots parameter is not in valid range.
         """
-        if not hasattr(self, "number_of_dots"):
-            raise ValueError("number_of_dots is required")
+        NumberOfDots().validate_value(self.number_of_dots)
 
     def convert(self, value: str) -> Tuple[int, int]:
         """
@@ -173,8 +175,13 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
         if isinstance(value, str):
             value = self.convert(value)
 
-        if not isinstance(value, tuple) or len(value) != 2:
-            raise TypeValidationError("Feedback must be a tuple of two integers")
+        if not isinstance(value, (tuple, list)) or len(value) != 2:
+            raise TypeValidationError(
+                "Feedback must be a tuple or list of two integers"
+            )
+
+        if sum(value) > self.number_of_dots:
+            raise ValueError(f"Feedback values sum cannot exceed {self.number_of_dots}")
 
         for num in value:
             if not isinstance(num, int) or num < 0 or num > self.number_of_dots:
