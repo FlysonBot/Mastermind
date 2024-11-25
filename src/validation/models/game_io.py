@@ -102,6 +102,7 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
             combination (Tuple[int, ...]): The combination to be validated.
 
         Raises:
+            InputConversionError: If the input cannot be converted to a tuple of integers.
             TypeValidationError: If the combination is not a tuple or list of integers.
             RangeError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
         """
@@ -128,6 +129,7 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
         """
         Initializes the ValidFeedback with the number of dots.
         """
+        self.convert = lambda value: _GameValidationUtils.convert(value)
         super().__init__(number_of_dots=number_of_dots)
 
     def validate_arguments(self) -> None:
@@ -138,26 +140,6 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
             RangeError: If the number_of_dots parameter is not in valid range.
         """
         NumberOfDots().validate_value(self.number_of_dots)
-
-    def convert(self, value: str) -> Tuple[int, int]:
-        """
-        Converts a string representation of a feedback into a tuple of two integers.
-
-        Args:
-            value (str): The string value to be converted.
-
-        Returns:
-            Tuple[int, int]: The converted tuple of two integers.
-
-        Raises:
-            InputConversionError: If the input string cannot be converted to a valid tuple of two integers.
-        """
-        try:
-            if "," in value:
-                return tuple(map(int, value.split(",")))
-            return tuple(map(int, value))
-        except ValueError as e:
-            raise InputConversionError("Invalid feedback format") from e
 
     def validate_value(self, value: Any) -> Tuple[int, int]:
         """
@@ -170,23 +152,30 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
             Tuple[int, int]: The validated feedback.
 
         Raises:
+            InputConversionError: If the input cannot be converted a tuple of integers.
             TypeValidationError: If the feedback is not a tuple of two integers.
-            ValueError: If the feedback values are not within the valid range.
+            RangeError: If the feedback values are not within the valid range.
         """
         if isinstance(value, str):
             value = self.convert(value)
 
-        if not isinstance(value, (tuple, list)) or len(value) != 2:
+        if not isinstance(value, (tuple, list)):
             raise TypeValidationError(
                 "Feedback must be a tuple or list of two integers"
             )
 
+        if len(value) != 2:
+            raise RangeError("Feedback must be a tuple of two integers")
+
         if sum(value) > self.number_of_dots:
-            raise ValueError(f"Feedback values sum cannot exceed {self.number_of_dots}")
+            raise RangeError(f"Feedback values sum cannot exceed {self.number_of_dots}")
 
         for num in value:
-            if not isinstance(num, int) or num < 0 or num > self.number_of_dots:
-                raise ValueError(
+            if not isinstance(num, int):
+                raise TypeValidationError("Feedback values must be integers")
+
+            if num < 0 or num > self.number_of_dots:
+                raise RangeError(
                     f"Feedback values must be between 0 and {self.number_of_dots}"
                 )
 
