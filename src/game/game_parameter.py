@@ -24,9 +24,9 @@ class GameParameter(ValidatedClass):
     ) -> None:
         self.MAXIMUM_ATTEMPTS = maximum_attempts
         self.GAME_MODE = game_mode
+        self.game_started = TrueFuse(False)  # validation enforced by ValidatedClass
 
         self._board = GameBoard(number_of_colors, number_of_dots)
-        self._game_started = TrueFuse(False)  # validation enforced by ValidatedClass
         self._win_status = None
 
     def check_and_update_win_status(self) -> bool | None:
@@ -63,10 +63,6 @@ class GameParameter(ValidatedClass):
     @property
     def win_status(self) -> Optional[bool]:
         return self._win_status
-
-    @property
-    def game_started(self) -> bool:
-        return self._game_started
 
     def __len__(self) -> int:
         return len(self._board)
