@@ -17,6 +17,8 @@ class TestValidCombination(unittest.TestCase):
         self.assertEqual(model.validate_value("123"), (1, 2, 3))
         self.assertEqual(model.validate_value((1, 2, 3)), (1, 2, 3))
         self.assertEqual(model.validate_value([1, 2, 3]), (1, 2, 3))
+        self.assertEqual(model.validate_value("6,6,6"), (6, 6, 6))
+        self.assertEqual(model.validate_value("4,4,5"), (4, 4, 5))
 
     def test_validate_value_with_invalid_input(self):
         """Test that ValidCombination raises errors for invalid combinations"""

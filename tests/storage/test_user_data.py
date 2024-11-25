@@ -54,6 +54,11 @@ class TestUserDataManager(unittest.TestCase):
             manager.save_data()
             mock_file().write.assert_called_with(pickle.dumps(self.test_data))
 
+            with self.assertRaises(PermissionError):
+                mock_file.side_effect = PermissionError()
+                manager = UserDataManager()
+                manager.save_data()
+
     def test_clear_all(self):
         """Test that all data can be cleared"""
         manager = UserDataManager()
