@@ -18,8 +18,8 @@ class PlayerLogic:
         game (GameState): The state of the game.
     """
 
-    def __init__(self, game: GameParameter) -> None:
-        self.game_state = game
+    def __init__(self, game_state: GameParameter) -> None:
+        self.game_state = game_state
 
     @property
     def GAME_MODE(self) -> str:

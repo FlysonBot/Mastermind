@@ -21,7 +21,7 @@ class Game:
             number_of_colors, number_of_dots, maximum_attempts, game_mode
         )
         self._board = self._state._board
-        self._player_logic = PlayerLogic(self)
+        self._player_logic = PlayerLogic(self._state)
         self._game_flow = GameFlow(self._state, self._player_logic)
 
     def start_game(self) -> Optional[str]:
