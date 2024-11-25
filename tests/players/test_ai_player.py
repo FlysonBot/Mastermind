@@ -2,7 +2,7 @@ import unittest
 
 from src.game.game import Game
 from src.players.ai_player import AICodeCracker, AICodeSetter
-from src.validation.models.game_io import ValidCombination
+from src.validation.models.valid_combination import ValidCombination
 
 
 class TestAICodeSetter(unittest.TestCase):

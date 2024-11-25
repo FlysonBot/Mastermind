@@ -24,7 +24,7 @@ class TestHumanCodeSetter(unittest.TestCase):
     def test_set_secret_code_invalid_input(self, mock_stdout, mock_getpass):
         mock_getpass.side_effect = ["123a", "1234", "1235", "1235", "1235"]
         self.human_code_setter.set_secret_code()
-        self.assertIn("Invalid combination format", mock_stdout.getvalue())
+        self.assertIn("Invalid input format", mock_stdout.getvalue())
         self.assertIn("To get more help, enter '?'", mock_stdout.getvalue())
         self.assertIn("Code does not match. Try again.", mock_stdout.getvalue())
 

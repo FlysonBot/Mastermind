@@ -34,7 +34,9 @@ class TestExternalCodeSetter(unittest.TestCase):
     def test_get_invalid_feedback_out_of_range(self, mock_stdout, mock_input):
         mock_input.side_effect = ["5,1", "2,1"]
         self.code_setter.get_feedback((1, 2, 3, 4))
-        self.assertIn("Feedback values sum cannot exceed 4", mock_stdout.getvalue())
+        self.assertIn(
+            "Feedback must consist of 2 integer in range [0, 4)", mock_stdout.getvalue()
+        )
 
     @patch("src.players.external_player.input")
     def test_discard_game(self, mock_input):
