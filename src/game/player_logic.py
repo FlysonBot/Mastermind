@@ -18,8 +18,8 @@ class PlayerLogic:
         game (GameState): The state of the game.
     """
 
-    def __init__(self, game: GameParameter) -> None:
-        self.game_state = game
+    def __init__(self, game_state: GameParameter) -> None:
+        self.game_state = game_state
 
     @property
     def GAME_MODE(self) -> str:
@@ -65,7 +65,7 @@ class PlayerLogic:
 
             # Process command
             if feedback in {"q", "d"}:  # quit or discard
-                break
+                return feedback
             if feedback == "u":  # undo
                 continue  # since guess haven't been submitted, skip = undo
 
@@ -99,9 +99,9 @@ class PlayerLogic:
         Raises:
             NotImplementedError: If the game has ended.
         """
-        if self._win_status is not None:
+        if self.game_state.win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
 
         self.PLAYER_CRACKER.clear_undo()
         self.PLAYER_SETTER.clear_undo()
-        self._board.add_guess(guess, feedback)
+        self.game_state._board.add_guess(guess, feedback)

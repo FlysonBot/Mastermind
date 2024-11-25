@@ -24,6 +24,15 @@ class TestGenerateFeedback(unittest.TestCase):
         self.assertEqual(black_pegs, 2)
         self.assertEqual(white_pegs, 0)
 
+    def test_generate_feedback_with_white_pegs(self):
+        """Test that generate_feedback correctly counts colors in wrong positions"""
+        guess = (1, 2, 3)
+        secret = (3, 1, 2)
+        number_of_colors = 4
+        black_pegs, white_pegs = generate_feedback(guess, secret, number_of_colors)
+        self.assertEqual(black_pegs, 0)
+        self.assertEqual(white_pegs, 3)
+
     def test_generate_feedback_with_no_matches(self):
         """Test that generate_feedback correctly counts when there are no matches"""
         guess = (1, 2, 3)

@@ -4,14 +4,18 @@ from typing import Optional, Union
 from src.players.abstract_player import CodeCracker, CodeSetter
 from src.utils import generate_feedback
 from src.validation import ValidCombination
-from src.validation.base.exceptions import RangeError, TypeValidationError
+from src.validation.base.exceptions import (
+    InputConversionError,
+    RangeError,
+    TypeValidationError,
+)
 
 
 class HumanCodeSetter(CodeSetter):
     def set_secret_code(self) -> Optional[str]:
         valid_guess = ValidCombination(
-            number_of_dots=self.GAME.number_of_dots,
-            number_of_colors=self.GAME.number_of_colors,
+            number_of_dots=self.game_state.number_of_dots,
+            number_of_colors=self.game_state.number_of_colors,
         )
 
         while True:
@@ -19,7 +23,7 @@ class HumanCodeSetter(CodeSetter):
 
             if secret == "?":
                 hint = f"""
-                Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
+                Enter a {self.game_state.number_of_dots}-digit number with digit ranging from 1 to {self.game_state.number_of_colors}.
                 For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
                 Or, you can enter a command:
                 (?) for help
@@ -35,13 +39,13 @@ class HumanCodeSetter(CodeSetter):
             try:
                 valid_guess.validate_value(secret)
 
-            except TypeValidationError as e:
+            except (TypeValidationError, InputConversionError) as e:
                 print(e)
                 print("To get more help, enter '?'")
 
             except RangeError:
                 print(
-                    f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]"
+                    f"Guess must consist of {self.game_state.number_of_dots} integers in range [1, {self.game_state.number_of_colors}]"
                 )
                 print("To get more help, enter '?'")
 
@@ -59,19 +63,21 @@ class HumanCodeSetter(CodeSetter):
         if not hasattr(self, "SECRET_CODE"):
             raise NotImplementedError("Secret code not set yet.")
 
-        return generate_feedback(guess, self.SECRET_CODE, self.GAME.number_of_colors)
+        return generate_feedback(
+            guess, self.SECRET_CODE, self.game_state.number_of_colors
+        )
 
 
 class HumanCodeCracker(CodeCracker):
-    def __init__(self, game: "Game") -> None:  # type: ignore  # noqa: F821
+    def __init__(self, player_logic: "PlayerLogic") -> None:  # type: ignore  # noqa: F821
         win_message = "Congratulations! You won in {step} steps!"
         lose_message = "Sorry, you lost. The secret code was {step}."
-        super().__init__(game, win_message, lose_message)
+        super().__init__(player_logic, win_message, lose_message)
 
     def obtain_guess(self) -> Union[tuple, str]:
         valid_guess = ValidCombination(
-            number_of_dots=self.GAME.number_of_dots,
-            number_of_colors=self.GAME.number_of_colors,
+            number_of_dots=self.game_state.number_of_dots,
+            number_of_colors=self.game_state.number_of_colors,
         )
 
         while True:
@@ -79,7 +85,7 @@ class HumanCodeCracker(CodeCracker):
 
             if guess == "?":
                 hint = f"""
-                Enter a {self.GAME.number_of_dots}-digit number with digit ranging from 1 to {self.GAME.number_of_colors}.
+                Enter a {self.game_state.number_of_dots}-digit number with digit ranging from 1 to {self.game_state.number_of_colors}.
                 For example, a 6-digit 4-color code can be 123412, or 1,2,3,4,1,2
                 Or, you can enter a command:
                 (?) for help
@@ -105,12 +111,12 @@ class HumanCodeCracker(CodeCracker):
             try:
                 return valid_guess.validate_value(guess)
 
-            except TypeValidationError as e:
+            except (TypeValidationError, InputConversionError) as e:
                 print(e)
                 print("To get more help, enter '?'")
 
             except RangeError:
                 print(
-                    f"Guess must consist of {self.GAME.number_of_dots} integers in range [1, {self.GAME.number_of_colors}]"
+                    f"Guess must consist of {self.game_state.number_of_dots} integers in range [1, {self.game_state.number_of_colors}]"
                 )
                 print("To get more help, enter '?'")
