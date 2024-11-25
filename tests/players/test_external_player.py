@@ -25,9 +25,7 @@ class TestExternalCodeSetter(unittest.TestCase):
     def test_get_invalid_feedback_wrong_format(self, mock_stdout, mock_input):
         mock_input.side_effect = ["2 1", "2,,1", "12"]
         self.code_setter.get_feedback((1, 2, 3, 4))
-        self.assertIn(
-            "Feedback must consist of 2 integer in range [0, 4)", mock_stdout.getvalue()
-        )
+        self.assertIn("Invalid input format", mock_stdout.getvalue())
 
     @patch("src.players.external_player.input")
     @patch("sys.stdout", new_callable=StringIO)

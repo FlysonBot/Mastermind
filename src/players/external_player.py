@@ -1,7 +1,13 @@
 from typing import Union
 
 from src.players.abstract_player import CodeSetter
-from src.validation import ValidationError, ValidFeedback
+from src.validation import ValidFeedback
+from src.validation.base.exceptions import (
+    InputConversionError,
+    RangeError,
+    TypeValidationError,
+)
+
 
 class ExternalCodeSetter(CodeSetter):
     def set_secret_code(self) -> None:
@@ -36,10 +42,11 @@ class ExternalCodeSetter(CodeSetter):
             try:
                 valid_feedback.value = valid_feedback.validate_value(feedback)
                 return valid_feedback.value
-            except ValueError as e:
+            except (TypeValidationError, InputConversionError) as e:
                 print(e)
                 print("To get more help, enter '?'")
-            except ValidationError:
+            
+            except RangeError:
                 print(
                     f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})"
                 )
