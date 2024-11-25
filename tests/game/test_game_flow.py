@@ -46,7 +46,7 @@ class TestGameFlow(unittest.TestCase):
 
         self.game._player_logic.PLAYER_CRACKER.win_message = MagicMock()
         self.game_state.check_and_update_win_status = MagicMock(return_value=True)
-        self.game_state._win_status = MagicMock(return_value=True)
+        self.game_state._win_status = True
         self.game_flow.output_result()
         self.game._player_logic.PLAYER_CRACKER.win_message.assert_called()
 
@@ -55,15 +55,15 @@ class TestGameFlow(unittest.TestCase):
 
         self.game._player_logic.PLAYER_CRACKER.lose_message = MagicMock()
         self.game_state.check_and_update_win_status = MagicMock(return_value=False)
-        self.game_state._win_status = MagicMock(return_value=False)
+        self.game_state._win_status = False
         self.game_flow.output_result()
-        self.game._player_logic.PLAYER_CRACKER.lose_message.assert_not_called()
+        self.game._player_logic.PLAYER_CRACKER.lose_message.assert_called()
 
     def test_output_continue(self):
         self.game._player_logic.initialize_players()
 
         self.game_state.check_and_update_win_status = MagicMock(return_value=None)
-        self.game_state._win_status = MagicMock(return_value=None)
+        self.game_state._win_status = None
         self.assertIsNone(self.game_flow.output_result())
 
 
