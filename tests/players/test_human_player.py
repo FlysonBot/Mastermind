@@ -8,10 +8,8 @@ from src.players.human_player import HumanCodeCracker, HumanCodeSetter
 
 class TestHumanCodeSetter(unittest.TestCase):
     def setUp(self):
-        self.game = MagicMock(spec=Game)
-        self.game.number_of_dots = 4
-        self.game.number_of_colors = 6
-        self.human_code_setter = HumanCodeSetter(self.game)
+        self.game = Game(6, 4, 10, "HvH")
+        self.human_code_setter = HumanCodeSetter(self.game._player_logic)
 
     @patch("src.players.human_player.getpass")
     def test_set_secret_code(self, mock_getpass):
@@ -72,10 +70,8 @@ class TestHumanCodeSetter(unittest.TestCase):
 
 class TestHumanCodeCracker(unittest.TestCase):
     def setUp(self):
-        self.game = MagicMock(spec=Game)
-        self.game.number_of_dots = 4
-        self.game.number_of_colors = 6
-        self.human_code_cracker = HumanCodeCracker(self.game)
+        self.game = Game(6, 4, 10, "HvH")
+        self.human_code_cracker = HumanCodeCracker(self.game._player_logic)
 
     @patch("builtins.input")
     def test_obtain_guess(self, mock_input):

@@ -8,7 +8,7 @@ from src.validation.models.valid_combination import ValidCombination
 class TestAICodeSetter(unittest.TestCase):
     def setUp(self):
         self.game = Game(6, 4, 10, "AIvH")
-        self.code_setter = AICodeSetter(self.game)
+        self.code_setter = AICodeSetter(self.game._player_logic)
 
     def test_set_secret_code(self):
         self.code_setter.set_secret_code()
