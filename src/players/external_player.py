@@ -9,7 +9,7 @@ class ExternalCodeSetter(CodeSetter):
         pass  # There is no code available for external game, skip it
 
     def get_feedback(self, guess: tuple) -> Union[tuple, str]:
-        valid_feedback = ValidFeedback((0, 0), number_of_dots=self.GAME.number_of_dots)
+        valid_feedback = ValidFeedback(number_of_dots=self.GAME.number_of_dots)
         while True:
             feedback = input("Enter the feedback: ")
             if feedback == "?":
