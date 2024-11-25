@@ -24,12 +24,12 @@ class GameFlow:
         Returns:
             Optional[str]: A command from the player, if any.
         """
-        if self._game_started:
+        if self.game_state.game_started:
             raise NotImplementedError("Game has already started.")
 
-        self._game_started = True
-        self.initialize_players()
-        self.PLAYER_SETTER.set_secret_code()
+        self.game_state.game_started = True
+        self.player_logic.initialize_players()
+        self.player_logic.PLAYER_SETTER.set_secret_code()
 
         return self._play_game()
 
@@ -40,7 +40,7 @@ class GameFlow:
         Returns:
             Optional[str]: A command from the player, if any.
         """
-        if not self._game_started:
+        if not self.game_state.game_started:
             raise NotImplementedError("Game has not started yet.")
 
         return self._play_game()
@@ -64,10 +64,10 @@ class GameFlow:
         """
         self.game_state.check_and_update_win_status()
 
-        if self.win_status is None:
+        if self.game_state.win_status is None:
             return
 
-        if self.win_status:
+        if self.game_state.win_status:
             self.player_logic.PLAYER_CRACKER.win_message()
 
         else:

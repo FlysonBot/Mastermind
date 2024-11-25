@@ -1,10 +1,11 @@
-from src.validation.models.game_io import ValidCombination, ValidFeedback
 from src.validation.models.numeric import (
     MaximumAttempts,
     NumberOfColors,
     NumberOfDots,
     NumberOfGuessesMade,
 )
+from src.validation.models.valid_combination import ValidCombination
+from src.validation.models.valid_feedback import ValidFeedback
 
 __all__ = [
     "ValidCombination",
