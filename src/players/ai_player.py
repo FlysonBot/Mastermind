@@ -19,4 +19,11 @@ class AICodeSetter(CodeSetter):
 
 
 class AICodeCracker(CodeCracker):
-    pass  # TODO: Implement solver logic.
+    def __init__(self, game: "Game") -> None:  # type: ignore  # noqa: F821
+        win_message = "Congratulations! You won in {step} steps!"
+        lose_message = "Sorry, you lost. The secret code was {step}."
+        super().__init__(game, win_message, lose_message)
+
+    def obtain_guess(self) -> tuple:
+        # TODO: Implement AI solver logic to generate guess.
+        pass
