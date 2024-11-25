@@ -47,6 +47,19 @@ class _GameValidationUtils:
         NumberOfDots().validate_value(instance.n_of_dots)
         NumberOfColors().validate_value(instance.n_of_colors)
 
+    @staticmethod
+    def validate_integer_range(values: int, low_limit: int, high_limit: int) -> None:
+        for value in values:
+            if not isinstance(value, int):
+                raise TypeValidationError(
+                    f"Value {value} is not an integer"
+                )
+            
+            if value < low_limit or value > high_limit:
+                raise RangeError(
+                    f"Value {value} is not in range [{low_limit}, {high_limit}]"
+                )
+
 
 class ValidCombination(ValidationModel[Tuple[int, ...]]):
     """
@@ -90,31 +103,12 @@ class ValidCombination(ValidationModel[Tuple[int, ...]]):
                 "A combination must be a tuple or list of integers"
             )
 
-        self.validate_combination(value)
-
-        return tuple(value)
-
-    def validate_combination(self, combination: Tuple[int, ...]) -> None:
-        """
-        Validates the individual dots in the combination.
-
-        Args:
-            combination (Tuple[int, ...]): The combination to be validated.
-
-        Raises:
-            InputConversionError: If the input cannot be converted to a tuple of integers.
-            TypeValidationError: If the combination is not a tuple or list of integers.
-            RangeError: If the combination does not have the correct number of dots or the dot values are not within the valid range.
-        """
-        if len(combination) != self.n_of_dots:
+        if len(value) != self.n_of_dots:
             raise RangeError(f"Combination must have {self.n_of_dots} dots")
 
-        for dot in combination:
-            if not isinstance(dot, int):
-                raise TypeValidationError("Dots must be integers")
+        _GameValidationUtils.validate_integer_range(value, 1, self.n_of_colors)
 
-            elif dot < 1 or dot > self.n_of_colors:
-                raise RangeError(f"Dots must be between 1 and {self.n_of_colors}")
+        return tuple(value)
 
 
 class ValidFeedback(ValidationModel[Tuple[int, int]]):
@@ -170,13 +164,6 @@ class ValidFeedback(ValidationModel[Tuple[int, int]]):
         if sum(value) > self.number_of_dots:
             raise RangeError(f"Feedback values sum cannot exceed {self.number_of_dots}")
 
-        for num in value:
-            if not isinstance(num, int):
-                raise TypeValidationError("Feedback values must be integers")
-
-            if num < 0 or num > self.number_of_dots:
-                raise RangeError(
-                    f"Feedback values must be between 0 and {self.number_of_dots}"
-                )
+        _GameValidationUtils.validate_integer_range(value, 0, self.number_of_dots)
 
         return value
