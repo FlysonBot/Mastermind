@@ -1,9 +1,9 @@
 import unittest
-from unittest.mock import patch
 from io import StringIO
+from unittest.mock import patch
 
-from src.players.external_player import ExternalCodeSetter
 from src.game.game import Game
+from src.players.external_player import ExternalCodeSetter
 
 
 class TestExternalCodeSetter(unittest.TestCase):
@@ -37,6 +37,16 @@ class TestExternalCodeSetter(unittest.TestCase):
         )
 
     @patch("src.players.external_player.input")
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_help(self, mock_stdout, mock_input):
+        mock_input.side_effect = ["?", "12"]
+        self.code_setter.get_feedback((1, 2, 3, 4))
+        self.assertIn(
+            "Enter a 2 digit number (optionally separated by comma) between 0 and 4.",
+            mock_stdout.getvalue(),
+        )
+
+    @patch("src.players.external_player.input")
     def test_discard_game(self, mock_input):
         mock_input.side_effect = ["d"]
         self.assertEqual(self.code_setter.get_feedback((1, 2, 3, 4)), "d")
@@ -54,4 +64,3 @@ class TestExternalCodeSetter(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

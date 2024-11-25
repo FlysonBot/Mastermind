@@ -40,9 +40,11 @@ class TestPlayerLogic(unittest.TestCase):
     @patch("src.players.AICodeSetter.get_feedback")
     def test_process_player_guessing(self, mock_get_feedback, mock_obtain_guess):
         mock_obtain_guess.side_effect = [(1, 2, 3, 4), "q"]
-        mock_get_feedback.side_effect = [(2, 2), "q"]
+        mock_get_feedback.side_effect = [(2, 2)]
 
-        self.player_logic.game_state.GAME_MODE = "HvAI"
+        self.player_logic.game_state.GAME_MODE = (
+            "HvAI"  # for easier testing (mock output)
+        )
         self.player_logic.initialize_players()
         self.assertEqual(self.player_logic.process_player_guessing(), "q")
         self.assertEqual(list(self.game._board._guesses), [(1, 2, 3, 4)])
@@ -50,22 +52,29 @@ class TestPlayerLogic(unittest.TestCase):
 
     @patch("src.players.HumanCodeCracker.obtain_guess")
     @patch("src.players.AICodeSetter.get_feedback")
-    def test_process_player_guessing_undo_and_redo(
+    def test_process_player_cracker_undo_and_redo(
         self, mock_get_feedback, mock_obtain_guess
     ):
         mock_obtain_guess.side_effect = [(1, 2, 3, 4), "u", "r", (1, 2, 3, 5), "d"]
         mock_get_feedback.side_effect = [(2, 2), (2, 1)]
         self.player_logic.game_state.GAME_MODE = "HvAI"
         self.player_logic.initialize_players()
-        
+
         self.assertEqual(self.player_logic.process_player_guessing(), "d")
         self.assertEqual(list(self.game._board._guesses), [(1, 2, 3, 4), (1, 2, 3, 5)])
         self.assertEqual(list(self.game._board._feedbacks), [(2, 2), (2, 1)])
 
-        self.player_logic.game_state.GAME_MODE = "AIvH"
+    @patch("src.players.HumanCodeCracker.obtain_guess")
+    @patch("src.players.AICodeSetter.get_feedback")
+    def test_process_player_setter_undo(self, mock_get_feedback, mock_obtain_guess):
+        mock_obtain_guess.side_effect = [(1, 2, 3, 4), (1, 2, 3, 5), (1, 2, 3, 6)]
+        mock_get_feedback.side_effect = [(2, 2), "u", "q"]
+        self.player_logic.game_state.GAME_MODE = "HvAI"
         self.player_logic.initialize_players()
-        with self.assertRaises(NotImplementedError):
-            self.player_logic.process_player_guessing()
+
+        self.assertEqual(self.player_logic.process_player_guessing(), "q")
+        self.assertEqual(list(self.game._board._guesses), [(1, 2, 3, 4)])
+        self.assertEqual(list(self.game._board._feedbacks), [(2, 2)])
 
 
 if __name__ == "__main__":
