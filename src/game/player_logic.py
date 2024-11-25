@@ -99,7 +99,7 @@ class PlayerLogic:
         Raises:
             NotImplementedError: If the game has ended.
         """
-        if self.game_state._win_status is not None:
+        if self.game_state.win_status is not None:
             raise NotImplementedError("Cannot make guess after game has ended.")
 
         self.PLAYER_CRACKER.clear_undo()

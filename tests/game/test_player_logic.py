@@ -76,6 +76,13 @@ class TestPlayerLogic(unittest.TestCase):
         self.assertEqual(list(self.game._board._guesses), [(1, 2, 3, 4)])
         self.assertEqual(list(self.game._board._feedbacks), [(2, 2)])
 
+    def test_cannot_make_guess_after_game_ended(self):
+        self.game._state._win_status = True
+        self.player_logic.game_state.GAME_MODE = "HvAI"
+        self.player_logic.initialize_players()
+        with self.assertRaises(NotImplementedError):
+            self.player_logic.submit_guess((1, 2, 3, 4), (1, 2))
+
 
 if __name__ == "__main__":
     unittest.main()

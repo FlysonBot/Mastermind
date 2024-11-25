@@ -61,7 +61,7 @@ class GameParameter(ValidatedClass):
         return self._board.NUMBER_OF_DOTS
 
     @property
-    def win_status(self) -> Optional[bool]:
+    def win_status(self) -> bool | None:
         return self._win_status
 
     def __len__(self) -> int:
