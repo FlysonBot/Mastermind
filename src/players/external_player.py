@@ -1,8 +1,7 @@
 from typing import Union
 
 from src.players.abstract_player import CodeSetter
-from src.validation import ValidFeedback, ValidationError
-
+from src.validation import ValidationError, ValidFeedback
 
 class ExternalCodeSetter(CodeSetter):
     def set_secret_code(self) -> None:
