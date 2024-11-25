@@ -65,7 +65,7 @@ class PlayerLogic:
 
             # Process command
             if feedback in {"q", "d"}:  # quit or discard
-                break
+                return feedback
             if feedback == "u":  # undo
                 continue  # since guess haven't been submitted, skip = undo
 
