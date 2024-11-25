@@ -31,7 +31,7 @@ class TrueFuse(StateValidator[bool]):
             )
         return value
 
-    def validate_modifications(self, new_value: Any) -> None:
+    def validate_modifications(self, new_value: Any) -> True:
         """
         Validates the modification to the value, ensuring it is set to True.
 
@@ -43,3 +43,4 @@ class TrueFuse(StateValidator[bool]):
         """
         if new_value is not True:
             raise InvalidModificationError("TrueFuse can only be modified to True")
+        return True

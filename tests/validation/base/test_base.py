@@ -1,5 +1,4 @@
 import unittest
-from dataclasses import dataclass
 from typing import Any, TypeVar
 
 from src.validation.base.base import StateValidator, ValidationModel, Validator
@@ -8,79 +7,127 @@ T = TypeVar("T")
 
 
 class TestValidator(unittest.TestCase):
-    def test_validate_value_abstract_method(self):
+    """Test suite for the Validator class"""
+
+    def test_validate_value_abstract(self):
+        """Test that validate_value is an abstract method"""
         with self.assertRaises(TypeError):
-            Validator[T]().validate_value(42)
+            Validator().validate_value(value=42)
 
 
 class TestValidationModel(unittest.TestCase):
+    """Test suite for the ValidationModel class"""
+
     def test_init_with_valid_kwargs(self):
+        """Test that ValidationModel can be initialized with valid keyword arguments"""
+
         class ConcreteValidationModel(ValidationModel[int]):
-            def validate_arguments(self) -> None:
-                pass
+            validate_value = None
+            validate_arguments = lambda self: None  # noqa: E731
 
-            def validate_value(self, value: Any) -> int:
-                return int(value)
-
-        model = ConcreteValidationModel(a=1, b=2)
+        model = ConcreteValidationModel(a=1, b=2, c=3)
         self.assertEqual(model.a, 1)
         self.assertEqual(model.b, 2)
+        self.assertEqual(model.c, 3)
 
     def test_init_with_invalid_kwargs(self):
+        """Test that ValidationModel raises an error with invalid keyword arguments"""
+
         class ConcreteValidationModel(ValidationModel[int]):
-            def validate_arguments(self) -> None:
+            validate_value = None
+
+            def validate_arguments(self):
                 if hasattr(self, "a") and self.a < 0:
                     raise ValueError("a must be non-negative")
 
-            def validate_value(self, value: Any) -> int:
-                return int(value)
-
         with self.assertRaises(ValueError) as context:
             ConcreteValidationModel(a=-1, b=2)
+
         self.assertEqual(str(context.exception), "a must be non-negative")
+
+    def test_validate_arguments_abstract(self):
+        """Test that validate_arguments is an abstract method"""
+        with self.assertRaises(TypeError):
+            ValidationModel[int]()
 
 
 class TestStateValidator(unittest.TestCase):
-    @dataclass
-    class ConcreteStateValidator(StateValidator[int]):
-        min_value: int = 0
-        max_value: int = 100
-
-        def validate_value(self, value: Any) -> int:
-            value = int(value)
-            if value < self.min_value or value > self.max_value:
-                raise ValueError(
-                    f"Value must be between {self.min_value} and {self.max_value}"
-                )
-            return value
-
-        def validate_modifications(self, new_value: Any) -> int:
-            value = self.validate_value(new_value)
-            if value < self.min_value or value > self.max_value:
-                raise ValueError(
-                    f"New value must be between {self.min_value} and {self.max_value}"
-                )
-            return value
+    """Test suite for the StateValidator class"""
 
     def test_init_with_valid_value(self):
-        validator = self.ConcreteStateValidator(50)
-        self.assertEqual(validator.value, 50)
+        """Test that StateValidator can be initialized with a valid value"""
+
+        class ConcreteStateValidator(StateValidator[int]):
+            validate_modifications = lambda self, new_value: None  # noqa: E731
+
+            def validate_value(self, value: Any) -> int:
+                return int(value)
+
+        validator = ConcreteStateValidator(42)
+        self.assertEqual(validator.value, 42)
 
     def test_init_with_invalid_value(self):
-        with self.assertRaises(ValueError) as context:
-            self.ConcreteStateValidator(-1)
-        self.assertEqual(str(context.exception), "Value must be between 0 and 100")
+        """Test that StateValidator raises an error with an invalid value"""
 
-    def test_set_value_with_valid_value(self):
-        validator = self.ConcreteStateValidator(50)
-        validator.value = 75
-        self.assertEqual(validator.value, 75)
+        class ConcreteStateValidator(StateValidator[int]):
+            validate_modifications = lambda self, new_value: None  # noqa: E731
 
-    def test_set_value_with_invalid_value(self):
-        validator = self.ConcreteStateValidator(50)
+            def validate_value(self, value: Any) -> None:
+                if value < 0:
+                    raise ValueError("Value must be non-negative")
+
         with self.assertRaises(ValueError) as context:
-            validator.value = -1
-        self.assertEqual(str(context.exception), "New value must be between 0 and 100")
+            ConcreteStateValidator(-1)
+
+        self.assertEqual(str(context.exception), "Value must be non-negative")
+
+    def test_value_property(self):
+        """Test that the value property works as expected"""
+
+        class ConcreteStateValidator(StateValidator[int]):
+            validate_modifications = lambda self, new_value: None  # noqa: E731
+
+            def validate_value(self, value: Any) -> int:
+                return int(value)
+
+        validator = ConcreteStateValidator(42)
+        self.assertEqual(validator.value, 42)
+
+    def test_value_setter_with_valid_value(self):
+        """Test that the value setter works with a valid value"""
+
+        class ConcreteStateValidator(StateValidator[int]):
+            def validate_value(self, value: Any) -> int:
+                return int(value)
+
+            def validate_modifications(self, new_value: Any) -> int:
+                return int(new_value)
+
+        validator = ConcreteStateValidator(42)
+        validator.value = 50
+        self.assertEqual(validator.value, 50)
+
+    def test_value_setter_with_invalid_value(self):
+        """Test that the value setter raises an error with an invalid value"""
+
+        class ConcreteStateValidator(StateValidator[int]):
+            def validate_value(self, value: Any) -> int:
+                return int(value)
+
+            def validate_modifications(self, new_value: Any) -> None:
+                if new_value < 0:
+                    raise ValueError("Value must be non-negative")
+
+        validator = ConcreteStateValidator(42)
+        with self.assertRaises(ValueError) as context:
+            validator.value = -10
+
+        self.assertEqual(str(context.exception), "Value must be non-negative")
+
+    def test_validate_modifications_abstract(self):
+        """Test that validate_modifications is an abstract method"""
+        with self.assertRaises(TypeError):
+            StateValidator[int](42)
 
 
 if __name__ == "__main__":

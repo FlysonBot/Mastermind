@@ -1,19 +1,19 @@
 from abc import ABC, abstractmethod
 
-from src.game import Game
 from src.utils import FStringTemplate, Stack
-from src.validation import BaseModel
 
 
-class Player(ABC, BaseModel):
-    def __init__(self, game: Game) -> None:  # type: ignore
-        self.GAME = game
+class Player(ABC):
+    def __init__(self, player_logic: "PlayerLogic") -> None:  # type: ignore  # noqa: F821
+        self.game_state = player_logic.game_state
         self.undo_stack = Stack()  # For undo and redo functionality
 
     @abstractmethod
     def undo(self, item: tuple) -> None:
-        if len(self.GAME._board) == 0:
-            raise self.GAME._board.EmptyBoardError("Cannot undo from empty board.")
+        if len(self.game_state._board) == 0:
+            raise self.game_state._board.EmptyBoardError(
+                "Cannot undo from empty board."
+            )
 
         # Item can be guess or feedback, varies by player type
         self.undo_stack.push(item)
@@ -37,24 +37,24 @@ class CodeSetter(Player, ABC):
         pass
 
     def undo(self) -> None:
-        super().undo(self.GAME._board.last_feedback())
+        super().undo(self.game_state._board.last_feedback())
 
 
 class CodeCracker(Player, ABC):
-    def __init__(self, game: "Game", win_msg: str, lose_msg: str) -> None:  # type: ignore
-        super().__init__(game)
+    def __init__(self, player_logic: "PlayerLogic", win_msg: str, lose_msg: str) -> None:  # type: ignore  # noqa: F821
+        super().__init__(player_logic)
         self._win_message = FStringTemplate(win_msg)
         self._lose_message = FStringTemplate(lose_msg)
 
     def win_message(self) -> None:
-        print(self._win_message.eval(step=len(self.GAME)))
+        print(self._win_message.eval(step=len(self.game_state)))
 
     def lose_message(self) -> None:
-        print(self._lose_message.eval(step=len(self.GAME)))
+        print(self._lose_message.eval(step=len(self.game_state)))
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
         pass
 
     def undo(self) -> None:
-        super().undo(self.GAME._board.last_guess())
+        super().undo(self.game_state._board.last_guess())

@@ -58,7 +58,7 @@ class GameHistoryMenu(DataDisplayMenu):
         """
         render_dataframe(data)
 
-    def _get_empty_message(self) -> str:
+    def _empty_message(self) -> str:
         """
         Returns the message to display when there is no game history.
         """
@@ -103,7 +103,7 @@ class ResumeGameMenu(DataDisplayMenu):
         render_dataframe(data)
         print("\n(0) Return to Main Menu")
 
-    def _get_empty_message(self) -> str:
+    def _empty_message(self) -> str:
         """
         Returns the message to display when there are no continuable games.
         """

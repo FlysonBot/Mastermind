@@ -31,7 +31,10 @@ class UserDataManager:
     @classmethod
     def _ensure_directory_exists(cls) -> None:
         """This method creates the directory if it does not already exist."""
-        os.makedirs("data", exist_ok=True)
+        if directory := os.path.dirname(cls._file_path):
+            os.makedirs(directory, exist_ok=True)
+        else:
+            raise ValueError("cls._file_path must include a directory component")
 
     def _load_data(self) -> None:
         """
@@ -74,7 +77,9 @@ class UserDataManager:
 
     def _modify_item(self, key: str, value: Any) -> None:
         """
-        Modifies the value associated with the given key, and saves the changes.
+        Modify the value associated with the given key in the internal dictionary.
+        If the key is one of the instance attribute, it modify that instead.
+        After modifying the internal dictionary, it saves the changes to the file.
 
         Args:
             key (str): The key to modify the value for.

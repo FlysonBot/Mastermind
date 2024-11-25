@@ -25,7 +25,10 @@ class BaseMenu(ABC):
         """
         Returns the width of the menu, based on the maximum length of the menu items.
         """
-        return max((len(key) for key in self.menu.keys()), default=len(self.name) + 8)
+        return max(
+            (len(key) + len(description) + 2 for key, description in self.menu.items()),
+            default=len(self.name) + 8,
+        )
 
     def display(self) -> None:
         """

@@ -1,10 +1,10 @@
 from typing import Optional
 
 from src.game.board import GameBoard
-from src.validation import TrueFuse
+from src.validation import TrueFuse, ValidatedClass
 
 
-class GameParameter:
+class GameParameter(ValidatedClass):
     """
     Represents the state of the Mastermind game.
 
@@ -24,9 +24,9 @@ class GameParameter:
     ) -> None:
         self.MAXIMUM_ATTEMPTS = maximum_attempts
         self.GAME_MODE = game_mode
+        self.game_started = TrueFuse(False)  # validation enforced by ValidatedClass
 
         self._board = GameBoard(number_of_colors, number_of_dots)
-        self._game_started = TrueFuse(False)
         self._win_status = None
 
     def check_and_update_win_status(self) -> bool | None:
@@ -37,15 +37,16 @@ class GameParameter:
             bool | None: The win status, or None if the game is still in progress.
         """
 
-        if self._last_guess_is_secret(self):
+        if len(self) == 0:
+            self._win_status = None
+            return self._win_status
+
+        if self._last_guess_is_secret() or self._last_feedback_is_perfect():
             self._win_status = True
 
-        elif self._last_feedback_is_perfect(self):
-            self._win_status = True
-
-        elif self._reached_maximum_attempts(self):
+        elif self._reached_maximum_attempts():
             self._win_status = False
-        
+
         else:
             self._win_status = None
 
@@ -60,12 +61,8 @@ class GameParameter:
         return self._board.NUMBER_OF_DOTS
 
     @property
-    def win_status(self) -> Optional[bool]:
+    def win_status(self) -> bool | None:
         return self._win_status
-
-    @property
-    def game_started(self) -> bool:
-        return self._game_started
 
     def __len__(self) -> int:
         return len(self._board)

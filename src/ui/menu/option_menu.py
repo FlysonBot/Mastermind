@@ -35,9 +35,9 @@ class OptionMenu(BaseMenu):
         Processes the selected option.
 
         Args:
-            option (str): The selected option.
+            option (str): The selected key from the menu.
 
         Returns:
-            str: The processed option.
+            str: The corresponding option name from the menu.
         """
         return self.menu[option]
