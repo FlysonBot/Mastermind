@@ -18,7 +18,7 @@ class TestPlayer(unittest.TestCase):
         self.player = self.ConcretePlayer(self.game)
 
     def test_init(self):
-        self.assertEqual(self.player.GAME, self.game)
+        self.assertEqual(self.player.game_state, self.game)
         self.assertIsInstance(self.player.undo_stack, Stack)
 
     def test_undo(self):

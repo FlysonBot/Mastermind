@@ -14,12 +14,12 @@ class ExternalCodeSetter(CodeSetter):
         pass  # There is no code available for external game, skip it
 
     def get_feedback(self, guess: tuple) -> Union[tuple, str]:
-        valid_feedback = ValidFeedback(number_of_dots=self.GAME.number_of_dots)
+        valid_feedback = ValidFeedback(number_of_dots=self.game_state.number_of_dots)
         while True:
             feedback = input("Enter the feedback: ")
             if feedback == "?":
                 hint = f"""
-                Enter a 2 digit number (optionally separated by comma) between 0 and {self.GAME.number_of_dots}.
+                Enter a 2 digit number (optionally separated by comma) between 0 and {self.game_state.number_of_dots}.
                 The first digit represents the number of black pegs, the second represents the number of white pegs.
                 For example: 01 or 0,1 -> (0, 1) -> 0 black pegs, 1 white peg.
                 Or, you can enter a command:
@@ -45,9 +45,9 @@ class ExternalCodeSetter(CodeSetter):
             except (TypeValidationError, InputConversionError) as e:
                 print(e)
                 print("To get more help, enter '?'")
-            
+
             except RangeError:
                 print(
-                    f"Feedback must consist of 2 integer in range [0, {self.GAME.number_of_dots})"
+                    f"Feedback must consist of 2 integer in range [0, {self.game_state.number_of_dots})"
                 )
                 print("To get more help, enter '?'")
