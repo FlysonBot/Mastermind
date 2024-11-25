@@ -4,7 +4,11 @@ from typing import Optional, Union
 from src.players.abstract_player import CodeCracker, CodeSetter
 from src.utils import generate_feedback
 from src.validation import ValidCombination
-from src.validation.base.exceptions import RangeError, TypeValidationError
+from src.validation.base.exceptions import (
+    InputConversionError,
+    RangeError,
+    TypeValidationError,
+)
 
 
 class HumanCodeSetter(CodeSetter):
@@ -35,7 +39,7 @@ class HumanCodeSetter(CodeSetter):
             try:
                 valid_guess.validate_value(secret)
 
-            except TypeValidationError as e:
+            except (TypeValidationError, InputConversionError) as e:
                 print(e)
                 print("To get more help, enter '?'")
 
@@ -105,7 +109,7 @@ class HumanCodeCracker(CodeCracker):
             try:
                 return valid_guess.validate_value(guess)
 
-            except TypeValidationError as e:
+            except (TypeValidationError, InputConversionError) as e:
                 print(e)
                 print("To get more help, enter '?'")
 
