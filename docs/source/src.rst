@@ -1,11 +1,9 @@
 src package
 ===========
 
-Subpackages
------------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    src.game
    src.main
@@ -14,11 +12,3 @@ Subpackages
    src.ui
    src.utils
    src.validation
-
-Module contents
----------------
-
-.. automodule:: src
-   :members:
-   :undoc-members:
-   :show-inheritance:

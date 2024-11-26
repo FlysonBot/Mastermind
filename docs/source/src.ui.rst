@@ -1,18 +1,8 @@
 src.ui package
 ==============
 
-Subpackages
------------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    src.ui.menu
-
-Module contents
----------------
-
-.. automodule:: src.ui
-   :members:
-   :undoc-members:
-   :show-inheritance:
