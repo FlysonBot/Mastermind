@@ -3,6 +3,7 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+from enum import auto
 import os
 import sys
 
@@ -23,11 +24,15 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx.ext.todo",
+    "sphinx.ext.autosummary",
 ]
 
 master_doc = "modules"
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+autosummary_generate = True  # Automatically generate stub .rst files
+autosummary_generate_overwrite = True  # Overwrite existing files if set to True
 
 
 # -- Options for HTML output -------------------------------------------------
