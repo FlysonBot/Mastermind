@@ -1,11 +1,11 @@
 from typing import Union
 
 from src.players.abstract_player import CodeSetter
-from src.validation import ValidFeedback
-from src.validation.base.exceptions import (
+from src.validation import (
     InputConversionError,
     RangeError,
     TypeValidationError,
+    ValidFeedback,
 )
 
 
