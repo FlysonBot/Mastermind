@@ -4,9 +4,7 @@ from src.storage.user_data import UserDataManager
 def retrieve_stored_games():
     """Retrieve all stored games"""
     saved_games = UserDataManager().saved_games
-    if not saved_games:
-        return []
-    return saved_games
+    return saved_games or []
 
 
 def list_continuable_games_index(stored_games):

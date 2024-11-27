@@ -139,9 +139,8 @@ class UserDataManager:
 
 def prompt_delete_data() -> bool:
     decision = input("Do you want to delete the stored data? (y/n): ")
-    if decision.lower() == "y":
-        UserDataManager().clear_all()
-        print("Data deleted successfully.")
-        return True
-    else:
+    if decision.lower() != "y":
         return False
+    UserDataManager().clear_all()
+    print("Data deleted successfully.")
+    return True
