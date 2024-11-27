@@ -16,7 +16,7 @@ class GameController:
         while True:
             try:
                 user_input = input("\n" + prompt)
-                if validator(user_input):
+                if validator().validate_value(user_input):
                     return user_input
                 else:
                     print("Invalid input. Please try again.")
