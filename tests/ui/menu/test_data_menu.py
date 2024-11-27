@@ -42,6 +42,12 @@ class TestDataDisplayMenu(unittest.TestCase):
         with self.assertRaises(TypeError):
             DataDisplayMenu()
 
+        with self.assertRaises(NotImplementedError):
+            self.data_menu._fetch_data()
+
+        with self.assertRaises(NotImplementedError):
+            self.data_menu._render_data([])
+
         def render_data(data: Any) -> None:
             for item in data:
                 print(item)
