@@ -66,6 +66,8 @@ class GameHistoryManager:
 
     @staticmethod
     def retrieve_game_history() -> Optional[pd.DataFrame]:
-        stored_game = retrieve_stored_games()
-        continuable_games = list_continuable_games(stored_game)
-        return game_list_to_pandas(continuable_games)
+        return game_list_to_pandas(retrieve_stored_games())
+
+    @staticmethod
+    def retrieve_continuable_games() -> Optional[pd.DataFrame]:
+        return game_list_to_pandas(list_continuable_games(retrieve_stored_games()))

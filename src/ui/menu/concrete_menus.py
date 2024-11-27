@@ -2,8 +2,7 @@ from typing import Optional, Union
 
 import pandas as pd
 
-from src.main.game_history import GameHistoryManager, game_list_to_pandas
-from src.main.game_storage import list_continuable_games_index, retrieve_stored_games
+from src.main.game_history import GameHistoryManager
 from src.ui.menu.data_menu import DataDisplayMenu
 from src.ui.menu.option_menu import OptionMenu
 from src.utils import render_dataframe
@@ -84,16 +83,13 @@ class ResumeGameMenu(DataDisplayMenu):
         """
         Initializes the menu with the list of continuable games.
         """
-        games = list_continuable_games_index(retrieve_stored_games())
         self.menu = {"0": "Return to Main Menu"}
-        for i in range(len(games)):
-            self.menu[str(i + 1)] = ""
 
     def _fetch_data(self) -> Optional[pd.DataFrame]:
         """
         Retrieves the list of continuable games.
         """
-        result = game_list_to_pandas(retrieve_stored_games())
+        result = GameHistoryManager().retrieve_continuable_games()
         self.menu_length = len(result) if result is not None else 0
         return result
 
