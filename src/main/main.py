@@ -36,10 +36,6 @@ class MainUI:
             input("\nPress Enter to continue...")
             return True
 
-        elif choice == "Settings":
-            raise NotImplementedError("Settings not implemented yet.")
-            # return True
-
         elif choice == "Save and Exit":
             return False  # terminate the loop
 

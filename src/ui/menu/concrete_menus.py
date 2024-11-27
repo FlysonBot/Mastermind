@@ -19,7 +19,6 @@ class MainMenu(OptionMenu):
         "1": "Start New Game",
         "2": "Load Saved Game",
         "3": "Game History",
-        "4": "Settings",
         "0": "Save and Exit",
     }
 
