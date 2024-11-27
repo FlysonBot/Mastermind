@@ -33,8 +33,7 @@ class MainUI:
             return True
 
         elif choice == "Game History":
-            GameHistoryMenu.display()
-            input("\nPress Enter to continue...")
+            GameHistoryMenu().display()
             return True
 
         elif choice == "Save and Exit":
