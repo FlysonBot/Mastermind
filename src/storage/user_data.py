@@ -47,9 +47,29 @@ class UserDataManager:
         try:
             with open(self._file_path, "rb") as file:
                 self._data = pickle.load(file)
+                return
 
         except FileNotFoundError:  # on first run
             self._data = {}
+            return
+
+        except EOFError as e:
+            print("There seems to be an issue loading the data.")
+            print(e)
+            print("\nIf this issue persists, consider deleting the stored data.")
+        except ModuleNotFoundError as e:
+            print(
+                "There is an error loading the stored data. Your data or app version might not match."
+            )
+            print(e)
+            print("\nTo resolve this issue, consider deleting the stored data.")
+        except Exception as e:
+            print("An unexpected error occurred while loading the data.")
+            print(e)
+            print("\nIf this issue persists, consider deleting the stored data.")
+
+        if not prompt_delete_data():
+            raise Exception("Data could not be loaded.")
 
     def save_data(self) -> None:
         """Saves the user data to the file."""
@@ -59,7 +79,7 @@ class UserDataManager:
 
     def clear_all(self) -> None:
         """Clears all the user data and saves the changes."""
-        self._data.clear()
+        self._data = {}
         self.save_data()
 
     def _retrieve_item(self, key: str) -> Any:
@@ -115,3 +135,13 @@ class UserDataManager:
     def __contains__(self, key: str) -> bool:
         """Checks if the given key exists in the user data."""
         return key in self._data
+
+
+def prompt_delete_data() -> bool:
+    decision = input("Do you want to delete the stored data? (y/n): ")
+    if decision.lower() == "y":
+        UserDataManager().clear_all()
+        print("Data deleted successfully.")
+        return True
+    else:
+        return False
