@@ -15,6 +15,10 @@ class TestTrueFuse(unittest.TestCase):
         validator = TrueFuse(False)
         self.assertFalse(validator.value)
 
+        with self.assertRaises(TypeValidationError):
+            validator = TrueFuse(None)
+            self.assertIsNone(validator.value)
+
     def test_validate_value_with_invalid_type(self):
         """Test that TrueFuse raises an error with a non-boolean value"""
         with self.assertRaises(TypeValidationError) as context:
