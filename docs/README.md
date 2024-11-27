@@ -2,9 +2,9 @@
 
 ## 1. Update the RST Files
 
-CD to the directory of this project, the run:
+CD to the directory of this project, then run:
 
-``` Bash
+```bash
 sphinx-apidoc -o docs/source src/ -f --templatedir=docs/source/_templates --doc-project="Table of Content" --maxdepth=2 --module-first
 ```
 
@@ -12,7 +12,7 @@ sphinx-apidoc -o docs/source src/ -f --templatedir=docs/source/_templates --doc-
 
 CD to the docs directory and run:
 
-``` Bash
+```bash
 make clean
 make html
 ```
@@ -25,13 +25,13 @@ If you encounter warning that saids "more than one target found for cross-refere
 
 If you cannot run the `sphinx-apidoc` command, make sure you have the `sphinx` package installed by running:
 
-``` Bash
+```bash
 pip install sphinx
 ```
 
 If you are missing theme, install the theme by:
 
-``` Bash
+```bash
 pip install sphinx-rtd-theme
 ```
 
