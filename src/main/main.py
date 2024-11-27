@@ -1,191 +1,21 @@
-from abc import ABC
 from typing import Any, List, Optional
 
 import pandas as pd
 
 from src.game import Game
 from src.storage import UserDataManager
-from src.utils import render_dataframe
+from src.ui.menu.concrete_menus import (
+    GameHistoryMenu,
+    MainMenu,
+    NewGameMenu,
+    ResumeGameMenu,
+)
 from src.validation import (
     MaximumAttempts,
     NumberOfColors,
     NumberOfDots,
     Validator,
 )
-
-
-class UserSettings:
-    """An utility class to store and access user settings."""
-
-
-class UserMenus:
-    """A collection of user menus."""
-
-    class Menu(ABC):
-        """
-        An abstract base class for creating interactive menus.
-
-        This class provides a structure for displaying a menu,
-        and getting user options. It serves as a foundation for
-        specific menu implementations by defining common behaviors
-        for displaying options and handling user input.
-        """
-
-        menu = {}
-
-        def __call__(self, length) -> str:
-            """Display the menu and get the user's option when called."""
-            real_length = len(self)
-            assert (
-                real_length == length
-            ), f"Menu length mismatch. Provided {length}, should be {real_length}"
-            return self.get_option()
-
-        def __len__(self) -> int:
-            """Return the number of options in the menu."""
-            return len(self.menu)
-
-        @classmethod
-        def get_name(cls) -> str:
-            return cls.name if hasattr(cls, "name") else cls.__name__
-
-        @classmethod
-        def get_width(cls) -> str:
-            if hasattr(cls, "width"):
-                return cls.width
-
-            menu_length = (
-                max(len(f"({key}) {value}") for key, value in cls.menu.items())
-                if cls.menu
-                else 0
-            )
-
-            return max(len(cls.get_name()) + 8, menu_length)
-
-        @classmethod
-        def print_header(cls) -> None:
-            """Print the header of the menu."""
-            dashes = "-" * ((cls.get_width() - len(cls.get_name()) - 1) // 2)
-            header: str = f"{dashes} {cls.get_name()} {dashes}"
-            print("\n\n\n" + header)  # print 3 empty lines and the header
-
-        @classmethod
-        def print_options(cls) -> None:
-            """Print the options of the menu."""
-            for key, value in cls.menu.items():  # print the options
-                print(f"({key}) {value}")
-
-        @classmethod
-        def print_separator(cls) -> None:
-            """Print the separator of the menu."""
-            width = ((cls.get_width() - len(cls.get_name()) - 1) // 2 + 1) * 2 + len(
-                cls.get_name()
-            )
-            print("-" * width + "\n")  # print the separator
-
-        @classmethod
-        def display(cls) -> None:
-            """Display the menu."""
-            cls.print_header()
-            cls.print_options()
-            cls.print_separator()
-
-        @classmethod
-        def get_option(cls) -> str:
-            """Get the user's option."""
-
-            cls.display()
-            while True:
-                option = input("Select an option: ")
-                if option in cls.menu:
-                    # Return the key can avoid potential mismatch when editing menu
-                    return cls.return_key(option)
-                cls.display()
-                print("Invalid option. Try again.")
-
-        @classmethod
-        def return_key(cls, option: str) -> str:
-            """Return the value of the option. Can be changed in subclasses."""
-            return cls.menu[option]
-
-    class MainMenu(Menu):
-        """The main menu."""
-
-        name = "Main Menu"
-        menu = {
-            "1": "Start New Game",
-            "2": "Load Saved Game",
-            "3": "Game History",
-            "4": "Settings",
-            "0": "Save and Exit",
-        }
-
-    class NewGameMenu(Menu):
-        """The menu for starting a new game."""
-
-        name = "New Game Menu"
-        menu = {
-            "1": "You vs Someone Else",
-            "2": "You vs AI",
-            "3": "AI vs You",
-            "4": "Solve External Game",
-            "0": "Return to Main Menu",
-        }
-
-    class GameHistoryMenu(Menu):
-        """The menu for displaying game history"""
-
-        name = "Game History"
-        width = 25
-
-        @classmethod
-        def display(cls) -> None:
-            """Display the menu."""
-            cls.print_header()
-
-            if (game_history := GameHistoryManager.retrieve_game_history()) is not None:
-                render_dataframe(game_history)
-            else:
-                print("No game history found.")
-
-            cls.print_separator()
-
-    class ResumeGameMenu(Menu):
-        """The menu for resuming a saved game."""
-
-        name = "Resume Game"
-        menu = {}
-        width = 27
-
-        def __call__(self, length: int) -> str:
-            UserMenus.ResumeGameMenu.menu = {
-                str(index + 1): ""
-                for index in range(len(GameController.list_continuable_games()))
-            }
-            UserMenus.ResumeGameMenu.menu["0"] = "Return to Main Menu"
-            return super().__call__(length)
-
-        @classmethod
-        def display(cls) -> None:
-            """Display the menu."""
-            cls.print_header()
-
-            if (
-                game_history := GameController.retrieve_continuable_games()
-            ) is not None:
-                game_history.index = [f"({i+1})" for i in game_history.index]
-                render_dataframe(game_history)
-            else:
-                print("No continuable game found.")
-
-            print("\n(0) Return to Main Menu")
-
-            cls.print_separator()
-
-        @classmethod
-        def return_key(cls, option: str) -> str:
-            """Return the game index for resuming and updating."""
-            return "return" if int(option) == 0 else int(option) - 1
 
 
 class GameHistoryManager:
@@ -341,7 +171,7 @@ class MainUI:
         Display the main menu and handle user input.
         Return whether the user want to exit.
         """
-        choice = UserMenus.MainMenu()(5)
+        choice = MainMenu()
 
         if choice == "Start New Game":
             self.new_game_menu()
@@ -352,7 +182,7 @@ class MainUI:
             return True
 
         elif choice == "Game History":
-            UserMenus.GameHistoryMenu.display()
+            GameHistoryMenu.display()
             input("\nPress Enter to continue...")
             return True
 
@@ -365,7 +195,7 @@ class MainUI:
 
     def new_game_menu(self) -> bool:
         """Display the new game menu and handle user input."""
-        choice = UserMenus.NewGameMenu()(5)
+        choice = NewGameMenu()
 
         if choice == "You vs Someone Else":
             GameController.start_new_game("HvH")
@@ -386,9 +216,7 @@ class MainUI:
 
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
-        choice = UserMenus.ResumeGameMenu()(
-            len(GameController.list_continuable_games()) + 1
-        )
+        choice = ResumeGameMenu()(len(GameController.list_continuable_games()) + 1)
 
         if choice == "return":
             return False  # return to main menu
