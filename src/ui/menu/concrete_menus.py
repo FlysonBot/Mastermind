@@ -2,7 +2,8 @@ from typing import Optional, Union
 
 import pandas as pd
 
-from src.main.main import GameController, GameHistoryManager
+from src.main.game_controller import GameController
+from src.main.game_history import GameHistoryManager
 from src.ui.menu.data_menu import DataDisplayMenu
 from src.ui.menu.option_menu import OptionMenu
 from src.utils import render_dataframe
