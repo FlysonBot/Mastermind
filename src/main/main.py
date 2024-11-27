@@ -21,7 +21,7 @@ class MainUI:
         Display the main menu and handle user input.
         Return whether the user want to exit.
         """
-        choice = MainMenu()
+        choice = MainMenu().get_option()
 
         if choice == "Start New Game":
             self.new_game_menu()
@@ -45,7 +45,7 @@ class MainUI:
 
     def new_game_menu(self) -> bool:
         """Display the new game menu and handle user input."""
-        choice = NewGameMenu()
+        choice = NewGameMenu().get_option()
 
         if choice == "You vs Someone Else":
             GameController.start_new_game("HvH")
@@ -66,7 +66,7 @@ class MainUI:
 
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
-        choice = ResumeGameMenu()(len(GameController.list_continuable_games()) + 1)
+        choice = ResumeGameMenu()
 
         if choice == "return":
             return False  # return to main menu
