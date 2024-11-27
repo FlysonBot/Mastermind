@@ -3,8 +3,13 @@ from typing import Any
 from src.game.game import Game
 from src.main.game_history import GameHistoryManager
 from src.storage.user_data import UserDataManager
-from src.validation.base.base import Validator
-from src.validation.models.numeric import MaximumAttempts, NumberOfColors, NumberOfDots
+from src.validation import (
+    MaximumAttempts,
+    NumberOfColors,
+    NumberOfDots,
+    ValidationError,
+    Validator,
+)
 
 
 class GameController:
@@ -16,12 +21,9 @@ class GameController:
         while True:
             try:
                 user_input = input("\n" + prompt)
-                if validator().validate_value(user_input):
-                    return user_input
-                else:
-                    print("Invalid input. Please try again.")
+                return validator().validate_value(user_input)
 
-            except Exception as e:
+            except ValidationError as e:
                 print(f"Invalid input. {e}")
 
     @classmethod
