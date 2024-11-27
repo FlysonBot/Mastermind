@@ -63,7 +63,7 @@ class MainUI:
 
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
-        choice = ResumeGameMenu()
+        choice = ResumeGameMenu().display()
 
         if choice == "return":
             return False  # return to main menu
