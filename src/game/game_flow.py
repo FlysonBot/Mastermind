@@ -29,7 +29,8 @@ class GameFlow:
 
         self.game_state.game_started = True
         self.player_logic.initialize_players()
-        self.player_logic.PLAYER_SETTER.set_secret_code()
+        if self.player_logic.PLAYER_SETTER.set_secret_code() == "d":
+            return "d"  # code setter discarded the game
 
         return self._play_game()
 

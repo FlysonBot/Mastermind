@@ -48,8 +48,10 @@ class GameController:
 
         parameters = cls.get_game_parameters()  # get user input
         game = Game(*parameters, game_mode)  # create a new game
-        game.start_game()  # start the game
-        GameHistoryManager.save_game(game)  # save the game
+        exit_state = game.start_game()  # start the game and retrieve exit state
+        
+        if exit_state != "d":  # "d" is discard, do not save
+            GameHistoryManager.save_game(game)  # save the game
 
     @classmethod
     def resume_game(cls, game_index: int) -> None:
@@ -57,10 +59,13 @@ class GameController:
         # Retrieve game
         game = UserDataManager().saved_games[game_index]["game"]
 
-        # Resume game
-        game.resume_game()
+        # Resume game and retrieve exit state
+        exit_state = game.resume_game()
 
-        # Update saved games
-        UserDataManager().saved_games[game_index] = (
-            GameHistoryManager().generate_meta_data(game)
-        )
+        # Update saved games if not game discarded
+        if exit_state == "d":  # or delete it if discarded
+            UserDataManager().saved_games.pop(game_index)
+        else:
+            UserDataManager().saved_games[game_index] = (
+                GameHistoryManager().generate_meta_data(game)
+            )
