@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import pandas as pd
 
-from src.main.game_history import GameHistoryManager
+from src.main.game_history import GameHistoryManager, game_list_to_pandas
 from src.main.game_storage import list_continuable_games_index, retrieve_stored_games
 from src.ui.menu.data_menu import DataDisplayMenu
 from src.ui.menu.option_menu import OptionMenu
@@ -93,7 +93,7 @@ class ResumeGameMenu(DataDisplayMenu):
         """
         Retrieves the list of continuable games.
         """
-        return retrieve_stored_games()
+        return game_list_to_pandas(retrieve_stored_games())
 
     def _render_data(self, data: pd.DataFrame) -> None:
         """
