@@ -1,4 +1,5 @@
 from src.main.game_controller import GameController
+from src.main.game_storage import list_continuable_games_index, retrieve_stored_games
 from src.storage import UserDataManager
 from src.ui.menu.concrete_menus import (
     GameHistoryMenu,
@@ -67,7 +68,7 @@ class MainUI:
         if choice == "return":
             return False  # return to main menu
 
-        game_index = GameController.list_continuable_games(return_index=True)[choice]
+        game_index = list_continuable_games_index(retrieve_stored_games())
         GameController.resume_game(game_index)
 
         return True

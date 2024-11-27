@@ -4,6 +4,7 @@ import pandas as pd
 
 from src.main.game_controller import GameController
 from src.main.game_history import GameHistoryManager
+from src.main.game_storage import list_continuable_games_index, retrieve_stored_games
 from src.ui.menu.data_menu import DataDisplayMenu
 from src.ui.menu.option_menu import OptionMenu
 from src.utils import render_dataframe
@@ -84,7 +85,7 @@ class ResumeGameMenu(DataDisplayMenu):
         """
         Initializes the menu with the list of continuable games.
         """
-        games = GameController.list_continuable_games()
+        games = list_continuable_games_index(retrieve_stored_games())
         self.menu = {"0": "Return to Main Menu"}
         for i in range(len(games)):
             self.menu[str(i + 1)] = ""
@@ -93,7 +94,7 @@ class ResumeGameMenu(DataDisplayMenu):
         """
         Retrieves the list of continuable games.
         """
-        return GameController.retrieve_continuable_games()
+        return retrieve_stored_games()
 
     def _render_data(self, data: pd.DataFrame) -> None:
         """
