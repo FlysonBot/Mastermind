@@ -69,6 +69,7 @@ class PlayerLogic:
             if feedback == "u":  # undo
                 continue  # since guess haven't been submitted, skip = undo
 
+            print(f"Feedback: {feedback}")
             self.submit_guess(guess, feedback)
             self.game_state.check_and_update_win_status()
 
