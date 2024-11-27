@@ -43,15 +43,15 @@ class GameHistoryManager:
     def generate_meta_data(game: Game) -> dict:
         """Generate meta data for the game."""
         return {
-            "game_mode": game.GAME_MODE,
+            "game_mode": game._state.GAME_MODE,
             "number_of_dots": game._state.number_of_dots,
             "number_of_colors": game._state.number_of_colors,
             "amount_attempted": len(game),
-            "amount_allowed": game.MAXIMUM_ATTEMPTS,
+            "amount_allowed": game._state.MAXIMUM_ATTEMPTS,
             "win_status": game._state.win_status,
             "guesses": game._board._guesses,
             "feedback": game._board._feedbacks,
-            **({"game": game} if game.win_status is None else {}),
+            **({"game": game} if game._state.win_status is None else {}),
         }
 
     @staticmethod
