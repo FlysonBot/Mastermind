@@ -93,7 +93,9 @@ class ResumeGameMenu(DataDisplayMenu):
         """
         Retrieves the list of continuable games.
         """
-        return game_list_to_pandas(retrieve_stored_games())
+        result = game_list_to_pandas(retrieve_stored_games())
+        self.menu_length = len(result) if result is not None else 0
+        return result
 
     def _render_data(self, data: pd.DataFrame) -> None:
         """
@@ -114,3 +116,28 @@ class ResumeGameMenu(DataDisplayMenu):
         Processes the selected option, returning either "return" or the index of the selected game.
         """
         return "return" if int(option) == 0 else int(option) - 1
+
+    def get_option(self) -> Union[str, int]:
+        """
+        Displays the menu and returns the selected option.
+        """
+        self.display()
+        if self.menu_length == 0:
+            input("\nPress Enter to continue...")
+            return 0
+        else:
+            while True:
+                option = input("Select a game to resume: ")
+                try:
+                    option = int(option)
+
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+
+                else:
+                    if 0 <= option <= self.menu_length:
+                        return option
+
+                    print("Invalid option. Try again.")
+
+                self.display()

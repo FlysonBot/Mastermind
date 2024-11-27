@@ -63,13 +63,13 @@ class MainUI:
 
     def saved_game_menu(self):
         """Display the saved game menu and handle user input."""
-        choice = ResumeGameMenu().display()
+        choice = ResumeGameMenu().get_option()
 
-        if choice == "return":
+        if choice == 0:
             return False  # return to main menu
 
         game_index = list_continuable_games_index(retrieve_stored_games())
-        GameController.resume_game(game_index)
+        GameController.resume_game(game_index[choice-1])  # -1 since first option is 1
 
         return True
 
