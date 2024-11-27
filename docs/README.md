@@ -1,4 +1,4 @@
-# Instruction for Building the Documentation
+# Instructions for Building the Documentation
 
 ## 1. Update the RST Files
 
@@ -19,7 +19,7 @@ make html
 
 The first command will delete the already built documentation. The second command will build the documentation.
 
-If you encounter warning that saids "more than one target found for cross-reference 'xxx'", you can ignore it.
+If you encounter warning that says "more than one target found for cross-reference 'xxx'", you can ignore it.
 
 ## Troubleshooting
 
