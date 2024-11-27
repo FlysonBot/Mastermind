@@ -2,7 +2,6 @@ from typing import Optional, Union
 
 import pandas as pd
 
-from src.main.game_controller import GameController
 from src.main.game_history import GameHistoryManager
 from src.main.game_storage import list_continuable_games_index, retrieve_stored_games
 from src.ui.menu.data_menu import DataDisplayMenu
