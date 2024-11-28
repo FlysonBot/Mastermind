@@ -1,4 +1,3 @@
-
 from src.game.board import GameBoard
 from src.validation import TrueFuse, ValidatedClass
 
