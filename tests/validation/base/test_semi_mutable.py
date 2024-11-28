@@ -1,6 +1,9 @@
 import unittest
 
-from mastermind.validation.base.exceptions import InvalidModificationError, TypeValidationError
+from mastermind.validation.base.exceptions import (
+    InvalidModificationError,
+    TypeValidationError,
+)
 from mastermind.validation.base.semi_mutable import TrueFuse
 
 

@@ -1,5 +1,8 @@
 from mastermind.main.game_controller import GameController
-from mastermind.main.game_storage import list_continuable_games_index, retrieve_stored_games
+from mastermind.main.game_storage import (
+    list_continuable_games_index,
+    retrieve_stored_games,
+)
 from mastermind.storage import UserDataManager
 from mastermind.ui.menu.concrete_menus import (
     GameHistoryMenu,

@@ -11,7 +11,9 @@ class TestGameFlow(unittest.TestCase):
         self.game_state = self.game._state
         self.game_flow = self.game._game_flow
 
-    @patch("mastermind.players.HumanCodeSetter.set_secret_code", return_value=(1, 2, 3, 4))
+    @patch(
+        "mastermind.players.HumanCodeSetter.set_secret_code", return_value=(1, 2, 3, 4)
+    )
     def test_start_game_not_started(self, mock_set_secret_code):
         self.game_flow._play_game = MagicMock(return_value=None)
         self.assertIsNone(self.game_flow.start_game())
