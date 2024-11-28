@@ -23,7 +23,6 @@ class TestValidatedClass(unittest.TestCase):
     def test_get_attribute_with_state_validator(self):
         """Test that ValidatedClass automatically unwraps StateValidator attributes"""
 
-
         obj = self.MyValidatedTrueFuseClass(True)
         self.assertTrue(obj.my_bool)
 

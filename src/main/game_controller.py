@@ -49,7 +49,7 @@ class GameController:
         parameters = cls.get_game_parameters()  # get user input
         game = Game(*parameters, game_mode)  # create a new game
         exit_state = game.start_game()  # start the game and retrieve exit state
-        
+
         if exit_state != "d":  # "d" is discard, do not save
             GameHistoryManager.save_game(game)  # save the game
 

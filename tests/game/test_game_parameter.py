@@ -45,7 +45,7 @@ class TestGameParameter(unittest.TestCase):
         self.game_param._board.add_guess((1, 2, 3, 4), (2, 1))
         self.assertFalse(self.game_param.check_and_update_win_status())
         self.assertFalse(self.game_param.win_status)
-    
+
     def test_check_and_update_win_status_continue(self):
         self.assertIsNone(self.game_param.win_status)
         self.game_param._board.add_guess((1, 2, 3, 4), (2, 1))

@@ -1,6 +1,6 @@
 import unittest
 from io import StringIO
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from src.game.game import Game
 from src.players.human_player import HumanCodeCracker, HumanCodeSetter

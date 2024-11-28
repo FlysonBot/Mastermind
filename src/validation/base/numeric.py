@@ -132,7 +132,7 @@ class ConstrainedInteger(NumberRangeModel[int]):
         """
         try:
             return int(value)
-        
+
         except ValueError as e:
             raise InputConversionError("Invalid input for integer conversion") from e
 
@@ -157,6 +157,6 @@ class ConstrainedFloat(NumberRangeModel[float]):
         """
         try:
             return float(value)
-        
+
         except ValueError as e:
             raise InputConversionError("Invalid input for float conversion") from e

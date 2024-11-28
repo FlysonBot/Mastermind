@@ -33,5 +33,5 @@ setup(
         "console_scripts": [
             "mastermind = main.main:main",
         ],
-    }
+    },
 )

@@ -50,11 +50,11 @@ class MainUI:
             GameController.start_new_game("HvAI")
             return True
         elif choice == "AI vs You":
-            #GameController.start_new_game("AIvH")
+            # GameController.start_new_game("AIvH")
             print("This feature  is not implemented yet.")
             return True
         elif choice == "Solve External Game":
-            #GameController.start_new_game("AIvAI")
+            # GameController.start_new_game("AIvAI")
             print("This feature  is not implemented yet.")
             return True
         elif choice == "Return to Main Menu":
@@ -70,7 +70,7 @@ class MainUI:
             return False  # return to main menu
 
         game_index = list_continuable_games_index(retrieve_stored_games())
-        GameController.resume_game(game_index[choice-1])  # -1 since first option is 1
+        GameController.resume_game(game_index[choice - 1])  # -1 since first option is 1
 
         return True
 

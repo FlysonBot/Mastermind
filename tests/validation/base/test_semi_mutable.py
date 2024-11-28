@@ -56,7 +56,7 @@ class TestTrueFuse(unittest.TestCase):
         with self.assertRaises(InvalidModificationError) as context:
             validator.value = False
         self.assertEqual(
-                str(context.exception), "TrueFuse can only be modified to True"
+            str(context.exception), "TrueFuse can only be modified to True"
         )
 
 

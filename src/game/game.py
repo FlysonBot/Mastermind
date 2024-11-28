@@ -54,21 +54,21 @@ class Game:
         Returns the number of colors in the game.
         """
         return self._state.number_of_colors
-    
+
     @property
     def number_of_dots(self) -> int:
         """
         Returns the number of dots in each combination.
         """
         return self._state.number_of_dots
-    
+
     @property
     def maximum_attempts(self) -> int:
         """
         Returns the maximum number of attempts allowed in the game.
         """
         return self._state.MAXIMUM_ATTEMPTS
-    
+
     @property
     def game_mode(self) -> str:
         """

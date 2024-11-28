@@ -58,7 +58,7 @@ class TestPersistentCacheManager(unittest.TestCase):
         second_manager = PersistentCacheManager()
         retrieved_value = second_manager.__getattr__(test_key)
         self.assertEqual(retrieved_value, test_value)
-    
+
     def test_get_non_existent_key(self):
         """Test that getting a non-existent key returns None"""
         self.assertIsNone(PersistentCacheManager.__getattr__("non_existent_key"))
