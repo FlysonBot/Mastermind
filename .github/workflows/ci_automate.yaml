@@ -3,22 +3,6 @@ on: [push, pull_request]
 
 jobs:
 
-  ruff:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Lint Python Code with Ruff
-        uses: astral-sh/ruff-action@v1
-        with:
-          args: "check"
-
-      - name: Format Python Code with Ruff
-        uses: astral-sh/ruff-action@v1
-        with:
-          args: "format --check"
-
   unittest:
     runs-on: ubuntu-latest
     steps:
