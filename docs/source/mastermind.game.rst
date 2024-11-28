@@ -1,28 +1,28 @@
-src.game package
-================
+mastermind.game package
+=======================
 
 
-.. automodule:: src.game.board
+.. automodule:: mastermind.game.board
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: src.game.game
+.. automodule:: mastermind.game.game
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: src.game.game_flow
+.. automodule:: mastermind.game.game_flow
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: src.game.game_parameter
+.. automodule:: mastermind.game.game_parameter
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: src.game.player_logic
+.. automodule:: mastermind.game.player_logic
    :members:
    :undoc-members:
    :show-inheritance:

@@ -5,7 +5,7 @@
 CD to the directory of this project, then run:
 
 ```bash
-sphinx-apidoc -o docs/source src/ -f --templatedir=docs/source/_templates --doc-project="Table of Content" --maxdepth=2 --module-first
+sphinx-apidoc -o docs/source src/mastermind -f --templatedir=docs/source/_templates --maxdepth=2 --module-first
 ```
 
 ## 2. Build the Documentation
