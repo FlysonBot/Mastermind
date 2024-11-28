@@ -1,7 +1,7 @@
 import unittest
 from typing import Any, TypeVar
 
-from src.validation.base.base import StateValidator, ValidationModel, Validator
+from mastermind.validation.base.base import StateValidator, ValidationModel, Validator
 
 T = TypeVar("T")
 

@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from src.game.game import Game
-from src.game.game_flow import GameFlow
+from mastermind.game.game import Game
+from mastermind.game.game_flow import GameFlow
 
 
 class TestGameFlow(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestGameFlow(unittest.TestCase):
         self.game_state = self.game._state
         self.game_flow = self.game._game_flow
 
-    @patch("src.players.HumanCodeSetter.set_secret_code", return_value=(1, 2, 3, 4))
+    @patch("mastermind.players.HumanCodeSetter.set_secret_code", return_value=(1, 2, 3, 4))
     def test_start_game_not_started(self, mock_set_secret_code):
         self.game_flow._play_game = MagicMock(return_value=None)
         self.assertIsNone(self.game_flow.start_game())
@@ -33,7 +33,7 @@ class TestGameFlow(unittest.TestCase):
             self.game_flow.resume_game()
             mock_play_game.assert_called()
 
-    @patch("src.game.player_logic.PlayerLogic.process_player_guessing")
+    @patch("mastermind.game.player_logic.PlayerLogic.process_player_guessing")
     @patch.object(GameFlow, "output_result")
     def test_play_game(self, mock_output_result, mock_process_player_guessing):
         mock_process_player_guessing.return_value = "q"

@@ -1,10 +1,10 @@
 import unittest
 
-from src.validation.base.exceptions import (
+from mastermind.validation.base.exceptions import (
     InputConversionError,
     RangeError,
 )
-from src.validation.models.valid_feedback import ValidFeedback
+from mastermind.validation.models.valid_feedback import ValidFeedback
 
 
 class TestValidFeedback(unittest.TestCase):

@@ -1,10 +1,10 @@
 import unittest
 
-from src.validation.base.exceptions import (
+from mastermind.validation.base.exceptions import (
     RangeError,
     TypeValidationError,
 )
-from src.validation.models.valid_combination import ValidCombination
+from mastermind.validation.models.valid_combination import ValidCombination
 
 
 class TestValidCombination(unittest.TestCase):

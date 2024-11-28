@@ -1,7 +1,7 @@
 import unittest
 
-from src.validation.base.exceptions import RangeError
-from src.validation.models.numeric import (
+from mastermind.validation.base.exceptions import RangeError
+from mastermind.validation.models.numeric import (
     MaximumAttempts,
     NumberOfColors,
     NumberOfDots,

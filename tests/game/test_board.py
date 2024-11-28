@@ -1,5 +1,5 @@
 import unittest
-from src.game.board import GameBoard
+from mastermind.game.board import GameBoard
 
 
 class TestGameBoard(unittest.TestCase):

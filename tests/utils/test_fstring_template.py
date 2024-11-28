@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils.fstring_template import FStringTemplate
+from mastermind.utils.fstring_template import FStringTemplate
 
 
 class TestFStringTemplate(unittest.TestCase):

@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import patch
 
-from src.game.game import Game
-from src.game.game_flow import GameFlow
-from src.game.player_logic import PlayerLogic
+from mastermind.game.game import Game
+from mastermind.game.game_flow import GameFlow
+from mastermind.game.player_logic import PlayerLogic
 
 
 class TestGame(unittest.TestCase):

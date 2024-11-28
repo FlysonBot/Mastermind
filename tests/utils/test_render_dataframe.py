@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from src.utils.render_dataframe import (
+from mastermind.utils.render_dataframe import (
     _calculate_column_widths,
     _calculate_index_width,
     _prepare_header,

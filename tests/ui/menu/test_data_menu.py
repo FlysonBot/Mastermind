@@ -2,7 +2,7 @@ import unittest
 from typing import Any
 from unittest.mock import call, patch
 
-from src.ui.menu.data_menu import DataDisplayMenu
+from mastermind.ui.menu.data_menu import DataDisplayMenu
 
 
 class TestDataDisplayMenu(unittest.TestCase):

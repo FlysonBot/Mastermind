@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils.stack import Stack
+from mastermind.utils.stack import Stack
 
 
 class TestStack(unittest.TestCase):

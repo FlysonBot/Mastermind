@@ -2,12 +2,12 @@ import unittest
 from numbers import Number
 from typing import TypeVar
 
-from src.validation.base.exceptions import (
+from mastermind.validation.base.exceptions import (
     InputConversionError,
     RangeError,
     TypeValidationError,
 )
-from src.validation.base.numeric import (
+from mastermind.validation.base.numeric import (
     ConstrainedFloat,
     ConstrainedInteger,
     NumberRangeModel,

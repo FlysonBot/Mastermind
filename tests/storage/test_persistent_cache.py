@@ -2,7 +2,7 @@ import os
 import unittest
 import tempfile
 
-from src.storage.persistent_cache import PersistentCacheManager
+from mastermind.storage.persistent_cache import PersistentCacheManager
 
 
 class TestPersistentCacheManager(unittest.TestCase):
