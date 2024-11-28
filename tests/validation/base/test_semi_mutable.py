@@ -1,7 +1,10 @@
 import unittest
 
-from src.validation.base.exceptions import InvalidModificationError, TypeValidationError
-from src.validation.base.semi_mutable import TrueFuse
+from mastermind.validation.base.exceptions import (
+    InvalidModificationError,
+    TypeValidationError,
+)
+from mastermind.validation.base.semi_mutable import TrueFuse
 
 
 class TestTrueFuse(unittest.TestCase):

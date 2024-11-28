@@ -1,8 +1,8 @@
 import unittest
 
-from src.game.game import Game
-from src.players.ai_player import AICodeCracker, AICodeSetter
-from src.validation.models.valid_combination import ValidCombination
+from mastermind.game.game import Game
+from mastermind.players.ai_player import AICodeCracker, AICodeSetter
+from mastermind.validation.models.valid_combination import ValidCombination
 
 
 class TestAICodeSetter(unittest.TestCase):

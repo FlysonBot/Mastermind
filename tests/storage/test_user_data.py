@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from src.storage.user_data import UserDataManager
+from mastermind.storage.user_data import UserDataManager
 
 
 class TestUserDataManager(unittest.TestCase):

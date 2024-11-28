@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import call, patch
 
-from src.ui.menu.option_menu import OptionMenu
+from mastermind.ui.menu.option_menu import OptionMenu
 
 
 class TestOptionMenu(unittest.TestCase):

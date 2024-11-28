@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from src.game.board import GameBoard
-from src.game.game_parameter import GameParameter
+from mastermind.game.board import GameBoard
+from mastermind.game.game_parameter import GameParameter
 
 
 class TestGameParameter(unittest.TestCase):

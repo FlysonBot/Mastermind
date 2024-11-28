@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils.get_feedback import generate_feedback
+from mastermind.utils.get_feedback import generate_feedback
 
 
 class TestGenerateFeedback(unittest.TestCase):

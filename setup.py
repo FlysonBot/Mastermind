@@ -8,7 +8,7 @@ def read_requirements(file):
 
 setup(
     name="mastermind",
-    version="1.5.1",
+    version="1.6.0",
     author="FlysonBot",
     author_email="FlysonBot@users.noreply.github.com",
     description="A Python package that simulates the Mastermind game with an AI solver.",
@@ -16,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/FlysonBot/Mastermind",
     package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    packages=find_packages(where="src"),  # Adjust this line
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3.10",
@@ -31,7 +31,7 @@ setup(
     install_requires=read_requirements("requirements.txt"),
     entry_points={
         "console_scripts": [
-            "mastermind = main.main:main",
+            "mastermind = mastermind.main.main:main",  # Adjusted to reflect the new structure
         ],
     },
 )

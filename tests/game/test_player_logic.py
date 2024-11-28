@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from src.game.game import Game
-from src.players import (
+from mastermind.game.game import Game
+from mastermind.players import (
     AICodeCracker,
     AICodeSetter,
     ExternalCodeSetter,
@@ -36,8 +36,8 @@ class TestPlayerLogic(unittest.TestCase):
         self.player_logic.game_state.GAME_MODE = "AIvAI"
         self._check_players(AICodeCracker, ExternalCodeSetter)
 
-    @patch("src.players.HumanCodeCracker.obtain_guess")
-    @patch("src.players.AICodeSetter.get_feedback")
+    @patch("mastermind.players.HumanCodeCracker.obtain_guess")
+    @patch("mastermind.players.AICodeSetter.get_feedback")
     def test_process_player_guessing(self, mock_get_feedback, mock_obtain_guess):
         mock_obtain_guess.side_effect = [(1, 2, 3, 4), "q"]
         mock_get_feedback.side_effect = [(2, 2)]
@@ -50,8 +50,8 @@ class TestPlayerLogic(unittest.TestCase):
         self.assertEqual(list(self.game._board._guesses), [(1, 2, 3, 4)])
         self.assertEqual(list(self.game._board._feedbacks), [(2, 2)])
 
-    @patch("src.players.HumanCodeCracker.obtain_guess")
-    @patch("src.players.AICodeSetter.get_feedback")
+    @patch("mastermind.players.HumanCodeCracker.obtain_guess")
+    @patch("mastermind.players.AICodeSetter.get_feedback")
     def test_process_player_cracker_undo_and_redo(
         self, mock_get_feedback, mock_obtain_guess
     ):
@@ -64,8 +64,8 @@ class TestPlayerLogic(unittest.TestCase):
         self.assertEqual(list(self.game._board._guesses), [(1, 2, 3, 4), (1, 2, 3, 5)])
         self.assertEqual(list(self.game._board._feedbacks), [(2, 2), (2, 1)])
 
-    @patch("src.players.HumanCodeCracker.obtain_guess")
-    @patch("src.players.AICodeSetter.get_feedback")
+    @patch("mastermind.players.HumanCodeCracker.obtain_guess")
+    @patch("mastermind.players.AICodeSetter.get_feedback")
     def test_process_player_setter_undo(self, mock_get_feedback, mock_obtain_guess):
         mock_obtain_guess.side_effect = [(1, 2, 3, 4), (1, 2, 3, 5), (1, 2, 3, 6)]
         mock_get_feedback.side_effect = [(2, 2), "u", "q"]

@@ -1,10 +1,10 @@
 import unittest
 
-from src.validation.base.exceptions import (
+from mastermind.validation.base.exceptions import (
     InputConversionError,
     RangeError,
 )
-from src.validation.models._game_utils import GameValidationUtils
+from mastermind.validation.models._game_utils import GameValidationUtils
 
 
 class TestGameValidationUtils(unittest.TestCase):

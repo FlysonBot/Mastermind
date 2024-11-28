@@ -1,8 +1,8 @@
 import unittest
 
-from src.validation.base.exceptions import InvalidModificationError
-from src.validation.base.semi_mutable import TrueFuse
-from src.validation.base.validated_class import ValidatedClass
+from mastermind.validation.base.exceptions import InvalidModificationError
+from mastermind.validation.base.semi_mutable import TrueFuse
+from mastermind.validation.base.validated_class import ValidatedClass
 
 
 class TestValidatedClass(unittest.TestCase):

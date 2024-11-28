@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from src.game.game import Game
-from src.players.abstract_player import CodeCracker, CodeSetter, Player
-from src.utils import Stack
+from mastermind.game.game import Game
+from mastermind.players.abstract_player import CodeCracker, CodeSetter, Player
+from mastermind.utils import Stack
 
 
 class TestPlayer(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player.game_state, self.game._state)
         self.assertIsInstance(self.player.undo_stack, Stack)
 
-    @patch("src.game.board.GameBoard.__len__", return_value=1)
+    @patch("mastermind.game.board.GameBoard.__len__", return_value=1)
     def test_undo(self, mock_len):
         self.player.undo((1, 2, 3, 4))
         self.assertEqual(self.player.undo_stack.pop(), (1, 2, 3, 4))

@@ -2,7 +2,7 @@ import io
 import unittest
 from unittest.mock import patch
 
-from src.ui.menu.base_menu import BaseMenu
+from mastermind.ui.menu.base_menu import BaseMenu
 
 
 class TestBaseMenu(BaseMenu):
