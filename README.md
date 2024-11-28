@@ -10,7 +10,7 @@ Mastermind is a code-breaking game for two players. The first player (the code-s
 
 ## Getting Started
 
-### <ins>Prerequisites</ins>
+### Prerequisites
 
 To run this project, you must have the following installed (installation guide below):
 
@@ -20,7 +20,7 @@ To run this project, you must have the following installed (installation guide b
 
 Or alternatively you can run this program in your browser with [Google Colab](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb)
 
-### <ins>Installation Guide</ins>
+### Installation Guide
 
 1. Install [Git](https://git-scm.com/downloads) if you haven't already.
 
@@ -40,7 +40,7 @@ Or alternatively you can run this program in your browser with [Google Colab](ht
 
 Enjoy! The program crashes during installation? Check out the section below.
 
-### <ins>Troubleshooting</ins>
+### Troubleshooting
 
 If you encounter any issues during installation, please check the following:
 
@@ -81,7 +81,7 @@ If you encounter any issues during installation, please check the following:
     pip install pandas
     ```
 
-    If you get an error, the dependancies doesn't work on your machine. You'll have to find your own way to install the dependencies.
+    If you get an error, the dependencies doesn't work on your machine. You'll have to find your own way to install the dependencies.
 
 6. If you're still having trouble, please open an issue on the [GitHub repository](https://github.com/FlysonBot/Mastermind/issues) and we'll try to help you out. Or alternatively you can run the program in your [browser](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb)
 
