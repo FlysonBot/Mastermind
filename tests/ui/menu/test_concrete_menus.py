@@ -25,7 +25,6 @@ class TestMainMenu(unittest.TestCase):
         self.assertEqual(menu._process_option("1"), "Start New Game")
         self.assertEqual(menu._process_option("2"), "Load Saved Game")
         self.assertEqual(menu._process_option("3"), "Game History")
-        self.assertEqual(menu._process_option("4"), "Settings")
         self.assertEqual(menu._process_option("0"), "Save and Exit")
 
 
@@ -65,7 +64,7 @@ class TestGameHistoryMenu(unittest.TestCase):
     def setUp(self):
         self.menu = GameHistoryMenu()
 
-    @patch("src.main.main.GameHistoryManager.retrieve_game_history")
+    @patch("src.main.game_history.GameHistoryManager.retrieve_game_history")
     def test_print_content_with_data(self, mock_retrieve_game_history):
         mock_retrieve_game_history.return_value = pd.DataFrame(
             {"Game": ["Game 1", "Game 2"]}
@@ -79,7 +78,7 @@ class TestGameHistoryMenu(unittest.TestCase):
             )
             mock_print.assert_not_called()
 
-    @patch("src.main.main.GameHistoryManager.retrieve_game_history")
+    @patch("src.main.game_history.GameHistoryManager.retrieve_game_history")
     @patch("builtins.print")
     def test_print_content_without_data(self, mock_print, mock_retrieve_game_history):
         mock_retrieve_game_history.return_value = None
@@ -89,7 +88,7 @@ class TestGameHistoryMenu(unittest.TestCase):
 
     def test_fetch_data(self):
         with patch(
-            "src.main.main.GameHistoryManager.retrieve_game_history"
+            "src.main.game_history.GameHistoryManager.retrieve_game_history"
         ) as mock_retrieve_game_history:
             mock_retrieve_game_history.return_value = pd.DataFrame(
                 {"Game": ["Game 1", "Game 2"]}

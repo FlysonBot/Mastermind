@@ -30,7 +30,8 @@ class TestUserDataManager(unittest.TestCase):
         instance2 = UserDataManager()
         self.assertIs(instance1, instance2)
 
-    def test_load_data(self):
+    @patch("builtins.input", side_effect=["y"])
+    def test_load_data(self, mock_input):
         """Test that data is loaded from the file"""
         with patch(
             "builtins.open",
@@ -43,10 +44,13 @@ class TestUserDataManager(unittest.TestCase):
         with patch(
             "builtins.open", unittest.mock.mock_open(read_data=b"corrupted data")
         ):
+            self.assertEqual(manager._data, self.test_data)
             manager = UserDataManager()
-            self.assertRaises(pickle.UnpicklingError, manager._load_data)
+            manager._load_data()
+            self.assertEqual(manager._data, {})
 
-    def test_save_data(self):
+    @patch("builtins.input", side_effect=["y"])
+    def test_save_data(self, mock_input):
         """Test that data is saved to the file"""
         with patch("builtins.open", unittest.mock.mock_open()) as mock_file:
             manager = UserDataManager()
@@ -56,7 +60,6 @@ class TestUserDataManager(unittest.TestCase):
 
             with self.assertRaises(PermissionError):
                 mock_file.side_effect = PermissionError()
-                manager = UserDataManager()
                 manager.save_data()
 
     def test_clear_all(self):

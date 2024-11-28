@@ -36,7 +36,7 @@ class UserDataManager:
         else:
             raise ValueError("cls._file_path must include a directory component")
 
-    def _load_data(self) -> None:
+    def _load_data(self) -> None:  # sourcery skip: extract-duplicate-method
         """
         Loads the user data from the file.
 
@@ -69,7 +69,7 @@ class UserDataManager:
             print("\nIf this issue persists, consider deleting the stored data.")
 
         if not prompt_delete_data():
-            raise Exception("Data could not be loaded.")
+            raise Exception("Data could not be loaded.")  # sourcery skip: raise-specific-error
 
     def save_data(self) -> None:
         """Saves the user data to the file."""
