@@ -1,6 +1,6 @@
 # Mastermind
 
-> This is a python implementation of the classic puzzle game Mastermind. It simulates the game and allow you to play with either another human being (sits next to you) or the computer, with a AI Solver build-in (still under development). This game currently only works in the terminal.
+> This is a python implementation of the classic puzzle game Mastermind. It simulates the game and allow you to play with either another human being (sits next to you) or the computer, with a AI Solver build-in (still under development). You can install this game with pip or try it out in your browser with [Google Colab](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb).
 
 Notice: This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I'll try to fix them as soon as possible.
 
@@ -10,7 +10,7 @@ Mastermind is a code-breaking game for two players. The first player (the code-s
 
 ## Getting Started
 
-### Prerequisites
+### <ins>Prerequisites</ins>
 
 To run this project, you must have the following installed (installation guide below):
 
@@ -18,7 +18,9 @@ To run this project, you must have the following installed (installation guide b
 - Python 3.10 (or higher)
 - pip (comes with Python, needed to install the project as a library)
 
-### Installation Guide
+Or alternatively you can run this program in your browser with [Google Colab](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb)
+
+### <ins>Installation Guide</ins>
 
 1. Install [Git](https://git-scm.com/downloads) if you haven't already.
 
@@ -38,7 +40,7 @@ To run this project, you must have the following installed (installation guide b
 
 Enjoy! The program crashes during installation? Check out the section below.
 
-### Troubleshooting
+### <ins>Troubleshooting</ins>
 
 If you encounter any issues during installation, please check the following:
 
@@ -79,9 +81,9 @@ If you encounter any issues during installation, please check the following:
     pip install pandas
     ```
 
-    If you get an error, unfortunately you're out of luck. You'll need to find your own way to install the dependencies.
+    If you get an error, the dependancies doesn't work on your machine. You'll have to find your own way to install the dependencies.
 
-6. If you're still having trouble, please open an issue on the [GitHub repository](https://github.com/FlysonBot/Mastermind/issues) and we'll try to help you out.
+6. If you're still having trouble, please open an issue on the [GitHub repository](https://github.com/FlysonBot/Mastermind/issues) and we'll try to help you out. Or alternatively you can run the program in your [browser](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb)
 
 ## Contributing
 
