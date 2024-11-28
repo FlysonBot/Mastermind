@@ -86,5 +86,9 @@ class MainUI:
         UserDataManager().save_data()
 
 
-if __name__ == "__main__":
+def main():
     MainUI().run()
+
+
+if __name__ == "__main__":
+    main()
