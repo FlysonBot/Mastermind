@@ -13,15 +13,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install coverage
+          pip install coveralls
+          pip install pytest
 
       - name: Run Coverall
+        env:
+          PYTHONPATH: ./src
+          GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
         run: |
-          pip install coveralls
-          coverage run --source=src -m pytest tests/
+          coverage run -m pytest tests/
           coveralls
