@@ -69,7 +69,9 @@ class UserDataManager:
             print("\nIf this issue persists, consider deleting the stored data.")
 
         if not prompt_delete_data():
-            raise Exception("Data could not be loaded.")  # sourcery skip: raise-specific-error
+            raise Exception(
+                "Data could not be loaded."
+            )  # sourcery skip: raise-specific-error
 
     def save_data(self) -> None:
         """Saves the user data to the file."""
