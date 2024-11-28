@@ -16,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/FlysonBot/Mastermind",
     package_dir={"": "src"},
-    packages=find_packages(where="src/mastermind"),  # Adjust this line
+    packages=find_packages(where="src"),  # Adjust this line
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3.10",
