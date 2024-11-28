@@ -15,14 +15,14 @@ Mastermind is a code-breaking game for two players. The first player (the code-s
 To run this project, you must have the following installed (installation guide below):
 
 - Git (needed to clone this repository)
-- Python 3.9 (or higher)
+- Python 3.10 (or higher)
 - pip (comes with Python, needed to install the project as a library)
 
 ### Installation Guide
 
 1. Install [Git](https://git-scm.com/downloads) if you haven't already.
 
-2. Install [Python 3.9+](https://www.python.org/downloads/) if you haven't already.
+2. Install [Python 3.10+](https://www.python.org/downloads/) if you haven't already.
 
 3. Install this repository as a python library using the following command in your terminal:
 
@@ -63,7 +63,7 @@ If you encounter any issues during installation, please check the following:
     ```
 
     If you get an error, you need to install python.
-    If your python version is lower than 3.9, you need to upgrade your python version.
+    If your python version is lower than 3.10, you need to upgrade your python version.
 
 4. Do you have `pip` installed properly? Check with the following command:
 
