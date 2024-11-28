@@ -2,6 +2,8 @@
 
 > This is a python implementation of the classic puzzle game Mastermind. It simulates the game and allow you to play with either another human being (sits next to you) or the computer, with a AI Solver build-in (still under development). This game currently only works in the terminal.
 
+Notice: This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I'll try to fix them as soon as possible.
+
 ## What is Mastermind?
 
 Mastermind is a code-breaking game for two players. The first player (the code-setter) creates a secret code, which the second player (the code-cracker) tries to guess. The code-cracker has a limited number of attempts to guess the code correctly. After each guess, the code-setter provides feedback to the code-cracker, indicating how many dots have the right color and are in the right place, and how many are the right color but in the wrong place. The code-cracker uses this feedback to refine their guesses until they correctly guess the code or run out of attempts.
