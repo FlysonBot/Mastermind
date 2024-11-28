@@ -25,6 +25,8 @@ jobs:
         run: sphinx-apidoc -o docs/source src/mastermind -f --templatedir=docs/source/_templates --maxdepth=2 --module-first
 
       - name: Build documentation
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src
         run: |
           cd docs
           make html
