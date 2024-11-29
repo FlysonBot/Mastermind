@@ -110,7 +110,7 @@ To contribute to the code directly, you must also follow the [Contributing Guide
 
 ## License
 
-Licensed under [MIT License]([/LICENSE](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE)) by [@FlysonBot](https://github.com/FlysonBot).
+Licensed under [MIT License](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE) by [@FlysonBot](https://github.com/FlysonBot).
 
 ## Questions?
 
