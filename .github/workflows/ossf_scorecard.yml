@@ -1,6 +1,8 @@
 name: OSSF Scorecard
 on:
   push:
+    branches:
+      - "*"  # avoid running on tag push (unsupported by scorecard)
   workflow_dispatch:
 
 permissions: read-all
