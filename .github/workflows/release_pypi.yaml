@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   release-build:
+    name: Build and upload release artifacts
     runs-on: ubuntu-latest
 
     steps:
@@ -40,14 +41,18 @@ jobs:
           path: dist/
 
   pypi-publish:
+    name: Publish release distributions to PyPI
     runs-on: ubuntu-latest
+    
     needs:
       - release-build
+    
     permissions:
       id-token: write
 
     environment:
       name: pypi
+      url: https://pypi.org/p/mastermind-ai
 
     steps:
       - name: Retrieve release distributions
@@ -58,5 +63,3 @@ jobs:
 
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@15c56dba361d8335944d31a2ecd17d700fc7bcbc # release/v1
-        with:
-          packages-dir: dist/
