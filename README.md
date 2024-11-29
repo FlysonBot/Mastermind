@@ -9,12 +9,12 @@
 | **Repo:** | [![GitHub Downloads](https://img.shields.io/github/downloads/FlysonBot/Mastermind/total)](https://github.com/FlysonBot/Mastermind/releases) [![Opened Issue Count](https://img.shields.io/github/issues/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/issues) [![Closed Issue Count](https://img.shields.io/github/issues-closed/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/issues?q=is%3Aissue+is%3Aclosed) [![Closed PR Count](https://img.shields.io/github/issues-pr-closed/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/pulls?q=is%3Apr+is%3Aclosed) ![Repo Size](https://img.shields.io/github/repo-size/FlysonBot/Mastermind) |
 | **Meta:** | [![GitHub License](https://img.shields.io/github/license/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE) |
 
+> [!NOTE]  
+> This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I'll try to fix them as soon as possible.
 
 # Mastermind
 
 > This is a python implementation of the classic puzzle game Mastermind. It simulates the game and allow you to play with either another human being (sits next to you) or the computer, with a AI Solver build-in (still under development). You can install this game with pip or try it out in your browser with [Google Colab](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb).
-
-Notice: This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I'll try to fix them as soon as possible.
 
 ## What is Mastermind?
 
@@ -50,7 +50,10 @@ Or alternatively you can run this program in your browser with [Google Colab](ht
     mastermind
     ```
 
-Enjoy! The program crashes during installation? Check out the section below.
+5. Enjoy!
+
+> [!TIP]
+> If the above doesn't work, try the troubleshooting guide below.
 
 ### Troubleshooting
 
@@ -58,8 +61,8 @@ If you encounter any issues during installation, please check the following:
 
 1. Do you have trouble finding your terminal?
 
-    - For windows users, press `Ctrl + R` and type "`cmd`" and press enter.
-    - For mac users, press `Cmd + Space` and type "`terminal`" and press enter.
+    - For windows users, press `Ctrl + R` and type `cmd` and press enter.
+    - For mac users, press `Cmd + Space` and type `terminal` and press enter.
     - For linux users, press `Ctrl + Alt + T`.
 
 2. Do you have `git` installed properly? Check with the following command:
