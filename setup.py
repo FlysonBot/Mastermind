@@ -8,7 +8,7 @@ def read_requirements(file):
 
 setup(
     name="mastermind",
-    version="1.6.0",
+    version="1.6.1-beta",
     author="FlysonBot",
     author_email="FlysonBot@users.noreply.github.com",
     description="A Python package that simulates the Mastermind game with an AI solver.",
