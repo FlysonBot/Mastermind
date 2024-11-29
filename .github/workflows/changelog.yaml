@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'  # Triggers on tags that start with 'v'
 
+permissions:
+  contents: read
+
 jobs:
   changelog:
     name: Generate changelog
