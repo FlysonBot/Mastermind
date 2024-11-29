@@ -23,13 +23,9 @@ jobs:
           fetch-depth: 0
 
       - name: Generate changelog
-        uses: orhun/git-cliff-action@e364f07989916ffb9f50d7ef6c0a8c48082c2792 # v4.4.1
-        with:
-          config: ./.config/cliff.toml
-          args: --latest --prepend CHANGELOG.md
-        env:
-          OUTPUT: CHANGELOG.md
-          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          pip install git-cliff
+          git cliff --latest --prepend CHANGELOG.md --config ./.config/cliff.toml
 
       - name: Commit
         run: |
