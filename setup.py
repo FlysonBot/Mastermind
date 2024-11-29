@@ -15,8 +15,13 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/FlysonBot/Mastermind",
+    project_urls={
+        "Repository": "https://github.com/FlysonBot/Mastermind",
+        "Documentation": "https://flysonbot.github.io/Mastermind/",
+        "Issues and Bugs": "https://github.com/FlysonBot/Mastermind/issues",
+    },
     package_dir={"": "src"},
-    packages=find_packages(where="src"),  # Adjust this line
+    packages=find_packages(where="src"),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3.10",
@@ -31,7 +36,7 @@ setup(
     install_requires=read_requirements("requirements.txt"),
     entry_points={
         "console_scripts": [
-            "mastermind = mastermind.main.main:main",  # Adjusted to reflect the new structure
+            "mastermind = mastermind.main.main:main",
         ],
     },
 )
