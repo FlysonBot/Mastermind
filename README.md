@@ -10,7 +10,7 @@
 | **Meta:** | [![GitHub License](https://img.shields.io/github/license/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE) |
 
 > [!NOTE]  
-> This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I'll try to fix them as soon as possible.
+> This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I will try to fix them as soon as possible.
 
 # Mastermind
 
@@ -34,9 +34,9 @@ Or alternatively you can run this program in your browser with [Google Colab](ht
 
 ### Installation Guide
 
-1. Install [Git](https://git-scm.com/downloads) if you haven't already.
+1. Install [Git](https://git-scm.com/downloads) if you have not already.
 
-2. Install [Python 3.10+](https://www.python.org/downloads/) if you haven't already.
+2. Install [Python 3.10+](https://www.python.org/downloads/) if you have not already.
 
 3. Install this repository as a python library using the following command in your terminal:
 
@@ -53,7 +53,7 @@ Or alternatively you can run this program in your browser with [Google Colab](ht
 5. Enjoy!
 
 > [!TIP]
-> If the above doesn't work, try the troubleshooting guide below.
+> If the above does not work, try the troubleshooting guide below.
 
 ### Troubleshooting
 
@@ -96,9 +96,9 @@ If you encounter any issues during installation, please check the following:
     pip install pandas
     ```
 
-    If you get an error, the dependencies doesn't work on your machine. You'll have to find your own way to install the dependencies.
+    If you get an error, the dependencies does not work on your machine. You will have to find your own way to install the dependencies.
 
-6. If you're still having trouble, please open an issue on the [GitHub repository](https://github.com/FlysonBot/Mastermind/issues) and we'll try to help you out. Or alternatively you can run the program in your [browser](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb)
+6. If you are still having trouble, please open an issue on the [GitHub repository](https://github.com/FlysonBot/Mastermind/issues) and we will try to help you out. Or alternatively you can run the program in your [browser](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb)
 
 ## Contributing
 
