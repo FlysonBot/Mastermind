@@ -1,6 +1,14 @@
-<h1 align="center">
+<p align="center">
 <img src="https://raw.githubusercontent.com/FlysonBot/Mastermind/main/docs/source/_static/Mastermind Logo.svg" width="350">
-</h1>
+</p>
+
+| | |
+| --- | --- |
+| **Testing:** | [![Testing Status](https://img.shields.io/github/actions/workflow/status/FlysonBot/Mastermind/coveralls.yaml?label=test)](https://github.com/FlysonBot/Mastermind/actions/workflows/coveralls.yaml) [![Test Coverage](https://coveralls.io/repos/github/FlysonBot/Mastermind/badge.svg?branch=main)](https://coveralls.io/github/FlysonBot/Mastermind?branch=main)  [![CodeFactor](https://www.codefactor.io/repository/github/flysonbot/mastermind/badge/main)](https://www.codefactor.io/repository/github/flysonbot/mastermind/overview/main) [![Docs Deploy Status](https://img.shields.io/github/actions/workflow/status/FlysonBot/Mastermind/deploy_sphinx.yaml?label=docs)](https://flysonbot.github.io/Mastermind/) |
+| **Version:** | [![GitHub tag](https://img.shields.io/github/tag/FlysonBot/Mastermind?include_prereleases=&sort=semver&color=blue)](https://github.com/FlysonBot/Mastermind/tags) [![GitHub Release](https://img.shields.io/github/v/release/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/releases) [![Python Version](https://img.shields.io/badge/Python-3.10+-blue)](https://www.python.org/downloads/) |
+| **Repo:** | [![GitHub Downloads](https://img.shields.io/github/downloads/FlysonBot/Mastermind/total)](https://github.com/FlysonBot/Mastermind/releases) [![Opened Issue Count](https://img.shields.io/github/issues/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/issues) [![Closed Issue Count](https://img.shields.io/github/issues-closed/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/issues?q=is%3Aissue+is%3Aclosed) [![Closed PR Count](https://img.shields.io/github/issues-pr-closed/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/pulls?q=is%3Apr+is%3Aclosed) ![Repo Size](https://img.shields.io/github/repo-size/FlysonBot/Mastermind) |
+| **Meta:** | [![GitHub License](https://img.shields.io/github/license/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE) |
+
 
 # Mastermind
 
@@ -99,7 +107,7 @@ To contribute to the code directly, you must also follow the [Contributing Guide
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE).
+Licensed under [MIT License]([/LICENSE](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE)) by [@FlysonBot](https://github.com/FlysonBot).
 
 ## Questions?
 
