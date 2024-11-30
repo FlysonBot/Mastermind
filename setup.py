@@ -7,7 +7,7 @@ def read_requirements(file):
 
 
 setup(
-    name="mastermind",
+    name="mastermind-ai",
     version="1.6.2-beta",
     author="FlysonBot",
     author_email="FlysonBot@users.noreply.github.com",
