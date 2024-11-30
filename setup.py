@@ -33,7 +33,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.10",
-    install_requires=read_requirements("requirements.txt"),
+    install_requires=read_requirements("src/requirements.txt"),
     entry_points={
         "console_scripts": [
             "mastermind = mastermind.main.main:main",
