@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v1.6.1-beta](https://github.com/FlysonBot/Mastermind/releases/tag/v1.6.0-beta) - 2024-11-28
+## [v1.6.2-beta](https://github.com/FlysonBot/Mastermind/releases/tag/v1.6.0-beta) - 2024-11-28
 
 This is the first official pre-release of the Mastermind project.
 
