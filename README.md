@@ -102,7 +102,7 @@ If you encounter any issues during installation, please check the following:
 
 Contributions are welcome! Please open an issue or submit a pull request.
 
-All contributors must adhere to the [Contributor Covenant Code of Conduct](https://github.com/FlysonBot/Mastermind/blob/main/CODE_OF_CONDUCT.md) to ensure a welcoming and inclusive environment for all contributors.
+All contributors must adhere to the [Contributor Covenant Code of Conduct](https://github.com/FlysonBot/Mastermind/blob/main/.github/CODE_OF_CONDUCT.md) to ensure a welcoming and inclusive environment for all contributors.
 
 To contribute to the code directly, you must also follow the [Contributing Guidelines](https://github.com/FlysonBot/Mastermind/blob/main/CONTRIBUTING.md) to ensure a smooth and efficient collaboration process.
 
