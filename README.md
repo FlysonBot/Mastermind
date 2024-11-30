@@ -14,7 +14,7 @@
 
 # Mastermind
 
-> This is a python implementation of the classic puzzle game Mastermind. It simulates the game and allow you to play with either another human being (sits next to you) or the computer, with a AI Solver build-in (still under development). You can install this game with pip or try it out in your browser with [Google Colab](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/mastermind_in_colab.ipynb).
+> This is a python implementation of the classic puzzle game Mastermind. It simulates the game and allow you to play with either another human being (sits next to you) or the computer, with a AI Solver build-in (still under development). You can install this game with pip or try it out in your browser with [Google Colab](https://colab.research.google.com/github/FlysonBot/Mastermind/blob/main/examples/mastermind_in_colab.ipynb).
 
 ## What is Mastermind?
 
