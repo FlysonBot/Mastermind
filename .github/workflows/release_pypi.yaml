@@ -52,7 +52,7 @@ jobs:
 
     environment:
       name: pypi
-      url: https://pypi.org/p/mastermind-ai
+      url: https://test.pypi.org/legacy/
 
     steps:
       - name: Retrieve release distributions
@@ -61,5 +61,8 @@ jobs:
           name: release-dists
           path: dist/
 
-      - name: Publish release distributions to PyPI
+      - name: Publish release distributions to TestPyPI
         uses: pypa/gh-action-pypi-publish@15c56dba361d8335944d31a2ecd17d700fc7bcbc # release/v1
+        with:
+          verbose: true
+          print-hash: true
