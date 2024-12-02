@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 import pandas as pd
+
 from mastermind.main.game_history import GameHistoryManager
 from mastermind.ui.menu.data_menu import DataDisplayMenu
 from mastermind.utils.render_dataframe import render_dataframe
@@ -13,6 +14,7 @@ class ResumeGameMenu(DataDisplayMenu):
 
     name = "Resume Game"
     width = 27
+    _empty_message = "No continuable game found."
 
     def __init__(self):
         """
@@ -36,12 +38,6 @@ class ResumeGameMenu(DataDisplayMenu):
         render_dataframe(data)
         print("\n(0) Return to Main Menu")
 
-    def _empty_message(self) -> str:
-        """
-        Returns the message to display when there are no continuable games.
-        """
-        return "No continuable game found."
-
     def _process_option(self, option: str) -> Union[str, int]:
         """
         Processes the selected option, returning either "return" or the index of the selected game.
@@ -56,19 +52,16 @@ class ResumeGameMenu(DataDisplayMenu):
         if self.menu_length == 0:
             input("\nPress Enter to continue...")
             return 0
-        else:
-            while True:
-                option = input("Select a game to resume: ")
-                try:
-                    option = int(option)
 
-                except ValueError:
-                    print("Invalid input. Please enter a number.")
+        while True:
+            option = input("Select a game to resume: ")
 
-                else:
-                    if 0 <= option <= self.menu_length:
-                        return option
+            if _is_option_valid(option, self.menu_length):
+                return int(option)
 
-                    print("Invalid option. Try again.")
+            print("Invalid input or option. Try again.")
+            self.display()
 
-                self.display()
+
+def _is_option_valid(option: int, number_of_options: int) -> bool:
+    return option.isdigit() and 0 <= option <= number_of_options
