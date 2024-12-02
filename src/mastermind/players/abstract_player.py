@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from mastermind.utils import FStringTemplate, Stack
+from mastermind.utils import Stack
 
 
 class Player(ABC):
@@ -48,14 +48,14 @@ class CodeCracker(Player, ABC):
         lose_msg: str,  # noqa: F821 # type: ignore
     ) -> None:  # type: ignore  # noqa: F821
         super().__init__(player_logic)
-        self._win_message = FStringTemplate(win_msg)
-        self._lose_message = FStringTemplate(lose_msg)
+        self._win_message = win_msg
+        self._lose_message = lose_msg
 
     def win_message(self) -> None:
-        print(self._win_message.eval(step=len(self.game_state)))
+        print(self._win_message.format(step=len(self.game_state)))
 
     def lose_message(self) -> None:
-        print(self._lose_message.eval(step=len(self.game_state)))
+        print(self._lose_message.format(step=len(self.game_state)))
 
     @abstractmethod
     def obtain_guess(self) -> tuple:
