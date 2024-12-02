@@ -68,14 +68,12 @@ class TestCodeSetter(unittest.TestCase):
 class TestCodeCracker(unittest.TestCase):
     class ConcreteCodeCracker(CodeCracker):
         obtain_guess = lambda: None  # noqa: E731
+        _WIN_MESSAGE = "You win in {step} steps!"
+        _LOSE_MESSAGE = "You lose after {step} steps."
 
     def setUp(self):
         self.game = Game(6, 4, 10, "HvH")
-        self.win_msg = "You win in {step} steps!"
-        self.lose_msg = "You lose after {step} steps."
-        self.code_cracker = self.ConcreteCodeCracker(
-            self.game._player_logic, self.win_msg, self.lose_msg
-        )
+        self.code_cracker = self.ConcreteCodeCracker(self.game._player_logic)
 
     @patch.object(ConcreteCodeCracker, "obtain_guess")
     def test_undo(self, mock_obtain_guess):
