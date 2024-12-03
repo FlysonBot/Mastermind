@@ -117,4 +117,3 @@ class TestPromptDeleteData(unittest.TestCase):
     @patch("builtins.input", return_value="n")
     def test_prompt_delete_data_user_declines(self, mock_input):
         self.assertFalse(_prompt_delete_data("data.pickle"))
-
