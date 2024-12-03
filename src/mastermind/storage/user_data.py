@@ -1,6 +1,6 @@
 from collections.abc import Callable
-from typing import Any
 from functools import partial
+from typing import Any
 
 from mastermind.storage.pickle_io import (
     delete_pickled_data,
@@ -62,25 +62,21 @@ class UserDataManager:
         self._data[key] = value
         self.save_data()
 
+    def __contains__(self, key: str) -> bool:
+        return key in self._data
+
+    # Allow dot and bracket notation for accessing and modifying data
     def __getattr__(self, key: str) -> Any:
-        """Retrieves the value associated with the given key."""
         return self._retrieve_item(key)
 
     def __getitem__(self, key: str) -> Any:
-        """Retrieves the value associated with the given key."""
         return self._retrieve_item(key)
 
     def __setattr__(self, key: str, value: Any) -> None:
-        """Modifies the value associated with the given key, and saves the changes."""
         self._modify_item(key, value)
 
     def __setitem__(self, key: str, value: Any) -> None:
-        """Modifies the value associated with the given key, and saves the changes."""
         self._modify_item(key, value)
-
-    def __contains__(self, key: str) -> bool:
-        """Checks if the given key exists in the user data."""
-        return key in self._data
 
 
 def _load_data_safely(filepath: str) -> dict:  # sourcery skip: extract-duplicate-method
