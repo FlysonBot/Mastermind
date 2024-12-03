@@ -16,13 +16,13 @@
       <title>mastermind package &mdash; Mastermind  documentation</title>
     
     <link rel="canonical" href="mastermind" />
-    <link rel="stylesheet" href="_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=b9bf16a8" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
         <link rel="index" title="Index" href="genindex.html" />
         <link rel="search" title="Search" href="search.html" />
         <link rel="top" title="Mastermind  documentation" href="#" />
@@ -225,8 +225,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mastermind.storage.html">mastermind.storage package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.persistent_cache.PersistentCacheManager"><code class="docutils literal notranslate"><span class="pre">PersistentCacheManager</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.pickle_io.delete_pickled_data"><code class="docutils literal notranslate"><span class="pre">delete_pickled_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.pickle_io.ensure_parent_directory_exists"><code class="docutils literal notranslate"><span class="pre">ensure_parent_directory_exists()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.pickle_io.read_pickled_data"><code class="docutils literal notranslate"><span class="pre">read_pickled_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.pickle_io.write_pickled_data"><code class="docutils literal notranslate"><span class="pre">write_pickled_data()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.user_data.UserDataManager"><code class="docutils literal notranslate"><span class="pre">UserDataManager</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.user_data.prompt_delete_data"><code class="docutils literal notranslate"><span class="pre">prompt_delete_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="mastermind.storage.html#mastermind.storage.user_data.get_user_data_manager"><code class="docutils literal notranslate"><span class="pre">get_user_data_manager()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mastermind.ui.html">mastermind.ui package</a><ul>
@@ -234,7 +238,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mastermind.utils.html">mastermind.utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mastermind.utils.html#mastermind.utils.fstring_template.FStringTemplate"><code class="docutils literal notranslate"><span class="pre">FStringTemplate</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="mastermind.utils.html#mastermind.utils.get_feedback.generate_feedback"><code class="docutils literal notranslate"><span class="pre">generate_feedback()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="mastermind.utils.html#mastermind.utils.render_dataframe.render_dataframe"><code class="docutils literal notranslate"><span class="pre">render_dataframe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="mastermind.utils.html#mastermind.utils.stack.Stack"><code class="docutils literal notranslate"><span class="pre">Stack</span></code></a></li>
@@ -276,7 +279,7 @@
         
         
         <div class="built-with pt-2">
-          Built with <a href="http://sphinx-doc.org">Sphinx 8.1.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.5.3</a>
+          Built with <a href="http://sphinx-doc.org">Sphinx 8.1.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.7.1</a>
         </div>
         
       </div>
@@ -288,7 +291,7 @@
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/docs-versions.js?v=08b0cbfb"></script>
-    <script src="_static/sphinx-nefertiti.min.js?v=0872986a"></script>
+    <script src="_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
     <script src="_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
   </body>
 </html>

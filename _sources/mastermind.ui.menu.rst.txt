@@ -7,17 +7,32 @@ mastermind.ui.menu package
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: mastermind.ui.menu.concrete_menus
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 .. automodule:: mastermind.ui.menu.data_menu
    :members:
    :undoc-members:
    :show-inheritance:
 
+.. automodule:: mastermind.ui.menu.game_history_menu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: mastermind.ui.menu.main_menu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: mastermind.ui.menu.new_game_menu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 .. automodule:: mastermind.ui.menu.option_menu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: mastermind.ui.menu.resume_game_menu
    :members:
    :undoc-members:
    :show-inheritance:

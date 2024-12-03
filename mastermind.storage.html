@@ -16,13 +16,13 @@
       <title>mastermind.storage package &mdash; Mastermind  documentation</title>
     
     <link rel="canonical" href="mastermind.storage" />
-    <link rel="stylesheet" href="_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=b9bf16a8" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
         <link rel="index" title="Index" href="genindex.html" />
         <link rel="search" title="Search" href="search.html" />
         <link rel="top" title="Mastermind  documentation" href="#" />
@@ -196,17 +196,18 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.storage.persistent_cache.</span></span><span class="sig-name descname"><span class="pre">PersistentCacheManager</span></span><a class="reference internal" href="_modules/mastermind/storage/persistent_cache.html#PersistentCacheManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.persistent_cache.PersistentCacheManager" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Manages a persistent cache of Python objects on the file system.</p>
-<p>The PersistentCacheManager class provides a simple interface for caching and retrieving data, using the pickle module to serialize and deserialize the objects.</p>
+<p>The PersistentCacheManager class provides a simple interface for caching and retrieving data,
+using the pickle_io module for pickling to serialize and deserialize the objects.</p>
 <p>The cache files are stored in the “data” directory, which is created automatically if it does not exist.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="mastermind.storage.persistent_cache.PersistentCacheManager.clear_cache">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/persistent_cache.html#PersistentCacheManager.clear_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.persistent_cache.PersistentCacheManager.clear_cache" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mastermind.storage.persistent_cache.PersistentCacheManager.clear_all_cache">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clear_all_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/persistent_cache.html#PersistentCacheManager.clear_all_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.persistent_cache.PersistentCacheManager.clear_all_cache" title="Link to this definition">¶</a></dt>
 <dd><p>Clears the entire cache by deleting all cache files.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mastermind.storage.persistent_cache.PersistentCacheManager.set">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/mastermind/storage/persistent_cache.html#PersistentCacheManager.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.persistent_cache.PersistentCacheManager.set" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/persistent_cache.html#PersistentCacheManager.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.persistent_cache.PersistentCacheManager.set" title="Link to this definition">¶</a></dt>
 <dd><p>Sets the cached value for the given key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -215,8 +216,43 @@
 <li><p><strong>value</strong> (<em>Any</em>) – The value to be cached.</p></li>
 </ul>
 </dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function" id="module-mastermind.storage.pickle_io">
+<dt class="sig sig-object py" id="mastermind.storage.pickle_io.delete_pickled_data">
+<span class="sig-prename descclassname"><span class="pre">mastermind.storage.pickle_io.</span></span><span class="sig-name descname"><span class="pre">delete_pickled_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/pickle_io.html#delete_pickled_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.pickle_io.delete_pickled_data" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a pickled file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – The path to the file to delete.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mastermind.storage.pickle_io.ensure_parent_directory_exists">
+<span class="sig-prename descclassname"><span class="pre">mastermind.storage.pickle_io.</span></span><span class="sig-name descname"><span class="pre">ensure_parent_directory_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/pickle_io.html#ensure_parent_directory_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.pickle_io.ensure_parent_directory_exists" title="Link to this definition">¶</a></dt>
+<dd><p>Create the parent directory of a file if it doesn’t exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – The path to the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mastermind.storage.pickle_io.read_pickled_data">
+<span class="sig-prename descclassname"><span class="pre">mastermind.storage.pickle_io.</span></span><span class="sig-name descname"><span class="pre">read_pickled_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/mastermind/storage/pickle_io.html#read_pickled_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.pickle_io.read_pickled_data" title="Link to this definition">¶</a></dt>
+<dd><p>Read pickled data from a file and return it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – The path to the file to read from.</p>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The cached value.</p>
+<dd class="field-even"><p>The pickled data being read, or None if the file does not exist.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Any</p>
@@ -224,33 +260,39 @@
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="mastermind.storage.pickle_io.write_pickled_data">
+<span class="sig-prename descclassname"><span class="pre">mastermind.storage.pickle_io.</span></span><span class="sig-name descname"><span class="pre">write_pickled_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/pickle_io.html#write_pickled_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.pickle_io.write_pickled_data" title="Link to this definition">¶</a></dt>
+<dd><p>Write pickled data to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – The path to the file to write to.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – The data to be pickled and written to the file.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class" id="module-mastermind.storage.user_data">
 <dt class="sig sig-object py" id="mastermind.storage.user_data.UserDataManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.storage.user_data.</span></span><span class="sig-name descname"><span class="pre">UserDataManager</span></span><a class="reference internal" href="_modules/mastermind/storage/user_data.html#UserDataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.user_data.UserDataManager" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.storage.user_data.</span></span><span class="sig-name descname"><span class="pre">UserDataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mastermind/storage/user_data.html#UserDataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.user_data.UserDataManager" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Manages user data using a singleton pattern.</p>
-<p>The UserDataManager class stores user data in a dictionary and persists it to a file on the file system using the pickle module.</p>
-<p>The class is implemented as a singleton, ensuring that there is only one instance of the UserDataManager class.</p>
+<p>Manages user data with a customizable data storage interface. You should not use this class directly. Use get_user_data_manager() instead.</p>
+<p>This class wraps a data dictionary and provides methods to modify, retrieve, and clear user data, while ensuring that changes are saved through a provided save function.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mastermind.storage.user_data.UserDataManager.clear_all">
 <span class="sig-name descname"><span class="pre">clear_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/user_data.html#UserDataManager.clear_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.user_data.UserDataManager.clear_all" title="Link to this definition">¶</a></dt>
 <dd><p>Clears all the user data and saves the changes.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="mastermind.storage.user_data.UserDataManager.save_data">
-<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/storage/user_data.html#UserDataManager.save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.user_data.UserDataManager.save_data" title="Link to this definition">¶</a></dt>
-<dd><p>Saves the user data to the file.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mastermind.storage.user_data.prompt_delete_data">
-<span class="sig-prename descclassname"><span class="pre">mastermind.storage.user_data.</span></span><span class="sig-name descname"><span class="pre">prompt_delete_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mastermind/storage/user_data.html#prompt_delete_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.user_data.prompt_delete_data" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="mastermind.storage.user_data.get_user_data_manager">
+<span class="sig-prename descclassname"><span class="pre">mastermind.storage.user_data.</span></span><span class="sig-name descname"><span class="pre">get_user_data_manager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mastermind.storage.user_data.UserDataManager" title="mastermind.storage.user_data.UserDataManager"><span class="pre">UserDataManager</span></a></span></span><a class="reference internal" href="_modules/mastermind/storage/user_data.html#get_user_data_manager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.storage.user_data.get_user_data_manager" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a new UserDataManager instance.</p>
+</dd></dl>
 
 </section>
 
@@ -268,16 +310,19 @@
                 <ul>
 <li><a class="reference internal" href="#">mastermind.storage package</a><ul>
 <li><a class="reference internal" href="#mastermind.storage.persistent_cache.PersistentCacheManager"><code class="docutils literal notranslate"><span class="pre">PersistentCacheManager</span></code></a><ul>
-<li><a class="reference internal" href="#mastermind.storage.persistent_cache.PersistentCacheManager.clear_cache"><code class="docutils literal notranslate"><span class="pre">PersistentCacheManager.clear_cache()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.storage.persistent_cache.PersistentCacheManager.clear_all_cache"><code class="docutils literal notranslate"><span class="pre">PersistentCacheManager.clear_all_cache()</span></code></a></li>
 <li><a class="reference internal" href="#mastermind.storage.persistent_cache.PersistentCacheManager.set"><code class="docutils literal notranslate"><span class="pre">PersistentCacheManager.set()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#mastermind.storage.pickle_io.delete_pickled_data"><code class="docutils literal notranslate"><span class="pre">delete_pickled_data()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.storage.pickle_io.ensure_parent_directory_exists"><code class="docutils literal notranslate"><span class="pre">ensure_parent_directory_exists()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.storage.pickle_io.read_pickled_data"><code class="docutils literal notranslate"><span class="pre">read_pickled_data()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.storage.pickle_io.write_pickled_data"><code class="docutils literal notranslate"><span class="pre">write_pickled_data()</span></code></a></li>
 <li><a class="reference internal" href="#mastermind.storage.user_data.UserDataManager"><code class="docutils literal notranslate"><span class="pre">UserDataManager</span></code></a><ul>
 <li><a class="reference internal" href="#mastermind.storage.user_data.UserDataManager.clear_all"><code class="docutils literal notranslate"><span class="pre">UserDataManager.clear_all()</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.storage.user_data.UserDataManager.save_data"><code class="docutils literal notranslate"><span class="pre">UserDataManager.save_data()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mastermind.storage.user_data.prompt_delete_data"><code class="docutils literal notranslate"><span class="pre">prompt_delete_data()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.storage.user_data.get_user_data_manager"><code class="docutils literal notranslate"><span class="pre">get_user_data_manager()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -310,7 +355,7 @@
         
         
         <div class="built-with pt-2">
-          Built with <a href="http://sphinx-doc.org">Sphinx 8.1.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.5.3</a>
+          Built with <a href="http://sphinx-doc.org">Sphinx 8.1.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.7.1</a>
         </div>
         
       </div>
@@ -322,7 +367,7 @@
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/docs-versions.js?v=08b0cbfb"></script>
-    <script src="_static/sphinx-nefertiti.min.js?v=0872986a"></script>
+    <script src="_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
     <script src="_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
   </body>
 </html>

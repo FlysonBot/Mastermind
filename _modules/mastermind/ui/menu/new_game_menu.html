@@ -3,8 +3,6 @@
 <html class="no-js" lang="en">
   <head>
     <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     
@@ -13,19 +11,20 @@
     <meta name="docsearch:release" content="" />
     <meta name="docsearch:version" content="" />
     
-      <title>Table of Content &mdash; Mastermind  documentation</title>
+      <title>mastermind.ui.menu.new_game_menu &mdash; Mastermind  documentation</title>
     
-    <link rel="canonical" href="index" />
-          <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
-        <link rel="index" title="Index" href="genindex.html" />
-        <link rel="search" title="Search" href="search.html" />
+    <link rel="canonical" href="_modules/mastermind/ui/menu/new_game_menu" />
+          <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../../_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../../_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../../_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
+        <link rel="index" title="Index" href="../../../../genindex.html" />
+        <link rel="search" title="Search" href="../../../../search.html" />
         <link rel="top" title="Mastermind  documentation" href="#" />
+        <link rel="up" title="Module code" href="../../../index.html" />
     <style>
       :root {
         --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
@@ -53,7 +52,7 @@
             <i class="bi bi-list"></i>
           </button>
         </div>
-          <a href="#"
+          <a href="../../../../index.html"
               
               class="navbar-brand p-0 me-0 md-lg-2 pe-lg-4"
           ><span class="brand-text">Mastermind</span></a>
@@ -77,7 +76,7 @@
     <hr class="d-xl-none text-white-50">
     <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
       <li class="nav-item col-12 col-xl-auto">
-        <form id="nftt-search-form" action="search.html" method="get">
+        <form id="nftt-search-form" action="../../../../search.html" method="get">
           <div class="input-group">
             <input type="text" name="q" class="form-control search-input" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
             <input type="hidden" name="check_keywords" value="yes" />
@@ -185,16 +184,32 @@
         <article id="content" class="nftt-content" role="main">
           <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Start</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Table of Content</li>
+    <li class="breadcrumb-item"><a href="../../../../index.html">Start</a></li>
+      <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+    <li class="breadcrumb-item active" aria-current="page">mastermind.ui.menu.new_game_menu</li>
   </ol>
 </nav>
-    <section id="table-of-content">
-<h1>Table of Content<a class="headerlink" href="#table-of-content" title="Link to this heading">¶</a></h1>
-<p>Welcome to the Mastermind repository!</p>
-<p>To look at the docstrings for all the modules, go to <a class="reference external" href="mastermind.html">modules</a>.</p>
-</section>
+    <h1>Source code for mastermind.ui.menu.new_game_menu</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">mastermind.ui.menu.option_menu</span> <span class="kn">import</span> <span class="n">OptionMenu</span>
 
+
+<div class="viewcode-block" id="NewGameMenu">
+<a class="viewcode-back" href="../../../../mastermind.ui.menu.html#mastermind.ui.menu.new_game_menu.NewGameMenu">[docs]</a>
+<span class="k">class</span> <span class="nc">NewGameMenu</span><span class="p">(</span><span class="n">OptionMenu</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The menu for starting a new game.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;New Game Menu&quot;</span>
+    <span class="n">menu</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="s2">&quot;You vs Someone Else&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="s2">&quot;You vs AI&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="s2">&quot;AI vs You&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="s2">&quot;Solve External Game&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="s2">&quot;Return to Main Menu&quot;</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+</pre></div>
 </article>
         <aside class="nftt-toc my-3">
           
@@ -230,11 +245,11 @@
   </div>
 </div>
     </footer>
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/docs-versions.js?v=08b0cbfb"></script>
-    <script src="_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
-    <script src="_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
+    <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/docs-versions.js?v=08b0cbfb"></script>
+    <script src="../../../../_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
+    <script src="../../../../_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
   </body>
 </html>

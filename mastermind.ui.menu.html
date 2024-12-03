@@ -16,13 +16,13 @@
       <title>mastermind.ui.menu package &mdash; Mastermind  documentation</title>
     
     <link rel="canonical" href="mastermind.ui.menu" />
-    <link rel="stylesheet" href="_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=b9bf16a8" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
           <link rel="stylesheet" type="text/css" href="_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
         <link rel="index" title="Index" href="genindex.html" />
         <link rel="search" title="Search" href="search.html" />
         <link rel="top" title="Mastermind  documentation" href="#" />
@@ -223,92 +223,69 @@
 
 </dd></dl>
 
-<dl class="py class" id="module-mastermind.ui.menu.concrete_menus">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.GameHistoryMenu">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.concrete_menus.</span></span><span class="sig-name descname"><span class="pre">GameHistoryMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/concrete_menus.html#GameHistoryMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.data_menu.DataDisplayMenu" title="mastermind.ui.menu.data_menu.DataDisplayMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataDisplayMenu</span></code></a></p>
-<p>The menu for displaying the game history.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.GameHistoryMenu.display">
-<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/ui/menu/concrete_menus.html#GameHistoryMenu.display"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu.display" title="Link to this definition">¶</a></dt>
-<dd><p>Displays the game history menu and waits for user input to continue.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.GameHistoryMenu.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Game</span> <span class="pre">History'</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu.name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.GameHistoryMenu.width">
-<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu.width" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.MainMenu">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.concrete_menus.</span></span><span class="sig-name descname"><span class="pre">MainMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/concrete_menus.html#MainMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.MainMenu" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.option_menu.OptionMenu" title="mastermind.ui.menu.option_menu.OptionMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptionMenu</span></code></a></p>
-<p>The main menu of the application.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.MainMenu.menu">
-<span class="sig-name descname"><span class="pre">menu</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'0':</span> <span class="pre">'Save</span> <span class="pre">and</span> <span class="pre">Exit',</span> <span class="pre">'1':</span> <span class="pre">'Start</span> <span class="pre">New</span> <span class="pre">Game',</span> <span class="pre">'2':</span> <span class="pre">'Load</span> <span class="pre">Saved</span> <span class="pre">Game',</span> <span class="pre">'3':</span> <span class="pre">'Game</span> <span class="pre">History'}</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.MainMenu.menu" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.MainMenu.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Main</span> <span class="pre">Menu'</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.MainMenu.name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.NewGameMenu">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.concrete_menus.</span></span><span class="sig-name descname"><span class="pre">NewGameMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/concrete_menus.html#NewGameMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.NewGameMenu" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.option_menu.OptionMenu" title="mastermind.ui.menu.option_menu.OptionMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptionMenu</span></code></a></p>
-<p>The menu for starting a new game.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.NewGameMenu.menu">
-<span class="sig-name descname"><span class="pre">menu</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'0':</span> <span class="pre">'Return</span> <span class="pre">to</span> <span class="pre">Main</span> <span class="pre">Menu',</span> <span class="pre">'1':</span> <span class="pre">'You</span> <span class="pre">vs</span> <span class="pre">Someone</span> <span class="pre">Else',</span> <span class="pre">'2':</span> <span class="pre">'You</span> <span class="pre">vs</span> <span class="pre">AI',</span> <span class="pre">'3':</span> <span class="pre">'AI</span> <span class="pre">vs</span> <span class="pre">You',</span> <span class="pre">'4':</span> <span class="pre">'Solve</span> <span class="pre">External</span> <span class="pre">Game'}</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.NewGameMenu.menu" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.NewGameMenu.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'New</span> <span class="pre">Game</span> <span class="pre">Menu'</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.NewGameMenu.name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.ResumeGameMenu">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.concrete_menus.</span></span><span class="sig-name descname"><span class="pre">ResumeGameMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/concrete_menus.html#ResumeGameMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.data_menu.DataDisplayMenu" title="mastermind.ui.menu.data_menu.DataDisplayMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataDisplayMenu</span></code></a></p>
-<p>The menu for resuming a saved game.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.ResumeGameMenu.get_option">
-<span class="sig-name descname"><span class="pre">get_option</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/mastermind/ui/menu/concrete_menus.html#ResumeGameMenu.get_option"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu.get_option" title="Link to this definition">¶</a></dt>
-<dd><p>Displays the menu and returns the selected option.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.ResumeGameMenu.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Resume</span> <span class="pre">Game'</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu.name" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="mastermind.ui.menu.concrete_menus.ResumeGameMenu.width">
-<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu.width" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py class" id="module-mastermind.ui.menu.data_menu">
 <dt class="sig sig-object py" id="mastermind.ui.menu.data_menu.DataDisplayMenu">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.data_menu.</span></span><span class="sig-name descname"><span class="pre">DataDisplayMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/data_menu.html#DataDisplayMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.data_menu.DataDisplayMenu" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.base_menu.BaseMenu" title="mastermind.ui.menu.base_menu.BaseMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMenu</span></code></a></p>
 <p>An abstract base class for menus that display data.</p>
 <p>Provides common functionality for fetching, rendering, and displaying data.</p>
+</dd></dl>
+
+<dl class="py class" id="module-mastermind.ui.menu.game_history_menu">
+<dt class="sig sig-object py" id="mastermind.ui.menu.game_history_menu.GameHistoryMenu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.game_history_menu.</span></span><span class="sig-name descname"><span class="pre">GameHistoryMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/game_history_menu.html#GameHistoryMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.data_menu.DataDisplayMenu" title="mastermind.ui.menu.data_menu.DataDisplayMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataDisplayMenu</span></code></a></p>
+<p>The menu for displaying the game history.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mastermind.ui.menu.game_history_menu.GameHistoryMenu.display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mastermind/ui/menu/game_history_menu.html#GameHistoryMenu.display"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu.display" title="Link to this definition">¶</a></dt>
+<dd><p>Displays the game history menu and waits for user input to continue.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.game_history_menu.GameHistoryMenu.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Game</span> <span class="pre">History'</span></em><a class="headerlink" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.game_history_menu.GameHistoryMenu.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu.width" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-mastermind.ui.menu.main_menu">
+<dt class="sig sig-object py" id="mastermind.ui.menu.main_menu.MainMenu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.main_menu.</span></span><span class="sig-name descname"><span class="pre">MainMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/main_menu.html#MainMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.main_menu.MainMenu" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.option_menu.OptionMenu" title="mastermind.ui.menu.option_menu.OptionMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptionMenu</span></code></a></p>
+<p>The main menu of the application.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.main_menu.MainMenu.menu">
+<span class="sig-name descname"><span class="pre">menu</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'0':</span> <span class="pre">'Save</span> <span class="pre">and</span> <span class="pre">Exit',</span> <span class="pre">'1':</span> <span class="pre">'Start</span> <span class="pre">New</span> <span class="pre">Game',</span> <span class="pre">'2':</span> <span class="pre">'Load</span> <span class="pre">Saved</span> <span class="pre">Game',</span> <span class="pre">'3':</span> <span class="pre">'Game</span> <span class="pre">History'}</span></em><a class="headerlink" href="#mastermind.ui.menu.main_menu.MainMenu.menu" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.main_menu.MainMenu.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Main</span> <span class="pre">Menu'</span></em><a class="headerlink" href="#mastermind.ui.menu.main_menu.MainMenu.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-mastermind.ui.menu.new_game_menu">
+<dt class="sig sig-object py" id="mastermind.ui.menu.new_game_menu.NewGameMenu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.new_game_menu.</span></span><span class="sig-name descname"><span class="pre">NewGameMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/new_game_menu.html#NewGameMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.new_game_menu.NewGameMenu" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.option_menu.OptionMenu" title="mastermind.ui.menu.option_menu.OptionMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptionMenu</span></code></a></p>
+<p>The menu for starting a new game.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.new_game_menu.NewGameMenu.menu">
+<span class="sig-name descname"><span class="pre">menu</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'0':</span> <span class="pre">'Return</span> <span class="pre">to</span> <span class="pre">Main</span> <span class="pre">Menu',</span> <span class="pre">'1':</span> <span class="pre">'You</span> <span class="pre">vs</span> <span class="pre">Someone</span> <span class="pre">Else',</span> <span class="pre">'2':</span> <span class="pre">'You</span> <span class="pre">vs</span> <span class="pre">AI',</span> <span class="pre">'3':</span> <span class="pre">'AI</span> <span class="pre">vs</span> <span class="pre">You',</span> <span class="pre">'4':</span> <span class="pre">'Solve</span> <span class="pre">External</span> <span class="pre">Game'}</span></em><a class="headerlink" href="#mastermind.ui.menu.new_game_menu.NewGameMenu.menu" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.new_game_menu.NewGameMenu.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'New</span> <span class="pre">Game</span> <span class="pre">Menu'</span></em><a class="headerlink" href="#mastermind.ui.menu.new_game_menu.NewGameMenu.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class" id="module-mastermind.ui.menu.option_menu">
@@ -330,6 +307,29 @@
 </dd>
 </dl>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-mastermind.ui.menu.resume_game_menu">
+<dt class="sig sig-object py" id="mastermind.ui.menu.resume_game_menu.ResumeGameMenu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mastermind.ui.menu.resume_game_menu.</span></span><span class="sig-name descname"><span class="pre">ResumeGameMenu</span></span><a class="reference internal" href="_modules/mastermind/ui/menu/resume_game_menu.html#ResumeGameMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mastermind.ui.menu.data_menu.DataDisplayMenu" title="mastermind.ui.menu.data_menu.DataDisplayMenu"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataDisplayMenu</span></code></a></p>
+<p>The menu for resuming a saved game.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mastermind.ui.menu.resume_game_menu.ResumeGameMenu.get_option">
+<span class="sig-name descname"><span class="pre">get_option</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/mastermind/ui/menu/resume_game_menu.html#ResumeGameMenu.get_option"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu.get_option" title="Link to this definition">¶</a></dt>
+<dd><p>Displays the menu and returns the selected option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.resume_game_menu.ResumeGameMenu.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Resume</span> <span class="pre">Game'</span></em><a class="headerlink" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu.name" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mastermind.ui.menu.resume_game_menu.ResumeGameMenu.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu.width" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -355,31 +355,31 @@
 <li><a class="reference internal" href="#mastermind.ui.menu.base_menu.BaseMenu.width"><code class="docutils literal notranslate"><span class="pre">BaseMenu.width</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu</span></code></a><ul>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu.display"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu.display()</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu.name"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu.name</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.GameHistoryMenu.width"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu.width</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.MainMenu"><code class="docutils literal notranslate"><span class="pre">MainMenu</span></code></a><ul>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.MainMenu.menu"><code class="docutils literal notranslate"><span class="pre">MainMenu.menu</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.MainMenu.name"><code class="docutils literal notranslate"><span class="pre">MainMenu.name</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.NewGameMenu"><code class="docutils literal notranslate"><span class="pre">NewGameMenu</span></code></a><ul>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.NewGameMenu.menu"><code class="docutils literal notranslate"><span class="pre">NewGameMenu.menu</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.NewGameMenu.name"><code class="docutils literal notranslate"><span class="pre">NewGameMenu.name</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu</span></code></a><ul>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu.get_option"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu.get_option()</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu.name"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu.name</span></code></a></li>
-<li><a class="reference internal" href="#mastermind.ui.menu.concrete_menus.ResumeGameMenu.width"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu.width</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#mastermind.ui.menu.data_menu.DataDisplayMenu"><code class="docutils literal notranslate"><span class="pre">DataDisplayMenu</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu</span></code></a><ul>
+<li><a class="reference internal" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu.display"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu.display()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu.name"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu.name</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.game_history_menu.GameHistoryMenu.width"><code class="docutils literal notranslate"><span class="pre">GameHistoryMenu.width</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mastermind.ui.menu.main_menu.MainMenu"><code class="docutils literal notranslate"><span class="pre">MainMenu</span></code></a><ul>
+<li><a class="reference internal" href="#mastermind.ui.menu.main_menu.MainMenu.menu"><code class="docutils literal notranslate"><span class="pre">MainMenu.menu</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.main_menu.MainMenu.name"><code class="docutils literal notranslate"><span class="pre">MainMenu.name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mastermind.ui.menu.new_game_menu.NewGameMenu"><code class="docutils literal notranslate"><span class="pre">NewGameMenu</span></code></a><ul>
+<li><a class="reference internal" href="#mastermind.ui.menu.new_game_menu.NewGameMenu.menu"><code class="docutils literal notranslate"><span class="pre">NewGameMenu.menu</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.new_game_menu.NewGameMenu.name"><code class="docutils literal notranslate"><span class="pre">NewGameMenu.name</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#mastermind.ui.menu.option_menu.OptionMenu"><code class="docutils literal notranslate"><span class="pre">OptionMenu</span></code></a><ul>
 <li><a class="reference internal" href="#mastermind.ui.menu.option_menu.OptionMenu.get_option"><code class="docutils literal notranslate"><span class="pre">OptionMenu.get_option()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu</span></code></a><ul>
+<li><a class="reference internal" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu.get_option"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu.get_option()</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu.name"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu.name</span></code></a></li>
+<li><a class="reference internal" href="#mastermind.ui.menu.resume_game_menu.ResumeGameMenu.width"><code class="docutils literal notranslate"><span class="pre">ResumeGameMenu.width</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -414,7 +414,7 @@
         
         
         <div class="built-with pt-2">
-          Built with <a href="http://sphinx-doc.org">Sphinx 8.1.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.5.3</a>
+          Built with <a href="http://sphinx-doc.org">Sphinx 8.1.3</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.7.1</a>
         </div>
         
       </div>
@@ -426,7 +426,7 @@
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/docs-versions.js?v=08b0cbfb"></script>
-    <script src="_static/sphinx-nefertiti.min.js?v=0872986a"></script>
+    <script src="_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
     <script src="_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
   </body>
 </html>

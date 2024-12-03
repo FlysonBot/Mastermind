@@ -7,6 +7,11 @@ mastermind.storage package
    :undoc-members:
    :show-inheritance:
 
+.. automodule:: mastermind.storage.pickle_io
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 .. automodule:: mastermind.storage.user_data
    :members:
    :undoc-members:

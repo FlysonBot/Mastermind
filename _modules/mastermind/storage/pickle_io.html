@@ -3,8 +3,6 @@
 <html class="no-js" lang="en">
   <head>
     <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     
@@ -13,19 +11,20 @@
     <meta name="docsearch:release" content="" />
     <meta name="docsearch:version" content="" />
     
-      <title>Table of Content &mdash; Mastermind  documentation</title>
+      <title>mastermind.storage.pickle_io &mdash; Mastermind  documentation</title>
     
-    <link rel="canonical" href="index" />
-          <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
-          <link rel="stylesheet" type="text/css" href="_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
-        <link rel="index" title="Index" href="genindex.html" />
-        <link rel="search" title="Search" href="search.html" />
+    <link rel="canonical" href="_modules/mastermind/storage/pickle_io" />
+          <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-nefertiti-default.min.css?v=a1428718" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../_static/fonts/nunito/stylesheet.css?v=0ed606bc" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../_static/pygments-dark.css?v=589f9147" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../_static/pygments-light.css?v=1620426e" /><!-- add (1) -->
+          <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-icons.min.css?v=44730005" /><!-- add (1) -->
+        <link rel="index" title="Index" href="../../../genindex.html" />
+        <link rel="search" title="Search" href="../../../search.html" />
         <link rel="top" title="Mastermind  documentation" href="#" />
+        <link rel="up" title="Module code" href="../../index.html" />
     <style>
       :root {
         --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
@@ -53,7 +52,7 @@
             <i class="bi bi-list"></i>
           </button>
         </div>
-          <a href="#"
+          <a href="../../../index.html"
               
               class="navbar-brand p-0 me-0 md-lg-2 pe-lg-4"
           ><span class="brand-text">Mastermind</span></a>
@@ -77,7 +76,7 @@
     <hr class="d-xl-none text-white-50">
     <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
       <li class="nav-item col-12 col-xl-auto">
-        <form id="nftt-search-form" action="search.html" method="get">
+        <form id="nftt-search-form" action="../../../search.html" method="get">
           <div class="input-group">
             <input type="text" name="q" class="form-control search-input" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
             <input type="hidden" name="check_keywords" value="yes" />
@@ -185,16 +184,82 @@
         <article id="content" class="nftt-content" role="main">
           <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Start</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Table of Content</li>
+    <li class="breadcrumb-item"><a href="../../../index.html">Start</a></li>
+      <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+    <li class="breadcrumb-item active" aria-current="page">mastermind.storage.pickle_io</li>
   </ol>
 </nav>
-    <section id="table-of-content">
-<h1>Table of Content<a class="headerlink" href="#table-of-content" title="Link to this heading">¶</a></h1>
-<p>Welcome to the Mastermind repository!</p>
-<p>To look at the docstrings for all the modules, go to <a class="reference external" href="mastermind.html">modules</a>.</p>
-</section>
+    <h1>Source code for mastermind.storage.pickle_io</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
+
+<div class="viewcode-block" id="read_pickled_data">
+<a class="viewcode-back" href="../../../mastermind.storage.html#mastermind.storage.pickle_io.read_pickled_data">[docs]</a>
+<span class="k">def</span> <span class="nf">read_pickled_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read pickled data from a file and return it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file to read from.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Any: The pickled data being read, or None if the file does not exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ensure_parent_directory_exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_parent_directory_exists">
+<a class="viewcode-back" href="../../../mastermind.storage.html#mastermind.storage.pickle_io.ensure_parent_directory_exists">[docs]</a>
+<span class="k">def</span> <span class="nf">ensure_parent_directory_exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the parent directory of a file if it doesn&#39;t exist.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">directory</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;filepath must include a directory component&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="write_pickled_data">
+<a class="viewcode-back" href="../../../mastermind.storage.html#mastermind.storage.pickle_io.write_pickled_data">[docs]</a>
+<span class="k">def</span> <span class="nf">write_pickled_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write pickled data to a file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file to write to.</span>
+<span class="sd">        data (dict): The data to be pickled and written to the file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ensure_parent_directory_exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_pickled_data">
+<a class="viewcode-back" href="../../../mastermind.storage.html#mastermind.storage.pickle_io.delete_pickled_data">[docs]</a>
+<span class="k">def</span> <span class="nf">delete_pickled_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete a pickled file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filepath (str): The path to the file to delete.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span></div>
+
+</pre></div>
 </article>
         <aside class="nftt-toc my-3">
           
@@ -230,11 +295,11 @@
   </div>
 </div>
     </footer>
-    <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/docs-versions.js?v=08b0cbfb"></script>
-    <script src="_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
-    <script src="_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/docs-versions.js?v=08b0cbfb"></script>
+    <script src="../../../_static/sphinx-nefertiti.min.js?v=dfd9d24d"></script>
+    <script src="../../../_static/bootstrap.bundle.min.js?v=ff4e7878"></script>
   </body>
 </html>
