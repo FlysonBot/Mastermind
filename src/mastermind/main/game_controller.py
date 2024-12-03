@@ -2,7 +2,7 @@ from typing import Any
 
 from mastermind.game.game import Game
 from mastermind.main.game_history import GameHistoryManager
-from mastermind.storage.user_data import UserDataManager
+from mastermind.storage import userdata
 from mastermind.validation import (
     MaximumAttempts,
     NumberOfColors,
@@ -57,15 +57,15 @@ class GameController:
     def resume_game(cls, game_index: int) -> None:
         """Resume a saved game."""
         # Retrieve game
-        game = UserDataManager().saved_games[game_index]["game"]
+        game = userdata.saved_games[game_index]["game"]
 
         # Resume game and retrieve exit state
         exit_state = game.resume_game()
 
         # Update saved games if not game discarded
         if exit_state == "d":  # or delete it if discarded
-            UserDataManager().saved_games.pop(game_index)
+            userdata.saved_games.pop(game_index)
         else:
-            UserDataManager().saved_games[game_index] = (
-                GameHistoryManager().generate_meta_data(game)
+            userdata.saved_games[game_index] = GameHistoryManager().generate_meta_data(
+                game
             )
