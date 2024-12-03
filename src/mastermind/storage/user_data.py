@@ -137,6 +137,6 @@ def _update_user_data(filepath: str):
 
 def get_user_data_manager() -> UserDataManager:
     """Returns a new UserDataManager instance."""
-    filepath = "data/user_data.pickle"
+    filepath = "data/user_data.pkl"
     _update_user_data(filepath)  # ensure UserDataManager always use the same user_data
     return UserDataManager(_user_data, partial(write_pickled_data, filepath))
