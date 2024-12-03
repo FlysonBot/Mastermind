@@ -1,9 +1,9 @@
-from mastermind.storage.user_data import UserDataManager
+from mastermind.storage import userdata
 
 
 def retrieve_stored_games():
     """Retrieve all stored games"""
-    saved_games = UserDataManager().saved_games
+    saved_games = userdata.saved_games
     return saved_games or []
 
 

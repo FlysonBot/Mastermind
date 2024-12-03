@@ -1,6 +1,6 @@
 import os
-import unittest
 import tempfile
+import unittest
 
 from mastermind.storage.persistent_cache import PersistentCacheManager
 
@@ -70,7 +70,7 @@ class TestPersistentCacheManager(unittest.TestCase):
         PersistentCacheManager._ensure_directory_exists()
         PersistentCacheManager.set(test_key, test_value)
         self.assertIsNotNone(PersistentCacheManager.__getattr__(test_key))
-        PersistentCacheManager.clear_cache()
+        PersistentCacheManager.clear_all_cache()
         self.assertIsNone(PersistentCacheManager.__getattr__(test_key))
 
 

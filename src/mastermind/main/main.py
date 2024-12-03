@@ -3,7 +3,7 @@ from mastermind.main.game_storage import (
     list_continuable_games_index,
     retrieve_stored_games,
 )
-from mastermind.storage import UserDataManager
+from mastermind.storage import userdata
 from mastermind.ui.menu import (
     GameHistoryMenu,
     MainMenu,
@@ -83,7 +83,7 @@ class MainUI:
         while self.main_menu():
             pass  # keep calling self.main_menu() until it return False
         print("Thank you for playing!")
-        UserDataManager().save_data()
+        userdata.save_data()
 
 
 def main():

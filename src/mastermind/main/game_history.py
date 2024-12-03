@@ -4,7 +4,7 @@ import pandas as pd
 
 from mastermind.game.game import Game
 from mastermind.main.game_storage import list_continuable_games, retrieve_stored_games
-from mastermind.storage.user_data import UserDataManager
+from mastermind.storage import userdata
 
 
 def game_list_to_pandas(games: List[dict]) -> Optional[pd.DataFrame]:
@@ -57,10 +57,10 @@ class GameHistoryManager:
     @staticmethod
     def save_game(game: Game) -> None:
         """Save the game to a file."""
-        if "saved_games" not in UserDataManager():  # if the list is empty
-            UserDataManager().saved_games = []  # initialize the list
+        if "saved_games" not in userdata:  # if the list is empty
+            userdata.saved_games = []  # initialize the list
 
-        UserDataManager().saved_games.append(
+        userdata.saved_games.append(
             GameHistoryManager.generate_meta_data(game)
         )  # store the meta data
 
