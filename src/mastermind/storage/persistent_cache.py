@@ -1,14 +1,19 @@
 import glob
 import os
-import pickle
 from typing import Any
+
+from mastermind.storage.pickle_io import (
+    read_pickled_data,
+    write_pickled_data,
+)
 
 
 class PersistentCacheManager:
     """
     Manages a persistent cache of Python objects on the file system.
 
-    The PersistentCacheManager class provides a simple interface for caching and retrieving data, using the pickle module to serialize and deserialize the objects.
+    The PersistentCacheManager class provides a simple interface for caching and retrieving data,
+    using the pickle_io module for pickling to serialize and deserialize the objects.
 
     The cache files are stored in the "data" directory, which is created automatically if it does not exist.
     """
@@ -32,11 +37,10 @@ class PersistentCacheManager:
         Returns:
             str: The file path for the cache file.
         """
-
         return os.path.join(cls._cache_directory, f"{key}.cache")
 
     @classmethod
-    def clear_cache(cls) -> None:
+    def clear_all_cache(cls) -> None:
         """Clears the entire cache by deleting all cache files."""
         for cache_file in glob.glob(os.path.join(cls._cache_directory, "*.cache")):
             os.remove(cache_file)
@@ -52,25 +56,15 @@ class PersistentCacheManager:
         Returns:
             Any: The cached value, or None if the key does not exist.
         """
-
-        file_path = cls._get_cache_file_path(key)
-        if os.path.exists(file_path):
-            with open(file_path, "rb") as file:
-                return pickle.load(file)
-        return None
+        return read_pickled_data(cls._get_cache_file_path(key))
 
     @classmethod
-    def set(cls, key: str, value: Any) -> Any:
+    def set(cls, key: str, value: Any) -> None:
         """
         Sets the cached value for the given key.
 
         Args:
             key (str): The key associated with the cached value.
             value (Any): The value to be cached.
-
-        Returns:
-            Any: The cached value.
         """
-
-        with open(cls._get_cache_file_path(key), "wb") as file:
-            pickle.dump(value, file)
+        write_pickled_data(cls._get_cache_file_path(key), value)
