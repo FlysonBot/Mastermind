@@ -1,87 +1,37 @@
-import os
-import pickle
+from collections.abc import Callable
+from functools import partial
 from typing import Any
+
+from mastermind.storage.pickle_io import (
+    delete_pickled_data,
+    read_pickled_data,
+    write_pickled_data,
+)
+
+_user_data = None  # Variable to hold user data dictionary
 
 
 class UserDataManager:
     """
-    Manages user data using a singleton pattern.
+    Manages user data with a customizable data storage interface. You should not use this class directly. Use get_user_data_manager() instead.
 
-    The UserDataManager class stores user data in a dictionary and persists it to a file on the file system using the pickle module.
-
-    The class is implemented as a singleton, ensuring that there is only one instance of the UserDataManager class.
+    This class wraps a data dictionary and provides methods to modify, retrieve, and clear user data, while ensuring that changes are saved through a provided save function.
     """
 
-    _instance = None  # Class-level attribute for the singleton instance
-    _data = {}  # Dictionary to hold user data
-    _file_path = "data/userdata.config"  # Path to the user data file
-
-    def __new__(cls) -> "UserDataManager":
+    def __init__(self, data: dict, save_fn: Callable[[dict], None]) -> None:
         """
-        Returns the singleton instance of the UserDataManager class.
+        Decorate the given data dictionary with the UserDataManager interface.
 
-        If the instance does not exist, it is created and the data is loaded from the file.
+        Args:
+            data (dict): The data dictionary to be decorated.
+            save_fn (Callable[dict, None]): A function that saves the data dictionary.
         """
-
-        if cls._instance is None:
-            cls._instance = super(UserDataManager, cls).__new__(cls)
-            cls._instance._load_data()  # Load data on instantiation
-        return cls._instance
-
-    @classmethod
-    def _ensure_directory_exists(cls) -> None:
-        """This method creates the directory if it does not already exist."""
-        if directory := os.path.dirname(cls._file_path):
-            os.makedirs(directory, exist_ok=True)
-        else:
-            raise ValueError("cls._file_path must include a directory component")
-
-    def _load_data(self) -> None:  # sourcery skip: extract-duplicate-method
-        """
-        Loads the user data from the file.
-
-        If the file does not exist, an empty dictionary is used as the initial user data.
-        """
-
-        self._ensure_directory_exists()  # Ensure the directory is created
-        try:
-            with open(self._file_path, "rb") as file:
-                self._data = pickle.load(file)
-                return
-
-        except FileNotFoundError:  # on first run
-            self._data = {}
-            return
-
-        except EOFError as e:
-            print("There seems to be an issue loading the data.")
-            print(e)
-            print("\nIf this issue persists, consider deleting the stored data.")
-        except ModuleNotFoundError as e:
-            print(
-                "There is an error loading the stored data. Your data or app version might not match."
-            )
-            print(e)
-            print("\nTo resolve this issue, consider deleting the stored data.")
-        except Exception as e:
-            print("An unexpected error occurred while loading the data.")
-            print(e)
-            print("\nIf this issue persists, consider deleting the stored data.")
-
-        if not prompt_delete_data():
-            raise Exception(
-                "Data could not be loaded."
-            )  # sourcery skip: raise-specific-error
-
-    def save_data(self) -> None:
-        """Saves the user data to the file."""
-        self._ensure_directory_exists()  # Ensure the directory is created
-        with open(self._file_path, "wb") as file:
-            pickle.dump(self._data, file)
+        super().__setattr__("_data", data)
+        super().__setattr__("save_data", lambda: save_fn(data=self._data))
 
     def clear_all(self) -> None:
         """Clears all the user data and saves the changes."""
-        self._data = {}
+        self._data.clear()  # clear method ensure _data instance is the same
         self.save_data()
 
     def _retrieve_item(self, key: str) -> Any:
@@ -94,8 +44,7 @@ class UserDataManager:
         Returns:
             Any: The value associated with the key, or None if the key does not exist.
         """
-
-        return self._data[key] if key in self._data else None
+        return self._data.get(key, None)
 
     def _modify_item(self, key: str, value: Any) -> None:
         """
@@ -108,41 +57,82 @@ class UserDataManager:
             value (Any): The new value to associate with the key.
         """
 
-        if key in {
-            "_instance",
-            "_data",
-            "_file_path",
-        }:  # Prevent overriding class attributes
-            super().__setattr__(key, value)
-        else:
-            self._data[key] = value
-            self.save_data()
+        if key in {"_data", "save_data"} and hasattr(self, key):
+            raise NotImplementedError(f"Modification of {key} attribute is forbidden.")
+        self._data[key] = value
+        self.save_data()
 
+    def __contains__(self, key: str) -> bool:
+        return key in self._data
+
+    # Allow dot and bracket notation for accessing and modifying data
     def __getattr__(self, key: str) -> Any:
-        """Retrieves the value associated with the given key."""
         return self._retrieve_item(key)
 
     def __getitem__(self, key: str) -> Any:
-        """Retrieves the value associated with the given key."""
         return self._retrieve_item(key)
 
     def __setattr__(self, key: str, value: Any) -> None:
-        """Modifies the value associated with the given key, and saves the changes."""
         self._modify_item(key, value)
 
     def __setitem__(self, key: str, value: Any) -> None:
-        """Modifies the value associated with the given key, and saves the changes."""
         self._modify_item(key, value)
 
-    def __contains__(self, key: str) -> bool:
-        """Checks if the given key exists in the user data."""
-        return key in self._data
+
+def _load_data_safely(filepath: str) -> dict:  # sourcery skip: extract-duplicate-method
+    """Loads the pickled data from the specified file path. If the file doesn't exist, it return an empty dictionary. This method is 'safe' because it handles exceptions and provides a user-friendly error message.
+
+    Args:
+        filepath (str): The path to the file to load data from.
+
+    Raises:
+        RuntimeError: When the data to be loaded is corrupted.
+    """
+
+    try:
+        data = read_pickled_data(filepath)
+        return data if data is not None else {}
+
+    except Exception as e:
+        print("An unexpected error occurred while loading the data.")
+        print(e)
+        print("\nIf this issue persists, consider deleting the stored data.")
+
+        if not _prompt_delete_data(filepath):
+            raise RuntimeError("Data could not be loaded.") from e
+        return {}
 
 
-def prompt_delete_data() -> bool:
+def _prompt_delete_data(filepath: str) -> bool:
+    """Prompts the user to delete the stored data.
+
+    Args:
+        filepath (str): The path to the file to delete.
+
+    Returns:
+        bool: Whether the user wants to delete the stored data.
+    """
     decision = input("Do you want to delete the stored data? (y/n): ")
+
     if decision.lower() != "y":
         return False
-    UserDataManager().clear_all()
+
+    delete_pickled_data(filepath)
     print("Data deleted successfully.")
     return True
+
+
+def _update_user_data(filepath: str):
+    """Load user data and update user_data variable if not initialized."""
+
+    global _user_data  # global ensures only 1 user_data exists at any time
+
+    if "_user_data" not in globals() or _user_data is None:
+        _user_data = _load_data_safely(filepath)
+
+
+def get_user_data_manager() -> UserDataManager:
+    """Returns a new UserDataManager instance."""
+    filepath = "data/user_data.pkl"
+    _update_user_data(filepath)  # ensure UserDataManager always use the same user_data
+    return UserDataManager(_user_data, partial(write_pickled_data, filepath))

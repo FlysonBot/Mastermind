@@ -1,4 +1,6 @@
 from mastermind.storage.persistent_cache import PersistentCacheManager
-from mastermind.storage.user_data import UserDataManager
+from mastermind.storage.user_data import get_user_data_manager
 
-__all__ = ["PersistentCacheManager", "UserDataManager"]
+userdata = get_user_data_manager()
+
+__all__ = ["PersistentCacheManager", "get_user_data_manager"]
