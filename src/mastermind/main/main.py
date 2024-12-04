@@ -83,7 +83,7 @@ class MainUI:
         while self.main_menu():
             pass  # keep calling self.main_menu() until it return False
         print("Thank you for playing!")
-        userdata._save_data()
+        userdata.save_data()
 
 
 def main():
