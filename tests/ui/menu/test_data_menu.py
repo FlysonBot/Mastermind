@@ -26,9 +26,7 @@ class TestDataDisplayMenu(unittest.TestCase):
 
     @patch.object(ConcreteDataDisplayMenu, "_fetch_data", return_value=None)
     @patch.object(ConcreteDataDisplayMenu, "_render_data")
-    def test_print_content_without_data(
-        self, mock_render_data, mock_fetch_data
-    ):
+    def test_print_content_without_data(self, mock_render_data, mock_fetch_data):
         with patch("builtins.print") as mock_print:
             self.data_menu._print_content()
             mock_fetch_data.assert_called()
