@@ -1,10 +1,10 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 from mastermind.ui.menu.base_menu import BaseMenu
 
 
-class DataDisplayMenu(BaseMenu):
+class DataDisplayMenu(BaseMenu, ABC):
     """
     An abstract base class for menus that display data.
 
@@ -19,7 +19,7 @@ class DataDisplayMenu(BaseMenu):
         if data is not None:
             self._render_data(data)
         else:
-            print(self._empty_message())
+            print(self._empty_message)
 
     @abstractmethod
     def _fetch_data(self) -> Optional[Any]:
