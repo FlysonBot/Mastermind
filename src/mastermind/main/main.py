@@ -15,11 +15,6 @@ from mastermind.ui.menu import (
 class MainUI:
     """Class to handle the user menu interface."""
 
-    def __new__(cls):
-        if not hasattr(cls, "instance"):
-            cls.instance = super(MainUI, cls).__new__(cls)
-        return cls.instance
-
     def main_menu(self) -> bool:
         """
         Display the main menu and handle user input.
@@ -83,7 +78,7 @@ class MainUI:
         while self.main_menu():
             pass  # keep calling self.main_menu() until it return False
         print("Thank you for playing!")
-        userdata._save_data()
+        userdata.save_data()
 
 
 def main():

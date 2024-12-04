@@ -14,6 +14,7 @@ class GameHistoryMenu(DataDisplayMenu):
 
     name = "Game History"
     width = 25
+    _empty_message = "No game history found."
 
     def _fetch_data(self) -> Optional[pd.DataFrame]:
         """
@@ -26,12 +27,6 @@ class GameHistoryMenu(DataDisplayMenu):
         Renders the game history data.
         """
         render_dataframe(data)
-
-    def _empty_message(self) -> str:
-        """
-        Returns the message to display when there is no game history.
-        """
-        return "No game history found."
 
     def display(self) -> None:
         """
