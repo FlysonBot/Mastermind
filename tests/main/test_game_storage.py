@@ -38,6 +38,15 @@ class TestMastermindStorage(unittest.TestCase):
             games = retrieve_stored_games()
         self.assertEqual(games, [])
 
+    def test_retrieve_none_games(self):
+        """Test the retrieve_stored_games function with None saved_games"""
+        mock_user_data_manager = create_autospec(UserDataManager, instance=True)
+        mock_user_data_manager.saved_games = None
+
+        with patch("mastermind.main.game_storage.userdata", new=mock_user_data_manager):
+            games = retrieve_stored_games()
+        self.assertEqual(games, [])
+
     def test_list_continuable_games_index(self):
         """Test the list_continuable_games_index function"""
         continuable_indexes = list_continuable_games_index(self.sample_games)
