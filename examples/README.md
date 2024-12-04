@@ -4,16 +4,16 @@
 
 In this directory, there is an `install.bat` and `install.sh` file. These files will install the required dependencies and run the program, including python 3.10.12 (or higher), pip, and mastermind-ai.
 
-- If you're using an windows machine, download and double click to run `install.bat`.
+- If you're using a windows machine, download and double click to run `install.bat`.
 - Otherwise, download and run `install.sh` in your terminal by:
 
     ```bash
-    cd [path]
+    cd "<path-to-directory>"
     chmod +x install.sh
     ./install.sh
     ```
 
-    Replace `[path]` with the path to the directory containing `install.sh`, or ignore it if you already opened your terminal in the directory.
+    Replace `<path-to-directory>` with the actual path to the directory containing `install.sh`, or ignore it if you already opened your terminal in the directory.
 
 ## Running Remotely: Google Colab
 
