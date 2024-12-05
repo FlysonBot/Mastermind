@@ -18,7 +18,6 @@ class BaseMenu(ABC):
 
         This is an abstract property that must be implemented by subclasses.
         """
-        pass
 
     @property
     def width(self) -> int:
@@ -52,7 +51,6 @@ class BaseMenu(ABC):
 
         This is an abstract method that must be implemented by subclasses.
         """
-        pass
 
     def _print_separator(self) -> None:
         """
