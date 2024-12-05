@@ -37,13 +37,23 @@ class TestGameFlow(unittest.TestCase):
 
     @patch("mastermind.game.player_logic.PlayerLogic.process_player_guessing")
     @patch.object(GameFlow, "output_result")
-    def test_play_game(self, mock_output_result, mock_process_player_guessing):
-        mock_process_player_guessing.return_value = "q"
-        self.assertEqual(self.game_flow._play_game(), "q")
+    def test_play_game_quit(self, mock_output_result, mock_process_player_guessing):
+        self._test_play_game("q", mock_output_result, mock_process_player_guessing)
+
+    @patch("mastermind.game.player_logic.PlayerLogic.process_player_guessing")
+    @patch.object(GameFlow, "output_result")
+    def test_play_game_discard(self, mock_output_result, mock_process_player_guessing):
+        self._test_play_game("d", mock_output_result, mock_process_player_guessing)
+
+    def _test_play_game(
+        self, return_value, mock_output_result, mock_process_player_guessing
+    ):
+        mock_process_player_guessing.return_value = return_value
+        self.assertEqual(self.game_flow._play_game(), return_value)
         mock_process_player_guessing.assert_called()
         mock_output_result.assert_called()
 
-    def test_output_win(self):  # sourcery skip: extract-duplicate-method
+    def test_output_win(self):  # sourcery skip: class-extract-method, extract-duplicate-method
         self.game._player_logic.initialize_players()
 
         self.game._player_logic.PLAYER_CRACKER.win_message = MagicMock()
