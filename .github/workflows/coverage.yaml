@@ -26,13 +26,14 @@ jobs:
           pip install pytest
       
       - name: Generate Coverage Report
+        env:
+          PYTHONPATH: ./src
         run: |
           coverage run -m pytest tests/
           coverage xml
 
       - name: Upload Report to Coveralls
         env:
-          PYTHONPATH: ./src
           GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
         run: coveralls
 
