@@ -1,6 +1,6 @@
 on: ["push", "pull_request"]
 
-name: Coveralls Test Coverage
+name: Update Test Coverage
 
 permissions:
   contents: read
@@ -32,3 +32,8 @@ jobs:
         run: |
           coverage run -m pytest tests/
           coveralls
+
+      - name: Run Codacy Coverage Reporter
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
