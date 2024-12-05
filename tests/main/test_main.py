@@ -128,7 +128,3 @@ class TestMainUI(unittest.TestCase):
                 [call("Welcome to Mastermind!"), call("Thank you for playing!")]
             )
             mock_user_data_manager.save_data.assert_called_once()
-
-
-if __name__ == "__main__":
-    unittest.main()

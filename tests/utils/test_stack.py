@@ -88,7 +88,3 @@ class TestStack(unittest.TestCase):
         """Test that the stack can be iterated over"""
         stack = Stack([1, 2, 3])
         self.assertEqual(list(stack), [1, 2, 3])
-
-
-if __name__ == "__main__":
-    unittest.main()

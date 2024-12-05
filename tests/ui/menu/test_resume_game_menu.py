@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch
 
-
 from mastermind.ui.menu.resume_game_menu import ResumeGameMenu, _is_option_valid
 
 
@@ -106,7 +105,7 @@ class TestResumeGameMenu(unittest.TestCase):
         result = menu.get_option()
         self.assertEqual(result, 0)
         self.assertEqual(mock_print.call_count, 3)
-        mock_print.assert_any_call('No continuable game found.')
+        mock_print.assert_any_call("No continuable game found.")
 
     @patch("builtins.input", side_effect=["9", "a", "2"])
     @patch("mastermind.main.game_history.list_continuable_games")
@@ -121,7 +120,3 @@ class TestResumeGameMenu(unittest.TestCase):
         self.assertEqual(result, 2)
         self.assertEqual(mock_input.call_count, 3)
         self.assertEqual(mock_render_data.call_count, 3)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -61,7 +61,3 @@ class TestRenderDataframe(unittest.TestCase):
         render_dataframe(df)
         expected_output = "   A B\n10 1 4\n20 2 5\n30 3 6\n"
         self.assertEqual(mock_stdout.getvalue(), expected_output)
-
-
-if __name__ == "__main__":
-    unittest.main()

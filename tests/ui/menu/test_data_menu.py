@@ -47,7 +47,3 @@ class TestDataDisplayMenu(unittest.TestCase):
         with patch("builtins.print") as mock_print:
             self.data_menu._print_content()
             mock_print.assert_has_calls([call(1), call(2), call(3), call(4)])
-
-
-if __name__ == "__main__":
-    unittest.main()

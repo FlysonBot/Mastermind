@@ -134,7 +134,3 @@ class TestConstrainedFloat(unittest.TestCase):
         with self.assertRaises(InputConversionError) as context:
             model.convert("invalid")
         self.assertEqual(str(context.exception), "Invalid input for float conversion")
-
-
-if __name__ == "__main__":
-    unittest.main()
