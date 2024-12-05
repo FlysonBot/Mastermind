@@ -49,11 +49,11 @@ class MainUI:
             return True
         elif choice == "AI vs You":
             # GameController.start_new_game("AIvH")
-            print("This feature  is not implemented yet.")
+            print("This feature is not implemented yet.")
             return True
         elif choice == "Solve External Game":
             # GameController.start_new_game("AIvAI")
-            print("This feature  is not implemented yet.")
+            print("This feature is not implemented yet.")
             return True
         elif choice == "Return to Main Menu":
             return False  # terminate the loop
