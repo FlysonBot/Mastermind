@@ -128,7 +128,3 @@ class TestStateValidator(unittest.TestCase):
         """Test that validate_modifications is an abstract method"""
         with self.assertRaises(TypeError):
             StateValidator[int](42)
-
-
-if __name__ == "__main__":
-    unittest.main()

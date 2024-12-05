@@ -89,7 +89,3 @@ class TestGameController(unittest.TestCase):
             "guesses": ["1234", "4561", "2312"],
             "feedback": [(4, 0), (3, 1), (2, 2)],
         }
-
-
-if __name__ == "__main__":
-    unittest.main()

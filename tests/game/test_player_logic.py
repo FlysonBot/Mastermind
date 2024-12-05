@@ -82,7 +82,3 @@ class TestPlayerLogic(unittest.TestCase):
         self.player_logic.initialize_players()
         with self.assertRaises(NotImplementedError):
             self.player_logic.submit_guess((1, 2, 3, 4), (1, 2))
-
-
-if __name__ == "__main__":
-    unittest.main()

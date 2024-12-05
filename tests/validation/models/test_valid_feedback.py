@@ -58,7 +58,3 @@ class TestValidFeedback(unittest.TestCase):
         self.assertEqual(
             str(context.exception), "Value must be greater than or equal to 2"
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -53,7 +53,9 @@ class TestGameFlow(unittest.TestCase):
         mock_process_player_guessing.assert_called()
         mock_output_result.assert_called()
 
-    def test_output_win(self):  # sourcery skip: class-extract-method, extract-duplicate-method
+    def test_output_win(
+        self,
+    ):  # sourcery skip: class-extract-method, extract-duplicate-method
         self.game._player_logic.initialize_players()
 
         self.game._player_logic.PLAYER_CRACKER.win_message = MagicMock()
@@ -77,7 +79,3 @@ class TestGameFlow(unittest.TestCase):
         self.game_state.check_and_update_win_status = MagicMock(return_value=None)
         self.game_state._win_status = None
         self.assertIsNone(self.game_flow.output_result())
-
-
-if __name__ == "__main__":
-    unittest.main()
