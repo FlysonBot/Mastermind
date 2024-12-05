@@ -53,7 +53,3 @@ class TestValidatedClass(unittest.TestCase):
         obj = self.MyValidatedIntClass(0)
         obj.new_attr = 42
         self.assertEqual(obj.new_attr, 42)
-
-
-if __name__ == "__main__":
-    unittest.main()

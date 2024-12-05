@@ -54,7 +54,3 @@ class TestValidCombination(unittest.TestCase):
         with self.assertRaises(RangeError) as context:
             model.validate_value((1, 2))
         self.assertEqual(str(context.exception), "Combination must have 3 dots")
-
-
-if __name__ == "__main__":
-    unittest.main()

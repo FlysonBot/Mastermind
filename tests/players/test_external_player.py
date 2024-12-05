@@ -60,7 +60,3 @@ class TestExternalCodeSetter(unittest.TestCase):
     def test_undo(self, mock_input):
         mock_input.side_effect = ["u"]
         self.assertEqual(self.code_setter.get_feedback((1, 2, 3, 4)), "u")
-
-
-if __name__ == "__main__":
-    unittest.main()

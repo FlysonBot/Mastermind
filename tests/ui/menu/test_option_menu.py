@@ -44,7 +44,3 @@ class TestOptionMenu(unittest.TestCase):
         self.assertEqual(self.option_menu._process_option("1"), "Option 1")
         self.assertEqual(self.option_menu._process_option("2"), "Option 2")
         self.assertEqual(self.option_menu._process_option("q"), "Quit")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -63,5 +63,5 @@ class ResumeGameMenu(DataDisplayMenu):
             self.display()
 
 
-def _is_option_valid(option: int, number_of_options: int) -> bool:
-    return option.isdigit() and 0 <= option <= number_of_options
+def _is_option_valid(option: str, number_of_options: int) -> bool:
+    return option.isdigit() and 0 <= int(option) <= number_of_options

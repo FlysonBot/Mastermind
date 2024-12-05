@@ -108,7 +108,3 @@ class TestGameHistoryManager(unittest.TestCase):
             self.assertListEqual(
                 list(dataframe["Attempts"]), ["W 8/10", "L 12/15", "  5/10"]
             )
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -1,6 +1,6 @@
 on: ["push", "pull_request"]
 
-name: Coveralls Test Coverage
+name: Update Test Coverage
 
 permissions:
   contents: read
@@ -24,11 +24,21 @@ jobs:
           pip install -r src/requirements.txt
           pip install coveralls
           pip install pytest
-
-      - name: Run Coverall
+      
+      - name: Generate Coverage Report
         env:
           PYTHONPATH: ./src
-          GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
         run: |
           coverage run -m pytest tests/
-          coveralls
+          coverage xml
+
+      - name: Upload Report to Coveralls
+        env:
+          GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+        run: coveralls
+
+      - name: Upload Report to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml

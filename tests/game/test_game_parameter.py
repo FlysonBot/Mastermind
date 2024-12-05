@@ -64,7 +64,3 @@ class TestGameParameter(unittest.TestCase):
         self.assertIsNone(self.game_param.win_status)
         self.assertIsNone(self.game_param.check_and_update_win_status())
         self.assertIsNone(self.game_param.win_status)
-
-
-if __name__ == "__main__":
-    unittest.main()

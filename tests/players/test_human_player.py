@@ -112,7 +112,3 @@ class TestHumanCodeCracker(unittest.TestCase):
     def test_obtain_guess_redo(self, mock_input):
         mock_input.return_value = "r"
         self.assertEqual(self.human_code_cracker.obtain_guess(), "r")
-
-
-if __name__ == "__main__":
-    unittest.main()

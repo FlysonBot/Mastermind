@@ -1,4 +1,5 @@
 import unittest
+
 from mastermind.game.board import GameBoard
 
 
@@ -71,7 +72,3 @@ class TestGameBoard(unittest.TestCase):
         self.assertEqual(len(self.board), 2)
         self.board.clear()
         self.assertEqual(len(self.board), 0)
-
-
-if __name__ == "__main__":
-    unittest.main()

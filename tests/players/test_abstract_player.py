@@ -94,7 +94,3 @@ class TestCodeCracker(unittest.TestCase):
         with patch("builtins.print") as mock_print:
             self.code_cracker.lose_message()
             mock_print.assert_called_with("You lose after 10 steps.")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -45,7 +45,3 @@ class TestGame(unittest.TestCase):
     def test_len(self):
         self.game._board.add_guess((1, 2, 3, 4), (1, 2))
         self.assertEqual(len(self.game), 1)
-
-
-if __name__ == "__main__":
-    unittest.main()
