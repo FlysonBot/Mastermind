@@ -25,8 +25,6 @@ class GameBoard:
         Exception raised when trying to access the game board when it is empty.
         """
 
-        pass
-
     def __init__(self, number_of_colors: int, number_of_dots: int) -> None:
         self.NUMBER_OF_COLORS = number_of_colors
         self.NUMBER_OF_DOTS = number_of_dots
