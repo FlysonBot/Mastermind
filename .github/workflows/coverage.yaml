@@ -24,16 +24,20 @@ jobs:
           pip install -r src/requirements.txt
           pip install coveralls
           pip install pytest
+      
+      - name: Generate Coverage Report
+        run: |
+          coverage run -m pytest tests/
+          coverage xml
 
-      - name: Run Coverall
+      - name: Upload Report to Coveralls
         env:
           PYTHONPATH: ./src
           GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
-        run: |
-          coverage run -m pytest tests/
-          coveralls
+        run: coveralls
 
-      - name: Run Codacy Coverage Reporter
+      - name: Upload Report to Codacy
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml
