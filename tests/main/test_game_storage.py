@@ -64,7 +64,3 @@ class TestMastermindStorage(unittest.TestCase):
 
         continuable_games = list_continuable_games([])
         self.assertEqual(continuable_games, [])
-
-
-if __name__ == "__main__":
-    unittest.main()

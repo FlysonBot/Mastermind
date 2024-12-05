@@ -28,7 +28,6 @@ class DataDisplayMenu(BaseMenu, ABC):
 
         This is an abstract method that must be implemented by subclasses.
         """
-        pass
 
     @abstractmethod
     def _render_data(self, data: Any) -> None:
@@ -37,7 +36,6 @@ class DataDisplayMenu(BaseMenu, ABC):
 
         This is an abstract method that must be implemented by subclasses.
         """
-        pass
 
     @property
     @abstractmethod
@@ -47,4 +45,3 @@ class DataDisplayMenu(BaseMenu, ABC):
 
         This is an abstract property that must be implemented by subclasses.
         """
-        pass

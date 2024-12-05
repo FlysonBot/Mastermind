@@ -90,7 +90,6 @@ class NumberRangeModel(ValidationModel[T]):
         Raises:
             InputConversionError: If the value cannot be converted to the expected numeric type.
         """
-        pass
 
     def validate_range(self, value: Number) -> None:
         """

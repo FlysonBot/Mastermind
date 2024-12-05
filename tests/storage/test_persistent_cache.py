@@ -72,7 +72,3 @@ class TestPersistentCacheManager(unittest.TestCase):
         self.assertIsNotNone(PersistentCacheManager.__getattr__(test_key))
         PersistentCacheManager.clear_all_cache()
         self.assertIsNone(PersistentCacheManager.__getattr__(test_key))
-
-
-if __name__ == "__main__":
-    unittest.main()

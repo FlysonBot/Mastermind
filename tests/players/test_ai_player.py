@@ -32,8 +32,3 @@ class TestAICodeCracker(unittest.TestCase):
         self.code_cracker = AICodeCracker(self.game, "You won!", "You lost.")
 
     # TODO: Add tests for the AI solver logic when implemented
-    pass
-
-
-if __name__ == "__main__":
-    unittest.main()

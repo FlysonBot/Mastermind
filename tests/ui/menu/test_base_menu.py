@@ -38,7 +38,3 @@ class TestBaseMenuClass(unittest.TestCase):
     def test_width(self):
         """Test that the width property returns the correct value"""
         self.assertEqual(self.base_menu.width, 23)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -61,7 +61,3 @@ class TestGenerateFeedback(unittest.TestCase):
         for guess, secret, exp_black, exp_white in test_cases:
             black_pegs, white_pegs = generate_feedback(guess, secret, 3)
             self.assertEqual((black_pegs, white_pegs), (exp_black, exp_white))
-
-
-if __name__ == "__main__":
-    unittest.main()
