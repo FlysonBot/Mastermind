@@ -47,19 +47,7 @@ class TestGameController(unittest.TestCase):
         game_mock = create_autospec(Game, instance=True)
         game_mock.resume_game.return_value = "d"
         mock_user_data_manager = create_autospec(UserDataManager, instance=True)
-        mock_user_data_manager.saved_games = [
-            {
-                "game": game_mock,
-                "game_mode": "HvH",
-                "number_of_dots": 4,
-                "number_of_colors": 6,
-                "amount_attempted": 8,
-                "amount_allowed": 10,
-                "win_status": None,
-                "guesses": ["1234", "4561", "2312"],
-                "feedback": [(4, 0), (3, 1), (2, 2)],
-            }
-        ]
+        mock_user_data_manager.saved_games = [self._sample_game_data(game_mock)]
 
         with patch(
             "mastermind.main.game_controller.userdata",
@@ -77,19 +65,7 @@ class TestGameController(unittest.TestCase):
         game._player_logic.initialize_players()
 
         mock_user_data_manager = create_autospec(UserDataManager, instance=True)
-        mock_user_data_manager.saved_games = [
-            {
-                "game": game,
-                "game_mode": "HvAI",
-                "number_of_dots": 4,
-                "number_of_colors": 6,
-                "amount_attempted": 3,
-                "amount_allowed": 10,
-                "win_status": None,
-                "guesses": ["1234", "4561", "2312"],
-                "feedback": [(4, 0), (3, 1), (2, 2)],
-            }
-        ]
+        mock_user_data_manager.saved_games = [self._sample_game_data(game)]
 
         with patch(
             "mastermind.main.game_controller.userdata", new=mock_user_data_manager
@@ -99,6 +75,20 @@ class TestGameController(unittest.TestCase):
 
             self.assertEqual(len(mock_user_data_manager.saved_games), 1)
             self.assertIsNone(mock_user_data_manager.saved_games[0]["win_status"])
+
+    def _sample_game_data(self, game):
+        """Helper method to create sample game data"""
+        return {
+            "game": game,
+            "game_mode": "HvAI",
+            "number_of_dots": 4,
+            "number_of_colors": 6,
+            "amount_attempted": 3,
+            "amount_allowed": 10,
+            "win_status": None,
+            "guesses": ["1234", "4561", "2312"],
+            "feedback": [(4, 0), (3, 1), (2, 2)],
+        }
 
 
 if __name__ == "__main__":
