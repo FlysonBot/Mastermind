@@ -69,7 +69,7 @@ class TestMainUI(unittest.TestCase):
         main_ui = MainUI()
         self.assertTrue(main_ui.new_game_menu())
         mock_get_option.assert_called_once()
-        mock_print.assert_called_once_with("This feature  is not implemented yet.")
+        mock_print.assert_called_once_with("This feature is not implemented yet.")
 
     @patch(
         "mastermind.ui.menu.NewGameMenu.get_option", return_value="Return to Main Menu"
