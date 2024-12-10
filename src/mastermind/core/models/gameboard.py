@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from mastermind.core.models.data.game_round import GameRound
+from mastermind.core.models.game_round import GameRound
 
 
 @dataclass
