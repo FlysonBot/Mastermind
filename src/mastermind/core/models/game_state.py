@@ -11,7 +11,7 @@ class GameState:
     Attributes:
         game_started (bool): A flag indicating if the game has started.
         game_over (bool): A flag indicating if the game has ended.
-        winner (Player): The player who won the game, if any. Only top level player (CodeSetter or CodeCracker) is allowed.
+        winner (Player): The player who won the game, if any. Only top level player (CodeSetter or Codebreaker) is allowed.
     """
 
     game_started: bool

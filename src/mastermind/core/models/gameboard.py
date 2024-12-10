@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Deque
+from typing import Deque, Generator, Tuple
 
 from mastermind.core.models.game_round import GameRound
 
@@ -16,3 +16,51 @@ class GameBoard:
     """
 
     game_rounds: Deque[GameRound]
+
+    def __len__(self) -> int:
+        """
+        Returns the number of game rounds in the game board.
+
+        Returns:
+            int: Number of game rounds in the game board.
+
+        Examples:
+            >>> game_board = GameBoard(game_rounds=[GameRound(guess=(1, 2, 3, 4), result=(1, 0)), GameRound(guess=(3, 4, 5, 6), result=(2, 1))])
+            >>> len(game_board)
+            2
+        """
+        return len(self.game_rounds)
+
+    @property
+    def guesses(self) -> Generator[Tuple[int, ...], None, None]:
+        """
+        Returns a generator of all guesses made in the game to allow for easy iteration.
+
+        Returns:
+            Generator[Tuple[int, ...], None, None]: _description_
+
+        Examples:
+            >>> game_board = GameBoard(game_rounds=[GameRound(guess=(1, 2, 3, 4), result=(1, 0)), GameRound(guess=(3, 4, 5, 6), result=(2, 1))])
+            >>> for guess in game_board.guesses:
+            ...     print(guess)
+            (1, 2, 3, 4)
+            (3, 4, 5, 6)
+        """
+        return (round.GUESS for round in self.game_rounds)
+
+    @property
+    def feedbacks(self) -> Generator[Tuple[int, int], None, None]:
+        """
+        Returns a generator of all feedbacks received in the game to allow for easy iteration.
+
+        Yields:
+            Generator[Tuple[int], None, None]: A generator of all feedbacks received in the game.
+
+        Examples:
+            >>> game_board = GameBoard(game_rounds=[GameRound(guess=(1, 2, 3, 4), result=(1, 0)), GameRound(guess=(3, 4, 5, 6), result=(2, 1))])
+            >>> for feedback in game_board.feedbacks:
+            ...     print(feedback)
+            (1, 0)
+            (2, 1)
+        """
+        return (round.FEEDBACK for round in self.game_rounds)
