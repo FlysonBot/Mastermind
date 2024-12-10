@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class GameStatus:
+class GameState:
     """Dataclass for the status of a game."""
 
     game_started: bool
