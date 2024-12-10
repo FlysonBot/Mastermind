@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from mastermind.core.models.data.game_mode import GameMode
+from mastermind.core.models.game_mode import GameMode
 
 
 @dataclass

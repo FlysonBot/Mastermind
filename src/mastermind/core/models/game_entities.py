@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from mastermind.core.models.behavior.players import Player
+from mastermind.core.controllers.players import Player
 
 
 @dataclass
