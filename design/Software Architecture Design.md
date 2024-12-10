@@ -86,9 +86,9 @@
 
 - **Data Models**: Data classes that store and validate data, including:
 
-  - GameParameter
+  - GameConfiguration
 
-  - GameStatus
+  - GameState
 
   - GameEntities
 
