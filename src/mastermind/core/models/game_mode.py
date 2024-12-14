@@ -1,5 +1,7 @@
 from enum import Enum
 
+from mastermind.core.controllers.players import Player
+
 
 class GameMode(Enum):
     """
@@ -12,7 +14,8 @@ class GameMode(Enum):
         EVE: Environment versus environment mode.
     """
 
-    PVP = ()  # place implemented player class here
-    PVE = ()  # for example, (Player1, Player2)
-    EVP = ()
-    EVE = ()
+    # placeholder for concrete players
+    PVP = (Player, Player)
+    PVE = (Player, Player)
+    EVP = (Player, Player)
+    EVE = (Player, Player)

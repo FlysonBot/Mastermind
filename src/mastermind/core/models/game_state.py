@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from mastermind.core.controllers.players import Player
 
@@ -14,6 +15,6 @@ class GameState:
         winner (Player): The player who won the game, if any. Only top level player (CodeSetter or Codebreaker) is allowed.
     """
 
-    game_started: bool
-    game_over: bool
-    winner: Player
+    game_started: bool = False
+    game_over: bool = False
+    winner: Optional[Player] = None
