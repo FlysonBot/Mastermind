@@ -6,13 +6,22 @@ from mastermind.core.models.gameboard import GameBoard
 
 
 class GameboardService:
+    """This class manages the game board and provides methods for adding and undoing game rounds.
+
+    It should be called from the GameService, not directly by the player.
+
+    Attributes:
+        game_rounds (Deque[GameRound]): A deque of GameRound instances, each representing a round of the game.
+        undo_stack (Deque[GameRound]): A deque of GameRound instances, representing the undo stack.
+    """
+
     def __init__(self, gameboard: GameBoard) -> None:
         """Initializes a new game board service with the current game board state.
 
         The service prepares game rounds and an undo stack for tracking game progress.
 
         Args:
-            gameboard: The current game board to be managed.
+            gameboard (GameBoard): The current game board to be managed.
         """
 
         self.game_rounds: Deque[GameRound] = gameboard.game_rounds
@@ -49,20 +58,19 @@ class GameboardService:
 
         self.game_rounds.append(self.undo_stack.pop())
 
-    def _add_round(self, guess: tuple[int, ...], feedback: tuple[int, int]) -> None:
+    def add_round(self, guess: tuple[int, ...], feedback: tuple[int, int]) -> None:
         """Adds a new game round with the player's guess and corresponding feedback.
 
         Appends the round to game rounds and clears the undo stack to prevent branching.
-        This method should be called from the GameService, not directly by the player.
 
         Args:
-            guess: A tuple representing the player's current guess.
-            feedback: A tuple containing the number of correct and misplaced pegs.
+            guess (tuple[int, ...]): A tuple representing the player's current guess.
+            feedback (tuple[int, int]): A tuple containing the number of correct and misplaced pegs.
 
         Examples:
             >>> gameboard = GameBoard(game_rounds=[GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
             >>> service = GameboardService(gameboard)
-            >>> service._add_round((1, 2, 3, 4), (1, 0))
+            >>> service.add_round((1, 2, 3, 4), (1, 0))
             >>> service.game_rounds
             [GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1)), GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
         """

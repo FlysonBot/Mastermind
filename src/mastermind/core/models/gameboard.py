@@ -39,7 +39,7 @@ class GameBoard:
         Returns a generator of all guesses made in the game to allow for easy iteration.
 
         Returns:
-            Generator[Tuple[int, ...], None, None]: _description_
+            Generator[Tuple[int, ...], None, None]: A generator of all guesses made in the game.
 
         Examples:
             >>> game_board = GameBoard(game_rounds=[GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
