@@ -25,7 +25,7 @@ class GameBoard:
             int: Number of game rounds in the game board.
 
         Examples:
-            >>> game_board = GameBoard(game_rounds=[GameRound(guess=(1, 2, 3, 4), result=(1, 0)), GameRound(guess=(3, 4, 5, 6), result=(2, 1))])
+            >>> game_board = GameBoard(game_rounds=[GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
             >>> len(game_board)
             2
         """
@@ -40,7 +40,7 @@ class GameBoard:
             Generator[Tuple[int, ...], None, None]: _description_
 
         Examples:
-            >>> game_board = GameBoard(game_rounds=[GameRound(guess=(1, 2, 3, 4), result=(1, 0)), GameRound(guess=(3, 4, 5, 6), result=(2, 1))])
+            >>> game_board = GameBoard(game_rounds=[GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
             >>> for guess in game_board.guesses:
             ...     print(guess)
             (1, 2, 3, 4)
@@ -57,7 +57,7 @@ class GameBoard:
             Generator[Tuple[int], None, None]: A generator of all feedbacks received in the game.
 
         Examples:
-            >>> game_board = GameBoard(game_rounds=[GameRound(guess=(1, 2, 3, 4), result=(1, 0)), GameRound(guess=(3, 4, 5, 6), result=(2, 1))])
+            >>> game_board = GameBoard(game_rounds=[GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
             >>> for feedback in game_board.feedbacks:
             ...     print(feedback)
             (1, 0)
