@@ -29,7 +29,7 @@ jobs:
         env:
           PYTHONPATH: ./src
         run: |
-          coverage run -m pytest src/tests
+          coverage run -m pytest --doctest-modules src
           coverage xml
 
       - name: Upload Report to Coveralls
