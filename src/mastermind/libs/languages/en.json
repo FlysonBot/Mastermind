@@ -1,0 +1,50 @@
+{
+  "game": {
+    "welcome": "Welcome to Mastermind!",
+    "thank_you": "Thank you for playing!",
+    "game_started": "The game has started.",
+    "game_resumed": "The game has been resumed.",
+    "game_discarded": "Game discarded.",
+    "game_saved": "Game saved.",
+    "you_won": "Congratulations! You won in {step} steps!",
+    "you_lost": "Sorry, you lost. The secret code was {code}."
+  },
+  "menu": {
+    "main_menu": {
+      "start_new_game": "Start New Game",
+      "load_saved_game": "Load Saved Game",
+      "game_history": "Game History",
+      "save_and_exit": "Save and Exit"
+    },
+    "new_game_menu": {
+      "you_vs_someone": "You vs Someone Else",
+      "you_vs_ai": "You vs AI",
+      "ai_vs_you": "AI vs You",
+      "solve_external_game": "Solve External Game",
+      "return_to_main": "Return to Main Menu"
+    },
+    "resume_game_menu": {
+      "no_continuable_games": "No continuable game found."
+    }
+  },
+  "validation": {
+    "invalid_input": "Invalid input. {error}",
+    "number_of_colors": "Enter the number of colors (2-10): ",
+    "number_of_dots": "Enter the number of dots (2-10): ",
+    "maximum_attempts": "Enter the maximum number of attempts: "
+  },
+  "feedback": {
+    "feedback_prompt": "Enter your feedback for the guess: ",
+    "feedback_help": "Enter a 2 digit number representing black and white pegs."
+  },
+  "commands": {
+    "quit": "Enter 'q' to quit.",
+    "discard": "Enter 'd' to discard the game.",
+    "undo": "Enter 'u' to undo.",
+    "redo": "Enter 'r' to redo."
+  },
+  "error": {
+    "game_not_started": "Game has not started yet.",
+    "game_already_started": "Game has already started."
+  }
+}
