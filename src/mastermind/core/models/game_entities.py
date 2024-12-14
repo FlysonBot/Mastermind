@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from mastermind.core.controllers.players import Player
+from mastermind.core.models.game_mode import GameMode
 
 
 @dataclass(frozen=True)
@@ -20,3 +21,17 @@ class GameEntities:
 
     def __str__(self):
         return f"Code Setter: {self.CODE_SETTER.__qualname__}, Code Breaker: {self.CODE_BREAKER.__qualname__}"
+
+
+def create_game_entities(game_mode: GameMode) -> GameEntities:
+    """Creates game entities based on the given game mode.
+
+    Args:
+        game_mode (GameMode): The game mode to create game entities for.
+
+    Returns:
+        GameEntities: The game entities based on the given game mode.
+    """
+
+    code_setter_class, code_breaker_class = game_mode.value
+    return GameEntities(code_setter_class(), code_breaker_class())

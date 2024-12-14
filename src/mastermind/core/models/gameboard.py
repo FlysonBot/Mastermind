@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from typing import Deque, Generator, Tuple
 
+from pyparsing import deque
+
 from mastermind.core.models.game_round import GameRound
 
 
-@dataclass
+@dataclass(frozen=True)
 class GameBoard:
     """
     Dataclass for the gameboard of a game.
@@ -64,3 +66,20 @@ class GameBoard:
             (2, 1)
         """
         return (round.FEEDBACK for round in self.game_rounds)
+
+
+def create_empty_game_board() -> GameBoard:
+    """Creates a new empty game board.
+
+    Returns:
+        GameBoard: A new empty game board.
+
+    Examples:
+        >>> game_board = create_game_board()
+        >>> len(game_board)
+        0
+        >>> game_board.game_rounds
+        deque([])
+    """
+
+    return GameBoard(game_rounds=deque())
