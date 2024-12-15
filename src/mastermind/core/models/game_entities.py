@@ -18,8 +18,8 @@ class GameEntities:
     CODE_SETTER: Player
     CODE_BREAKER: Player
 
-    def __str__(self):
-        return f"Code Setter: {self.CODE_SETTER.__qualname__}, Code Breaker: {self.CODE_BREAKER.__qualname__}"
+    def __repr__(self) -> str:
+        return f"GameEntities({self.CODE_SETTER}, {self.CODE_BREAKER})"
 
 
 def create_game_entities(game_mode: GameMode) -> GameEntities:
@@ -30,6 +30,10 @@ def create_game_entities(game_mode: GameMode) -> GameEntities:
 
     Returns:
         GameEntities: The game entities based on the given game mode.
+
+    Examples:
+        >>> create_game_entities(GameMode.PVP)
+        GameEntities(Player(), Player())
     """
 
     code_setter_class, code_breaker_class = game_mode.value

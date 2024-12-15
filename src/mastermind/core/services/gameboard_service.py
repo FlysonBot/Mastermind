@@ -35,6 +35,8 @@ class GameboardService:
         Examples:
             >>> gameboard = GameBoard(game_rounds=[GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
             >>> service = GameboardService(gameboard)
+            >>> service.game_rounds
+            [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))]
             >>> service.undo()
             >>> service.game_rounds
             [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
@@ -50,6 +52,8 @@ class GameboardService:
         Examples:
             >>> gameboard = GameBoard(game_rounds=[GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))])
             >>> service = GameboardService(gameboard)
+            >>> service.game_rounds
+            [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))]
             >>> service.undo()
             >>> service.redo()
             >>> service.game_rounds
