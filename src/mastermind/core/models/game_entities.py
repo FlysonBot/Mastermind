@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 
+from dataclasses_json import dataclass_json
+
 from mastermind.core.controllers.players import Player
 from mastermind.core.models.game_mode import GameMode
 
 
+@dataclass_json
 @dataclass(frozen=True)
 class GameEntities:
     """Dataclass for the entities of a game (such as players or those from plugins).
@@ -38,4 +41,3 @@ class GameEntities:
 
     def __repr__(self) -> str:
         return f"GameEntities({self.CODE_SETTER}, {self.CODE_BREAKER})"
-

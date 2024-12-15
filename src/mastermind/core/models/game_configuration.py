@@ -1,8 +1,11 @@
 from dataclasses import dataclass
 
+from dataclasses_json import dataclass_json
+
 from mastermind.core.models.game_mode import GameMode
 
 
+@dataclass_json
 @dataclass(frozen=True)
 class GameConfiguration:
     """Dataclass for the configuration of a game.
@@ -14,7 +17,7 @@ class GameConfiguration:
         NUMBER_OF_DOTS (int): The number of dots in a code.
         ATTEMPTS_ALLOWED (int): The maximum number of attempts allowed for the code  to guess the code.
         GAME_MODE (GameMode): The game mode determine who is Player 1 and Player 2.
-    
+
     Examples:
         >>> game_configuration = GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP)
         >>> print(game_configuration)
