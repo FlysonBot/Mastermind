@@ -37,17 +37,8 @@ def create_new_game(game_configuration: GameConfiguration) -> Game:
 
     Examples:
         >>> game_configuration = GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP)
-        >>> game = create_new_game(game_configuration)
-        >>> isinstance(game, Game)
-        True
-        >>> game.game_board
-        GameBoard(game_rounds=deque([]))
-        >>> isinstance(game.game_configuration, GameConfiguration)
-        True
-        >>> isinstance(game.game_entities, GameEntities)
-        True
-        >>> game.game_state
-        GameState(game_started=False, winner=None)
+        >>> create_new_game(game_configuration)
+        Game(game_board=GameBoard(game_rounds=deque([])), game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP), game_entities=GameEntities(Player(), Player()), game_state=GameState(game_started=False, winner=None))
     """
 
     return Game(
