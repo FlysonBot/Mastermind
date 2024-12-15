@@ -2,9 +2,12 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import Deque, Generator, Tuple
 
+from dataclasses_json import dataclass_json
+
 from mastermind.core.models.game_round import GameRound
 
 
+@dataclass_json
 @dataclass(frozen=True)
 class GameBoard:
     """Dataclass for the gameboard of a game.

@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 from typing import Tuple
 
+from dataclasses_json import dataclass_json
 
+
+@dataclass_json
 @dataclass(frozen=True)
 class GameRound:
-    """ for a single round of the game.
+    """for a single round of the game.
 
     This class encapsulates the guess made during a round and the corresponding feedback received.
 

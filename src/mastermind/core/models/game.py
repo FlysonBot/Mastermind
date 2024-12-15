@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 
+from dataclasses_json import dataclass_json
+
 from mastermind.core.models.game_configuration import GameConfiguration
 from mastermind.core.models.game_entities import GameEntities
 from mastermind.core.models.game_mode import GameMode  # type: ignore # noqa: F401
@@ -7,6 +9,7 @@ from mastermind.core.models.game_state import GameState
 from mastermind.core.models.gameboard import GameBoard
 
 
+@dataclass_json
 @dataclass
 class Game:
     """Dataclass for a game.

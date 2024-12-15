@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from dataclasses_json import dataclass_json
+
 from mastermind.core.controllers.players import PlayerRole
 
 
+@dataclass_json
 @dataclass
 class GameState:
     """Dataclass for maintaining the current state of the game, indicating whether the game has started, if it is over, and who won.
