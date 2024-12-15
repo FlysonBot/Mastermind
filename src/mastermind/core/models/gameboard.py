@@ -8,8 +8,7 @@ from mastermind.core.models.game_round import GameRound
 
 @dataclass(frozen=True)
 class GameBoard:
-    """
-    Dataclass for the gameboard of a game.
+    """Dataclass for the gameboard of a game.
 
     This class represents the collection of game rounds that have taken place during a game session. It serves as a structured way to manage and track the progression of the game through its various rounds.
 
@@ -20,8 +19,7 @@ class GameBoard:
     game_rounds: Deque[GameRound]
 
     def __len__(self) -> int:
-        """
-        Returns the number of game rounds in the game board.
+        """Returns the number of game rounds in the game board.
 
         Returns:
             int: Number of game rounds in the game board.
@@ -35,8 +33,7 @@ class GameBoard:
 
     @property
     def guesses(self) -> Generator[Tuple[int, ...], None, None]:
-        """
-        Returns a generator of all guesses made in the game to allow for easy iteration.
+        """Returns a generator of all guesses made in the game to allow for easy iteration.
 
         Returns:
             Generator[Tuple[int, ...], None, None]: A generator of all guesses made in the game.
@@ -52,8 +49,7 @@ class GameBoard:
 
     @property
     def feedbacks(self) -> Generator[Tuple[int, int], None, None]:
-        """
-        Returns a generator of all feedbacks received in the game to allow for easy iteration.
+        """Returns a generator of all feedbacks received in the game to allow for easy iteration.
 
         Yields:
             Generator[Tuple[int], None, None]: A generator of all feedbacks received in the game.

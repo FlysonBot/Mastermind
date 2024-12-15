@@ -4,8 +4,7 @@ from typing import Tuple
 
 @dataclass(frozen=True)
 class GameRound:
-    """
-    Dataclass for a single round of the game.
+    """ for a single round of the game.
 
     This class encapsulates the guess made during a round and the corresponding feedback received.
 

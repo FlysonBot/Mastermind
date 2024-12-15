@@ -9,8 +9,7 @@ from mastermind.core.models.gameboard import GameBoard, create_empty_game_board
 
 @dataclass
 class Game:
-    """
-    Dataclass for a game.
+    """Dataclass for a game.
 
     This class encapsulates all the essential information about a game, including the game board, configuration, entities, and current state.
 

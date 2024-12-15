@@ -6,8 +6,7 @@ from mastermind.core.models.game_mode import GameMode
 
 @dataclass(frozen=True)
 class GameEntities:
-    """
-    Dataclass for the entities of a game (such as players or those from plugins).
+    """Dataclass for the entities of a game (such as players or those from plugins).
 
     This class represents the key participants in a game, specifically the players involved in setting and breaking the code. It serves as a structured way to manage and reference these entities throughout the game's lifecycle.
 
