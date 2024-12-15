@@ -1,7 +1,6 @@
 from collections import deque
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Deque, Generator, Tuple
-
 
 from mastermind.core.models.game_round import GameRound
 
@@ -16,7 +15,7 @@ class GameBoard:
         game_rounds (Deque[GameRound]): A collection of GameRound instances, each representing a round of the game.
     """
 
-    game_rounds: Deque[GameRound]
+    game_rounds: Deque[GameRound] = field(default_factory=deque)
 
     def __len__(self) -> int:
         """Returns the number of game rounds in the game board.
@@ -62,20 +61,3 @@ class GameBoard:
             (2, 1)
         """
         return (round.FEEDBACK for round in self.game_rounds)
-
-
-def create_empty_game_board() -> GameBoard:
-    """Creates a new empty game board.
-
-    Returns:
-        GameBoard: A new empty game board.
-
-    Examples:
-        >>> game_board = create_empty_game_board()
-        >>> len(game_board)
-        0
-        >>> game_board.game_rounds
-        deque([])
-    """
-
-    return GameBoard(game_rounds=deque())

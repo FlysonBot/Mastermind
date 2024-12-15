@@ -18,23 +18,24 @@ class GameEntities:
     CODE_SETTER: Player
     CODE_BREAKER: Player
 
+    @classmethod
+    def from_game_mode(cls, game_mode: GameMode) -> "GameEntities":
+        """Creates game entities based on the given game mode.
+
+        Args:
+            game_mode (GameMode): The game mode to create game entities for.
+
+        Returns:
+            GameEntities: The game entities based on the given game mode.
+
+        Examples:
+            >>> GameEntities.from_game_mode(GameMode.PVP)
+            GameEntities(Player(), Player())
+        """
+
+        code_setter_class, code_breaker_class = game_mode.value
+        return cls(code_setter_class(), code_breaker_class())
+
     def __repr__(self) -> str:
         return f"GameEntities({self.CODE_SETTER}, {self.CODE_BREAKER})"
 
-
-def create_game_entities(game_mode: GameMode) -> GameEntities:
-    """Creates game entities based on the given game mode.
-
-    Args:
-        game_mode (GameMode): The game mode to create game entities for.
-
-    Returns:
-        GameEntities: The game entities based on the given game mode.
-
-    Examples:
-        >>> create_game_entities(GameMode.PVP)
-        GameEntities(Player(), Player())
-    """
-
-    code_setter_class, code_breaker_class = game_mode.value
-    return GameEntities(code_setter_class(), code_breaker_class())
