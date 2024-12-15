@@ -75,7 +75,7 @@ def create_empty_game_board() -> GameBoard:
         GameBoard: A new empty game board.
 
     Examples:
-        >>> game_board = create_game_board()
+        >>> game_board = create_empty_game_board()
         >>> len(game_board)
         0
         >>> game_board.game_rounds

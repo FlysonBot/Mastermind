@@ -36,11 +36,14 @@ class GameService:
             feedback (tuple[int, int]): A tuple containing the number of correct and misplaced pegs.
 
         Examples:
+            >>> from mastermind.core.models.game import create_new_game
+            >>> from mastermind.core.models.game_configuration import GameConfiguration
+            >>> from mastermind.core.models.game_mode import GameMode
             >>> game = create_new_game(GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
             >>> service = GameService(game)
             >>> service.add_round((1, 2, 3, 4), (1, 0))
-            >>> service.game_rounds
-            [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
+            >>> game.game_board.game_rounds
+            deque([GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))])
 
         Raises:
             GameEndedException: When trying to add a round to a game that has ended.
@@ -62,14 +65,17 @@ class GameService:
         """Undo the most recent game round.
 
         Examples:
+            >>> from mastermind.core.models.game import create_new_game
+            >>> from mastermind.core.models.game_configuration import GameConfiguration
+            >>> from mastermind.core.models.game_mode import GameMode
             >>> game = create_new_game(GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
             >>> service = GameService(game)
             >>> service.add_round((1, 2, 3, 4), (1, 0))
             >>> game.game_board.game_rounds
-            [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
+            deque([GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))])
             >>> service.undo()
             >>> game.game_board.game_rounds
-            []
+            deque([])
 
         Raises:
             GameNotStartedException: When trying to undo game rounds before the game has started.
@@ -81,7 +87,7 @@ class GameService:
                 "Cannot undo game rounds before game has started."
             )
 
-        if not self._game_state.game_over:
+        if self._game_state.game_over:
             raise GameEndedException("Cannot undo game rounds after game has ended.")
 
         self._gameboard_service.undo()
@@ -90,13 +96,16 @@ class GameService:
         """Restores the most recently undone game round.
 
         Examples:
+            >>> from mastermind.core.models.game import create_new_game
+            >>> from mastermind.core.models.game_configuration import GameConfiguration
+            >>> from mastermind.core.models.game_mode import GameMode
             >>> game = create_new_game(GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
             >>> service = GameService(game)
             >>> service.add_round((1, 2, 3, 4), (1, 0))
             >>> service.undo()
             >>> service.redo()
-            >>> service.game_rounds
-            [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
+            >>> game.game_board.game_rounds
+            deque([GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))])
 
         Raises:
             GameNotStartedException: When trying to redo game rounds before the game has started.

@@ -48,7 +48,7 @@ def create_new_game(game_configuration: GameConfiguration) -> Game:
         >>> isinstance(game.game_entities, GameEntities)
         True
         >>> game.game_state
-        GameState(game_started=False, game_over=False, winner=None)
+        GameState(game_started=False, winner=None)
     """
 
     return Game(
