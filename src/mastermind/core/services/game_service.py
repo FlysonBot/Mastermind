@@ -36,10 +36,9 @@ class GameService:
             feedback (tuple[int, int]): A tuple containing the number of correct and misplaced pegs.
 
         Examples:
-            >>> from mastermind.core.models.game import create_new_game
             >>> from mastermind.core.models.game_configuration import GameConfiguration
             >>> from mastermind.core.models.game_mode import GameMode
-            >>> game = create_new_game(GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
+            >>> game = Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
             >>> service = GameService(game)
             >>> service.add_round((1, 2, 3, 4), (1, 0))
             >>> game.game_board.game_rounds
@@ -65,10 +64,9 @@ class GameService:
         """Undo the most recent game round.
 
         Examples:
-            >>> from mastermind.core.models.game import create_new_game
             >>> from mastermind.core.models.game_configuration import GameConfiguration
             >>> from mastermind.core.models.game_mode import GameMode
-            >>> game = create_new_game(GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
+            >>> game = Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
             >>> service = GameService(game)
             >>> service.add_round((1, 2, 3, 4), (1, 0))
             >>> game.game_board.game_rounds
@@ -96,10 +94,9 @@ class GameService:
         """Restores the most recently undone game round.
 
         Examples:
-            >>> from mastermind.core.models.game import create_new_game
             >>> from mastermind.core.models.game_configuration import GameConfiguration
             >>> from mastermind.core.models.game_mode import GameMode
-            >>> game = create_new_game(GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
+            >>> game = Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
             >>> service = GameService(game)
             >>> service.add_round((1, 2, 3, 4), (1, 0))
             >>> service.undo()
