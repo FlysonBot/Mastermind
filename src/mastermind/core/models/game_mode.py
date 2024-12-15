@@ -4,8 +4,7 @@ from mastermind.core.controllers.players import Player
 
 
 class GameMode(Enum):
-    """
-    Enum for the different game modes, which determined who is Player 1 and who is Player 2.
+    """Enum for the different game modes, which determined who is Player 1 and who is Player 2.
 
     Members:
         PVP: Player versus player mode.
