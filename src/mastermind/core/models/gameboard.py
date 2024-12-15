@@ -1,7 +1,7 @@
+from collections import deque
 from dataclasses import dataclass
 from typing import Deque, Generator, Tuple
 
-from pyparsing import deque
 
 from mastermind.core.models.game_round import GameRound
 
