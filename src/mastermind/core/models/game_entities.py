@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 
-from dataclasses_json import dataclass_json
+from mastermind.utils.serialize_dataclass import DataClassJson
 
 from mastermind.core.controllers.players import Player
 from mastermind.core.models.game_mode import GameMode
 
 
-@dataclass_json
 @dataclass(frozen=True)
-class GameEntities:
+class GameEntities(DataClassJson):
     """Dataclass for the entities of a game (such as players or those from plugins).
 
     This class represents the key participants in a game, specifically the players involved in setting and breaking the code. It serves as a structured way to manage and reference these entities throughout the game's lifecycle.

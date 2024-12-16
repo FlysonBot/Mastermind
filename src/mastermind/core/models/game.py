@@ -1,17 +1,14 @@
 from dataclasses import dataclass, field
 
-from dataclasses_json import dataclass_json
-
 from mastermind.core.models.game_configuration import GameConfiguration
 from mastermind.core.models.game_entities import GameEntities
-from mastermind.core.models.game_mode import GameMode  # type: ignore # noqa: F401
 from mastermind.core.models.game_state import GameState
 from mastermind.core.models.gameboard import GameBoard
+from mastermind.utils.serialize_dataclass import DataClassJson
 
 
-@dataclass_json
 @dataclass
-class Game:
+class Game(DataClassJson):
     """Dataclass for a game.
 
     This class encapsulates all the essential information about a game, including the game board, configuration, entities, and current state.
@@ -23,9 +20,10 @@ class Game:
         game_state (GameState): The current state of the game, indicating whether it is ongoing, won, or lost.
 
     Examples:
+        >>> from mastermind.core.models.game_mode import GameMode
         >>> game_configuration = GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP)
         >>> Game(game_configuration=game_configuration)
-        Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP), game_board=GameBoard(game_rounds=deque([])), game_state=GameState(game_started=False, winner=None), game_entities=GameEntities(Player(), Player()))
+        Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP), game_board=GameBoard(game_rounds=deque([])), game_state=GameState(game_started=False, winner=PlayerRole.UNDETERMINED), game_entities=GameEntities(Player(), Player()))
     """
 
     game_configuration: GameConfiguration

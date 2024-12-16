@@ -1,13 +1,11 @@
 from dataclasses import dataclass
 
-from dataclasses_json import dataclass_json
-
 from mastermind.core.models.game_mode import GameMode
+from mastermind.utils.serialize_dataclass import DataClassJson
 
 
-@dataclass_json
 @dataclass(frozen=True)
-class GameConfiguration:
+class GameConfiguration(DataClassJson):
     """Dataclass for the configuration of a game.
 
     This class defines the settings that determine how a game is structured, including the number of colors, dots, allowed attempts, and game mode.

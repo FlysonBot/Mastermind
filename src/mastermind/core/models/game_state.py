@@ -1,14 +1,12 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from dataclasses_json import dataclass_json
-
 from mastermind.core.controllers.players import PlayerRole
+from mastermind.utils.serialize_dataclass import DataClassJson
 
 
-@dataclass_json
 @dataclass
-class GameState:
+class GameState(DataClassJson):
     """Dataclass for maintaining the current state of the game, indicating whether the game has started, if it is over, and who won.
 
     Attributes:
@@ -18,7 +16,7 @@ class GameState:
     """
 
     game_started: bool = False
-    winner: Optional[PlayerRole] = None
+    winner: PlayerRole = PlayerRole.UNDETERMINED
 
     @property
     def game_over(self) -> bool:
@@ -28,14 +26,14 @@ class GameState:
             bool: True if the game has ended, False otherwise.
 
         Examples:
-            >>> game_state = GameState(game_started=True, winner=None)
+            >>> game_state = GameState(game_started=True, winner=PlayerRole.UNDETERMINED)
             >>> game_state.game_over
             False
             >>> game_state = GameState(game_started=True, winner=PlayerRole.CODE_SETTER)
             >>> game_state.game_over
             True
         """
-        return self.winner is not None
+        return self.winner is not PlayerRole.UNDETERMINED
 
 
 def get_winner(
@@ -60,11 +58,15 @@ def get_winner(
         True
         >>> get_winner(num_attempts=5, max_attempts=5, last_feedback=(4, 0), number_of_dots=4) == PlayerRole.CODE_BREAKER
         True
-        >>> get_winner(num_attempts=4, max_attempts=5, last_feedback=(1, 0), number_of_dots=4) == None
+        >>> get_winner(num_attempts=4, max_attempts=5, last_feedback=(1, 0), number_of_dots=4) == PlayerRole.UNDETERMINED
         True
     """
 
     if last_feedback == (number_of_dots, 0):
         return PlayerRole.CODE_BREAKER
 
-    return PlayerRole.CODE_SETTER if num_attempts >= max_attempts else None
+    return (
+        PlayerRole.CODE_SETTER
+        if num_attempts >= max_attempts
+        else PlayerRole.UNDETERMINED
+    )
