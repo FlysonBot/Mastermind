@@ -4,7 +4,22 @@ VT = TypeVar("VT")  # Type for value in a key-value pair
 
 
 class DotDict(Dict[str, Any]):
-    """dot.notation access to dictionary attributes"""
+    """Dictionary that supports dot notation for accessing nested keys.
+    
+    Example:
+        >>> normal_dict = {"a": {"b": 1, "c": {"d": 2}}}
+        >>> dot_dict = DotDict(normal_dict)
+        >>> dot_dict.a.b
+        1
+        >>> dot_dict.a.c.d
+        2
+        >>> dot_dict["a"]["b"]
+        1
+        >>> dot_dict["a"]["c"]["d"]
+        2
+        >>> dot_dict.a
+        {'b': 1, 'c': {'d': 2}}
+    """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__()
