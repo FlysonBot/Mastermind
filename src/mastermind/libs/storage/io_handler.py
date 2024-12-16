@@ -11,13 +11,13 @@ class IOHandler(ABC, Generic[T]):
     """
 
     @abstractmethod
-    def add(self, value: T) -> None:
+    def add(self, key: str, value: T) -> None:
         """Add a new item to the repository.
 
         Args:
+            key (str): The key of the item to add.
             value (T): The value of the item to add.
         """
-        pass
 
     @abstractmethod
     def get(self, key: str) -> T:
@@ -32,7 +32,6 @@ class IOHandler(ABC, Generic[T]):
         Raises:
             KeyError: If the key does not exist in the repository.
         """
-        pass
 
     @abstractmethod
     def update(self, key: str, value: T) -> None:
@@ -45,7 +44,6 @@ class IOHandler(ABC, Generic[T]):
         Raises:
             KeyError: If the key does not exist in the repository.
         """
-        pass
 
     @abstractmethod
     def delete(self, key: str) -> None:
@@ -57,7 +55,6 @@ class IOHandler(ABC, Generic[T]):
         Raises:
             KeyError: If the key does not exist in the repository.
         """
-        pass
 
     @abstractmethod
     def exists(self, key: str) -> bool:
@@ -69,7 +66,6 @@ class IOHandler(ABC, Generic[T]):
         Returns:
             bool: True if the item exists, False otherwise.
         """
-        pass
 
     @abstractmethod
     def keys(self) -> list[str]:
@@ -78,4 +74,3 @@ class IOHandler(ABC, Generic[T]):
         Returns:
             list[str]: A list of all keys in the repository.
         """
-        pass

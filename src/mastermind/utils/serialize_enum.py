@@ -8,13 +8,13 @@ T = TypeVar("T", bound=Enum)
 
 def serialize_enum_name_only(enum_cls: Type[T]) -> Type[T]:
     """Decorator to register an enum class for name-only JSON serialization with dataclasses-json library.
-    
+
     Args:
         enum_cls (Type[T]): The enum class to register.
 
     Returns:
         Type[T]: The decorated enum class.
-        
+
     Example:
         >>> from dataclasses_json import dataclass_json
         >>> from mastermind.utils.enum_meta import EnumMeta
@@ -51,7 +51,7 @@ def serialize_enum_name_only(enum_cls: Type[T]) -> Type[T]:
         Traceback (most recent call last):
         ...
         TypeError: Object of type type is not JSON serializable
-        
+
     """
 
     def enum_name_encoder(enum_value: Enum) -> str:
