@@ -136,7 +136,7 @@
 
 ### **Testing Framework**
 
-- **Unittest*- and **Pytest**
+- **Unittest**, **Doctest**, and **Pytest**
 
 ### **Version Control**
 
