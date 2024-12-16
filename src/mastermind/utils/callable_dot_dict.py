@@ -6,7 +6,7 @@ from mastermind.utils.dot_dict import DotDict
 
 class CallableDotDict(DotDict):
     """DotDict that wraps string values in CallableString
-    
+
     Example:
         >>> def plus_one(value: str) -> int:
         ...     return int(value) + 1

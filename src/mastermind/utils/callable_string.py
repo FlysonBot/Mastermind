@@ -3,7 +3,7 @@ from typing import Any, Callable
 
 class CallableString(str):
     """String that can be called as a function.
-    
+
     Example:
         >>> def plus_one(value: str) -> int:
         ...     return int(value) + 1

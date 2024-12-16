@@ -1,4 +1,5 @@
 from typing import Any, TypeVar, Union
+
 from dataclasses_json import DataClassJsonMixin
 
 A = TypeVar("A", bound="DataClassJsonMixin")
@@ -12,5 +13,7 @@ class DataClassJson(DataClassJsonMixin):
         return super().to_dict(encode_json)  # type: ignore
 
     @classmethod
-    def from_dict(cls: type[A], kvs: dict[Any, Any], *, infer_missing: bool = False) -> A:  # type: ignore
+    def from_dict(  # type: ignore
+        cls: type[A], kvs: dict[Any, Any], *, infer_missing: bool = False
+    ) -> A:
         return super().from_dict(kvs, infer_missing=infer_missing)  # type: ignore
