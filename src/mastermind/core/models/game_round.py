@@ -1,12 +1,11 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from dataclasses_json import dataclass_json
+from mastermind.utils.serialize_dataclass import DataClassJson
 
 
-@dataclass_json
 @dataclass(frozen=True)
-class GameRound:
+class GameRound(DataClassJson):
     """for a single round of the game.
 
     This class encapsulates the guess made during a round and the corresponding feedback received.

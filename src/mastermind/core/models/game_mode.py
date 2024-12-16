@@ -1,7 +1,9 @@
 from mastermind.core.controllers.players import Player
 from mastermind.utils.enum_meta import EnumMeta
+from mastermind.utils import serialize_enum_name_only
 
 
+@serialize_enum_name_only
 class GameMode(EnumMeta):
     """Enum for the different game modes, which determined who is Player 1 and who is Player 2.
 
