@@ -35,15 +35,6 @@ class GameService:
             guess (tuple[int, ...]): A tuple representing the player's current guess.
             feedback (tuple[int, int]): A tuple containing the number of correct and misplaced pegs.
 
-        Examples:
-            >>> from mastermind.core.models.game_configuration import GameConfiguration
-            >>> from mastermind.core.models.game_mode import GameMode
-            >>> game = Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
-            >>> service = GameService(game)
-            >>> service.add_round((1, 2, 3, 4), (1, 0))
-            >>> game.game_board.game_rounds
-            deque([GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))])
-
         Raises:
             GameEndedException: When trying to add a round to a game that has ended.
         """
@@ -63,18 +54,6 @@ class GameService:
     def undo(self) -> None:
         """Undo the most recent game round.
 
-        Examples:
-            >>> from mastermind.core.models.game_configuration import GameConfiguration
-            >>> from mastermind.core.models.game_mode import GameMode
-            >>> game = Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
-            >>> service = GameService(game)
-            >>> service.add_round((1, 2, 3, 4), (1, 0))
-            >>> game.game_board.game_rounds
-            deque([GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))])
-            >>> service.undo()
-            >>> game.game_board.game_rounds
-            deque([])
-
         Raises:
             GameNotStartedException: When trying to undo game rounds before the game has started.
             GameEndedException: When trying to undo game rounds after the game has ended.
@@ -92,17 +71,6 @@ class GameService:
 
     def redo(self) -> None:
         """Restores the most recently undone game round.
-
-        Examples:
-            >>> from mastermind.core.models.game_configuration import GameConfiguration
-            >>> from mastermind.core.models.game_mode import GameMode
-            >>> game = Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP))
-            >>> service = GameService(game)
-            >>> service.add_round((1, 2, 3, 4), (1, 0))
-            >>> service.undo()
-            >>> service.redo()
-            >>> game.game_board.game_rounds
-            deque([GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))])
 
         Raises:
             GameNotStartedException: When trying to redo game rounds before the game has started.
