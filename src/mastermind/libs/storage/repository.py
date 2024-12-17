@@ -9,7 +9,7 @@ T = TypeVar("T")
 
 
 class Repository(ABC, Generic[T]):
-    """Abstract base class for repository pattern."""
+    """Abstract base class for repository pattern. It is designed with an interface similar to dictionary."""
 
     def __init__(self, io_handler: IOHandler[T]) -> None:  # type: ignore
         """Initialize the repository.
@@ -48,7 +48,7 @@ class Repository(ABC, Generic[T]):
         if uuid in self:
             return self.add(value)  # try again
 
-        self.io_handler.add(value)
+        self.io_handler.add(uuid, value)
         self.data[uuid] = value
         return uuid
 
@@ -121,7 +121,7 @@ class Repository(ABC, Generic[T]):
         """
 
         for name in self.io_handler.keys():
-            yield self[name]
+            yield (name, self[name])
 
     def __next__(self) -> T:
         """Get the next item in the repository.
