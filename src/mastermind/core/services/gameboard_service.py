@@ -5,6 +5,10 @@ from mastermind.core.models.game_round import GameRound
 from mastermind.core.models.gameboard import GameBoard
 
 
+class NoRedoAvailableException(Exception):
+    pass
+
+
 class GameboardService:
     """This class manages the game board and provides methods for adding and undoing game rounds.
 
@@ -60,7 +64,11 @@ class GameboardService:
             [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))]
         """
 
-        self.game_rounds.append(self.undo_stack.pop())
+        try:
+            self.game_rounds.append(self.undo_stack.pop())
+
+        except IndexError as e:
+            raise NoRedoAvailableException("No redo available.") from e
 
     def add_round(self, guess: tuple[int, ...], feedback: tuple[int, int]) -> None:
         """Adds a new game round with the player's guess and corresponding feedback.

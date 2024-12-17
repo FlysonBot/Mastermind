@@ -41,7 +41,7 @@ def get_winner(
     max_attempts: int,
     last_feedback: tuple[int, int],
     number_of_dots: int,
-) -> Optional[PlayerRole]:
+) -> PlayerRole:
     """Determines the winner of the game based on the number of attempts and the last feedback.
 
     Args:
