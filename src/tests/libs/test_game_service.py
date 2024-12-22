@@ -2,17 +2,17 @@ from collections import deque
 
 import pytest
 
-from mastermind.core.controllers.players import PlayerRole
-from mastermind.core.models.game import Game
-from mastermind.core.models.game_configuration import GameConfiguration
-from mastermind.core.models.game_mode import GameMode
-from mastermind.core.models.game_round import GameRound
-from mastermind.core.services.game_service import (
+from mastermind.database.models.game import Game
+from mastermind.database.models.game_configuration import GameConfiguration
+from mastermind.database.models.game_mode import GameMode
+from mastermind.database.models.game_round import GameRound
+from mastermind.server.players.players import PlayerRole
+from mastermind.server.services.game_service import (
     GameEndedException,
     GameNotStartedException,
     GameService,
 )
-from mastermind.core.services.gameboard_service import NoRedoAvailableException
+from mastermind.server.services.gameboard_service import NoRedoAvailableException
 
 
 @pytest.fixture

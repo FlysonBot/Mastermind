@@ -2,10 +2,10 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from mastermind.core.models.game import Game
-from mastermind.core.models.game_configuration import GameConfiguration
-from mastermind.core.models.game_mode import GameMode
-from mastermind.libs.storage import GameRepository
+from mastermind.database.models.game import Game
+from mastermind.database.models.game_configuration import GameConfiguration
+from mastermind.database.models.game_mode import GameMode
+from mastermind.database.libs import GameRepository
 
 
 @pytest.fixture
