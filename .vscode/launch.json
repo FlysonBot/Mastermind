@@ -9,15 +9,20 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal"
         },
         {
             "name": "Python Debugger: All Code",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",
             "justMyCode": false
+        },
+        {
+            "name": "Python Debugger: Pytest",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["${file}"]
         }
     ]
 }
