@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from mastermind.server import PlayerRole
+from mastermind.server.players import PlayerRole
 from mastermind.utils import DataClassJson
 
 
