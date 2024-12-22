@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from mastermind.database.models.game_mode import GameMode
-from mastermind.server import Player
+from mastermind.server.players import Player
 from mastermind.utils import DataClassJson
 
 

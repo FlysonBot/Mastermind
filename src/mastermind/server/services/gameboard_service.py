@@ -1,7 +1,7 @@
 from collections import deque
 from typing import Deque
 
-from mastermind.database import GameBoard, GameRound
+from mastermind.database.models import GameBoard, GameRound
 
 
 class NoRedoAvailableException(Exception):

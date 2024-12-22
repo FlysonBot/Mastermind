@@ -1,4 +1,4 @@
-from mastermind.server import Player
+from mastermind.server.players import Player
 from mastermind.utils import EnumMeta, serialize_enum_name_only
 
 
