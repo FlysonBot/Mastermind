@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
-from mastermind.utils.callable_string import CallableString
-from mastermind.utils.dot_dict import DotDict
+from mastermind.libs.utils.callable_string import CallableString
+from mastermind.libs.utils.dot_dict import DotDict
 
 
 class CallableDotDict(DotDict):

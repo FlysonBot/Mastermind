@@ -17,7 +17,7 @@ def serialize_enum_name_only(enum_cls: Type[T]) -> Type[T]:
 
     Example:
         >>> from dataclasses_json import dataclass_json
-        >>> from mastermind.utils.enum_meta import EnumMeta
+        >>> from mastermind.libs.utils.enum_meta import EnumMeta
         >>> from dataclasses import dataclass
 
         >>> class CustomClass:

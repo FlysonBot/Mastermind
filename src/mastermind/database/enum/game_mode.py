@@ -1,5 +1,5 @@
+from mastermind.libs.utils import EnumMeta, serialize_enum_name_only
 from mastermind.server.players import Player
-from mastermind.utils import EnumMeta, serialize_enum_name_only
 
 
 @serialize_enum_name_only

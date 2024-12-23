@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import Deque, Generator, Tuple
 
 from mastermind.database.models.game_round import GameRound
-from mastermind.utils import DataClassJson
+from mastermind.libs.utils import DataClassJson
 
 
 @dataclass(frozen=True)

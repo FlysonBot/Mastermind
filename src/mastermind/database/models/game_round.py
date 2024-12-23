@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from mastermind.utils import DataClassJson
+from mastermind.libs.utils import DataClassJson
 
 
 @dataclass(frozen=True)

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
-from mastermind.utils import CallableDotDict
+from mastermind.libs.utils import CallableDotDict
 
 
 class Localization:

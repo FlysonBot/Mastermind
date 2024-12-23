@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
+from mastermind.libs.utils import DataClassJson
 from mastermind.server.players import PlayerRole
-from mastermind.utils import DataClassJson
 
 
 @dataclass
