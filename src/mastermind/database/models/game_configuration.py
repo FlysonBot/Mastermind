@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from mastermind.database.models.game_mode import GameMode
+from mastermind.database.enum import GameMode
 from mastermind.utils import DataClassJson
 
 

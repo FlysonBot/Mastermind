@@ -3,7 +3,7 @@ from typing import Type, TypeVar
 
 from dataclasses_json import DataClassJsonMixin
 
-from mastermind.database.libs.io_handler import IOHandler
+from mastermind.database.io.io_handler import IOHandler
 
 JsonSerializable = TypeVar("JsonSerializable", bound="DataClassJsonMixin")
 
