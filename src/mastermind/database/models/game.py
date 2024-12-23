@@ -4,7 +4,7 @@ from mastermind.database.models.game_configuration import GameConfiguration
 from mastermind.database.models.game_entities import GameEntities
 from mastermind.database.models.game_state import GameState
 from mastermind.database.models.gameboard import GameBoard
-from mastermind.utils import DataClassJson
+from mastermind.libs.utils import DataClassJson
 
 
 @dataclass

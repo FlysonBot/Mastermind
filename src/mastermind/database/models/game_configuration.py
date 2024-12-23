@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from mastermind.database.enum import GameMode
-from mastermind.utils import DataClassJson
+from mastermind.libs.utils import DataClassJson
 
 
 @dataclass(frozen=True)

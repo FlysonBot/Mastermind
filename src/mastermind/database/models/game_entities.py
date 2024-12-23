@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from mastermind.database.enum import GameMode
+from mastermind.libs.utils import DataClassJson
 from mastermind.server.players import Player
-from mastermind.utils import DataClassJson
 
 
 @dataclass(frozen=True)
