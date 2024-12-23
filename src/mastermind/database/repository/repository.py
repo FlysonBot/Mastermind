@@ -3,7 +3,7 @@ from typing import Any, Dict, Generator, Generic, TypeVar
 
 from shortuuid import ShortUUID
 
-from mastermind.database.libs.io_handler import IOHandler
+from mastermind.database.io.io_handler import IOHandler
 
 T = TypeVar("T")
 
