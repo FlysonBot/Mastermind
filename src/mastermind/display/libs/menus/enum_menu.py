@@ -1,25 +1,16 @@
 from abc import abstractmethod
-from typing import NamedTuple, Type
+from typing import Optional
 
-from mastermind.display.libs.menus.display_mode import DisplayMode
-from mastermind.display.libs.menus.menu_adapter import MenuAdapter
+from mastermind.display.libs.menus.back import back
+from mastermind.display.libs.menus.menu_config import MenuConfig
 from mastermind.display.libs.menus.menu_option import MenuOptions
 from mastermind.libs.utils import EnumMeta
-
-EnumMenuConfig = NamedTuple(
-    "EnumMenuConfig",
-    [
-        ("title", str),
-        ("display_mode", DisplayMode),
-        ("menu_adapter", Type[MenuAdapter]),
-    ],
-)
 
 
 class EnumMenu(EnumMeta):
     @classmethod
     @abstractmethod
-    def config(cls) -> EnumMenuConfig:
+    def config(cls) -> MenuConfig:
         pass
 
     @classmethod
@@ -33,3 +24,12 @@ class EnumMenu(EnumMeta):
         return config.menu_adapter(
             config.title, cls.list_options(), config.display_mode
         ).get_selections()
+
+    @classmethod
+    def activate(cls, stay_in_menu: Optional[bool] = False) -> None:
+        stay_in_menu = stay_in_menu or cls.config().stay_in_menu
+
+        while (
+            cls.get_selections()[0].action() is not back and cls.config().stay_in_menu
+        ):
+            pass

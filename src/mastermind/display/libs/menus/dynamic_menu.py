@@ -1,19 +1,33 @@
-from abc import ABC
+from abc import ABC, abstractmethod
+from dataclasses import field
 
-from mastermind.display.libs.menus.menu_adapter import MenuAdapter
+from mastermind.display.libs.menus.back import back
+from mastermind.display.libs.menus.menu_config import MenuConfig
 from mastermind.display.libs.menus.menu_option import MenuOption, MenuOptions
 
 
 class DynamicMenu(ABC):
-    menu_adapter: MenuAdapter
+    config: MenuConfig
+    options: MenuOptions = field(default_factory=list)
 
-    def __init__(self, title: str) -> None:
-        self.title = title
-        self.options: MenuOptions = []
+    @classmethod
+    @abstractmethod
+    def reconstruct_menu(cls) -> None:
+        pass
 
-    def add_option(self, option: MenuOption) -> None:
-        self.options.append(option)
+    @classmethod
+    def add_option(cls, option: MenuOption) -> None:
+        cls.options.append(option)
 
-    def get_selections(self) -> MenuOptions:  # in case of multiple selections
-        return self.menu_adapter.get_selections()
+    @classmethod
+    def get_selections(cls) -> MenuOptions:  # in case of multiple selections
+        cls.reconstruct_menu()
 
+        return cls.config.menu_adapter(
+            cls.config.title, cls.options, cls.config.display_mode, **cls.config.kwargs
+        ).get_selections()
+
+    @classmethod
+    def activate(cls) -> None:
+        while cls.get_selections()[0].action() is not back and cls.config.stay_in_menu:
+            pass
