@@ -1,7 +1,8 @@
 from abc import abstractmethod
 from typing import Type
 
-from mastermind.display.libs.menus.menu_adapter import MenuAdapter, MenuOptions
+from mastermind.display.libs.menus.menu_adapter import MenuAdapter
+from mastermind.display.libs.menus.menu_option import MenuOptions
 from mastermind.libs.utils import EnumMeta
 
 
@@ -18,7 +19,8 @@ class EnumMenu(EnumMeta):
 
     @classmethod
     def list_options(cls) -> MenuOptions:
-        return [(member.name, member.title) for member in cls]
+        # member is a MenuOption
+        return [member.value for member in cls]
 
     @classmethod
     def get_selection(cls) -> MenuOptions:

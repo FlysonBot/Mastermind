@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Union
 
 from mastermind.display.libs.menus.display_mode import DisplayMode
-
-MenuOption = Union[tuple[str, str], str]
-MenuOptions = list[MenuOption]
+from mastermind.display.libs.menus.menu_option import MenuOptions
 
 
 class MenuAdapter(ABC):
