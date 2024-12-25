@@ -14,11 +14,12 @@ class HandlerPipeline:
         """
 
         super().__init_subclass__()
-        cls.handlers: list[InstanceMethod] = [
-            func
-            for func in cls.__dict__.values()
-            if callable(func) and not func.__name__.startswith("_")
+        cls.handlers = [
+            func for name, func in cls.__dict__.items()
+            if callable(func) and not name.startswith("_")
+            and not isinstance(func, (staticmethod, classmethod))
         ]
+
 
     @classmethod
     def _add_handler_after(
