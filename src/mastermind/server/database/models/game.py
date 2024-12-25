@@ -20,7 +20,7 @@ class Game(DataClassJson):
         game_state (GameState): The current state of the game, indicating whether it is ongoing, won, or lost.
 
     Examples:
-        >>> from mastermind.server.database.models.game_mode import GameMode
+        >>> from mastermind.server.database.enum.game_mode import GameMode
         >>> game_configuration = GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP)
         >>> Game(game_configuration=game_configuration)
         Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP), game_board=GameBoard(game_rounds=deque([])), game_state=GameState(game_started=False, winner=PlayerRole.UNDETERMINED), game_entities=GameEntities(Player(), Player()))

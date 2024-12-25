@@ -2,10 +2,10 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from mastermind.database import GameRepository
-from mastermind.database.models.game import Game
-from mastermind.database.models.game_configuration import GameConfiguration
-from mastermind.database.models.game_mode import GameMode
+from mastermind.server.database.enum.game_mode import GameMode
+from mastermind.server.database.models.game import Game
+from mastermind.server.database.models.game_configuration import GameConfiguration
+from mastermind.server.database.repository import GameRepository
 
 
 @pytest.fixture
@@ -43,7 +43,7 @@ def test_update_item(game_repository: GameRepository, game: Game):
             NUMBER_OF_COLORS=4,
             NUMBER_OF_DOTS=5,
             ATTEMPTS_ALLOWED=6,
-            GAME_MODE=GameMode.PVE,
+            GAME_MODE=GameMode.PVC,
         )
     )
     game_repository[uuid] = new_game
