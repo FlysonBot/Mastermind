@@ -35,12 +35,12 @@ class MenuHandler(MenuAdapter):
 
 
 def _generate_header(title: str, width: int) -> str:
-    margin_length = (width - len(title) - 1) // 2
+    margin_length = (width - text_width(title)) // 2
     return f"\n{'=' * margin_length} {title} {'=' * margin_length}"
 
 
 def _generate_footer(title: str, width: int) -> str:
-    return f"{'=' * (len(_generate_header(title, width))-1)}\n"
+    return f"{'=' * (text_width(_generate_header(title, width))-1)}\n"
 
 
 def _generate_body(menu_options: MenuOptions, display_mode: DisplayMode) -> list[str]:
@@ -54,4 +54,9 @@ def _generate_body(menu_options: MenuOptions, display_mode: DisplayMode) -> list
 
 
 def _calculate_width(title: str, body: list[str]) -> int:
-    return max(len(title), max(map(len, body)))
+    return max(text_width(title), max(map(text_width, body)))
+
+
+def text_width(text: str) -> int:
+    """Calculate the width of a string in characters, taking into account Chinese characters."""
+    return sum(2 if "\u4e00" <= char <= "\u9fff" else 1 for char in text)
