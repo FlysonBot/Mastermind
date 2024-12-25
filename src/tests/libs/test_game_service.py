@@ -2,17 +2,20 @@ from collections import deque
 
 import pytest
 
-from mastermind.database.models.game import Game
-from mastermind.database.models.game_configuration import GameConfiguration
-from mastermind.database.models.game_mode import GameMode
-from mastermind.database.models.game_round import GameRound
-from mastermind.server.players.players import PlayerRole
+from mastermind.server.database.enum.game_mode import GameMode
+from mastermind.server.database.models.game import Game
+from mastermind.server.database.models.game_configuration import GameConfiguration
+from mastermind.server.database.models.game_round import GameRound
+from mastermind.server.players.base_players import PlayerRole
 from mastermind.server.services.game_service import (
     GameEndedException,
     GameNotStartedException,
     GameService,
 )
-from mastermind.server.services.gameboard_service import NoRedoAvailableException
+from mastermind.server.services.gameboard_service import (
+    GameboardService,
+    NoRedoAvailableException,
+)
 
 
 @pytest.fixture
@@ -29,7 +32,7 @@ def game():
 
 @pytest.fixture
 def game_service(game: Game):
-    return GameService(game)
+    return GameService(game, GameboardService(game.game_board))
 
 
 def test_add_round(game_service: GameService, game: Game):

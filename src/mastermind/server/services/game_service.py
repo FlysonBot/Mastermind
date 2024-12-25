@@ -1,4 +1,4 @@
-from mastermind.database import Game, get_winner
+from mastermind.server.database.models import Game, get_winner
 from mastermind.server.services.gameboard_service import GameboardService
 
 
@@ -11,7 +11,7 @@ class GameNotStartedException(Exception):
 
 
 class GameService:
-    def __init__(self, game: Game) -> None:
+    def __init__(self, game: Game, gameboard_service: GameboardService) -> None:
         """Initializes a new game service with the given game.
 
         Args:
@@ -22,7 +22,7 @@ class GameService:
         self._game_configuration = game.game_configuration
         self._game_entities = game.game_entities
         self._game_state = game.game_state
-        self._gameboard_service = GameboardService(self._game_board)
+        self._gameboard_service = gameboard_service
 
     def add_round(self, guess: tuple[int, ...], feedback: tuple[int, int]) -> None:
         """Adds a new game round with the player's guess and corresponding feedback.
