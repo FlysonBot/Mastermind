@@ -26,7 +26,7 @@ class Localization:
         if language in self._language_pack:
             return self._language_pack[language]
 
-        file_path = Path(f"{language}.json")
+        file_path = Path(f"{Path(__file__).parent}/{language}.json")
         if not file_path.is_file():
             raise FileNotFoundError(f"Language pack for '{language}' not found.")
 
@@ -39,5 +39,5 @@ class Localization:
             self._language_pack[language] = CallableDotDict(data, func=print_message)
             return self._language_pack[language]
 
-    def __getattr__(self, item: str) -> Any:
+    def __getattr__(self, item: str) -> CallableDotDict:
         return getattr(self.messages, item)
