@@ -1,8 +1,11 @@
 from clear_screen import clear  # type: ignore
 
+from mastermind.client.display.languages import global_localization
 from mastermind.client.display.libs.menus import MenuAdapter
 from mastermind.client.display.libs.menus.display_mode import DisplayMode
 from mastermind.client.display.libs.menus.menu_option import MenuOptions
+
+menu_handler = global_localization.menu.menu_handler
 
 
 class MenuHandler(MenuAdapter):
@@ -23,12 +26,12 @@ class MenuHandler(MenuAdapter):
     def _get_selections(self) -> MenuOptions:
         keys = list(map(lambda option: option.value, self.menu_options))
         choice = None
-        input_hint = self.kwargs.get("input_hint", "Enter your choice: ")
+        input_hint = self.kwargs.get("input_hint", menu_handler.default_input_hint)
 
         while (choice := input(input_hint)) not in keys:
             clear()
             self.print_menu()
-            print("Invalid choice. Please try again.")
+            menu_handler.invalid_choice()
 
         clear()
         return [self.menu_options[keys.index(choice)]]
@@ -50,7 +53,7 @@ def _generate_body(menu_options: MenuOptions, display_mode: DisplayMode) -> list
     if display_mode == DisplayMode.BOTH:
         return [f" ({option.value}) {option.title}" for option in menu_options]
 
-    raise ValueError(f"Unsupported display mode: {display_mode}")
+    raise ValueError(menu_handler.unsupported_display_mode(display_mode=display_mode))
 
 
 def _calculate_width(title: str, body: list[str]) -> int:

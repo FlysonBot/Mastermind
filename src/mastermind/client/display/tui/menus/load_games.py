@@ -1,5 +1,6 @@
 import pandas as pd
 
+from mastermind.client.display.languages import global_localization
 from mastermind.client.display.libs.menus.back import back
 from mastermind.client.display.libs.menus.dynamic_menu import DynamicMenu
 from mastermind.client.display.libs.menus.menu_config import MenuConfig
@@ -15,7 +16,7 @@ def example_play_api(index: int) -> None: ...
 
 class LoadGames(DynamicMenu):
     config = MenuConfig(
-        title="Load Games",
+        title=global_localization.menu.load_games.menu_title,
         menu_adapter=MenuHandler,
         stay_in_menu=False,
     )
@@ -30,4 +31,8 @@ class LoadGames(DynamicMenu):
         for i, line in enumerate(rendered):
             cls.add_option(MenuOption(line, str(i), lambda: example_play_api(i)))
 
-        cls.add_option(MenuOption("Return to Main Menu", "r", lambda: back))
+        cls.add_option(
+            MenuOption(
+                global_localization.menu.menu_handler.return_to_main, "r", lambda: back
+            )
+        )

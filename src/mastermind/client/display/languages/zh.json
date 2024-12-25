@@ -1,0 +1,61 @@
+{
+  "game": {
+    "welcome": "欢迎来到 Mastermind！",
+    "thank_you": "感谢您的参与！",
+    "game_started": "游戏已开始。",
+    "game_resumed": "游戏已恢复。",
+    "game_discarded": "游戏已放弃。",
+    "game_saved": "游戏已保存。",
+    "you_won": "恭喜！您在 {step} 步内获胜！",
+    "you_lost": "抱歉，您输了。秘密代码是 {code}。"
+  },
+  "menu": {
+    "menu_handler": {
+      "default_input_hint": "输入您的选择：",
+      "return_to_main": "返回主菜单",
+      "invalid_choice": "无效选择。请重试。",
+      "unsupported_display_mode": "不支持的显示模式：{display_mode}"
+    },
+    "main_menu": {
+      "menu_title": "主菜单",
+      "new_game": "开始新游戏",
+      "saved_game": "加载已保存的游戏",
+      "settings": "设置",
+      "quit": "退出"
+    },
+    "new_game_menu": {
+      "menu_title": "新游戏",
+      "PVP": "您设置，您猜",
+      "PVC": "您设置，其他人猜",
+      "CVP": "其他人设置，您猜",
+      "EVE": "解决外部游戏"
+    },
+    "load_games": {
+      "menu_title": "加载已保存的游戏"
+    },
+    "settings": {
+      "menu_title": "设置",
+      "input_hint": "输入要切换的设置："
+    }
+  },
+  "validation": {
+    "invalid_input": "无效输入。{error}",
+    "number_of_colors": "输入颜色数量（2-10）：",
+    "number_of_dots": "输入点的数量（2-10）：",
+    "maximum_attempts": "输入最大尝试次数："
+  },
+  "feedback": {
+    "feedback_prompt": "输入您对猜测的反馈：",
+    "feedback_help": "输入一个2位数字，表示黑白钉。"
+  },
+  "commands": {
+    "quit": "输入 'q' 退出。",
+    "discard": "输入 'd' 放弃游戏。",
+    "undo": "输入 'u' 撤销。",
+    "redo": "输入 'r' 重做。"
+  },
+  "error": {
+    "game_not_started": "游戏尚未开始。",
+    "game_already_started": "游戏已经开始。"
+  }
+}

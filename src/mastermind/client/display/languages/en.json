@@ -10,21 +10,47 @@
     "you_lost": "Sorry, you lost. The secret code was {code}."
   },
   "menu": {
+    "menu_handler": {
+      "default_input_hint": "Enter your choice: ",
+      "return_to_main": "Return to Main Menu",
+      "invalid_choice": "Invalid choice. Please try again.",
+      "unsupported_display_mode": "Unsupported display mode: {display_mode}"
+    },
     "main_menu": {
-      "start_new_game": "Start New Game",
-      "load_saved_game": "Load Saved Game",
-      "game_history": "Game History",
-      "save_and_exit": "Save and Exit"
+      "menu_title": "Main Menu",
+      "new_game": "Start New Game",
+      "saved_game": "Load Saved Game",
+      "settings": "Settings",
+      "quit": "Quit"
     },
     "new_game_menu": {
-      "you_vs_someone": "You vs Someone Else",
-      "you_vs_ai": "You vs AI",
-      "ai_vs_you": "AI vs You",
-      "solve_external_game": "Solve External Game",
-      "return_to_main": "Return to Main Menu"
+      "menu_title": "New Game",
+      "PVP": "You Set You Guess",
+      "PVC": "You Set Others Guess",
+      "CVP": "Others Set You Guess",
+      "EVE": "Solve External Game"
     },
-    "resume_game_menu": {
-      "no_continuable_games": "No continuable game found."
+    "load_games": {
+      "menu_title": "Load Saved Game"
+    },
+    "settings": {
+      "menu_title": "Settings",
+      "input_hint": "Enter the setting to toggle: "
+    }
+  },
+  "services": {
+    "game_service": {
+      "game_ended": "Game has ended.",
+      "game_not_started": "Game has not started yet.",
+      "game_already_started": "Game has already started.",
+      "game_ended_undo": "Cannot undo game rounds after game has ended.",
+      "game_ended_redo": "Cannot redo game rounds after game has ended.",
+      "game_not_started_undo": "Cannot undo game rounds before game has started.",
+      "game_not_started_redo": "Cannot redo game rounds before game has started.",
+      "game_ended_add_round": "Cannot add round to game that has ended."
+    },
+    "gameboard_service": {
+      "no_redo_available": "No redo available."
     }
   },
   "validation": {
