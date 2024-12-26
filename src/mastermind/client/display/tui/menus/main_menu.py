@@ -6,6 +6,7 @@ from mastermind.client.display.tui.menus.load_games import LoadGames
 from mastermind.client.display.tui.menus.menu_handler import MenuHandler
 from mastermind.client.display.tui.menus.new_game import NewGame
 from mastermind.client.display.tui.menus.settings import Settings
+from mastermind.libs.logs import ClientLogger
 
 main_menu = global_localization.menu.main_menu
 
@@ -22,4 +23,5 @@ class MainMenu(EnumMenu):
             title=main_menu.menu_title,
             menu_adapter=MenuHandler,
             stay_in_menu=True,
+            logger=ClientLogger("MainMenu").logger,
         )

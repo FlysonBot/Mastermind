@@ -22,12 +22,19 @@ class DynamicMenu(ABC):
     @classmethod
     def get_selections(cls) -> MenuOptions:  # in case of multiple selections
         cls.reconstruct_menu()
+        cls.config.logger.debug(f"Menu options: {cls.options}")
 
-        return cls.config.menu_adapter(
+        selection = cls.config.menu_adapter(
             cls.config.title, cls.options, cls.config.display_mode, **cls.config.kwargs
         ).get_selections()
 
+        cls.config.logger.debug(f"Selections: {selection}")
+        return selection
+
     @classmethod
     def activate(cls) -> None:
+        cls.config.logger.debug(
+            f"Activating menu: {cls.__name__}. Stay in menu: {cls.config.stay_in_menu}"
+        )
         while cls.get_selections()[0].action() is not back and cls.config.stay_in_menu:
             pass

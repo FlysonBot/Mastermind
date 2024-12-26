@@ -21,13 +21,21 @@ class EnumMenu(EnumMeta):
     @classmethod
     def get_selections(cls) -> MenuOptions:
         config = cls.config()
-        return config.menu_adapter(
+        selection = config.menu_adapter(
             config.title, cls.list_options(), config.display_mode
         ).get_selections()
+
+        cls.config().logger.debug(f"Selections: {selection}")
+
+        return selection
 
     @classmethod
     def activate(cls, stay_in_menu: Optional[bool] = False) -> None:
         stay_in_menu = stay_in_menu or cls.config().stay_in_menu
+
+        cls.config().logger.debug(
+            f"Activating menu: {cls.__name__}. Stay in menu: {stay_in_menu}"
+        )
 
         while (
             cls.get_selections()[0].action() is not back and cls.config().stay_in_menu

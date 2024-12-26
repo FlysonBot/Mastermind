@@ -6,6 +6,7 @@ from mastermind.client.display.libs.menus.dynamic_menu import DynamicMenu
 from mastermind.client.display.libs.menus.menu_config import MenuConfig
 from mastermind.client.display.libs.menus.menu_option import MenuOption
 from mastermind.client.display.tui.menus.menu_handler import MenuHandler
+from mastermind.libs.logs import ClientLogger
 from mastermind.server.database.models.settings import AllSettings
 
 settings = AllSettings()
@@ -17,6 +18,7 @@ class Settings(DynamicMenu):
         title=settings_menu.menu_title,
         menu_adapter=MenuHandler,
         stay_in_menu=True,
+        logger=ClientLogger("Settings").logger,
         kwargs={"input_hint": settings_menu.input_hint},
     )
 
