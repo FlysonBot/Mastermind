@@ -6,6 +6,7 @@ from mastermind.client.display.libs.menus.dynamic_menu import DynamicMenu
 from mastermind.client.display.libs.menus.menu_config import MenuConfig
 from mastermind.client.display.libs.menus.menu_option import MenuOption
 from mastermind.client.display.tui.menus.menu_handler import MenuHandler
+from mastermind.libs.logs import ClientLogger
 from mastermind.libs.utils import render_dataframe
 from mastermind.server.database.models.game import Game
 
@@ -19,6 +20,7 @@ class LoadGames(DynamicMenu):
         title=global_localization.menu.load_games.menu_title,
         menu_adapter=MenuHandler,
         stay_in_menu=False,
+        logger=ClientLogger("LoadGames").logger,
     )
 
     @classmethod
