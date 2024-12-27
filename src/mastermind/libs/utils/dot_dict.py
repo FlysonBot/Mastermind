@@ -39,7 +39,11 @@ class DotDict(Dict[str, Any]):
             self[key] = convert(value)
 
     def __getattr__(self, key: str) -> Any:
-        return self.__getitem__(key)
+        try:
+            return self.__getitem__(key)
+
+        except KeyError:  # in case trying to access a built-in attribute
+            return super().__getattribute__(key)
 
     def __setattr__(self, key: str, value: Any) -> None:
         self.__setitem__(key, value)
