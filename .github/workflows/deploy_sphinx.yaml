@@ -12,21 +12,21 @@ jobs:
 
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+      - name: Install uv (faster alternative to pip)
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: '3.10'
-          cache: 'pip'
+          version: "0.4.4"
+          python-version: "3.10"
+          enable-cache: true
 
       - name: Install dependencies
         run: |
-          pip install -r src/requirements.txt
-          pip install -r docs/requirements.txt
+          uv pip install -r pyproject.toml --extra docs
 
       - name: Generate rst files
         run: sphinx-apidoc -o docs/source src/mastermind -f --templatedir=docs/source/_templates --maxdepth=2 --module-first
