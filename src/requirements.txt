@@ -1,5 +1,0 @@
-shortuuid==1.0.13
-appdirs==1.4.4
-dataclasses-json==0.6.7
-clear-screen==0.1.14
-pandas==2.2.2
