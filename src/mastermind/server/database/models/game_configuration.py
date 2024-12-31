@@ -1,11 +1,11 @@
-from dataclasses import dataclass
+from attrs import field, frozen
+from attrs.validators import ge
 
-from mastermind.libs.utils import DataClassJson
 from mastermind.server.database.enum import GameMode
 
 
-@dataclass(frozen=True)
-class GameConfiguration(DataClassJson):
+@frozen
+class GameConfiguration:
     """Dataclass for the configuration of a game.
 
     This class defines the settings that determine how a game is structured, including the number of colors, dots, allowed attempts, and game mode.
@@ -22,9 +22,9 @@ class GameConfiguration(DataClassJson):
         3x4, 5 attempts in PVP mode
     """
 
-    NUMBER_OF_COLORS: int
-    NUMBER_OF_DOTS: int
-    ATTEMPTS_ALLOWED: int
+    NUMBER_OF_COLORS: int = field(validator=ge(2))
+    NUMBER_OF_DOTS: int = field(validator=ge(1))
+    ATTEMPTS_ALLOWED: int = field(validator=ge(1))
     GAME_MODE: GameMode
 
     def __str__(self):

@@ -1,14 +1,13 @@
-from dataclasses import dataclass, field
+from attrs import Factory, define, field
 
-from mastermind.libs.utils import DataClassJson
 from mastermind.server.database.models.game_configuration import GameConfiguration
 from mastermind.server.database.models.game_entities import GameEntities
 from mastermind.server.database.models.game_state import GameState
 from mastermind.server.database.models.gameboard import GameBoard
 
 
-@dataclass
-class Game(DataClassJson):
+@define
+class Game:
     """Dataclass for a game.
 
     This class encapsulates all the essential information about a game, including the game board, configuration, entities, and current state.
@@ -27,8 +26,8 @@ class Game(DataClassJson):
     """
 
     game_configuration: GameConfiguration
-    game_board: GameBoard = field(default_factory=GameBoard)
-    game_state: GameState = field(default_factory=GameState)
+    game_board: GameBoard = Factory(GameBoard)
+    game_state: GameState = Factory(GameState)
     game_entities: GameEntities = field(init=False)
 
     def __post_init__(self):

@@ -1,13 +1,13 @@
 from collections import deque
-from dataclasses import dataclass, field
 from typing import Deque, Generator, Tuple
 
-from mastermind.libs.utils import DataClassJson
+from attrs import Factory, frozen
+
 from mastermind.server.database.models.game_round import GameRound
 
 
-@dataclass(frozen=True)
-class GameBoard(DataClassJson):
+@frozen  # Just the reference, game_rounds is still mutable
+class GameBoard:
     """Dataclass for the gameboard of a game.
 
     This class represents the collection of game rounds that have taken place during a game session. It serves as a structured way to manage and track the progression of the game through its various rounds.
@@ -16,7 +16,7 @@ class GameBoard(DataClassJson):
         game_rounds (Deque[GameRound]): A collection of GameRound instances, each representing a round of the game.
     """
 
-    game_rounds: Deque[GameRound] = field(default_factory=deque)
+    game_rounds: Deque[GameRound] = Factory(deque)
 
     def __len__(self) -> int:
         """Returns the number of game rounds in the game board.
@@ -62,3 +62,13 @@ class GameBoard(DataClassJson):
             (2, 1)
         """
         return (round.FEEDBACK for round in self.game_rounds)
+
+    def validate_all_rounds(self, NUMBER_OF_COLORS: int, NUMBER_OF_DOTS: int) -> None:
+        """Validate all rounds in the game board.
+
+        Args:
+            NUMBER_OF_COLORS (int): The number of colors available to a code.
+            NUMBER_OF_DOTS (int): The number of dots in each code.
+        """
+        for round in self.game_rounds:
+            round.validate(NUMBER_OF_COLORS, NUMBER_OF_DOTS)

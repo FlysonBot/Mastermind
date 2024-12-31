@@ -1,9 +1,9 @@
-from mastermind.server.database.io.io_handler import IOHandler
-from mastermind.server.database.io.json_multifiles_handler import (
-    JsonMultiFilesIOHandler,
+from mastermind.server.database.io.cattrs_multifiles_handler import (
+    CattrsMultifilesIOHandler,
 )
+from mastermind.server.database.io.io_handler import IOHandler
 
 __all__ = [
     "IOHandler",
-    "JsonMultiFilesIOHandler",
+    "CattrsMultifilesIOHandler",
 ]

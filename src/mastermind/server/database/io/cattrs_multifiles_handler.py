@@ -1,145 +1,115 @@
+import json
 import os
-from typing import Type, TypeVar
-
-from dataclasses_json import DataClassJsonMixin
+from typing import NoReturn, Type, TypeVar
 
 from mastermind.libs.logs import ServerLogger
+from mastermind.server.database import converter
 from mastermind.server.database.io.io_handler import IOHandler
 
-JsonSerializable = TypeVar("JsonSerializable", bound="DataClassJsonMixin")
-logger = ServerLogger("JsonMultiFiles")
+CattrsSerializable = TypeVar("CattrsSerializable")
+logger = ServerLogger("CattrsMultifiles")
 
 
-class JsonMultiFilesIOHandler(IOHandler[JsonSerializable]):
-    """IOHandler for storing data into multiple JSON files in the same directory."""
+class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
+    """IOHandler for storing data into multiple JSON files in the same directory using cattrs to serialize and deserialize."""
 
-    def __init__(self, path: str, JSON_constructor: Type[JsonSerializable]) -> None:
-        """Initialize the JsonMultiFilesIOHandler.
+    def __init__(self, path: str, data_type: Type[CattrsSerializable]) -> None:
+        """Initialize the CattrsMultifilesIOHandler.
 
         Args:
             path (str): The path to the directory where the files will be stored.
+            data_type (Type[CattrsSerializable]): The type of data to be stored, such as a dataclass or attrs class.
         """
 
         logger.debug(f"Initializing with path: {path}")
         self.path = path
-        self.JSON_constructor = JSON_constructor
+        self.data_type = data_type
         os.makedirs(self.path, exist_ok=True)
         logger.info("Initialized successfully")
 
-    def add(self, key: str, value: JsonSerializable) -> None:
-        """Create a new file with the given key and JSON-serialize the value.
+    def add(self, key: str, value: CattrsSerializable) -> None:
+        """Create a new file with the given key and serialize the value.
 
         Args:
-            key (str): The UUID of the item to add.
-            value (JsonSerializable): The value of the item to add, will be serialized to JSON.
+            key (str): The UUID of the item to add, which will be used as the filename.
+            value (CattrsSerializable): The value of the item to add, will be serialized to JSON.
 
         Example:
             >>> from tempfile import TemporaryDirectory
-            >>> from dataclasses_json import dataclass_json
             >>> from dataclasses import dataclass
-            >>> @dataclass_json
-            ... @dataclass
+            >>> @dataclass
             ... class MyDataClass:
-            ...     my_field: str
-            >>> my_data_class = MyDataClass(my_field="Hello, World!")
+            ...     my_field: str = "Hello, World!"
+            >>> my_data_class = MyDataClass()
             >>> with TemporaryDirectory() as temp_dir:
-            ...     io_handler = JsonMultiFilesIOHandler(temp_dir, MyDataClass)
+            ...     io_handler = CattrsMultifilesIOHandler(temp_dir, MyDataClass)
             ...     io_handler.add("my_data_class", my_data_class)
             ...     print(os.path.exists(os.path.join(temp_dir, "my_data_class.json")))
             True
         """
 
         logger.debug(f"Writing to file: {key}.json in {self.path}")
+        raw_data = _serialize(value)
+        _write(self.path, key, raw_data)
 
-        try:
-            with open(os.path.join(self.path, f"{key}.json"), "w") as file:
-                file.write(value.to_json())
-
-        except Exception as e:
-            self.log_exception(f"Error writing {key}.json", e)
-
-        logger.info(f"Wrote {key}.json to {self.path}")
-
-    def get(self, key: str) -> JsonSerializable:
+    def get(self, key: str) -> CattrsSerializable:
         """Get the value associated with the given key.
 
         Args:
             key (str): The UUID of the item to get.
 
         Returns:
-            JsonSerializable: The value associated with the given key.
+            CattrsSerializable: The value associated with the given key.
 
         Raises:
             KeyError: If the key does not exist in the repository.
 
         Example:
             >>> from tempfile import TemporaryDirectory
-            >>> from dataclasses_json import dataclass_json
             >>> from dataclasses import dataclass
-            >>> @dataclass_json
-            ... @dataclass
+            >>> @dataclass
             ... class MyDataClass:
-            ...     my_field: str
-            >>> my_data_class = MyDataClass(my_field="Hello, World!")
+            ...     my_field: str = "Hello, World!"
+            >>> my_data_class = MyDataClass()
             >>> with TemporaryDirectory() as temp_dir:
-            ...     io_handler = JsonMultiFilesIOHandler(temp_dir, MyDataClass)
+            ...     io_handler = CattrsMultifilesIOHandler(temp_dir, MyDataClass)
             ...     io_handler.add("my_data_class", my_data_class)
             ...     print(io_handler.get("my_data_class"))
             MyDataClass(my_field='Hello, World!')
         """
 
         logger.debug(f"Reading from file: {key}.json in {self.path}")
+        raw_data = _read(self.path, key)
+        return _deserialize(raw_data, self.data_type)
 
-        try:
-            with open(os.path.join(self.path, f"{key}.json"), "r") as file:
-                return self.JSON_constructor.from_json(file.read())
-
-        except FileNotFoundError as e:
-            self.log_exception(f"File {key}.json does not exist in {self.path}", e)
-
-        except Exception as e:
-            self.log_exception(f"Error reading {key}.json", e)
-
-    def update(self, key: str, value: JsonSerializable) -> None:
+    def update(self, key: str, value: CattrsSerializable) -> None:
         """Update the value associated with the given key.
 
         Args:
             key (str): The UUID of the item to update.
-            value (JsonSerializable): The new value to update the item to.
+            value (CattrsSerializable): The new value to update the item to.
 
         Raises:
             KeyError: If the key does not exist in the repository.
 
         Example:
             >>> from tempfile import TemporaryDirectory
-            >>> from dataclasses_json import dataclass_json
             >>> from dataclasses import dataclass
-            >>> @dataclass_json
-            ... @dataclass
+            >>> @dataclass
             ... class MyDataClass:
-            ...     my_field: str
-            >>> my_data_class = MyDataClass(my_field="Hello, World!")
+            ...     my_field: str = "Hello, World!"
+            >>> my_data_class = MyDataClass()
             >>> with TemporaryDirectory() as temp_dir:
-            ...     io_handler = JsonMultiFilesIOHandler(temp_dir, MyDataClass)
+            ...     io_handler = CattrsMultifilesIOHandler(temp_dir, MyDataClass)
             ...     io_handler.add("my_data_class", my_data_class)
             ...     io_handler.update("my_data_class", MyDataClass(my_field="Goodbye, World!"))
             ...     print(io_handler.get("my_data_class"))
             MyDataClass(my_field='Goodbye, World!')
         """
 
-        logger.debug(f"Updating file: {key}.json in {self.path}")
-
-        try:
-            with open(os.path.join(self.path, f"{key}.json"), "w") as file:
-                file.write(value.to_json())
-
-        except FileNotFoundError as e:
-            self.log_exception(f"File {key}.json does not exist in {self.path}", e)
-
-        except Exception as e:
-            self.log_exception(f"Error updating {key}.json", e)
-
-        logger.info(f"Updated {key}.json in {self.path}")
+        logger.debug(f"Updating file: {key}.json in {self.path} with new data")
+        raw_data = _serialize(value)
+        _write(self.path, key, raw_data)
 
     def delete(self, key: str) -> None:
         """Delete the item associated with the given key.
@@ -152,15 +122,13 @@ class JsonMultiFilesIOHandler(IOHandler[JsonSerializable]):
 
         Example:
             >>> from tempfile import TemporaryDirectory
-            >>> from dataclasses_json import dataclass_json
             >>> from dataclasses import dataclass
-            >>> @dataclass_json
-            ... @dataclass
+            >>> @dataclass
             ... class MyDataClass:
-            ...     my_field: str
-            >>> my_data_class = MyDataClass(my_field="Hello, World!")
+            ...     my_field: str = "Hello, World!"
+            >>> my_data_class = MyDataClass()
             >>> with TemporaryDirectory() as temp_dir:
-            ...     io_handler = JsonMultiFilesIOHandler(temp_dir, MyDataClass)
+            ...     io_handler = CattrsMultifilesIOHandler(temp_dir, MyDataClass)
             ...     io_handler.add("my_data_class", my_data_class)
             ...     io_handler.delete("my_data_class")
             ...     print(io_handler.exists("my_data_class"))
@@ -173,10 +141,10 @@ class JsonMultiFilesIOHandler(IOHandler[JsonSerializable]):
             os.remove(os.path.join(self.path, f"{key}.json"))
 
         except FileNotFoundError as e:
-            self.log_exception(f"File {key}.json does not exist in {self.path}", e)
+            _log_exception(f"File {key}.json does not exist in {self.path}", e)
 
         except Exception as e:
-            self.log_exception(f"Error deleting {key}.json", e)
+            _log_exception(f"Error deleting {key}.json", e)
 
         logger.info(f"Deleted {key}.json from {self.path}")
 
@@ -191,15 +159,13 @@ class JsonMultiFilesIOHandler(IOHandler[JsonSerializable]):
 
         Example:
             >>> from tempfile import TemporaryDirectory
-            >>> from dataclasses_json import dataclass_json
             >>> from dataclasses import dataclass
-            >>> @dataclass_json
-            ... @dataclass
+            >>> @dataclass
             ... class MyDataClass:
-            ...     my_field: str
-            >>> my_data_class = MyDataClass(my_field="Hello, World!")
+            ...     my_field: str = "Hello, World!"
+            >>> my_data_class = MyDataClass()
             >>> with TemporaryDirectory() as temp_dir:
-            ...     io_handler = JsonMultiFilesIOHandler(temp_dir, MyDataClass)
+            ...     io_handler = CattrsMultifilesIOHandler(temp_dir, MyDataClass)
             ...     io_handler.add("my_data_class", my_data_class)
             ...     print(io_handler.exists("my_data_class"))
             ...     io_handler.delete("my_data_class")
@@ -221,24 +187,72 @@ class JsonMultiFilesIOHandler(IOHandler[JsonSerializable]):
 
         Example:
             >>> from tempfile import TemporaryDirectory
-            >>> from dataclasses_json import dataclass_json
             >>> from dataclasses import dataclass
-            >>> @dataclass_json
-            ... @dataclass
+            >>> @dataclass
             ... class MyDataClass:
-            ...     my_field: str
-            >>> my_data_class = MyDataClass(my_field="Hello, World!")
+            ...     my_field: str = "Hello, World!"
+            >>> my_data_class = MyDataClass()
             >>> with TemporaryDirectory() as temp_dir:
-            ...     io_handler = JsonMultiFilesIOHandler(temp_dir, MyDataClass)
+            ...     io_handler = CattrsMultifilesIOHandler(temp_dir, MyDataClass)
             ...     io_handler.add("my_data_class", my_data_class)
             ...     print(io_handler.keys())
             ['my_data_class']
         """
         logger.debug(f"Listing files in directory: {self.path}")
         files = os.listdir(self.path)
+
         logger.debug(f"Found the following files: {files}")
         return [file[:-5] for file in os.listdir(self.path) if file.endswith(".json")]
 
-    def log_exception(self, log_message: str, exception: Exception):
-        logger.error(f"{log_message}: {exception}")
-        raise exception
+
+def _log_exception(log_message: str, exception: Exception) -> NoReturn:
+    logger.error(f"{log_message}: {exception}")
+    raise exception
+
+
+def _serialize(value: object) -> str:
+    try:
+        raw_data = converter.unstructure(value)
+
+    except Exception as e:
+        return _log_exception("Error serializing data", e)
+
+    return raw_data
+
+
+def _deserialize(
+    raw_data: str, data_type: Type[CattrsSerializable]
+) -> CattrsSerializable:
+    try:
+        return converter.structure(raw_data, data_type)
+
+    except Exception as e:
+        return _log_exception("Error deserializing data", e)
+
+
+def _write(path: str, key: str, value: str) -> None:
+    try:
+        with open(os.path.join(path, f"{key}.json"), "w") as file:
+            json.dump(value, file)
+
+    except Exception as e:
+        return _log_exception(
+            f"Error writing to file: {os.path.join(path, f'{key}.json')}. Data serialized correctly.",
+            e,
+        )
+
+    logger.info(f"Wrote {key}.json to {path}")
+
+
+def _read(path: str, key: str) -> str:
+    try:
+        with open(os.path.join(path, f"{key}.json"), "r") as file:
+            return json.load(file)
+
+    except FileNotFoundError as e:
+        return _log_exception(f"File {key}.json does not exist in {path}", e)
+
+    except Exception as e:
+        return _log_exception(
+            f"Error reading from file: {os.path.join(path, f'{key}.json')}", e
+        )
