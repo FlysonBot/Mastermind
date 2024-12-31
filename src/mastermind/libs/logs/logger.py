@@ -33,7 +33,7 @@ def get_file_handler(log_file_path: str) -> RotatingFileHandler:
         log_file_path, maxBytes=1024 * 1024 * 10, backupCount=10
     )
     file_formatter = logging.Formatter(
-        "%(asctime)s [%(levelname)s] %(name)s - %(message)s (File: %(filename)s, Line: %(lineno)d)",
+        "%(asctime)s [%(levelname)s] %(name)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
     file_handler.setFormatter(file_formatter)
