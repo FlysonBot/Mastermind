@@ -1,12 +1,11 @@
-from dataclasses import dataclass
+from attrs import frozen
 
-from mastermind.libs.utils import DataClassJson
 from mastermind.server.database.enum import GameMode
 from mastermind.server.players import Player
 
 
-@dataclass(frozen=True)
-class GameEntities(DataClassJson):
+@frozen
+class GameEntities:
     """Dataclass for the entities of a game (such as players or those from plugins).
 
     This class represents the key participants in a game, specifically the players involved in setting and breaking the code. It serves as a structured way to manage and reference these entities throughout the game's lifecycle.

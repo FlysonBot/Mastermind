@@ -1,11 +1,10 @@
-from dataclasses import dataclass
+from attrs import define
 
-from mastermind.libs.utils import DataClassJson
 from mastermind.server.players import PlayerRole
 
 
-@dataclass
-class GameState(DataClassJson):
+@define
+class GameState:
     """Dataclass for maintaining the current state of the game, indicating whether the game has started, if it is over, and who won.
 
     Attributes:

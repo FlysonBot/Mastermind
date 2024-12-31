@@ -1,9 +1,11 @@
-from mastermind.libs.utils import EnumMeta, serialize_enum_name_only
+from enum import Enum
+
 from mastermind.server.players import Player
+from mastermind.libs.utils import serialize_enum_name_only
 
 
 @serialize_enum_name_only
-class GameMode(EnumMeta):
+class GameMode(Enum):
     """Enum for the different game modes, which determined who is Player 1 and who is Player 2.
 
     Members:

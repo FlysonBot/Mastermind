@@ -11,7 +11,7 @@ T = TypeVar("T")
 class Repository(ABC, Generic[T]):
     """Abstract base class for repository pattern. It is designed with an interface similar to dictionary."""
 
-    def __init__(self, io_handler: IOHandler[T]) -> None:  # type: ignore
+    def __init__(self, io_handler: IOHandler[T]) -> None:
         """Initialize the repository.
 
         Args:
