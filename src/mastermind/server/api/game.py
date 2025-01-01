@@ -26,7 +26,7 @@ def create_game():
 
 @app.route("/games/<str:game_id>", methods=["GET"])
 def get_game_info(game_id: str):
-    game: Game = _retrieve_game_by_id(game_id)
+    game: Game = retrieve_game_by_id(game_id)
 
     game_info: list[GameInfo] = retrieve_game_info(
         [(game_id, game)], get_filter_func(False)
@@ -37,14 +37,14 @@ def get_game_info(game_id: str):
 
 @app.route("/games/<str:game_id>", methods=["DELETE"])
 def delete_game(game_id: str):
-    _retrieve_game_by_id(game_id)
+    retrieve_game_by_id(game_id)
 
     del game_repository[game_id]
 
     return "", 204
 
 
-def _retrieve_game_by_id(game_id: str) -> Game:
+def retrieve_game_by_id(game_id: str) -> Game:
     with RaiseErrorCode(KeyError, 404, f"Game with id {game_id} does not exist"):
         if game_id not in game_repository and (
             len(game_id) != 6 or set(game_id).difference(set(shortuuid_alphabet()))
