@@ -1,18 +1,19 @@
 from abc import ABC, abstractmethod
 from dataclasses import field
 
-from mastermind.client.display.libs.menus.back import back
-from mastermind.client.display.libs.menus.menu_config import MenuConfig
-from mastermind.client.display.libs.menus.menu_option import MenuOption, MenuOptions
+from mastermind.libs.menus.back import back
+from mastermind.libs.menus.menu_config import MenuConfig
+from mastermind.libs.menus.menu_option import MenuOption, MenuOptions
 
 
 class DynamicMenu(ABC):
     """A type of menu that can be dynamically constructed at runtime.
-    
+
     Attributes:
         config (MenuConfig): Menu configuration such as title, adapter, display mode, etc.
         options (MenuOptions): List of menu options.
     """
+
     config: MenuConfig
     options: MenuOptions = field(default_factory=list)
 
