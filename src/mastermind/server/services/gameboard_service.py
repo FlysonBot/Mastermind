@@ -1,7 +1,16 @@
 from collections import deque
 from typing import Deque
 
+from mastermind.client.display.languages import global_localization
+from mastermind.libs.logs import ServerLogger
 from mastermind.server.database.models import GameBoard, GameRound
+
+gameboard_service = global_localization.services.gameboard_service
+logger = ServerLogger("GameboardService")
+
+
+class NoUndoAvailableException(Exception):
+    pass
 
 
 class NoRedoAvailableException(Exception):
@@ -45,7 +54,15 @@ class GameboardService:
             [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
         """
 
-        self.undo_stack.append(self.game_rounds.pop())
+        logger.debug("Attempting to undo game round")
+
+        try:
+            self.undo_stack.append(self.game_rounds.pop())
+        except IndexError as e:
+            logger.warning("No more game rounds to undo")
+            raise NoUndoAvailableException(gameboard_service.no_undo_available) from e
+
+        self.inform_action("Undo successful")
 
     def redo(self) -> None:
         """Restores the most recently undone game round from the undo stack.
@@ -63,11 +80,15 @@ class GameboardService:
             [GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0)), GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1))]
         """
 
+        logger.debug("Attempting to redo game round")
+
         try:
             self.game_rounds.append(self.undo_stack.pop())
-
         except IndexError as e:
-            raise NoRedoAvailableException("No redo available.") from e
+            logger.warning("No more game rounds to redo")
+            raise NoRedoAvailableException(gameboard_service.no_redo_available) from e
+
+        self.inform_action("Redo successful")
 
     def add_round(self, guess: tuple[int, ...], feedback: tuple[int, int]) -> None:
         """Adds a new game round with the player's guess and corresponding feedback.
@@ -86,5 +107,14 @@ class GameboardService:
             [GameRound(GUESS=(3, 4, 5, 6), FEEDBACK=(2, 1)), GameRound(GUESS=(1, 2, 3, 4), FEEDBACK=(1, 0))]
         """
 
+        logger.debug(
+            f"Adding round to game with guess: {guess} and feedback: {feedback}"
+        )
         self.game_rounds.append(GameRound(GUESS=guess, FEEDBACK=feedback))
         self.undo_stack.clear()
+        self.inform_action("Add round successful")
+
+    def inform_action(self, message: str):
+        logger.info(message)
+        logger.debug(f"Game rounds: {self.game_rounds}")
+        logger.debug(f"Undo stack: {self.undo_stack}")

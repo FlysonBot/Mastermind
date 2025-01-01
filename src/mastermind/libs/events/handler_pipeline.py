@@ -8,6 +8,8 @@ InstanceMethod = Callable[["HandlerPipeline"], Any]
 
 
 class HandlerPipeline:
+    handlers: list[InstanceMethod]
+
     def __init_subclass__(cls) -> None:
         """Add all methods to the handlers list in the order they were defined.
 
@@ -15,7 +17,7 @@ class HandlerPipeline:
         """
         super().__init_subclass__()
 
-        cls.handlers: list[InstanceMethod] = []
+        cls.handlers = []
         for base in cls.__bases__:
             for attr_name, attr_value in inspect.getmembers(base):
                 if inspect.isfunction(attr_value) and not attr_name.startswith("_"):

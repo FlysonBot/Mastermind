@@ -1,5 +1,10 @@
+from mastermind.client.display.languages import global_localization
+from mastermind.libs.logs import ServerLogger
 from mastermind.server.database.models import Game, get_winner
 from mastermind.server.services.gameboard_service import GameboardService
+
+game_service = global_localization.services.game_service
+logger = ServerLogger("GameService")
 
 
 class GameEndedException(Exception):
@@ -38,8 +43,12 @@ class GameService:
             GameEndedException: When trying to add a round to a game that has ended.
         """
 
+        logger.debug(
+            f"Adding round to game with guess: {guess} and feedback: {feedback}"
+        )
         if self._game_state.game_over:
-            raise GameEndedException("Cannot add round to game that has ended.")
+            self.warn_state("Attempted to add round to game that has ended")
+            raise GameEndedException(game_service.game_ended_add_round)
 
         self._gameboard_service.add_round(guess, feedback)
         self._game_state.game_started = True
@@ -49,6 +58,7 @@ class GameService:
             last_feedback=self._gameboard_service.game_rounds[-1].FEEDBACK,
             number_of_dots=self._game_configuration.NUMBER_OF_DOTS,
         )
+        self.inform_action("Add round successful")
 
     def undo(self) -> None:
         """Undo the most recent game round.
@@ -58,15 +68,17 @@ class GameService:
             GameEndedException: When trying to undo game rounds after the game has ended.
         """
 
+        logger.debug("Attempting to undo game round")
         if not self._game_state.game_started:
-            raise GameNotStartedException(
-                "Cannot undo game rounds before game has started."
-            )
+            self.warn_state("Attempted to undo game round before game has started")
+            raise GameNotStartedException(game_service.game_not_started_undo)
 
         if self._game_state.game_over:
-            raise GameEndedException("Cannot undo game rounds after game has ended.")
+            self.warn_state("Attempted to undo game round after game has ended")
+            raise GameEndedException(game_service.game_ended_undo)
 
         self._gameboard_service.undo()
+        self.inform_action("Undo successful")
 
     def redo(self) -> None:
         """Restores the most recently undone game round.
@@ -75,9 +87,21 @@ class GameService:
             GameNotStartedException: When trying to redo game rounds before the game has started.
         """
 
+        logger.debug("Attempting to redo game round")
         if not self._game_state.game_started:
-            raise GameNotStartedException(
-                "Cannot redo game rounds before game has started."
-            )
+            self.warn_state("Attempted to redo game round before game has started")
+            raise GameNotStartedException(game_service.game_not_started_redo)
 
         self._gameboard_service.redo()
+        self.inform_action("Redo successful")
+
+    def inform_action(self, message: str):
+        logger.info(message)
+        state_message = f"Game state: {self._game_state}"
+        state_message += f"Game rounds: {self._gameboard_service.game_rounds}"
+        state_message += f"Undo stack: {self._gameboard_service.undo_stack}"
+        logger.debug(state_message)
+
+    def warn_state(self, message: str):
+        logger.warning(message)
+        logger.debug(f"Game state: {self._game_state}")
