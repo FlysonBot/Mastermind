@@ -1,13 +1,13 @@
 from abc import abstractmethod
 from typing import Optional
+from enum import Enum
 
 from mastermind.client.display.libs.menus.back import back
 from mastermind.client.display.libs.menus.menu_config import MenuConfig
-from mastermind.client.display.libs.menus.menu_option import MenuOptions
-from mastermind.libs.utils import EnumMeta
+from mastermind.client.display.libs.menus.menu_option import MenuOption, MenuOptions
 
 
-class EnumMenu(EnumMeta):
+class EnumMenu(Enum):
     @classmethod
     @abstractmethod
     def config(cls) -> MenuConfig:
@@ -20,8 +20,8 @@ class EnumMenu(EnumMeta):
 
     @classmethod
     def get_selections(cls) -> MenuOptions:
-        config = cls.config()
-        selection = config.menu_adapter(
+        config: MenuConfig = cls.config()
+        selection: MenuOptions = config.menu_adapter(
             config.title, cls.list_options(), config.display_mode
         ).get_selections()
 
