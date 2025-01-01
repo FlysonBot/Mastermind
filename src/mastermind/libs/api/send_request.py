@@ -8,10 +8,21 @@ JSON = dict[str, Any]
 Params = Union[JSON, list[tuple[str, Any]]]
 
 
-class Request:
+class RequestURL:
+    """A class for sending HTTP requests to a specified URL.
+
+    Attributes:
+        path (str): The path of the server endpoint to send the request to (i.e. "http://localhost:5000)
+    """
+
     base_url: str
 
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
+        """Initialize a RequestURL object with the specified path.
+
+        Args:
+            path (str): The URL without the server address (i.e. "/api/v1/games")
+        """
         self.path: str = path
         self.url: str = f"{self.base_url}{path}"
 

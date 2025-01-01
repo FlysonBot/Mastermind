@@ -10,7 +10,17 @@ logger = ServerLogger("Unpack Request")
 
 
 def unpack_request(request: Request, type: type) -> Any:
-    """Unpack the request data into the given type, with error handling."""
+    """Structure the request data into the specified type.
+
+    When the request data cannot be structured into the specified type, a 400 Bad Request error is raised.
+
+    Args:
+        request (Request): The flask.request variable.
+        type (type): The type to structure the request data into.
+
+    Returns:
+        Any: The structured request data.
+    """
     try:
         return converter.structure(request.get_json(), type)  # type: ignore
 

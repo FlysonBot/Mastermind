@@ -23,6 +23,20 @@ GameInfoLookupFunc = Callable[[GameIdPair], Any]
 
 @app.route("/games", methods=["GET"])
 def api_list_game_info() -> tuple[Response, Literal[200]]:
+    """API to list all the games in the game repository with their information.
+
+    All request parameters are optional and passed as query parameters.
+
+    Args:
+        only_continuable (bool): Whether to only include games that had not ended.
+        retrieve_all (bool): Whether to turn on blacklist mode (retrieve all except excluded keys).
+        include (list[str]): A list of keys to include in the response (used in whitelist mode).
+        exclude (list[str]): A list of keys to exclude from the response (used in blacklist mode).
+
+    Returns:
+        Response: A response containing a list of game information.
+    """
+
     only_continuable: bool = request.args.get("only_continuable") is not None
     retrieve_all: bool = request.args.get("retrieveAll") is not None
     includes: set[str] = set(request.args.getlist("include") or [])
@@ -36,7 +50,15 @@ def api_list_game_info() -> tuple[Response, Literal[200]]:
 
 
 def list_games(only_continuable: bool = False) -> list[GameIdPair]:
-    """Lists all the game in the game repository."""
+    """Lists all the game in the game repository, along with their ids.
+
+    Args:
+        only_continuable (bool): Whether to only include games that had not ended.
+
+    Returns:
+        list[GameIdPair]: A list of (id, game) pairs.
+    """
+
     return (
         list(game_repository)
         if only_continuable
@@ -45,7 +67,15 @@ def list_games(only_continuable: bool = False) -> list[GameIdPair]:
 
 
 def filter_continuable(game_id_pairs: list[GameIdPair]) -> list[GameIdPair]:
-    """Filters out games that had ended."""
+    """Filters out games that had ended from the given list of games.
+
+    Args:
+        game_id_pairs (list[GameIdPair]): A list of (id, game) pairs to filter.
+
+    Returns:
+        list[GameIdPair]: A list of (id, game) pairs that have not ended.
+    """
+
     return [
         game_id_pair
         for game_id_pair in game_id_pairs
@@ -58,7 +88,16 @@ def get_filter_func(
     includes: Optional[set[str]] = None,
     excludes: Optional[set[str]] = None,
 ) -> GameInfoLookupFunc:
-    """Generate a function to filter the game information."""
+    """Generate a function to filter the game information, based on the filter parameters.
+
+    Args:
+        blacklist (bool): Whether to use blacklist mode (retrieve all except excluded keys).
+        includes (set[str]): A set of keys to include in the response (used in whitelist mode).
+        excludes (set[str]): A set of keys to exclude from the response (used in blacklist mode).
+
+    Returns:
+        GameInfoLookupFunc: A function that takes a (id, game) pair and returns a dictionary of game information.
+    """
     return (
         partial(_exclude, exclude=(excludes or set()))
         if blacklist
@@ -69,7 +108,15 @@ def get_filter_func(
 def retrieve_game_info(
     games: list[GameIdPair], filter_func: Callable[[GameIdPair], GameInfo]
 ) -> list[GameInfo]:
-    """Retrieve the game information using the given filtering function."""
+    """Retrieve the game information using the given filtering function.
+
+    Args:
+        games (list[GameIdPair]): A list of (id, game) pairs to retrieve information for.
+        filter_func (Callable[[GameIdPair], GameInfo]): A function that takes a (id, game) pair and returns a dictionary of game information.
+
+    Returns:
+        list[GameInfo]: A list of dictionaries containing game information.
+    """
     return [filter_func(game) for game in games]
 
 

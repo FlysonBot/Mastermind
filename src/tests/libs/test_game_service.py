@@ -6,7 +6,7 @@ from mastermind.server.database.enum.game_mode import GameMode
 from mastermind.server.database.models.game import Game
 from mastermind.server.database.models.game_configuration import GameConfiguration
 from mastermind.server.database.models.game_round import GameRound
-from mastermind.server.players.base_players import PlayerRole
+from mastermind.server.database.enum import PlayerRole
 from mastermind.server.services.game_service import (
     GameEndedException,
     GameNotStartedException,

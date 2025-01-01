@@ -17,7 +17,6 @@ class CallableString(str):
         '1'
         >>> special_str("1")()
         2
-
     """
 
     def __new__(cls, value: str, func: Callable[[Any], Any]) -> "CallableString":
