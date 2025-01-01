@@ -40,7 +40,7 @@ class ClientExceptionLogger(ClientLogger):
         exc_value: BaseException,
         exc_traceback: traceback.TracebackException,
     ) -> None:
-        traceback_message = "\n".join(  # type: ignore
+        traceback_message: str = "\n".join(  # type: ignore
             traceback.format_exception(exc_type, exc_value, exc_traceback)  # type: ignore
         )
         self.error(f"Exception: {exc_type.__name__}: {exc_value}")

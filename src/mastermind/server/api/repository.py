@@ -1,5 +1,5 @@
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Literal, Optional
+from typing import TYPE_CHECKING, Any, Callable, Iterable, Literal, Optional
 
 from flask import request
 from flask.wrappers import Response
@@ -106,4 +106,4 @@ info_lookup: dict[str, GameInfoLookupFunc] = {
     "code_setter": lambda pair: pair[1].game_entities.CODE_SETTER.__class__.__name__,
     "code_breaker": lambda pair: pair[1].game_entities.CODE_BREAKER.__class__.__name__,
 }
-valid_keys = info_lookup.keys()
+valid_keys: Iterable[str] = info_lookup.keys()

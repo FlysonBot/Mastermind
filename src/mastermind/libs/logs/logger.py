@@ -5,8 +5,8 @@ from pathlib import Path
 
 class Logger:
     def __init__(self, log_file_path: str, logger_name: str) -> None:
-        self.log_file_path = log_file_path
-        self.logger = logging.getLogger(logger_name)
+        self.log_file_path: str = log_file_path
+        self.logger: logging.Logger = logging.getLogger(logger_name)
         self.logger.setLevel(logging.DEBUG)
         self.logger.addHandler(get_file_handler(log_file_path))
 

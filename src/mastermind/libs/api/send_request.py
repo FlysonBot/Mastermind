@@ -12,8 +12,8 @@ class Request:
     base_url: str
 
     def __init__(self, path: str):
-        self.path = path
-        self.url = f"{self.base_url}{path}"
+        self.path: str = path
+        self.url: str = f"{self.base_url}{path}"
 
     def get(
         self, params: Optional[Params] = None, data: Optional[JSON] = None

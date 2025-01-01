@@ -15,10 +15,10 @@ class MenuAdapter(ABC):
         display_mode: DisplayMode,
         **kwargs: dict[Any, Any],
     ) -> None:
-        self.title = title
+        self.title: str = title
         self.menu_options = menu_options
-        self.display_mode = display_mode
-        self.kwargs = kwargs
+        self.display_mode: DisplayMode = display_mode
+        self.kwargs: dict[str, dict[Any, Any]] = kwargs
 
     @abstractmethod
     def get_selections(self) -> MenuOptions:

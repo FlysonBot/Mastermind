@@ -12,11 +12,11 @@ def render_dataframe(df: pd.DataFrame) -> list[str]:
         list: A list of strings representing the DataFrame.
     """
     # Calculate widths
-    col_widths = [_calculate_index_width(df)] + _calculate_column_widths(df)
+    col_widths: list[int] = [_calculate_index_width(df)] + _calculate_column_widths(df)
 
     # Prepare header
-    header = _prepare_header(df)
-    output = [_format_row(header, col_widths)]
+    header: list[str] = _prepare_header(df)
+    output: list[str] = [_format_row(header, col_widths)]
     # Prepare rows
     for index, row in df.iterrows():  # type: ignore
         row_values = [str(index)] + [str(row[col]) for col in df.columns]  # type: ignore

@@ -24,8 +24,8 @@ def RaiseErrorCode(
         yield
 
     except exception_type as e:  # type: ignore
-        caller = stack()[2].function
-        caller_parent = stack()[3].function
-        error_message = f"{description} (api: {caller_parent}/{caller})\n{e}"
+        caller: str = stack()[2].function
+        caller_parent: str = stack()[3].function
+        error_message: str = f"{description} (api: {caller_parent}/{caller})\n{e}"
         logger.error(error_message)
         abort(status_code, description=description)
