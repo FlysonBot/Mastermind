@@ -4,7 +4,7 @@ from enum import Enum
 
 from mastermind.client.display.libs.menus.back import back
 from mastermind.client.display.libs.menus.menu_config import MenuConfig
-from mastermind.client.display.libs.menus.menu_option import MenuOption, MenuOptions
+from mastermind.client.display.libs.menus.menu_option import MenuOptions
 
 
 class EnumMenu(Enum):

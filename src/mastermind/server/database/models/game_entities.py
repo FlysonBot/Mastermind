@@ -1,7 +1,11 @@
 from attrs import frozen
+from typing import TYPE_CHECKING
 
 from mastermind.server.database.enum import GameMode
 from mastermind.server.players import Player
+
+if TYPE_CHECKING:
+    from mastermind.server.players.base_players import CodeBreaker, CodeSetter
 
 
 @frozen
@@ -33,8 +37,9 @@ class GameEntities:
             GameEntities(Player(), Player())
         """
 
-        code_setter_class, code_breaker_class = game_mode.value
-        return cls(code_setter_class(), code_breaker_class())
+        code_setter_class: type[CodeSetter] = game_mode.value[0]
+        code_breaker_class: type[CodeBreaker] = game_mode.value[1]
+        return cls(code_setter_class(), code_breaker_class())  # type: ignore
 
     def __repr__(self) -> str:
         return f"GameEntities({self.CODE_SETTER}, {self.CODE_BREAKER})"

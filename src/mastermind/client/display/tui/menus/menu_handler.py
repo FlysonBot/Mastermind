@@ -1,3 +1,4 @@
+from typing import Any
 from clear_screen import clear  # type: ignore
 
 from mastermind.client.display.languages import global_localization
@@ -14,8 +15,8 @@ class MenuHandler(MenuAdapter):
         return self._get_selections()
 
     def print_menu(self) -> None:
-        body = _generate_body(self.menu_options, self.display_mode)
-        width = _calculate_width(self.title, body)
+        body: list[str] = _generate_body(self.menu_options, self.display_mode)
+        width: int = _calculate_width(self.title, body)
 
         clear()
         print(_generate_header(self.title, width))
@@ -26,7 +27,7 @@ class MenuHandler(MenuAdapter):
     def _get_selections(self) -> MenuOptions:
         keys = list(map(lambda option: option.value, self.menu_options))
         choice = None
-        input_hint = self.kwargs.get("input_hint", menu_handler.default_input_hint)
+        input_hint: dict[Any, Any] = self.kwargs.get("input_hint", menu_handler.default_input_hint)
 
         while (choice := input(input_hint)) not in keys:
             clear()

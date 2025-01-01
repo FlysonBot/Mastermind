@@ -27,8 +27,8 @@ class Settings(DynamicMenu):
         cls.options = []
 
         for i, setting in enumerate(fields(settings)):
-            name = setting.name
-            value = getattr(settings, name)
+            name: str = setting.name
+            value: bool = getattr(settings, name)
 
             cls.add_option(
                 MenuOption(

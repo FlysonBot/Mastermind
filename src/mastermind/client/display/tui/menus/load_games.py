@@ -28,7 +28,7 @@ class LoadGames(DynamicMenu):
         cls.options = []
 
         table = pd.DataFrame(example_load_api())
-        rendered = render_dataframe(table)
+        rendered: list[str] = render_dataframe(table)
 
         for i, line in enumerate(rendered):
             cls.add_option(MenuOption(line, str(i), lambda: example_play_api(i)))

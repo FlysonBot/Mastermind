@@ -10,7 +10,7 @@ from mastermind.server.database.repository.repository import Repository
 class GameRepository(Repository[Game]):
     """Repository for storing games."""
 
-    default_path = path.join(user_data_dir("mastermind-ai"), "games")
+    default_path: str = path.join(user_data_dir("mastermind-ai"), "games")
 
     def __init__(self, repository_path: str = default_path) -> None:
         """Initialize the GameRepository."""

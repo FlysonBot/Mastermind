@@ -23,8 +23,8 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
         """
 
         logger.debug(f"Initializing with path: {path}")
-        self.path = path
-        self.data_type = data_type
+        self.path: str = path
+        self.data_type: type[CattrsSerializable] = data_type
         os.makedirs(self.path, exist_ok=True)
         logger.info("Initialized successfully")
 
@@ -50,7 +50,7 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
         """
 
         logger.debug(f"Writing to file: {key}.json in {self.path}")
-        raw_data = _serialize(value)
+        raw_data: JSON = _serialize(value)
         _write(self.path, key, raw_data)
 
     def get(self, key: str) -> CattrsSerializable:
@@ -80,7 +80,7 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
         """
 
         logger.debug(f"Reading from file: {key}.json in {self.path}")
-        raw_data = _read(self.path, key)
+        raw_data: JSON = _read(self.path, key)
         return _deserialize(raw_data, self.data_type)
 
     def update(self, key: str, value: CattrsSerializable) -> None:
@@ -109,7 +109,7 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
         """
 
         logger.debug(f"Updating file: {key}.json in {self.path} with new data")
-        raw_data = _serialize(value)
+        raw_data: JSON = _serialize(value)
         _write(self.path, key, raw_data)
 
     def delete(self, key: str) -> None:
@@ -200,7 +200,7 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
             ['my_data_class']
         """
         logger.debug(f"Listing files in directory: {self.path}")
-        files = os.listdir(self.path)
+        files: list[str] = os.listdir(self.path)
 
         logger.debug(f"Found the following files: {files}")
         return [file[:-5] for file in os.listdir(self.path) if file.endswith(".json")]

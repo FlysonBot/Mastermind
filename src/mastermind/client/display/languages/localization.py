@@ -4,6 +4,8 @@ from typing import Any, Dict
 
 from mastermind.libs.utils import CallableDotDict
 
+JSON = list[Any] | dict[str, Any]
+
 
 class Localization:
     """Localization class for printing messages in different languages."""
@@ -19,8 +21,8 @@ class Localization:
 
     @language.setter
     def language(self, language: str) -> None:
-        self.messages = self.load_language_pack(language)
-        self._language = language
+        self.messages: CallableDotDict = self.load_language_pack(language)
+        self._language: str = language
 
     def load_language_pack(self, language: str) -> CallableDotDict:
         if language in self._language_pack:
@@ -35,7 +37,7 @@ class Localization:
             def print_message(message: str, **kwargs: Any) -> str:
                 return message.format(**kwargs)
 
-            data = json.load(f)
+            data: JSON = json.load(f)
             self._language_pack[language] = CallableDotDict(data, func=print_message)
             return self._language_pack[language]
 

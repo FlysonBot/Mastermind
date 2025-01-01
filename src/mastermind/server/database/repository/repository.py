@@ -19,7 +19,7 @@ class Repository(ABC, Generic[T]):
         """
 
         self.data: Dict[str, T] = {}
-        self.io_handler = io_handler
+        self.io_handler: IOHandler[T] = io_handler
 
     def __contains__(self, name: str) -> bool:
         """Check if an item exists in the repository.
@@ -43,7 +43,7 @@ class Repository(ABC, Generic[T]):
             str: The UUID of the added item.
         """
 
-        uuid = ShortUUID().random(length=6)
+        uuid: str = ShortUUID().random(length=6)
 
         if uuid in self:
             return self.add(value)  # try again
@@ -88,7 +88,7 @@ class Repository(ABC, Generic[T]):
             return self.data[name]
 
         if self.io_handler.exists(name):
-            value = self.io_handler.get(name)
+            value: T = self.io_handler.get(name)
             self.data[name] = value
             return value
 
