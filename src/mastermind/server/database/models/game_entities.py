@@ -23,7 +23,7 @@ class GameEntities:
     CODE_BREAKER: Player
 
     @classmethod
-    def from_game_mode(cls, game_mode: GameMode) -> "GameEntities":
+    def from_game_mode(cls, game_mode: GameMode, client_id: str = "1234") -> "GameEntities":
         """Creates game entities based on the given game mode.
 
         Args:
@@ -39,7 +39,7 @@ class GameEntities:
 
         code_setter_class: type[CodeSetter] = game_mode.value[0]
         code_breaker_class: type[CodeBreaker] = game_mode.value[1]
-        return cls(code_setter_class(), code_breaker_class())  # type: ignore
+        return cls(code_setter_class(client_id), code_breaker_class(client_id))
 
     def __repr__(self) -> str:
         return f"GameEntities({self.CODE_SETTER}, {self.CODE_BREAKER})"
