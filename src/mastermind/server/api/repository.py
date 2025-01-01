@@ -1,7 +1,8 @@
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Optional
+from typing import TYPE_CHECKING, Any, Callable, Literal, Optional
 
 from flask import request
+from flask.wrappers import Response
 
 from mastermind.libs.api import pack_response
 from mastermind.server.api.app import app
@@ -21,7 +22,7 @@ GameInfoLookupFunc = Callable[[GameIdPair], Any]
 
 
 @app.route("/games", methods=["GET"])
-def api_list_game_info():
+def api_list_game_info() -> tuple[Response, Literal[200]]:
     only_continuable: bool = request.args.get("only_continuable") is not None
     retrieve_all: bool = request.args.get("retrieveAll") is not None
     includes: set[str] = set(request.args.getlist("include") or [])
@@ -102,7 +103,7 @@ info_lookup: dict[str, GameInfoLookupFunc] = {
     "attempts_made": lambda pair: len(pair[1].game_board),
     "guesses": lambda pair: list(pair[1].game_board.guesses),
     "feedbacks": lambda pair: list(pair[1].game_board.feedbacks),
-    "code_setter": lambda pair: pair[1].game_entities.CODE_SETTER.__qualname__,
-    "code_breaker": lambda pair: pair[1].game_entities.CODE_BREAKER.__qualname__,
+    "code_setter": lambda pair: pair[1].game_entities.CODE_SETTER.__class__.__name__,
+    "code_breaker": lambda pair: pair[1].game_entities.CODE_BREAKER.__class__.__name__,
 }
 valid_keys = info_lookup.keys()

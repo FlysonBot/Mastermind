@@ -95,13 +95,13 @@ class GameService:
         self._gameboard_service.redo()
         self.inform_action("Redo successful")
 
-    def inform_action(self, message: str):
+    def inform_action(self, message: str) -> None:
         logger.info(message)
         state_message = f"Game state: {self._game_state}"
         state_message += f"Game rounds: {self._gameboard_service.game_rounds}"
         state_message += f"Undo stack: {self._gameboard_service.undo_stack}"
         logger.debug(state_message)
 
-    def warn_state(self, message: str):
+    def warn_state(self, message: str) -> None:
         logger.warning(message)
         logger.debug(f"Game state: {self._game_state}")

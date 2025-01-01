@@ -30,7 +30,7 @@ class Game:
     game_state: GameState = Factory(GameState)
     game_entities: GameEntities = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.game_entities = GameEntities.from_game_mode(
             self.game_configuration.GAME_MODE
         )

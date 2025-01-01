@@ -11,7 +11,7 @@ class BoolHandlerPipeline(HandlerPipeline):
     If a handler returns False, the next handler will not be called and a HandleResult with handled=False will be returned. Otherwise, the next handler will be called, and a HandleResult with handled=True will be returned if all handlers return True.
     """
 
-    def __new__(cls, **kwargs: dict[Any, Any]) -> HandleResult:
+    def __new__(cls, **kwargs: dict[Any, Any]) -> HandleResult:  # type: ignore
         instance = object.__new__(cls)
         instance.__dict__.update(kwargs)
 

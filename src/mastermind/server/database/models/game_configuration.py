@@ -27,5 +27,5 @@ class GameConfiguration:
     ATTEMPTS_ALLOWED: int = field(validator=ge(1))
     GAME_MODE: GameMode
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.NUMBER_OF_COLORS}x{self.NUMBER_OF_DOTS}, {self.ATTEMPTS_ALLOWED} attempts in {self.GAME_MODE.name} mode"

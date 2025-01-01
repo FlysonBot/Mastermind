@@ -66,5 +66,14 @@ docs = [
 packages = ["mastermind"]
 package-dir = { "" = "src" }
 
+[tool.mypy]
+exclude = "src/tests"
+warn_unused_ignores = false
+warn_return_any = false
+disallow_untyped_calls = false
+check_untyped_defs = true
+strict = true
+disable_error_code = "empty-body"
+
 [project.scripts]
 mastermind = "mastermind.client.display.tui.main:main"

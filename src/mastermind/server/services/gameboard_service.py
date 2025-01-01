@@ -114,7 +114,7 @@ class GameboardService:
         self.undo_stack.clear()
         self.inform_action("Add round successful")
 
-    def inform_action(self, message: str):
+    def inform_action(self, message: str) -> None:
         logger.info(message)
         logger.debug(f"Game rounds: {self.game_rounds}")
         logger.debug(f"Undo stack: {self.undo_stack}")

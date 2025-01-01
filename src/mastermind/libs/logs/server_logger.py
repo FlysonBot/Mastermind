@@ -11,10 +11,10 @@ from mastermind.libs.logs.logger import Logger
 class ServerLogger(Logger):
     """Logger for server-side operations."""
 
-    started = False
-    filepath = path.join(user_log_dir("mastermind-ai"), "server.log")
+    started: bool = False
+    filepath: str = path.join(user_log_dir("mastermind-ai"), "server.log")
 
-    def __init__(self, logger_name: str):
+    def __init__(self, logger_name: str) -> None:
         super().__init__(self.filepath, logger_name)
 
         if not self.started:
@@ -23,23 +23,23 @@ class ServerLogger(Logger):
             self.started = True
 
     @classmethod
-    def close(cls):
+    def close(cls) -> None:
         Logger(cls.filepath, "Server Status").info("Server logging stopped")
 
 
 class ServerExceptionLogger(ServerLogger):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("ExceptionLogger")
 
-    def setup_exception_hook(self):
-        sys.excepthook = self.handle_exception
+    def setup_exception_hook(self) -> None:
+        sys.excepthook = self.handle_exception  # type: ignore
 
     def handle_exception(
         self,
         exc_type: type[BaseException],
         exc_value: BaseException,
         exc_traceback: traceback.TracebackException,
-    ):
+    ) -> None:
         traceback_message = "\n".join(  # type: ignore
             traceback.format_exception(exc_type, exc_value, exc_traceback)  # type: ignore
         )

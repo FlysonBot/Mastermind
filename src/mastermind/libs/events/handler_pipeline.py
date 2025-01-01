@@ -45,5 +45,5 @@ class HandlerPipeline:
         cls.handlers.insert(cls.handlers.index(after) + 1, handler)
 
     @abstractmethod
-    def __new__(cls, **kwargs: dict[Any, Any]) -> HandleResult:
+    def __new__(cls, **kwargs: dict[Any, Any]) -> HandleResult:  # type: ignore
         """Handle the event."""
