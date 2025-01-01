@@ -23,7 +23,9 @@ class GameEntities:
     CODE_BREAKER: Player
 
     @classmethod
-    def from_game_mode(cls, game_mode: GameMode, client_id: str = "1234") -> "GameEntities":
+    def from_game_mode(
+        cls, game_mode: GameMode, client_id: str = "1234"
+    ) -> "GameEntities":
         """Creates game entities based on the given game mode.
 
         Args:

@@ -1,4 +1,4 @@
-from mastermind.client.display.languages import global_localization
+from mastermind.client.languages import global_localization
 from mastermind.libs.logs import ServerLogger
 from mastermind.server.database.models import Game, get_winner
 from mastermind.server.services.gameboard_service import GameboardService

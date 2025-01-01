@@ -1,5 +1,5 @@
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Iterable, Literal, Optional
+from typing import Any, Callable, Iterable, Literal, Optional
 
 from flask import request
 from flask.wrappers import Response
@@ -8,9 +8,6 @@ from mastermind.libs.api import pack_response
 from mastermind.server.api.app import app
 from mastermind.server.database.models import Game
 from mastermind.server.database.repository import GameRepository
-
-if TYPE_CHECKING:
-    from mastermind.server.database.models import Game
 
 
 game_repository = GameRepository()

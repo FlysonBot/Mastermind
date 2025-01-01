@@ -4,6 +4,7 @@ from mastermind.server.database.models.game_entities import GameEntities
 from mastermind.server.database.models.game_round import GameRound
 from mastermind.server.database.models.game_state import GameState, get_winner
 from mastermind.server.database.models.gameboard import GameBoard
+from mastermind.server.database.models.settings import AllSettings
 
 __all__ = [
     "Game",
@@ -13,4 +14,5 @@ __all__ = [
     "GameState",
     "get_winner",
     "GameBoard",
+    "AllSettings",
 ]
