@@ -22,7 +22,7 @@ class Game:
         >>> from mastermind.server.database.enum.game_mode import GameMode
         >>> game_configuration = GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP)
         >>> Game(game_configuration=game_configuration)
-        Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=GameMode.PVP), game_board=GameBoard(game_rounds=deque([])), game_state=GameState(game_started=False, winner=PlayerRole.UNDETERMINED), game_entities=GameEntities(Player(), Player()))
+        Game(game_configuration=GameConfiguration(NUMBER_OF_COLORS=3, NUMBER_OF_DOTS=4, ATTEMPTS_ALLOWED=5, GAME_MODE=<GameMode.PVP: (<class 'mastermind.server.players.human_player.HumanSetter'>, <class 'mastermind.server.players.human_player.HumanBreaker'>)>), game_board=GameBoard(game_rounds=deque([])), game_state=GameState(game_started=False, winner=<PlayerRole.UNDETERMINED: 'UNDETERMINED'>), game_entities=GameEntities(Player(), Player()))
     """
 
     game_configuration: GameConfiguration
@@ -30,7 +30,7 @@ class Game:
     game_state: GameState = Factory(GameState)
     game_entities: GameEntities = field(init=False)
 
-    def __post_init__(self) -> None:
+    def __attrs_post_init__(self) -> None:
         self.game_entities = GameEntities.from_game_mode(
             self.game_configuration.GAME_MODE
         )

@@ -9,7 +9,7 @@ Feedback = tuple[int, int]
 
 @dataclass
 class Player:
-    client_id: int
+    client_id: str
     player_role: PlayerRole = PlayerRole.UNDETERMINED
 
     def __repr__(self) -> str:
