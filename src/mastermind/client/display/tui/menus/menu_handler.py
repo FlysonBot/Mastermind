@@ -1,10 +1,11 @@
 from typing import Any
+
 from clear_screen import clear  # type: ignore
 
 from mastermind.client.display.languages import global_localization
-from mastermind.client.display.libs.menus import MenuAdapter
-from mastermind.client.display.libs.menus.display_mode import DisplayMode
-from mastermind.client.display.libs.menus.menu_option import MenuOptions
+from mastermind.libs.menus import MenuAdapter
+from mastermind.libs.menus.display_mode import DisplayMode
+from mastermind.libs.menus.menu_option import MenuOptions
 
 menu_handler = global_localization.menu.menu_handler
 
