@@ -1,7 +1,7 @@
 from collections import deque
 from typing import Deque
 
-from mastermind.client.display.languages import global_localization
+from mastermind.client.languages import global_localization
 from mastermind.libs.logs import ServerLogger
 from mastermind.server.database.models import GameBoard, GameRound
 

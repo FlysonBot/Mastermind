@@ -76,4 +76,4 @@ strict = true
 disable_error_code = "empty-body"
 
 [project.scripts]
-mastermind = "mastermind.client.display.tui.main:main"
+mastermind = "mastermind.client.tui.main:main"

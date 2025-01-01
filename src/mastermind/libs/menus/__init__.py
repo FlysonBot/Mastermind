@@ -5,6 +5,7 @@ from mastermind.libs.menus.enum_menu import EnumMenu
 from mastermind.libs.menus.menu_adapter import MenuAdapter
 from mastermind.libs.menus.menu_config import MenuConfig
 from mastermind.libs.menus.menu_option import MenuOption, MenuOptions
+from mastermind.libs.menus.menu_protocol import MenuProtocol
 
 __all__ = [
     "back",
@@ -15,4 +16,5 @@ __all__ = [
     "MenuConfig",
     "MenuOption",
     "MenuOptions",
+    "MenuProtocol",
 ]

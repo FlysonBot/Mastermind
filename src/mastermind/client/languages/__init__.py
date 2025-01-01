@@ -1,4 +1,4 @@
-from mastermind.client.display.languages.global_localization import (
+from mastermind.client.languages.global_localization import (
     console_localization,
     global_localization,
 )

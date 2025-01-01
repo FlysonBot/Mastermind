@@ -1,12 +1,14 @@
 from enum import Enum
 
 from mastermind.libs.utils import serialize_enum_name_only
-from mastermind.server.players.computer_player import ComputerBreaker, ComputerSetter
-from mastermind.server.players.environment_player import (
+from mastermind.server.players import (
+    ComputerBreaker,
+    ComputerSetter,
     EnvironmentBreaker,
     EnvironmentSetter,
+    HumanBreaker,
+    HumanSetter,
 )
-from mastermind.server.players.human_player import HumanBreaker, HumanSetter
 
 
 @serialize_enum_name_only

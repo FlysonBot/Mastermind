@@ -1,11 +1,8 @@
-from mastermind.client.display.languages import global_localization
-from mastermind.client.display.tui.menus.menu_handler import MenuHandler
+from mastermind.client.languages import global_localization
+from mastermind.client.tui.menus.menu_handler import MenuHandler
 from mastermind.libs.logs import ClientLogger
-from mastermind.libs.menus.back import back
-from mastermind.libs.menus.enum_menu import EnumMenu
-from mastermind.libs.menus.menu_config import MenuConfig
-from mastermind.libs.menus.menu_option import MenuOption
-from mastermind.server.database.enum.game_mode import GameMode
+from mastermind.libs.menus import EnumMenu, MenuConfig, MenuOption, back
+from mastermind.server.database.enum import GameMode
 
 new_game = global_localization.menu.new_game_menu
 
