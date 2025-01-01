@@ -9,7 +9,7 @@ from mastermind.server.api.game import retrieve_game_by_id
 from mastermind.server.database.enum import PlayerRole
 
 
-@app.route("/games/<str:game_id>/join", methods=["POST"])
+@app.route("/games/<string:game_id>/join", methods=["POST"])
 def join_game(game_id: str) -> tuple[Response, Literal[201]]:
     retrieve_game_by_id(game_id)
 
