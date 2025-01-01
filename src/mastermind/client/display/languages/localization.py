@@ -21,10 +21,12 @@ class Localization:
 
     @language.setter
     def language(self, language: str) -> None:
+        """Set and load new language."""
         self.messages: CallableDotDict = self.load_language_pack(language)
         self._language: str = language
 
     def load_language_pack(self, language: str) -> CallableDotDict:
+        """Load specified language pack from file."""
         if language in self._language_pack:
             return self._language_pack[language]
 

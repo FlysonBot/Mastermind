@@ -207,11 +207,13 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
 
 
 def _log_exception(log_message: str, exception: Exception) -> NoReturn:
+    """Log and raise an exception."""
     logger.error(f"{log_message}: {exception}")
     raise exception
 
 
 def _serialize(value: object) -> JSON:
+    """Unstructure the given value using cattrs and return the data in JSON format."""
     try:
         raw_data: JSON = converter.unstructure(value)
 
@@ -224,6 +226,7 @@ def _serialize(value: object) -> JSON:
 def _deserialize(
     raw_data: JSON, data_type: Type[CattrsSerializable]
 ) -> CattrsSerializable:
+    """Structure the given data in JSON format using cattrs and return the data as a Python object."""
     try:
         return converter.structure(raw_data, data_type)
 
@@ -232,6 +235,7 @@ def _deserialize(
 
 
 def _write(path: str, key: str, value: JSON) -> None:
+    """Write the given JSON data to a file in the given path with the filename as the key."""
     try:
         with open(os.path.join(path, f"{key}.json"), "w") as file:
             json.dump(value, file)
@@ -246,6 +250,7 @@ def _write(path: str, key: str, value: JSON) -> None:
 
 
 def _read(path: str, key: str) -> JSON:
+    """Read the JSON data from a file in the given path with the filename as the key."""
     try:
         with open(os.path.join(path, f"{key}.json"), "r") as file:
             return json.load(file)  # type: ignore

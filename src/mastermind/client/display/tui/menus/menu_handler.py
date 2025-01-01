@@ -27,7 +27,9 @@ class MenuHandler(MenuAdapter):
     def _get_selections(self) -> MenuOptions:
         keys = list(map(lambda option: option.value, self.menu_options))
         choice = None
-        input_hint: dict[Any, Any] = self.kwargs.get("input_hint", menu_handler.default_input_hint)
+        input_hint: dict[Any, Any] = self.kwargs.get(
+            "input_hint", menu_handler.default_input_hint
+        )
 
         while (choice := input(input_hint)) not in keys:
             clear()

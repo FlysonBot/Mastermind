@@ -6,7 +6,10 @@ from mastermind.client.display.libs.menus.menu_option import MenuOptions
 
 
 class MenuAdapter(ABC):
-    """This class is responsible for displaying and handling menu selections."""
+    """This class is responsible for displaying and handling menu selections.
+    
+    This adapter ensure the underlying ui handling is separated from the menu logic, allowing for flexible ui implementations and consistent interface.
+    """
 
     def __init__(
         self,

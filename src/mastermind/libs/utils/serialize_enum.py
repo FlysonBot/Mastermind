@@ -29,7 +29,6 @@ def serialize_enum_name_only(enum_cls: Type[T]) -> Type[T]:
         'A'
         >>> converter.structure("A", MyEnum)
         <MyEnum.A: 'A'>
-
     """
 
     converter.register_structure_hook(enum_cls, lambda d, _: enum_cls[d])

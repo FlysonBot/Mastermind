@@ -7,12 +7,19 @@ from mastermind.client.display.libs.menus.menu_option import MenuOption, MenuOpt
 
 
 class DynamicMenu(ABC):
+    """A type of menu that can be dynamically constructed at runtime.
+    
+    Attributes:
+        config (MenuConfig): Menu configuration such as title, adapter, display mode, etc.
+        options (MenuOptions): List of menu options.
+    """
     config: MenuConfig
     options: MenuOptions = field(default_factory=list)
 
     @classmethod
     @abstractmethod
     def reconstruct_menu(cls) -> None:
+        """Method to reconstruct the menu at each display to keep it up-to-date."""
         pass
 
     @classmethod
@@ -20,7 +27,12 @@ class DynamicMenu(ABC):
         cls.options.append(option)
 
     @classmethod
-    def get_selections(cls) -> MenuOptions:  # in case of multiple selections
+    def get_selections(cls) -> MenuOptions:
+        """Repeatedly prompt the user to select an option from the menu until a valid selection is made.
+
+        Returns:
+            MenuOptions: A list of selected menu options (in case of multiple selections).
+        """
         cls.reconstruct_menu()
         cls.config.logger.debug(f"Menu options: {cls.options}")
 
@@ -33,6 +45,7 @@ class DynamicMenu(ABC):
 
     @classmethod
     def activate(cls) -> None:
+        """Switch to the menu to display and handle user selections."""
         cls.config.logger.debug(
             f"Activating menu: {cls.__name__}. Stay in menu: {cls.config.stay_in_menu}"
         )
