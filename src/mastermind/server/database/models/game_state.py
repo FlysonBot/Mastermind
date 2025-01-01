@@ -1,6 +1,6 @@
 from attrs import define
 
-from mastermind.server.players import PlayerRole
+from mastermind.server.database.enum import PlayerRole
 
 
 @define

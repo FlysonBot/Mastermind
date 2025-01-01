@@ -4,25 +4,25 @@ from pathlib import Path
 
 
 class Logger:
-    def __init__(self, log_file_path: str, logger_name: str):
+    def __init__(self, log_file_path: str, logger_name: str) -> None:
         self.log_file_path = log_file_path
         self.logger = logging.getLogger(logger_name)
         self.logger.setLevel(logging.DEBUG)
         self.logger.addHandler(get_file_handler(log_file_path))
 
-    def info(self, msg: str):
+    def info(self, msg: str) -> None:
         self.logger.info(msg)
 
-    def debug(self, msg: str):
+    def debug(self, msg: str) -> None:
         self.logger.debug(msg)
 
-    def warning(self, msg: str):
+    def warning(self, msg: str) -> None:
         self.logger.warning(msg)
 
-    def error(self, msg: str):
+    def error(self, msg: str) -> None:
         self.logger.error(msg)
 
-    def critical(self, msg: str):
+    def critical(self, msg: str) -> None:
         self.logger.critical(msg)
 
 
@@ -41,7 +41,7 @@ def get_file_handler(log_file_path: str) -> RotatingFileHandler:
     return file_handler
 
 
-def ensure_log_file_exists(log_file_path: str):
+def ensure_log_file_exists(log_file_path: str) -> None:
     log_file = Path(log_file_path)
     log_file.parent.mkdir(parents=True, exist_ok=True)
 

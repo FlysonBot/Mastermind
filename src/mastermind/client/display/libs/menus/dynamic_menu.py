@@ -24,7 +24,7 @@ class DynamicMenu(ABC):
         cls.reconstruct_menu()
         cls.config.logger.debug(f"Menu options: {cls.options}")
 
-        selection = cls.config.menu_adapter(
+        selection: MenuOptions = cls.config.menu_adapter(
             cls.config.title, cls.options, cls.config.display_mode, **cls.config.kwargs
         ).get_selections()
 

@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Literal, Optional
 
 from flask import abort, request
+from flask.wrappers import Response
 
 from mastermind.libs.api import pack_response
 from mastermind.server.api.app import app
@@ -9,7 +10,7 @@ from mastermind.server.database.enum import PlayerRole
 
 
 @app.route("/games/<str:game_id>/join", methods=["POST"])
-def join_game(game_id: str):
+def join_game(game_id: str) -> tuple[Response, Literal[201]]:
     retrieve_game_by_id(game_id)
 
     player_role: PlayerRole = retrieve_player_role(

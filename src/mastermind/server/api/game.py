@@ -1,4 +1,7 @@
+from typing import Literal
+
 from flask import abort, request
+from flask.wrappers import Response
 from shortuuid import get_alphabet as shortuuid_alphabet
 
 from mastermind.libs.api import RaiseErrorCode, pack_response, unpack_request
@@ -15,7 +18,7 @@ game_repository = GameRepository()
 
 
 @app.route("/games", methods=["POST"])
-def create_game():
+def create_game() -> tuple[Response, Literal[201]]:
     game_config: GameConfiguration = unpack_request(request, GameConfiguration)
 
     game: Game = Game(game_configuration=game_config)
@@ -25,7 +28,7 @@ def create_game():
 
 
 @app.route("/games/<str:game_id>", methods=["GET"])
-def get_game_info(game_id: str):
+def get_game_info(game_id: str) -> tuple[Response, Literal[201]]:
     game: Game = retrieve_game_by_id(game_id)
 
     game_info: list[GameInfo] = retrieve_game_info(
@@ -36,7 +39,7 @@ def get_game_info(game_id: str):
 
 
 @app.route("/games/<str:game_id>", methods=["DELETE"])
-def delete_game(game_id: str):
+def delete_game(game_id: str) -> tuple[Literal[""], Literal[204]]:
     retrieve_game_by_id(game_id)
 
     del game_repository[game_id]

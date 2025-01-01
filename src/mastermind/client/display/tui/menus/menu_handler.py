@@ -34,7 +34,7 @@ class MenuHandler(MenuAdapter):
             menu_handler.invalid_choice()
 
         clear()
-        return [self.menu_options[keys.index(choice)]]
+        return [self.menu_options[keys.index(choice)]]  # type: ignore
 
 
 def _generate_header(title: str, width: int) -> str:

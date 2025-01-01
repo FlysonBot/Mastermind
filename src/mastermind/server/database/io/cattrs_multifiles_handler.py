@@ -1,6 +1,6 @@
 import json
 import os
-from typing import NoReturn, Type, TypeVar
+from typing import Any, NoReturn, Type, TypeVar
 
 from mastermind.libs.logs import ServerLogger
 from mastermind.server.database import converter
@@ -8,6 +8,7 @@ from mastermind.server.database.io.io_handler import IOHandler
 
 CattrsSerializable = TypeVar("CattrsSerializable")
 logger = ServerLogger("CattrsMultifiles")
+JSON = list[Any] | dict[str, Any]
 
 
 class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
@@ -210,9 +211,9 @@ def _log_exception(log_message: str, exception: Exception) -> NoReturn:
     raise exception
 
 
-def _serialize(value: object) -> str:
+def _serialize(value: object) -> JSON:
     try:
-        raw_data = converter.unstructure(value)
+        raw_data: JSON = converter.unstructure(value)
 
     except Exception as e:
         return _log_exception("Error serializing data", e)
@@ -221,7 +222,7 @@ def _serialize(value: object) -> str:
 
 
 def _deserialize(
-    raw_data: str, data_type: Type[CattrsSerializable]
+    raw_data: JSON, data_type: Type[CattrsSerializable]
 ) -> CattrsSerializable:
     try:
         return converter.structure(raw_data, data_type)
@@ -230,13 +231,13 @@ def _deserialize(
         return _log_exception("Error deserializing data", e)
 
 
-def _write(path: str, key: str, value: str) -> None:
+def _write(path: str, key: str, value: JSON) -> None:
     try:
         with open(os.path.join(path, f"{key}.json"), "w") as file:
             json.dump(value, file)
 
     except Exception as e:
-        return _log_exception(
+        _log_exception(
             f"Error writing to file: {os.path.join(path, f'{key}.json')}. Data serialized correctly.",
             e,
         )
@@ -244,10 +245,10 @@ def _write(path: str, key: str, value: str) -> None:
     logger.info(f"Wrote {key}.json to {path}")
 
 
-def _read(path: str, key: str) -> str:
+def _read(path: str, key: str) -> JSON:
     try:
         with open(os.path.join(path, f"{key}.json"), "r") as file:
-            return json.load(file)
+            return json.load(file)  # type: ignore
 
     except FileNotFoundError as e:
         return _log_exception(f"File {key}.json does not exist in {path}", e)
