@@ -142,9 +142,6 @@ class CattrsMultifilesIOHandler(IOHandler[CattrsSerializable]):
         try:
             os.remove(os.path.join(self.path, f"{key}.json"))
 
-        except FileNotFoundError as e:
-            _log_exception(f"File {key}.json does not exist in {self.path}", e)
-
         except Exception as e:
             _log_exception(f"Error deleting {key}.json", e)
 
