@@ -2,32 +2,14 @@ from collections import deque
 
 import pytest
 
-from mastermind.server.database.enum import GameMode, PlayerRole
-from mastermind.server.database.models import Game, GameConfiguration, GameRound
+from mastermind.server.database.enum import PlayerRole
+from mastermind.server.database.models import Game, GameRound
 from mastermind.server.services import (
-    GameboardService,
     GameEndedException,
     GameNotStartedException,
     GameService,
     NoRedoAvailableException,
 )
-
-
-@pytest.fixture
-def game() -> Game:
-    return Game(
-        game_configuration=GameConfiguration(
-            NUMBER_OF_COLORS=3,
-            NUMBER_OF_DOTS=4,
-            ATTEMPTS_ALLOWED=5,
-            GAME_MODE=GameMode.PVP,
-        )
-    )
-
-
-@pytest.fixture
-def game_service(game: Game) -> GameService:
-    return GameService(game, GameboardService(game.game_board))
 
 
 def test_add_round(game_service: GameService, game: Game) -> None:
