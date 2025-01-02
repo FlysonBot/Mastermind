@@ -2,8 +2,9 @@ from typing import Any, TypeVar
 
 from requests import Response
 
-from mastermind.libs.logs import ClientLogger
 from mastermind.server.database import converter
+
+from ..logs import ClientLogger
 
 T = TypeVar("T")
 logger = ClientLogger("Unpack Response")

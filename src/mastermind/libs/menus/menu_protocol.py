@@ -1,7 +1,7 @@
 from typing import Any, Protocol
 
-from mastermind.libs.menus.menu_config import MenuConfig
-from mastermind.libs.menus.menu_option import MenuOptions
+from .menu_config import MenuConfig
+from .menu_option import MenuOptions
 
 
 class MenuProtocol(Protocol):

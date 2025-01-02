@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Any
 
-from mastermind.libs.events.handle_result import HandleResult
-from mastermind.libs.events.handler_pipeline import HandlerPipeline
+from .handle_result import HandleResult
+from .handler_pipeline import HandlerPipeline
 
 
 class BoolHandlerPipeline(HandlerPipeline):

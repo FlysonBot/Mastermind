@@ -4,7 +4,7 @@ from typing import Generator
 
 from flask import abort
 
-from mastermind.libs.logs import ServerLogger
+from ..logs import ServerLogger
 
 logger = ServerLogger("RaiseErrorCode")
 

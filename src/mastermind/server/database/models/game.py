@@ -1,9 +1,9 @@
 from attrs import Factory, define, field
 
-from mastermind.server.database.models.game_configuration import GameConfiguration
-from mastermind.server.database.models.game_entities import GameEntities
-from mastermind.server.database.models.game_state import GameState
-from mastermind.server.database.models.gameboard import GameBoard
+from .game_configuration import GameConfiguration
+from .game_entities import GameEntities
+from .game_state import GameState
+from .gameboard import GameBoard
 
 
 @define

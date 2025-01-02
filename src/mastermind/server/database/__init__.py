@@ -1,3 +1,3 @@
-from mastermind.server.database.converter import converter
+from .converter import converter
 
 __all__ = ["converter"]

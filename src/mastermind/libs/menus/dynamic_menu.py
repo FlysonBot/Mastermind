@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import field
 
-from mastermind.libs.menus.back import back
-from mastermind.libs.menus.menu_config import MenuConfig
-from mastermind.libs.menus.menu_option import MenuOption, MenuOptions
+from .back import back
+from .menu_config import MenuConfig
+from .menu_option import MenuOption, MenuOptions
 
 
 class DynamicMenu(ABC):

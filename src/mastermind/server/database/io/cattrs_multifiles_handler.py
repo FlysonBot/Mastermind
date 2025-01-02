@@ -3,8 +3,9 @@ import os
 from typing import Any, NoReturn, Type, TypeVar
 
 from mastermind.libs.logs import ServerLogger
-from mastermind.server.database import converter
-from mastermind.server.database.io.io_handler import IOHandler
+
+from .. import converter
+from .io_handler import IOHandler
 
 CattrsSerializable = TypeVar("CattrsSerializable")
 logger = ServerLogger("CattrsMultifiles")

@@ -4,9 +4,10 @@ from flask import abort, request
 from flask.wrappers import Response
 
 from mastermind.libs.api import pack_response
-from mastermind.server.api.app import app
-from mastermind.server.api.game import retrieve_game_by_id
-from mastermind.server.database.enum import PlayerRole
+
+from ..database.enum import PlayerRole
+from .app import app
+from .game import retrieve_game_by_id
 
 
 @app.route("/games/<string:game_id>/join", methods=["POST"])

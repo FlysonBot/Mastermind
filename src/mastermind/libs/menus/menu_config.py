@@ -2,9 +2,10 @@ from dataclasses import field
 from logging import Logger
 from typing import Any, NamedTuple, Type
 
-from mastermind.libs.logs.null_logger import NullLogger
-from mastermind.libs.menus.display_mode import DisplayMode
-from mastermind.libs.menus.menu_adapter import MenuAdapter
+
+from ..logs import NullLogger
+from .display_mode import DisplayMode
+from .menu_adapter import MenuAdapter
 
 
 class MenuConfig(NamedTuple):

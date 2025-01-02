@@ -1,4 +1,4 @@
-from mastermind.client.languages.localization import Localization
+from .localization import Localization
 
 
 def example_get_language_preference() -> str:

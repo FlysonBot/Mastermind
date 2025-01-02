@@ -5,7 +5,7 @@ from os import path
 
 from appdirs import user_log_dir
 
-from mastermind.libs.logs.logger import Logger
+from .logger import Logger
 
 
 class ServerLogger(Logger):

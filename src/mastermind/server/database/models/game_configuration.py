@@ -1,7 +1,7 @@
 from attrs import field, frozen
 from attrs.validators import ge
 
-from mastermind.server.database.enum import GameMode
+from ..enum import GameMode
 
 
 @frozen

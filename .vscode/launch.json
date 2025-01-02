@@ -5,6 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: Module (Just My Code)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "module": "${command:extension.commandvariable.file.relativeFileDotsNoExtension}",
+        },
+        {
+            "name": "Python Debugger: Module (All Code)",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "module": "${command:extension.commandvariable.file.relativeFileDotsNoExtension}",
+            "justMyCode": false,
+        },
+        {
             "name": "Python Debugger: Just My Code",
             "type": "debugpy",
             "request": "launch",

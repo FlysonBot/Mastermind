@@ -1,9 +1,9 @@
-from mastermind.server.services.game_service import (
+from .game_service import (
     GameEndedException,
     GameNotStartedException,
     GameService,
 )
-from mastermind.server.services.gameboard_service import (
+from .gameboard_service import (
     GameboardService,
     NoRedoAvailableException,
 )

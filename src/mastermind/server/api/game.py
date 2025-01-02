@@ -5,14 +5,15 @@ from flask.wrappers import Response
 from shortuuid import get_alphabet as shortuuid_alphabet
 
 from mastermind.libs.api import RaiseErrorCode, pack_response, unpack_request
-from mastermind.server.api.app import app
-from mastermind.server.api.repository import (
+
+from ..database.models import Game, GameConfiguration
+from ..database.repository import GameRepository
+from .app import app
+from .repository import (
     GameInfo,
     get_filter_func,
     retrieve_game_info,
 )
-from mastermind.server.database.models import Game, GameConfiguration
-from mastermind.server.database.repository import GameRepository
 
 game_repository = GameRepository()
 

@@ -1,8 +1,10 @@
-from attrs import frozen
 from typing import TYPE_CHECKING
 
-from mastermind.server.database.enum import GameMode
+from attrs import frozen
+
 from mastermind.server.players import Player
+
+from ..enum import GameMode
 
 if TYPE_CHECKING:
     from mastermind.server.players.base_players import CodeBreaker, CodeSetter

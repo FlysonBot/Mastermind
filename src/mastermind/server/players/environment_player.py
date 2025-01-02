@@ -1,4 +1,4 @@
-from mastermind.server.players.base_players import (
+from .base_players import (
     CodeBreaker,
     CodeSetter,
     Combination,
