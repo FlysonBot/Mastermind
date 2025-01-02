@@ -1,10 +1,11 @@
 from mastermind.client.languages import global_localization
-from mastermind.client.tui.menus.load_games import LoadGames
-from mastermind.client.tui.menus.menu_handler import MenuHandler
-from mastermind.client.tui.menus.new_game import NewGame
-from mastermind.client.tui.menus.settings import Settings
 from mastermind.libs.logs import ClientLogger
 from mastermind.libs.menus import EnumMenu, MenuConfig, MenuOption, back
+
+from .load_games import LoadGames
+from .menu_handler import MenuHandler
+from .new_game import NewGame
+from .settings import Settings
 
 main_menu = global_localization.menu.main_menu
 

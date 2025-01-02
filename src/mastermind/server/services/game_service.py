@@ -1,7 +1,8 @@
 from mastermind.client.languages import global_localization
 from mastermind.libs.logs import ServerLogger
-from mastermind.server.database.models import Game, get_winner
-from mastermind.server.services.gameboard_service import GameboardService
+
+from ..database.models import Game, get_winner
+from .gameboard_service import GameboardService
 
 game_service = global_localization.services.game_service
 logger = ServerLogger("GameService")

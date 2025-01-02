@@ -1,10 +1,10 @@
-from mastermind.server.database.models.game import Game
-from mastermind.server.database.models.game_configuration import GameConfiguration
-from mastermind.server.database.models.game_entities import GameEntities
-from mastermind.server.database.models.game_round import GameRound
-from mastermind.server.database.models.game_state import GameState, get_winner
-from mastermind.server.database.models.gameboard import GameBoard
-from mastermind.server.database.models.settings import AllSettings
+from .game import Game
+from .game_configuration import GameConfiguration
+from .game_entities import GameEntities
+from .game_round import GameRound
+from .game_state import GameState, get_winner
+from .gameboard import GameBoard
+from .settings import AllSettings
 
 __all__ = [
     "Game",

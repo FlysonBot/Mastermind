@@ -3,8 +3,9 @@ from typing import Any
 
 from flask import Request, abort
 
-from mastermind.libs.logs import ServerLogger
 from mastermind.server.database import converter
+
+from ..logs import ServerLogger
 
 logger = ServerLogger("Unpack Request")
 

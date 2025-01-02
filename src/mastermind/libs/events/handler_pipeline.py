@@ -2,7 +2,7 @@ import inspect
 from abc import abstractmethod
 from typing import Any, Callable
 
-from mastermind.libs.events.handle_result import HandleResult
+from .handle_result import HandleResult
 
 InstanceMethod = Callable[["HandlerPipeline"], Any]
 

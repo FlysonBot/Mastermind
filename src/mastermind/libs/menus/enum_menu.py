@@ -2,9 +2,9 @@ from abc import abstractmethod
 from enum import Enum
 from typing import Optional
 
-from mastermind.libs.menus.back import back
-from mastermind.libs.menus.menu_config import MenuConfig
-from mastermind.libs.menus.menu_option import MenuOptions
+from .back import back
+from .menu_config import MenuConfig
+from .menu_option import MenuOptions
 
 
 class EnumMenu(Enum):

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from mastermind.server.database.enum.player_role import PlayerRole
+from ..database.enum.player_role import PlayerRole
 
 Combination = tuple[int, ...]
 Feedback = tuple[int, int]

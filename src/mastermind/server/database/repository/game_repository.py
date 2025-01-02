@@ -2,9 +2,9 @@ from os import path
 
 from appdirs import user_data_dir
 
-from mastermind.server.database.io import CattrsMultifilesIOHandler
-from mastermind.server.database.models import Game
-from mastermind.server.database.repository.repository import Repository
+from ..io import CattrsMultifilesIOHandler
+from ..models import Game
+from .repository import Repository
 
 
 class GameRepository(Repository[Game]):

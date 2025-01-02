@@ -5,10 +5,10 @@ from flask import request
 from flask.wrappers import Response
 
 from mastermind.libs.api import pack_response
-from mastermind.server.api.app import app
-from mastermind.server.database.models import Game
-from mastermind.server.database.repository import GameRepository
 
+from ..database.models import Game
+from ..database.repository import GameRepository
+from .app import app
 
 game_repository = GameRepository()
 

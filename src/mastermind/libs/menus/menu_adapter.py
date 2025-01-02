@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from mastermind.libs.menus.display_mode import DisplayMode
-from mastermind.libs.menus.menu_option import MenuOptions
+from .display_mode import DisplayMode
+from .menu_option import MenuOptions
 
 
 class MenuAdapter(ABC):

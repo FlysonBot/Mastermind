@@ -3,7 +3,7 @@ from typing import Deque, Generator, Tuple
 
 from attrs import Factory, frozen
 
-from mastermind.server.database.models.game_round import GameRound
+from .game_round import GameRound
 
 
 @frozen  # Just the reference, game_rounds is still mutable

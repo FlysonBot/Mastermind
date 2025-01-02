@@ -1,11 +1,12 @@
 import pandas as pd
 
 from mastermind.client.languages import global_localization
-from mastermind.client.tui.menus.menu_handler import MenuHandler
 from mastermind.libs.logs import ClientLogger
 from mastermind.libs.menus import DynamicMenu, MenuConfig, MenuOption, back
 from mastermind.libs.utils import render_dataframe
 from mastermind.server.database.models import Game
+
+from .menu_handler import MenuHandler
 
 
 def example_load_api() -> list[Game]: ...

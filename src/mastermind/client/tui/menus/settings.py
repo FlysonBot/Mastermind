@@ -1,10 +1,11 @@
 from dataclasses import fields
 
 from mastermind.client.languages import global_localization
-from mastermind.client.tui.menus.menu_handler import MenuHandler
 from mastermind.libs.logs import ClientLogger
 from mastermind.libs.menus import DynamicMenu, MenuConfig, MenuOption, back
 from mastermind.server.database.models import AllSettings
+
+from .menu_handler import MenuHandler
 
 settings = AllSettings()
 settings_menu = global_localization.menu.settings

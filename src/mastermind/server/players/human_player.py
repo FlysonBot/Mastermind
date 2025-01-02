@@ -1,5 +1,5 @@
-from mastermind.server.players._human_utils import HumanUtils
-from mastermind.server.players.base_players import (
+from ._human_utils import HumanUtils
+from .base_players import (
     CodeBreaker,
     CodeSetter,
     Combination,
