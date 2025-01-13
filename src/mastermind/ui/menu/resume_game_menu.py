@@ -34,7 +34,7 @@ class ResumeGameMenu(DataDisplayMenu):
         """
         Renders the list of continuable games.
         """
-        data.index = [f"({i+1})" for i in data.index]
+        data.index = [f"({i + 1})" for i in data.index]
         render_dataframe(data)
         print("\n(0) Return to Main Menu")
 
