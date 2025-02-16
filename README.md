@@ -8,7 +8,10 @@
 | **Activity:** | [![Opened Issue Count](https://img.shields.io/github/issues/FlysonBot/Mastermind?color=teal)](<https://github.com/FlysonBot/Mastermind/issues>) [![Closed Issue Count](https://img.shields.io/github/issues-closed/FlysonBot/Mastermind?color=teal)](https://github.com/FlysonBot/Mastermind/issues?q=is%3Aissue+is%3Aclosed) [![Closed PR Count](https://img.shields.io/github/issues-pr-closed/FlysonBot/Mastermind?color=teal)](https://github.com/FlysonBot/Mastermind/pulls?q=is%3Apr+is%3Aclosed) [![PyPI - Downloads](https://img.shields.io/pypi/dw/mastermind-ai)](https://pypi.org/project/mastermind-ai/) |
 | **Meta:** | [![GitHub License](https://img.shields.io/github/license/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE) ![PyPI Status](https://img.shields.io/pypi/status/mastermind-ai) ![Repo Size](https://img.shields.io/github/repo-size/FlysonBot/Mastermind) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/FlysonBot/Mastermind/main.svg)](https://results.pre-commit.ci/latest/github/FlysonBot/Mastermind/main) |
 
-> [!NOTE]  
+> [!NOTE]
+> Update: This repo is not being actively maintaned.
+
+> [!NOTE]
 > This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I will try to fix them as soon as possible.
 
 **Links:**
