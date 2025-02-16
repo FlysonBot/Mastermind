@@ -9,7 +9,7 @@
 | **Meta:** | [![GitHub License](https://img.shields.io/github/license/FlysonBot/Mastermind)](https://github.com/FlysonBot/Mastermind/blob/main/LICENSE) ![PyPI Status](https://img.shields.io/pypi/status/mastermind-ai) ![Repo Size](https://img.shields.io/github/repo-size/FlysonBot/Mastermind) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/FlysonBot/Mastermind/main.svg)](https://results.pre-commit.ci/latest/github/FlysonBot/Mastermind/main) |
 
 > [!NOTE]
-> Update: This repo is not being actively maintaned. To see the latest code, please the new-version branch.
+> Update: This repo is not being actively maintaned. To see the latest code, please visit the new-version branch.
 
 > [!NOTE]
 > This repo is currently still under development. Currently there is a beta version that have the basic simulation feature finished. If you encountered any issue, please open up an issue and let me know! I will try to fix them as soon as possible.
