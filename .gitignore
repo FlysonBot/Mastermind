@@ -1,0 +1,6 @@
+__pycache__/
+/.coverage
+/coverage.xml
+/data
+/.env
+*egg-info/

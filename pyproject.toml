@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mastermind-ai"
+version = "2.0.1-beta"
+requires-python = ">=3.10"
+authors = [{name = "FlysonBot"}]
+
+# Descriptions
+description = "A Python package that simulates the Mastermind game with an AI solver."
+readme = "README.md"
+
+# Tags
+keywords = ["mastermind", "game", "ai", "puzzle"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Framework :: Pytest",
+    "Framework :: Sphinx",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Games/Entertainment :: Puzzle Games",
+]
+
+# Dependencies
+dependencies = [
+    #"shortuuid>=1.0.13",
+    "appdirs>=1.4.4",
+    "clear-screen>=0.1.14",
+    #"pandas>=2.2.2",
+    #"attrs>=24.3.0",
+    #"cattrs>=24.1.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/FlysonBot/Mastermind"
+Documentation = "https://flysonbot.github.io/Mastermind/"
+Repository = "https://github.com/FlysonBot/Mastermind"
+Issues = "https://github.com/FlysonBot/Mastermind/issues"
+Changelog = "https://github.com/FlysonBot/Mastermind/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+    "types-appdirs",
+    #"pandas-stubs",
+    #"types-requests>=2.32.0.20241016",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+docs = [
+    "sphinx>=8.1.3",
+    "sphinx-nefertiti>=0.5.2",
+]
+
+[tool.setuptools]
+packages = ["mastermind"]
+package-dir = { "" = "src" }
+
+[tool.mypy]
+exclude = "src/tests"
+warn_unused_ignores = false
+warn_return_any = false
+disallow_untyped_calls = false
+check_untyped_defs = true
+strict = true
+disable_error_code = "empty-body"
+
+[project.scripts]
+mastermind = "mastermind.main:main"
