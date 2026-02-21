@@ -28,6 +28,8 @@ public class FeedbackTest {
     @Test
     public void testSingleCallPerformance() {
         System.out.println("\n=== Single Call Performance (First Overload) ===");
+        long startTime = 0;
+        int totalCalls = 0;
 
         // Pre-generate all combinations OUTSIDE the timer
         int[] allCombinations = new int[TOTAL_COMBINATIONS];
@@ -38,27 +40,30 @@ public class FeedbackTest {
         int[] secrets = new int[TOTAL_COMBINATIONS];
         System.arraycopy(allCombinations, 0, secrets, 0, TOTAL_COMBINATIONS);
 
-        long startTime = System.nanoTime();
-        int totalCalls = 0;
+        startTime = System.nanoTime();
+        totalCalls = 0;
 
-        // Call single version 1,296 times, storing results in a 2D array
-        for (int guessIdx = 0; guessIdx < TOTAL_COMBINATIONS; guessIdx++) {
-            int guess = allCombinations[guessIdx];
+        // Run 40 times
+        for (int t=0; t<80; t++) {
+            // Call single version 1,296 times, storing results in a 2D array
+            for (int guessIdx = 0; guessIdx < TOTAL_COMBINATIONS; guessIdx++) {
+                int guess = allCombinations[guessIdx];
 
-            for (int secretIdx = 0; secretIdx < TOTAL_COMBINATIONS; secretIdx++) {
-                int secret = secrets[secretIdx];
-                int[] feedback = Feedback.getFeedback(guess, secret, COLORS, DIGITS);
+                for (int secretIdx = 0; secretIdx < TOTAL_COMBINATIONS; secretIdx++) {
+                    int secret = secrets[secretIdx];
+                    int[] feedback = Feedback.getFeedback(guess, secret, COLORS, DIGITS);
 
-                assertNotNull(feedback);
-                assertEquals(2, feedback.length);
-                assertTrue(feedback[0] >= 0 && feedback[0] <= DIGITS,
-                        "Black count out of range for guess=" + guess + ", secret=" + secret);
-                assertTrue(feedback[1] >= 0 && feedback[1] <= DIGITS - feedback[0],
-                        "White count out of range for guess=" + guess + ", secret=" + secret);
-                assertTrue(feedback[0] + feedback[1] <= DIGITS,
-                        "Sum of black and white count out of range for guess=" + guess + ", secret=" + secret);
+                    assertNotNull(feedback);
+                    assertEquals(2, feedback.length);
+                    assertTrue(feedback[0] >= 0 && feedback[0] <= DIGITS,
+                            "Black count out of range for guess=" + guess + ", secret=" + secret);
+                    assertTrue(feedback[1] >= 0 && feedback[1] <= DIGITS - feedback[0],
+                            "White count out of range for guess=" + guess + ", secret=" + secret);
+                    assertTrue(feedback[0] + feedback[1] <= DIGITS,
+                            "Sum of black and white count out of range for guess=" + guess + ", secret=" + secret);
 
-                totalCalls++;
+                    totalCalls++;
+                }
             }
         }
 

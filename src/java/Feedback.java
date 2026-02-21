@@ -1,6 +1,7 @@
-public class Feedback {
+public class Feedback { // Can possibly be implemented faster with int[] if reuse array for guess/secret
+    // Reusable arrays
     private static final int[] color_freq_counter = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};  // 9 zeros
-    private static final int[] divisors = new int[] {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};  // 9 divisors
+    private static final int[] result = new int[2];
 
     public static int[] getFeedback(int guess, int secret, int c, int d) {
         if (c > 9 || d > 9) {
@@ -12,8 +13,10 @@ public class Feedback {
 
         for (int i = 0; i < d; i++) {
             // Extract each digit from the guess and secret
-            int curr_guess = (int) (guess / divisors[i] % 10);
-            int curr_secret = (int) (secret / divisors[i] % 10);
+            int curr_guess = guess % 10;
+            int curr_secret = secret % 10;
+            guess /= 10;
+            secret /= 10;
 
             // Either increment black or color_freq
             if (curr_guess == curr_secret) {
@@ -25,16 +28,20 @@ public class Feedback {
         }
 
         // Calculate white count from color_freq
+        int freq;
         for (int j = 0; j < c; j++) {
-            if (color_freq_counter[j] > 0) {
-                color_freq_total += color_freq_counter[j];
+            freq = color_freq_counter[j];
+            if (freq > 0) {
+                color_freq_total += freq;
             } else {
-                color_freq_total -= color_freq_counter[j];
+                color_freq_total -= freq;
             }
             color_freq_counter[j] = 0;  // Reset counter
         }
         
         // Return feedback
-        return new int[] {black, d - black - (color_freq_total / 2)}; // black, white
+        result[0] = black;
+        result[1] = d - black - (color_freq_total / 2);
+        return result;
     }
 }
