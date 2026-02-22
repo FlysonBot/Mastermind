@@ -30,7 +30,7 @@ public class FeedbackTest {
         return result;
     }
 
-    private int[] getFeedbackQuick(int guess, int secret) {
+    private int getFeedbackQuick(int guess, int secret) {
         return feedback_obj.getFeedback(guess, secret, COLORS, DIGITS);
     }
 
@@ -78,27 +78,55 @@ public class FeedbackTest {
         System.out.println("\n=== Edge Cases Test ===");
 
         // Perfect match
-        int[] result1 = getFeedbackQuick(1111, 1111);
-        assertEquals(4, result1[0], "Perfect match should have 4 blacks");
-        assertEquals(0, result1[1], "Perfect match should have 0 whites");
-        System.out.println("✓ Perfect match (1111 vs 1111): " + result1[0] + " black, " + result1[1] + " white");
+        int result1 = getFeedbackQuick(1111, 1111);
+        assertEquals(4, result1 / 10, "Perfect match should have 4 blacks");
+        assertEquals(0, result1 % 10, "Perfect match should have 0 whites");
+        System.out.println("✓ Perfect match (1111 vs 1111): " + result1 / 10 + " black, " + result1 % 10 + " white");
 
         // No match
-        int[] result2 = getFeedbackQuick(1111, 2222);
-        assertEquals(0, result2[0], "No match should have 0 blacks");
-        assertEquals(0, result2[1], "No match should have 0 whites");
-        System.out.println("✓ No match (1111 vs 2222): " + result2[0] + " black, " + result2[1] + " white");
+        int result2 = getFeedbackQuick(1111, 2222);
+        assertEquals(0, result2 / 10, "No match should have 0 blacks");
+        assertEquals(0, result2 % 10, "No match should have 0 whites");
+        System.out.println("✓ No match (1111 vs 2222): " + result2 / 10 + " black, " + result2 % 10 + " white");
 
         // All whites
-        int[] result3 = getFeedbackQuick(1234, 4321);
-        assertEquals(0, result3[0], "All whites case should have 0 blacks");
-        assertEquals(4, result3[1], "All whites case should have 4 whites");
-        System.out.println("✓ All whites (1234 vs 4321): " + result3[0] + " black, " + result3[1] + " white");
+        int result3 = getFeedbackQuick(1234, 4321);
+        assertEquals(0, result3 / 10, "All whites case should have 0 blacks");
+        assertEquals(4, result3 % 10, "All whites case should have 4 whites");
+        System.out.println("✓ All whites (1234 vs 4321): " + result3 / 10 + " black, " + result3 % 10 + " white");
 
         // Mixed
-        int[] result4 = getFeedbackQuick(5566, 5655);
-        assertEquals(1, result4[0], "Mixed case blacks");
-        assertEquals(2, result4[1], "Mixed case whites");
-        System.out.println("✓ Mixed (1122 vs 1211): " + result4[0] + " black, " + result4[1] + " white");
+        int result4 = getFeedbackQuick(5566, 5655);
+        assertEquals(1, result4 / 10, "Mixed case blacks");
+        assertEquals(2, result4 % 10, "Mixed case whites");
+        System.out.println("✓ Mixed (1122 vs 1211): " + result4 / 10 + " black, " + result4 % 10 + " white");
     }
+
+    @Test
+    void testCalcFeedbackSize() {
+        assertEquals(55, Feedback.calcFeedbackSize(9));
+    }
+
+    @Test
+    void testEnumerateFeedback() {
+        int d = 9;
+        int[] feedbacks = Feedback.enumerateFeedback(d);
+
+        int[] expected = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,          // black = 0, white = 0..9  (10 values)
+            10, 11, 12, 13, 14, 15, 16, 17, 18,    // black = 1, white = 0..8  (9 values)
+            20, 21, 22, 23, 24, 25, 26, 27,        // black = 2, white = 0..7  (8 values)
+            30, 31, 32, 33, 34, 35, 36,            // black = 3, white = 0..6  (7 values)
+            40, 41, 42, 43, 44, 45,                // black = 4, white = 0..5  (6 values)
+            50, 51, 52, 53, 54,                    // black = 5, white = 0..4  (5 values)
+            60, 61, 62, 63,                        // black = 6, white = 0..3  (4 values)
+            70, 71, 72,                            // black = 7, white = 0..2  (3 values)
+            80, 81,                                // black = 8, white = 0..1  (2 values)
+            90                                     // black = 9, white = 0..0  (1 value)
+        };
+
+        assertEquals(55, feedbacks.length, "Size should be 55 for d=9");
+        assertArrayEquals(expected, feedbacks, "Enumerated feedbacks for d=9 do not match expected values");
+    }
+
 }
