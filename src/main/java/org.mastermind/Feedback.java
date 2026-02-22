@@ -69,4 +69,20 @@ public class Feedback {
         result[1] = d - black - (color_freq_total >>> 1); // '>>> 1' = divide by 2
         return result;
     }
+
+    public static int calcFeedbackSize(int d) { return (d + 1) * (d + 2) / 2; }
+
+    public static int[][] enumerateFeedback(int d) {
+        int[][] result = new int[calcFeedbackSize(d)][2];
+        int i=0;
+
+        for (int black=0; black<d; black++) {
+            for (int white=0; white < d - black; white++) {
+                result[i] = new int[] {black, white};
+                i++;
+            }
+        }
+
+        return result;
+    }
 }
