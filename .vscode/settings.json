@@ -23,14 +23,11 @@
     "terminal.integrated.env.linux": {
         "PYTHONPATH": "${workspaceFolder}:${workspaceFolder}/src"
     },
-    "java.project.sourcePaths": [
-        "src/java",
-        "tests/java"
-    ],
+    "java.format.settings.url": ".vscode/java-formatter.xml",
     "java.project.outputPath": "out",
-    "java.project.referencedLibraries": [
-        "lib/junit-jupiter-api-5.13.4.jar",
-        "lib/junit-jupiter-engine-5.13.4.jar"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.project.sourcePaths": [
+        "src/main/java",
+        "src/test/java"
     ],
-    "java.format.settings.url": ".vscode/java-formatter.xml"
 }

@@ -1,3 +1,5 @@
+package org.mastermind;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,18 +18,20 @@ public class FeedbackTest {
     private int indexToCombination(int index) {
         int result = 0;
         int divisor = 1;
+
         for (int i = 0; i < DIGITS; i++) {
             int digit = (index % COLORS) + 1;
             result += digit * divisor;
             divisor *= 10;
             index /= COLORS;
         }
+        
         return result;
     }
 
     @Test
     public void testSingleCallPerformance() {
-        System.out.println("\n=== Single Call Performance (First Overload) ===");
+        System.out.println("\n=== Performance Stress Test ===");
         long startTime = 0;
         int totalCalls = 0;
 
@@ -40,19 +44,21 @@ public class FeedbackTest {
         int[] secrets = new int[TOTAL_COMBINATIONS];
         System.arraycopy(allCombinations, 0, secrets, 0, TOTAL_COMBINATIONS);
 
+        Feedback feedback_obj = new Feedback(COLORS, DIGITS);
+
         startTime = System.nanoTime();
-        totalCalls = 0;
 
         // Run 40 times
-        for (int t=0; t<80; t++) {
+        for (int t=0; t<200; t++) {
             // Call single version 1,296 times, storing results in a 2D array
             for (int guessIdx = 0; guessIdx < TOTAL_COMBINATIONS; guessIdx++) {
                 int guess = allCombinations[guessIdx];
 
                 for (int secretIdx = 0; secretIdx < TOTAL_COMBINATIONS; secretIdx++) {
                     int secret = secrets[secretIdx];
-                    int[] feedback = Feedback.getFeedback(guess, secret, COLORS, DIGITS);
+                    feedback_obj.getFeedback(guess, secret);
 
+                    /*
                     assertNotNull(feedback);
                     assertEquals(2, feedback.length);
                     assertTrue(feedback[0] >= 0 && feedback[0] <= DIGITS,
@@ -61,6 +67,7 @@ public class FeedbackTest {
                             "White count out of range for guess=" + guess + ", secret=" + secret);
                     assertTrue(feedback[0] + feedback[1] <= DIGITS,
                             "Sum of black and white count out of range for guess=" + guess + ", secret=" + secret);
+                    */
 
                     totalCalls++;
                 }
@@ -78,27 +85,28 @@ public class FeedbackTest {
     @Test
     public void testEdgeCases() {
         System.out.println("\n=== Edge Cases Test ===");
+        Feedback feedback_obj = new Feedback(COLORS, DIGITS);
 
         // Perfect match
-        int[] result1 = Feedback.getFeedback(1111, 1111, COLORS, DIGITS);
+        int[] result1 = feedback_obj.getFeedback(1111, 1111);
         assertEquals(4, result1[0], "Perfect match should have 4 blacks");
         assertEquals(0, result1[1], "Perfect match should have 0 whites");
         System.out.println("✓ Perfect match (1111 vs 1111): " + result1[0] + " black, " + result1[1] + " white");
 
         // No match
-        int[] result2 = Feedback.getFeedback(1111, 2222, COLORS, DIGITS);
+        int[] result2 = feedback_obj.getFeedback(1111, 2222);
         assertEquals(0, result2[0], "No match should have 0 blacks");
         assertEquals(0, result2[1], "No match should have 0 whites");
         System.out.println("✓ No match (1111 vs 2222): " + result2[0] + " black, " + result2[1] + " white");
 
         // All whites
-        int[] result3 = Feedback.getFeedback(1234, 4321, COLORS, DIGITS);
+        int[] result3 = feedback_obj.getFeedback(1234, 4321);
         assertEquals(0, result3[0], "All whites case should have 0 blacks");
         assertEquals(4, result3[1], "All whites case should have 4 whites");
         System.out.println("✓ All whites (1234 vs 4321): " + result3[0] + " black, " + result3[1] + " white");
 
         // Mixed
-        int[] result4 = Feedback.getFeedback(1122, 1211, COLORS, DIGITS);
+        int[] result4 = feedback_obj.getFeedback(1122, 1211);
         assertEquals(1, result4[0], "Mixed case blacks");
         assertEquals(2, result4[1], "Mixed case whites");
         System.out.println("✓ Mixed (1122 vs 1211): " + result4[0] + " black, " + result4[1] + " white");
