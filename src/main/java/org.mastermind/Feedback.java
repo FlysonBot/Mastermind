@@ -1,19 +1,17 @@
 package org.mastermind;
 
 public class Feedback {
-
     /**
      * @param guess  code, digits 1..c, length d
      * @param secret code, digits 1..c, length d
-     * @param c      number of colors (<= 9)
      * @param d      number of digits (<= 9)
      */
-    public int getFeedback(int guess, int secret, int c, int d) {
+    public static int getFeedback(int guess, int secret, int d) {
         int black = 0;
         int colorFreqTotal = 0;
 
-        if (c > 9 || d > 9) {
-            throw new IllegalArgumentException("c or d cannot be larger than 9");
+        if (d > 9) {
+            throw new IllegalArgumentException("d cannot be larger than 9");
         }
 
         // Color frequency counter (for color 1-9)

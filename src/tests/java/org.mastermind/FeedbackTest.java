@@ -9,7 +9,6 @@ public class FeedbackTest {
     private static final int COLORS = 6;  // c parameter
     private static final int DIGITS = 4;  // d parameter
     private static final int TOTAL_COMBINATIONS = 1296; // 6^4
-    private static final Feedback feedback_obj = new Feedback();
 
     /**
      * Converts a combination index to its Mastermind representation.
@@ -31,7 +30,7 @@ public class FeedbackTest {
     }
 
     private int getFeedbackQuick(int guess, int secret) {
-        return feedback_obj.getFeedback(guess, secret, COLORS, DIGITS);
+        return Feedback.getFeedback(guess, secret, DIGITS);
     }
 
     @Test

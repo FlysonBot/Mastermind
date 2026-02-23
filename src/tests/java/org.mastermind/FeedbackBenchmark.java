@@ -14,9 +14,8 @@ public class FeedbackBenchmark {  // ← MAIN CLASS
     // 1. STATE CLASS (nested static class)
     @State(Scope.Thread)
     public static class BenchmarkState {
-        public Feedback feedback_obj = new Feedback();
         public int getFeedbackQuick(int guess, int secret) {
-            return feedback_obj.getFeedback(guess, secret, 6, 4);
+            return Feedback.getFeedback(guess, secret, 4);
         }
     }
 
