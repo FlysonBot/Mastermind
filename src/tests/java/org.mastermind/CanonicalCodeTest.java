@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class CanonicalTest {
+class CanonicalCodeTest {
 
     @Nested
     @DisplayName("Calculate Canonical Count")
-    class CanonicalCount {
+    class CanonicalCodeCount {
         @Test
         @DisplayName("Verify the user-provided example: c=6, d=9")
         void testPromptExample() {
             // Output should be 21147
-            assertEquals(21147, Canonical.countCanonicalForms(9, 9));
+            assertEquals(21147, CanonicalCode.countCanonicalForms(9, 9));
         }
 
         @ParameterizedTest
@@ -28,22 +28,22 @@ class CanonicalTest {
                 "1, 10, 1"     // S(n,1) is always 1
         })
         void testSmallValues(int c, int d, int expected) {
-            assertEquals(expected, Canonical.countCanonicalForms(c, d));
+            assertEquals(expected, CanonicalCode.countCanonicalForms(c, d));
         }
 
         @Test
         @DisplayName("When c >= d, the result is the Bell number B_d")
         void testBellNumberIdentity() {
             // Bell numbers: B_3=5, B_5=52
-            assertEquals(5, Canonical.countCanonicalForms(3, 3));
-            assertEquals(52, Canonical.countCanonicalForms(10, 5));
+            assertEquals(5, CanonicalCode.countCanonicalForms(3, 3));
+            assertEquals(52, CanonicalCode.countCanonicalForms(10, 5));
         }
 
         @Test
         @DisplayName("Edge cases for zeros")
         void testZeroCases() {
-            assertEquals(0, Canonical.countCanonicalForms(0, 5), "Sum up to k=0 should be 0");
-            assertEquals(0, Canonical.countCanonicalForms(5, 0), "Stirling numbers for d=0 are 0");
+            assertEquals(0, CanonicalCode.countCanonicalForms(0, 5), "Sum up to k=0 should be 0");
+            assertEquals(0, CanonicalCode.countCanonicalForms(5, 0), "Stirling numbers for d=0 are 0");
         }
 
         @Test
@@ -51,13 +51,13 @@ class CanonicalTest {
         void testMaxIntSafety() {
             // B_15 is 1,382,958,545, which is < 2,147,483,647 (Max Int)
             int bell15 = 1382958545;
-            assertEquals(bell15, Canonical.countCanonicalForms(15, 15));
+            assertEquals(bell15, CanonicalCode.countCanonicalForms(15, 15));
         }
     }
 
     @Nested
     @DisplayName("Enumerate Canonical Forms")
-    class CanonicalForms{
+    class CanonicalCodeForms {
         /**
          * Helper to verify if a number is mathematically canonical.
          * New colors must be the smallest available integer.
@@ -83,8 +83,8 @@ class CanonicalTest {
         void testArraySize() {
             int c = 9;
             int d = 9;
-            int expectedSize = Canonical.countCanonicalForms(c, d); // 21147
-            int[] results = Canonical.enumerateCanonicalForms(c, d);
+            int expectedSize = CanonicalCode.countCanonicalForms(c, d); // 21147
+            int[] results = CanonicalCode.enumerateCanonicalForms(c, d);
 
             assertEquals(expectedSize, results.length);
             assertEquals(21147, results.length);
@@ -99,7 +99,7 @@ class CanonicalTest {
             // 121 (uses 2 colors)
             // 122 (uses 2 colors)
             int[] expected = {111, 112, 121, 122};
-            int[] actual = Canonical.enumerateCanonicalForms(2, 3);
+            int[] actual = CanonicalCode.enumerateCanonicalForms(2, 3);
 
             assertArrayEquals(expected, actual, "Should generate exactly 111, 112, 121, 122");
         }
@@ -107,7 +107,7 @@ class CanonicalTest {
         @Test
         @DisplayName("Verify Rule 1: All codes must start with 1")
         void testStartsWithOne() {
-            int[] results = Canonical.enumerateCanonicalForms(6, 4);
+            int[] results = CanonicalCode.enumerateCanonicalForms(6, 4);
             for (int code : results) {
                 // A 4-digit number starting with 1 is between 1000 and 1999
                 assertTrue(code >= 1000 && code <= 1999, "Code " + code + " must start with 1");
@@ -117,7 +117,7 @@ class CanonicalTest {
         @Test
         @DisplayName("Verify Rule 2: No skipping colors (Canonical check)")
         void testNoSkippedColors() {
-            int[] results = Canonical.enumerateCanonicalForms(6, 5);
+            int[] results = CanonicalCode.enumerateCanonicalForms(6, 5);
             for (int code : results) {
                 assertTrue(isCanonical(code, 5), "Code " + code + " violates canonical rules");
             }
@@ -127,7 +127,7 @@ class CanonicalTest {
         @DisplayName("Edge Case: c=1")
         void testSingleColor() {
             // If only 1 color is allowed, every digit must be 1
-            int[] results = Canonical.enumerateCanonicalForms(1, 4);
+            int[] results = CanonicalCode.enumerateCanonicalForms(1, 4);
             assertEquals(1, results.length);
             assertEquals(1111, results[0]);
         }
@@ -136,7 +136,7 @@ class CanonicalTest {
         @DisplayName("Edge Case: d=1")
         void testSingleDigit() {
             // If length is 1, only '1' is possible
-            int[] results = Canonical.enumerateCanonicalForms(6, 1);
+            int[] results = CanonicalCode.enumerateCanonicalForms(6, 1);
             assertEquals(1, results.length);
             assertEquals(1, results[0]);
         }

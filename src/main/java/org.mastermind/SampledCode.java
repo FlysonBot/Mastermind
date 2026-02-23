@@ -2,7 +2,7 @@ package org.mastermind;
 
 import java.util.Random;
 
-public class MastermindSampler {
+public class SampledCode {
 
     public static int[] getSample(int c, int d, int sampleSize) {
         Random random = new Random();

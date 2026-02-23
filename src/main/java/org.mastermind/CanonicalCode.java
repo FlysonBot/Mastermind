@@ -1,6 +1,6 @@
 package org.mastermind;
 
-public class Canonical {
+public class CanonicalCode {
     /**
      * Calculates the sum of Stirling numbers of the second kind S(d, k)
      * for k from 1 to min(c, d).
