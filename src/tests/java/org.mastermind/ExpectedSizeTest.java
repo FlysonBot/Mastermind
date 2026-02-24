@@ -18,7 +18,7 @@ public class ExpectedSizeTest {
     }
 
     @Test
-    public void testExpectedSizeClassicMastermind() {
+    public void testExpectedSize() {
         assertEquals(204.5355f, calcExpectedSize(1122, secrets), DELTA);
         assertEquals(185.2685f, calcExpectedSize(1123, secrets), DELTA);
         assertEquals(188.1898f, calcExpectedSize(1234, secrets), DELTA);
@@ -28,7 +28,7 @@ public class ExpectedSizeTest {
     }
 
     @Test
-    public void testSymmetry() {
+    public void testExpectedSizeSymmetry() {
         // Guesses with the same color multiset should yield the same expected size
         float base = calcExpectedSize(1122, secrets);
         assertEquals(base, calcExpectedSize(1212, secrets), DELTA);
