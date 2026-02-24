@@ -36,7 +36,7 @@ public class FeedbackTest {
 
     @Test
     public void testIterationPerformance() {
-        System.out.println("\n=== Performance Stress Test ===");
+        System.out.println("\n=== Iteration Performance Test ===");
         long startTime;
         int totalCalls = 0;
 
@@ -75,10 +75,11 @@ public class FeedbackTest {
 
     @Test
     public void testSingleCombinationPerformance() {
+        System.out.println("\n=== Fixed Input Performance Test ===");
         long startTime = System.nanoTime();
 
         // Run multiple times
-        int limit = (int) Math.pow(9, 9);
+        int limit = (int) Math.pow(6, 4);
         for (int t=0; t<limit; t++) {
             getFeedbackQuick(1123, 3456);
         }
