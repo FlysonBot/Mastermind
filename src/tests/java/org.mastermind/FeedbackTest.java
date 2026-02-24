@@ -9,6 +9,7 @@ public class FeedbackTest {
     private static final int COLORS = 6;  // c parameter
     private static final int DIGITS = 4;  // d parameter
     private static final int TOTAL_COMBINATIONS = 1296; // 6^4
+    private static final int[] colorFreqCounter = new int[10];
 
     /**
      * Converts a combination index to its Mastermind representation.
@@ -30,13 +31,13 @@ public class FeedbackTest {
     }
 
     private int getFeedbackQuick(int guess, int secret) {
-        return Feedback.getFeedback(guess, secret, DIGITS);
+        return Feedback.getFeedback(guess, secret, DIGITS, colorFreqCounter);
     }
 
     @Test
-    public void testSingleCallPerformance() {
+    public void testIterationPerformance() {
         System.out.println("\n=== Performance Stress Test ===");
-        long startTime = 0;
+        long startTime;
         int totalCalls = 0;
 
         // Pre-generate all combinations OUTSIDE the timer
@@ -70,6 +71,24 @@ public class FeedbackTest {
         System.out.println("Total combinations processed: " + totalCalls);
         System.out.println("Time taken: " + duration + " ms");
         System.out.println("Average per call: " + String.format("%.6f", duration / (double) totalCalls) + " ms");
+    }
+
+    @Test
+    public void testSingleCombinationPerformance() {
+        long startTime = System.nanoTime();
+
+        // Run multiple times
+        int limit = (int) Math.pow(9, 9);
+        for (int t=0; t<limit; t++) {
+            getFeedbackQuick(1123, 3456);
+        }
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime) / 1_000_000;
+
+        System.out.println("Total combinations processed: " + limit);
+        System.out.println("Time taken: " + duration + " ms");
+        System.out.println("Average per call: " + String.format("%.6f", duration / (double) limit) + " ms");
     }
 
     @Test
