@@ -1,6 +1,19 @@
 package org.mastermind;
 
+/**
+ * A game of Mastermind has 2 parameters, c (number of colors)
+ * and d (number of digits). A code is a valid Mastermind code
+ * if it has exactly d digits, and uses values between 1 and c
+ * inclusively for each digit.
+ */
 public class AllValidCode {
+    /**
+     * Generate all valid Mastermind code for a game.
+     *
+     * @param c     number of colors (<= 9)
+     * @param d     number of digits (<= 9)
+     * @return      Array of all valid Mastermind code
+     */
     public static int[] generateAllCodes(int c, int d) {
         // Total number of codes = c^d (e.g. 6 colors, 4 pegs = 1296 codes)
         int total = 1;

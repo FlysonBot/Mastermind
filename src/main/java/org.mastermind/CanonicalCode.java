@@ -1,10 +1,22 @@
 package org.mastermind;
 
+/**
+ * Canonical forms refer to a specific subset of all Mastermind code
+ * that starts with 1, digit ordered from small to large starting
+ * from the left, and the highest value digit equals to the number
+ * of colors used in the code. This is helpful at the beginning of
+ * the game before any guesses are made, where color and positional
+ * symmetry remain unbroken, allowing for a reduced search space to
+ * find the best first guess.
+ */
 public class CanonicalCode {
     /**
-     * Calculates the sum of Stirling numbers of the second kind S(d, k)
-     * for k from 1 to min(c, d).
-     * Safe for d up to 15 (B_15 fits in an int; B_16 requires a long).
+     * Calculate the number of Canonical forms in a Mastermind game using
+     * Stirling number of the second kind.
+     *
+     * @param c     number of colors (<= 9)
+     * @param d     number of digits (<= 9)
+     * @return      Number of Canonical form in Mastermind
      */
     public static int countCanonicalForms(int c, int d) {
         // Edge cases for empty sets or partitions
@@ -36,14 +48,16 @@ public class CanonicalCode {
     }
 
     /**
-     * Enumerates all canonical Mastermind codes as a primitive int array.
+     * Enumerate all Canonical forms in a Mastermind game.
+     *
+     * @param c     number of colors (<= 9)
+     * @param d     number of digits (<= 9)
+     * @return      Array of all Canonical forms in Mastermind
      */
     public static int[] enumerateCanonicalForms(int c, int d) {
-        if (c <= 0 || d <= 0) return new int[0];
 
         // 1. Calculate the exact size needed using our Stirling Sum logic
-        int totalSize = countCanonicalForms(c, d);
-        int[] results = new int[totalSize];
+        int[] results = new int[countCanonicalForms(c, d)];
 
         // 2. Use a tiny wrapper array for the index to pass by reference in recursion
         int[] index = {0};

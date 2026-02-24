@@ -1,12 +1,26 @@
 package org.mastermind;
 
+/**
+ * Feedback is a crucial part of Mastermind. After each guess being
+ * made, a feedback is provided to give clues as to how close the
+ * guess is to the actual secret. Feedback consists of 2 values, the
+ * black and white counts. The black counts is the number of digits
+ * in guess and secret that shares the same value at the same position.
+ * The white counts is the number of digits in guess and secret that
+ * shares the same  value at a different positon. In this program,
+ * feedback is represented as a 2-digit integers where the first digit
+ * represent the black counts, and the second represents the white.
+ */
 public class Feedback {
 
     /**
+     * Calculate the Mastermind feedback for a guess and a secret.
+     *
      * @param guess             code, digits 1..c, length d
      * @param secret            code, digits 1..c, length d
      * @param d                 number of digits (<= 9)
      * @param colorFreqCounter  int array of 0 with length c
+     * @return                  Feedback value (black * 10 + white)
      */
     public static int getFeedback(int guess, int secret, int d, int[] colorFreqCounter) {
         int black = 0;
@@ -40,8 +54,16 @@ public class Feedback {
         return black * 9 + d - (colorFreqTotal >>> 1);
     }
 
+    /**
+     * @param d number of digits in the Mastermind game
+     * @return Number of possible feedback values in the game
+     */
     public static int calcFeedbackSize(int d) { return (d + 1) * (d + 2) / 2; }
 
+    /**
+     * @param d number of digits in the Mastermind game
+     * @return All possible feedback values in the game
+     */
     public static int[] enumerateFeedback(int d) {
         int[] result = new int[calcFeedbackSize(d)];
         int i=0;

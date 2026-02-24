@@ -1,5 +1,19 @@
 package org.mastermind;
 
+/**
+ * In Mastermind, after each guess, the solution space is reduced
+ * to the set of secrets whose feedback value with the guess matches
+ * the observed feedback value. Therefore, the expected average
+ * size of the solution space can be calculated by summing for each
+ * secret, how many secrets has the same feedback, and divide by the
+ * total. This can be simplified to summing the frequency squared
+ * then divide by total. This expected size is a key metric to
+ * determine the best guess in the MiniAverage approach by picking a
+ * guess that produce the minimum expected size. However, since the
+ * exact value doesn't matter to the algorithm and only the relative
+ * ranking does, it is possible to simplify the calculation to just
+ * return the sum of frequency square without any division.
+ */
 public class ExpectedSize {
     private final int[] validFeedback;
 
@@ -8,18 +22,19 @@ public class ExpectedSize {
     }
 
     /**
-     * Calculate sum of square of the number of remaining solution after a guess.
+     * Calculate the sum of number of remaining solution for each secret.
      * <p>
      * This is part of the formula for calculating the average solution size (aka
      * expected size). It is the number obtained before dividing by total. Avoiding
      * division in this function save time for algorithm that only relies on rank
-     * and not necessary the true expected value.
+     * and not necessary the exact expected value.
      * </p>
      *
      * @param guess         code, digits 1..c, length d
      * @param secrets       list of codes, digits 1..c, length d
      * @param d             number of digits (<= 9)
-     * @param feedbackFreq  int array of 0 with length c
+     * @param feedbackFreq  int array of 0 with length 100
+     * @return              Sum of number of remaining solution for each secret
      */
     public int calcExpectedRank(int guess, int[] secrets, int d, int[] feedbackFreq) {
 
@@ -42,11 +57,35 @@ public class ExpectedSize {
         return sum;
     }
 
-    public float calcExpectedSize(int guess, int[] secrets, int d, int total, int[] feedbackFreq) {
-        return (float) calcExpectedRank(guess, secrets, d, feedbackFreq) / total;
+    /**
+     * Calculate the average expected size of the solution space after a guess.
+     *
+     * @param guess        code, digits 1..c, length d
+     * @param secrets      list of codes, digits 1..c, length d
+     * @param d            number of digits (<= 9)
+     * @param feedbackFreq int array of 0 with length c
+     * @return Average number of remaining solution
+     */
+    public float calcExpectedSize(int guess, int[] secrets, int d, int[] feedbackFreq) {
+        return (float) calcExpectedRank(guess, secrets, d, feedbackFreq) / secrets.length;
     }
 
-    public float calcExpectedProportion(int guess, int[] secrets, int d, int total, int[] feedbackFreq) {
-        return (float) calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) Math.pow(total, 3);
+    /**
+     * Calculate the average expected proportion of the solution space that
+     * will remain valid after making a guess.
+     * <p>
+     * This is preferred over calculating the average expected size when using
+     * a Monte Carlo sample, where the sample size doesn't equal to the
+     * population size.
+     * </p>
+     *
+     * @param guess        code, digits 1..c, length d
+     * @param secrets      list of codes, digits 1..c, length d
+     * @param d            number of digits (<= 9)
+     * @param feedbackFreq int array of 0 with length c
+     * @return Average proportion of remaining solution
+     */
+    public float calcExpectedProportion(int guess, int[] secrets, int d, int[] feedbackFreq) {
+        return (float) calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) Math.pow(secrets.length, 3);
     }
 }

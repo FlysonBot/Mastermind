@@ -7,14 +7,13 @@ public class ExpectedSizeTest {
 
     private static final int COLORS = 6;
     private static final int DIGITS = 4;
-    private static final int TOTAL = 1296;
     private static final float DELTA = 0.001f;
     private static final int[] feedbackFreq = new int[100];
     private static final ExpectedSize expectedSizeObj = new ExpectedSize(DIGITS);
     int[] secrets = AllValidCode.generateAllCodes(COLORS, DIGITS);
     
     private float calcExpectedSize(int guess, int[] secrets) {
-        return expectedSizeObj.calcExpectedSize(guess, secrets, DIGITS, TOTAL, feedbackFreq);
+        return expectedSizeObj.calcExpectedSize(guess, secrets, DIGITS, feedbackFreq);
     }
 
     @Test
