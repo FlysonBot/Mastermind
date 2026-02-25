@@ -1,8 +1,24 @@
 package org.mastermind;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.*;
 
+/**
+ * This is a strategy to find the best guess for Mastermind by searching
+ * through the space of all valid guesses and secrets to find the guess
+ * that minimize the average number of remaining solutions to the puzzle.
+ * Due to the nature of Mastermind, sometimes the search space can be huge.
+ * To optimize for performance, the program create a thread for each CPU
+ * thread precent on the machine. The algorithm go multi-threading when
+ * the search space exceed a threshold, which is a heuristic value for
+ * when the algorithm will take longer than 50 milliseconds to run.
+ */
 public class BestGuess {
+    private static final int THREAD_COUNT = Runtime.getRuntime().availableProcessors();
+    private static final ExecutorService POOL = Executors.newFixedThreadPool(THREAD_COUNT);
+    private static final long PARALLEL_THRESHOLD = 3_000_000;
 
     /**
      * Find the guess that will minimize the expected size of the solution space
@@ -14,24 +30,87 @@ public class BestGuess {
      * @return        best guess from all candidates
      */
     public static int findBestGuess(int[] guesses, int[] secrets, int d) {
+
+        // Determine whether multi-threading is needed, true = not needed
+        if ((long) guesses.length * secrets.length < PARALLEL_THRESHOLD) {
+            return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
+        }
+
+        // Call the parallelized version of the algorithm
+        return findBestGuessParallel(guesses, secrets, d);
+    }
+
+    public static int findBestGuess(int[] guesses, int[] secrets, int d, boolean parallel) {
+        if (!parallel) return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
+        return findBestGuessParallel(guesses, secrets, d);
+    }
+
+    private static int findBestGuessParallel(int[] guesses, int[] secrets, int d) {
+
+        // Calculate the chunk size with ceil(guesses.length / THREAD_COUNT)
+        int chunkSize = (guesses.length + THREAD_COUNT - 1) / THREAD_COUNT;
+        int actualThreads = (guesses.length + chunkSize - 1) / chunkSize;
+
+        // Holder for function's output result
+        List<Future<int[]>> futures = new ArrayList<>(actualThreads);
+
+        // Submit work to each threads
+        for (int t = 0; t < actualThreads; t++) {
+            final int from = t * chunkSize;
+            final int to = Math.min(from + chunkSize, guesses.length);
+            futures.add(t, POOL.submit(() -> findBestGuessAlgorithm(guesses, secrets, d, from, to)));
+        }
+
+        // Find best guess from returned result
+        int bestGuess = -1;
+        int bestScore = Integer.MAX_VALUE;
+
+        for (Future<int[]> future : futures) {
+            try {
+                // Read the result
+                int[] result = future.get();
+
+                // Update best guess if found better score
+                if (result[1] < bestScore) {
+                    bestGuess = result[0];
+                    bestScore = result[1];
+                }
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Interrupted while waiting for thread result", e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException("Exception in worker thread", e.getCause());
+            }
+        }
+
+        return bestGuess;
+    }
+
+    public static void shutdown() {
+        POOL.shutdown();
+    }
+
+    private static int[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int d, int start, int end) {
         ExpectedSize expectedSizeObj = new ExpectedSize(d);
         int[] feedbackFreq = new int[100];
 
         int bestGuess = -1;
         int bestScore = Integer.MAX_VALUE;
 
-        for (int guess : guesses) {
+        for (int i = start; i < end; i++) {
             // Compute rank
+            int guess = guesses[i];
             int score = expectedSizeObj.calcExpectedRank(guess, secrets, d, feedbackFreq);
 
-            // Update rank if found a smaller rank
+            // Update result if found a smaller rank
             if (score < bestScore) {
                 bestScore = score;
                 bestGuess = guess;
             }
         }
 
-        return bestGuess;
+        return new int[] {bestGuess, bestScore};
     }
 
     /**

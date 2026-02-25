@@ -26,11 +26,13 @@ public class Feedback {
         int black = 0;
 
         for (int i = 0; i < d; i++) {
+            // Extract digits
             int currGuess = guess % 10;
             int currSecret = secret % 10;
             guess /= 10;
             secret /= 10;
 
+            // Increment counters
             if (currGuess == currSecret) {
                 black++;
             } else {
@@ -51,6 +53,7 @@ public class Feedback {
             colorFreqCounter[i] = 0;
         }
 
+        // black * 10 + d - black - colorFreqTotal / 2
         return black * 9 + d - (colorFreqTotal >>> 1);
     }
 

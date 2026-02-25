@@ -8,24 +8,38 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 3, time = 1)
 @Measurement(iterations = 3, time = 1)
-@Fork(5)
+@Fork(2)
 public class BestGuessBenchmark {
 
     // 1. STATE CLASS (nested static class)
     @State(Scope.Thread)
     public static class BenchmarkState {
         private final int[] allCodes = AllValidCode.generateAllCodes(6, 4);
+
+        // TEARDOWN - Shutdown the thread pool after benchmarking
+        @TearDown(Level.Trial)
+        public void tearDown() {
+            BestGuess.shutdown();
+        }
     }
 
-    // 2. BENCHMARK METHOD
+    // 2. BENCHMARK METHOD - Ordinary (Sequential) Version
     @Benchmark
-    public void benchmarkTest(BenchmarkState state, Blackhole blackhole) {
-        int bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 4);
+    public void benchmarkOrdinaryVersion(BenchmarkState state, Blackhole blackhole) {
+        int bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 4, false);
+        blackhole.consume(bestGuess);
+    }
+
+    // 3. BENCHMARK METHOD - Parallel Version
+    @Benchmark
+    public void benchmarkParallelVersion(BenchmarkState state, Blackhole blackhole) {
+        int bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 4, true);
         blackhole.consume(bestGuess);
     }
 }
 
 /* Average Performance:
-Benchmark                         Mode  Cnt   Score   Error  Units
-BestGuessBenchmark.benchmarkTest  avgt   15  34.629 ± 0.476  ms/op
+Benchmark                                    Mode  Cnt   Score   Error  Units
+BestGuessBenchmark.benchmarkOrdinaryVersion  avgt    6  34.278 ± 0.994  ms/op
+BestGuessBenchmark.benchmarkParallelVersion  avgt    6  12.409 ± 4.445  ms/op
  */
