@@ -57,35 +57,29 @@ public class ExpectedSize {
         return sum;
     }
 
-    /**
-     * Calculate the average expected size of the solution space after a guess.
-     *
-     * @param guess        code, digits 1..c, length d
-     * @param secrets      list of codes, digits 1..c, length d
-     * @param d            number of digits (<= 9)
-     * @param feedbackFreq int array of 0 with length c
-     * @return Average number of remaining solution
-     */
     public float calcExpectedSize(int guess, int[] secrets, int d, int[] feedbackFreq) {
-        return (float) calcExpectedRank(guess, secrets, d, feedbackFreq) / secrets.length;
+        return calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) secrets.length;
     }
 
-    /**
-     * Calculate the average expected proportion of the solution space that
-     * will remain valid after making a guess.
-     * <p>
-     * This is preferred over calculating the average expected size when using
-     * a Monte Carlo sample, where the sample size doesn't equal to the
-     * population size.
-     * </p>
-     *
-     * @param guess        code, digits 1..c, length d
-     * @param secrets      list of codes, digits 1..c, length d
-     * @param d            number of digits (<= 9)
-     * @param feedbackFreq int array of 0 with length c
-     * @return Average proportion of remaining solution
-     */
     public float calcExpectedProportion(int guess, int[] secrets, int d, int[] feedbackFreq) {
-        return (float) calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) Math.pow(secrets.length, 3);
+        return calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) Math.pow(secrets.length, 3);
+    }
+
+    public float calcExpectedProportionFromSample(
+            int guess, int[] secrets, int d, int[] feedbackFreq, int populationSize
+    ) {
+        return calcExpectedRank(guess, secrets, d, feedbackFreq) * populationSize / (float) Math.pow(secrets.length, 3);
+    }
+
+    public float convertRankToExpectedSize(int rank, int total) {
+        return (float) rank / total;
+    }
+
+    public float convertRankToExpectedProportion(int rank, int total) {
+        return rank / (float) Math.pow(total, 3);
+    }
+
+    public float convertSampleRankToExpectedSize(int rank, int sampleSize, int populationSize) {
+        return rank * populationSize / (float) Math.pow(sampleSize, 3);
     }
 }
