@@ -16,6 +16,15 @@ public class SolutionSpace {
     }
 
     /**
+     * Reset the solution space to all valid codes for the given number of colors.
+     *
+     * @param c  number of colors
+     */
+    public void reset(int c) {
+        remainingSecrets = CodeCache.getAllValid(c, d).clone();
+    }
+
+    /**
      * Filter the solution space according to the obtained feedback from a guess.
      * After this operation, only the secrets whose feedback with the input guess
      * matches the obtained feedback would be kept.

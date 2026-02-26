@@ -19,20 +19,89 @@ public class MastermindSessionTest {
         runGame(1234);
     }
 
-    /**
-     * Simulate a full game with secret 6666 (all same color, worst-case candidate).
-     */
+    /** Simulate a full game with secret 6666 (all same color, worst-case candidate). */
     @Test
     void testSolveSecret6666() {
         runGame(6666);
     }
 
-    /**
-     * Simulate a full game with secret 1562 (arbitrary mid-range code).
-     */
+    /** Simulate a full game with secret 1562 (arbitrary mid-range code). */
     @Test
     void testSolveSecret1562() {
         runGame(1562);
+    }
+
+    /** Record two guesses, undo both at once, and verify the session is fully reset. */
+    @Test
+    void testUndoMultiple() {
+        int[] colorFreqCounter = new int[10];
+        MastermindSession session = new MastermindSession(C, D);
+
+        int spaceAtStart = session.getSolutionSpaceSize();
+
+        // Record two arbitrary guesses with their real feedbacks against secret 1234
+        int guess1 = 1122;
+        int fb1 = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
+        session.recordGuess(guess1, fb1);
+        int spaceAfter1 = session.getSolutionSpaceSize();
+
+        int guess2 = 1344;
+        int fb2 = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
+        session.recordGuess(guess2, fb2);
+        int spaceAfter2 = session.getSolutionSpaceSize();
+
+        // Sanity: each filter should narrow the space
+        assertTrue(spaceAfter1 < spaceAtStart);
+        assertTrue(spaceAfter2 < spaceAfter1);
+        assertEquals(2, session.getTurnCount());
+
+        // Undo both guesses at once
+        session.undo(2);
+
+        assertEquals(0, session.getTurnCount());
+        assertFalse(session.isSolved());
+        assertEquals(spaceAtStart, session.getSolutionSpaceSize());
+    }
+
+    /**
+     * Record three guesses, undo one, verify intermediate state matches
+     * what it was after the first guess alone.
+     */
+    @Test
+    void testUndoPartial() {
+        int[] colorFreqCounter = new int[10];
+        MastermindSession session = new MastermindSession(C, D);
+
+        int guess1 = 1122;
+        int fb1 = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
+        session.recordGuess(guess1, fb1);
+        int spaceAfter1 = session.getSolutionSpaceSize();
+
+        int guess2 = 1344;
+        int fb2 = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
+        session.recordGuess(guess2, fb2);
+
+        int guess3 = 1234;
+        int fb3 = Feedback.getFeedback(guess3, 1234, D, colorFreqCounter);
+        session.recordGuess(guess3, fb3);
+        assertTrue(session.isSolved());
+
+        // Undo last two guesses — should land back at the state after guess1
+        session.undo(2);
+
+        assertEquals(1, session.getTurnCount());
+        assertFalse(session.isSolved());
+        assertEquals(spaceAfter1, session.getSolutionSpaceSize());
+        assertEquals(guess1, session.getHistory().getFirst()[0]);
+        assertEquals(fb1,    session.getHistory().getFirst()[1]);
+    }
+
+    /** Verify that undo throws when n is out of range. */
+    @Test
+    void testUndoInvalidN() {
+        MastermindSession session = new MastermindSession(C, D);
+        assertThrows(IllegalArgumentException.class, () -> session.undo(0));
+        assertThrows(IllegalArgumentException.class, () -> session.undo(1));
     }
 
     private void runGame(int secret) {

@@ -79,6 +79,31 @@ public class MastermindSession {
         }
     }
 
+    /**
+     * Undo the last {@code n} recorded guesses, reconstructing the solution space
+     * by replaying the remaining history from scratch.
+     *
+     * @param n  number of guesses to undo (must be &gt;= 1 and &lt;= turn count)
+     * @throws IllegalArgumentException if {@code n} is out of range
+     */
+    public void undo(int n) {
+        if (n < 1 || n > history.size())
+            throw new IllegalArgumentException("n must be between 1 and " + history.size() + ".");
+
+        int keep = history.size() - n;
+        List<int[]> kept = new ArrayList<>(history.subList(0, keep));
+
+        // Reconstruct solution space from the beginning
+        solutionSpace.reset(c);
+        for (int[] entry : kept) {
+            solutionSpace.filterSolution(entry[0], entry[1]);
+        }
+
+        history.clear();
+        history.addAll(kept);
+        solved = false;
+    }
+
     /** @return {@code true} if the secret has been identified */
     public boolean isSolved() { return solved; }
 
