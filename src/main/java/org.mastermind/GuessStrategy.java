@@ -47,24 +47,40 @@ public class GuessStrategy {
     }
 
     /**
-     * Later turns: cascade through three levels of size reduction until the
+     * Later turns: cascade through several levels of size reduction until the
      * product fits within the threshold.
      *
      * <ol>
      *   <li>All valid codes × remaining secrets — best guess quality.</li>
      *   <li>Remaining secrets × remaining secrets — restrict guess space.</li>
      *   <li>Remaining secrets × sampled secrets — estimate when both are large.</li>
+     *   <li>Sampled guesses × sampled secrets — final fallback.</li>
      * </ol>
      */
     private static int[][] laterTurns(int c, int d, int[] secrets) {
         int[] allValidCodes = CodeCache.getAllValid(c, d);
+
+        // If possible, go for the full search space
         if ((long) allValidCodes.length * secrets.length <= THRESHOLD) {
             return new int[][] { allValidCodes, secrets };
         }
+
+        // Otherwise, try restricting guess space to valid solution only
         if ((long) secrets.length * secrets.length <= THRESHOLD) {
             return new int[][] { secrets, secrets };
         }
-        return new int[][] { secrets, sample(c, d) };
+
+        int[] randomSample = sample(c, d);
+        int sampleSize = randomSample.length;
+
+        // If still can't make it, use random sample for secrets
+        if ((long) secrets.length * sampleSize <= THRESHOLD) {
+            // Remaining secrets × sampled secrets
+            return new int[][] { secrets, randomSample };
+        }
+
+        // As a last resort, use random sample for both guesses and secrets
+        return new int[][] { randomSample, randomSample };
     }
 
     private static int[] sample(int c, int d) {
