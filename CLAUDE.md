@@ -23,3 +23,4 @@ Python will handle the terminal-based UI, and JPype will be used to talk to Java
 ### Preference
 - Stick to primitive type unless there is a reason not to.
 - Unless necessary, do not write extra class and objects. Be simple.
+- Do not run any tests or benchmark for me unless specifically instructed.
