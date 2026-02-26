@@ -29,25 +29,25 @@ public class BestGuess {
      * @param guesses all candidate guesses
      * @param secrets remaining possible secrets
      * @param d       number of digits
-     * @return        best guess from all candidates
+     * @return        long[] where [0]=best guess, [1]=its rank (sum of squared partition sizes)
      */
-    public static int findBestGuess(int[] guesses, int[] secrets, int d) {
+    public static long[] findBestGuess(int[] guesses, int[] secrets, int d) {
 
-        // Determine whether multi-threading is needed, true = not needed
+        // Determine whether multi-threading is needed
         if ((long) guesses.length * secrets.length < PARALLEL_THRESHOLD) {
-            return (int) findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
+            return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length);
         }
 
         // Call the parallelized version of the algorithm
         return findBestGuessParallel(guesses, secrets, d);
     }
 
-    public static int findBestGuess(int[] guesses, int[] secrets, int d, boolean parallel) {
-        if (!parallel) return (int) findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
+    public static long[] findBestGuess(int[] guesses, int[] secrets, int d, boolean parallel) {
+        if (!parallel) return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length);
         return findBestGuessParallel(guesses, secrets, d);
     }
 
-    private static int findBestGuessParallel(int[] guesses, int[] secrets, int d) {
+    private static long[] findBestGuessParallel(int[] guesses, int[] secrets, int d) {
 
         // Calculate the chunk size with ceil(guesses.length / THREAD_COUNT)
         int chunkSize = (guesses.length + THREAD_COUNT - 1) / THREAD_COUNT;
@@ -86,7 +86,7 @@ public class BestGuess {
             }
         }
 
-        return bestGuess;
+        return new long[] {bestGuess, bestScore};
     }
 
     private static long[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int d, int start, int end) {

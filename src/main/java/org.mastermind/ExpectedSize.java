@@ -57,29 +57,31 @@ public class ExpectedSize {
         return sum;
     }
 
+    public float convertRankToExpectedSize(long rank, int total) {
+        return (float) rank / total;
+    }
+
+    public float convertRankToExpectedProportion(long rank, int total) {
+        return rank / (float) Math.pow(total, 2);
+    }
+
+    public float convertSampleRankToExpectedSize(long rank, int sampleSize, int populationSize) {
+        return rank * populationSize / (float) Math.pow(sampleSize, 2);
+    }
+
     public float calcExpectedSize(int guess, int[] secrets, int d, int[] feedbackFreq) {
-        return calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) secrets.length;
+        return convertRankToExpectedSize(calcExpectedRank(guess, secrets, d, feedbackFreq), secrets.length);
     }
 
     public float calcExpectedProportion(int guess, int[] secrets, int d, int[] feedbackFreq) {
-        return calcExpectedRank(guess, secrets, d, feedbackFreq) / (float) Math.pow(secrets.length, 3);
+        return convertRankToExpectedProportion(calcExpectedRank(guess, secrets, d, feedbackFreq), secrets.length);
     }
 
     public float calcExpectedProportionFromSample(
             int guess, int[] secrets, int d, int[] feedbackFreq, int populationSize
     ) {
-        return calcExpectedRank(guess, secrets, d, feedbackFreq) * populationSize / (float) Math.pow(secrets.length, 3);
-    }
-
-    public float convertRankToExpectedSize(int rank, int total) {
-        return (float) rank / total;
-    }
-
-    public float convertRankToExpectedProportion(int rank, int total) {
-        return rank / (float) Math.pow(total, 3);
-    }
-
-    public float convertSampleRankToExpectedSize(int rank, int sampleSize, int populationSize) {
-        return rank * populationSize / (float) Math.pow(sampleSize, 3);
+        return convertSampleRankToExpectedSize(calcExpectedRank(
+                guess, secrets, d, feedbackFreq), secrets.length, populationSize
+        );
     }
 }

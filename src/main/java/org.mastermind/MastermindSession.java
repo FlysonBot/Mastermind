@@ -48,13 +48,28 @@ public class MastermindSession {
      * @throws IllegalStateException if the game is already solved
      */
     public int suggestGuess() {
+        return (int) suggestGuessWithDetails()[0];
+    }
+
+    /**
+     * Suggest the best next guess and return scoring details for display.
+     *
+     * <p>Use the rank and scoring secrets length to compute an accurate expected
+     * size via {@link ExpectedSize#convertSampleRankToExpectedSize(long, int, int)},
+     * passing the full solution space size as {@code populationSize}.
+     *
+     * @return long[] where [0]=guess, [1]=rank, [2]=scoring secrets length
+     * @throws IllegalStateException if the game is already solved
+     */
+    public long[] suggestGuessWithDetails() {
         if (solved) throw new IllegalStateException("Game is already solved.");
 
         int[] secrets = solutionSpace.getSecrets();
-        if (secrets.length == 1) return secrets[0];
+        if (secrets.length == 1) return new long[] {secrets[0], 1L, 1L};
 
-        int[][] arrays = GuessStrategy.select(c, d, history.size(), secrets);
-        return BestGuess.findBestGuess(arrays[0], arrays[1], d);
+        int[][] searchSpace = GuessStrategy.select(c, d, history.size(), secrets);  // {guesses, secrets}
+        long[] result = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], d);
+        return new long[] {result[0], result[1], searchSpace[1].length};    // {guess, rank, secrets length}
     }
 
     /**

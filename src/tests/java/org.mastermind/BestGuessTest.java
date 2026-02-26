@@ -27,7 +27,7 @@ public class BestGuessTest {
     @Test
     public void testOrdinaryVersion() {
         // Act: Call the ordinary version with parallel = false
-        int bestGuess = BestGuess.findBestGuess(allCodes, allCodes, d, false);
+        int bestGuess = (int) BestGuess.findBestGuess(allCodes, allCodes, d, false)[0];
 
         // Assert: Verify the result matches the expected value
         assertEquals(EXPECTED_BEST_GUESS, bestGuess);
@@ -41,7 +41,7 @@ public class BestGuessTest {
     @Test
     public void testParallelVersion() {
         // Act: Call the parallel version with parallel = true
-        int bestGuess = BestGuess.findBestGuess(allCodes, allCodes, d, true);
+        int bestGuess = (int) BestGuess.findBestGuess(allCodes, allCodes, d, true)[0];
 
         // Assert: Verify the result matches the expected value
         assertEquals(EXPECTED_BEST_GUESS, bestGuess);
