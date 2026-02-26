@@ -20,6 +20,8 @@ public class BestGuess {
     private static final ExecutorService POOL = Executors.newFixedThreadPool(THREAD_COUNT);
     private static final long PARALLEL_THRESHOLD = 3_000_000;
 
+    public static void shutdown() { POOL.shutdown(); }
+
     /**
      * Find the guess that will minimize the expected size of the solution space
      * after guessing.
@@ -33,7 +35,7 @@ public class BestGuess {
 
         // Determine whether multi-threading is needed, true = not needed
         if ((long) guesses.length * secrets.length < PARALLEL_THRESHOLD) {
-            return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
+            return (int) findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
         }
 
         // Call the parallelized version of the algorithm
@@ -41,7 +43,7 @@ public class BestGuess {
     }
 
     public static int findBestGuess(int[] guesses, int[] secrets, int d, boolean parallel) {
-        if (!parallel) return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
+        if (!parallel) return (int) findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length)[0];
         return findBestGuessParallel(guesses, secrets, d);
     }
 
@@ -52,7 +54,7 @@ public class BestGuess {
         int actualThreads = (guesses.length + chunkSize - 1) / chunkSize;
 
         // Holder for function's output result
-        List<Future<int[]>> futures = new ArrayList<>(actualThreads);
+        List<Future<long[]>> futures = new ArrayList<>(actualThreads);
 
         // Submit work to each threads
         for (int t = 0; t < actualThreads; t++) {
@@ -63,16 +65,16 @@ public class BestGuess {
 
         // Find best guess from returned result
         int bestGuess = -1;
-        int bestScore = Integer.MAX_VALUE;
+        long bestScore = Long.MAX_VALUE;
 
-        for (Future<int[]> future : futures) {
+        for (Future<long[]> future : futures) {
             try {
                 // Read the result
-                int[] result = future.get();
+                long[] result = future.get();
 
                 // Update best guess if found better score
                 if (result[1] < bestScore) {
-                    bestGuess = result[0];
+                    bestGuess = (int) result[0];
                     bestScore = result[1];
                 }
 
@@ -87,21 +89,17 @@ public class BestGuess {
         return bestGuess;
     }
 
-    public static void shutdown() {
-        POOL.shutdown();
-    }
-
-    private static int[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int d, int start, int end) {
+    private static long[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int d, int start, int end) {
         ExpectedSize expectedSizeObj = new ExpectedSize(d);
         int[] feedbackFreq = new int[100];
 
         int bestGuess = -1;
-        int bestScore = Integer.MAX_VALUE;
+        long bestScore = Long.MAX_VALUE;
 
         for (int i = start; i < end; i++) {
             // Compute rank
             int guess = guesses[i];
-            int score = expectedSizeObj.calcExpectedRank(guess, secrets, d, feedbackFreq);
+            long score = expectedSizeObj.calcExpectedRank(guess, secrets, d, feedbackFreq);
 
             // Update result if found a smaller rank
             if (score < bestScore) {
@@ -110,7 +108,7 @@ public class BestGuess {
             }
         }
 
-        return new int[] {bestGuess, bestScore};
+        return new long[] {bestGuess, bestScore};
     }
 
     /**

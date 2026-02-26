@@ -36,7 +36,7 @@ public class ExpectedSize {
      * @param feedbackFreq  int array of 0 with length 100
      * @return              Sum of number of remaining solution for each secret
      */
-    public int calcExpectedRank(int guess, int[] secrets, int d, int[] feedbackFreq) {
+    public long calcExpectedRank(int guess, int[] secrets, int d, int[] feedbackFreq) {
 
         // Calculate feedback for each secret
         int[] colorFreqCounter = new int[10];
@@ -46,8 +46,8 @@ public class ExpectedSize {
         }
 
         // Find the sum of square
-        int sum = 0;
-        int freq;
+        long sum = 0;
+        long freq;
         for (int feedback: validFeedback) {
             freq = feedbackFreq[feedback];
             sum += freq * freq;
