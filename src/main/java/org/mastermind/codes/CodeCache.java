@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.codes;
 
 /**
  * Lazy cache for generated code arrays, shared across classes.

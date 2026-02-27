@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.codes;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

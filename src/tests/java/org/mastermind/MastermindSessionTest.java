@@ -1,6 +1,8 @@
 package org.mastermind;
 
 import org.junit.jupiter.api.Test;
+import org.mastermind.solver.ExpectedSize;
+import org.mastermind.solver.Feedback;
 
 import static org.junit.jupiter.api.Assertions.*;
 

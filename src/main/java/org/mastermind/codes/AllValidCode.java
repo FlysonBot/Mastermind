@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.codes;
 
 /**
  * A game of Mastermind has 2 parameters, c (number of colors)

@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.solver;
 
 /**
  * Feedback is a crucial part of Mastermind. After each guess being

@@ -1,4 +1,6 @@
-package org.mastermind;
+package org.mastermind.solver;
+
+import org.mastermind.codes.CodeCache;
 
 /**
  * Solution space refer to the set of remaining valid secrets

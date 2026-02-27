@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.codes;
 
 import java.util.Random;
 

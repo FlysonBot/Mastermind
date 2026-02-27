@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.solver;
 
 import org.junit.jupiter.api.Test;
 

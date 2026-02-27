@@ -1,5 +1,9 @@
 package org.mastermind;
 
+import org.mastermind.codes.CodeCache;
+import org.mastermind.codes.SampledCode;
+import org.mastermind.solver.Feedback;
+
 /**
  * Selects which arrays to pass as guesses and secrets to BestGuess for each turn.
  *

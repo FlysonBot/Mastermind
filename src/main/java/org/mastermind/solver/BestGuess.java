@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.solver;
 
 import java.util.ArrayList;
 import java.util.Arrays;

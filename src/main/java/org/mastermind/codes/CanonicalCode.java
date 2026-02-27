@@ -1,4 +1,4 @@
-package org.mastermind;
+package org.mastermind.codes;
 
 /**
  * Canonical forms refer to a specific subset of all Mastermind code
