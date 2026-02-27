@@ -2,13 +2,14 @@ package org.mastermind;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BestGuessTest {
 
-    private int[] allCodes;
-    private final int d = 4;
-    private static final int EXPECTED_BEST_GUESS = 1123;
+    private static final int   EXPECTED_BEST_GUESS = 1123;
+    private final        int   d                   = 4;
+    private              int[] allCodes;
 
     /**
      * Setup method that runs before each test.

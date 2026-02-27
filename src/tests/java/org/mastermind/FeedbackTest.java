@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FeedbackTest {
 
-    private static final int COLORS = 6;  // c parameter
-    private static final int DIGITS = 4;  // d parameter
-    private static final int TOTAL_COMBINATIONS = 1296; // 6^4
-    private static final int[] colorFreqCounter = new int[10];
+    private static final int   COLORS             = 6;  // c parameter
+    private static final int   DIGITS             = 4;  // d parameter
+    private static final int   TOTAL_COMBINATIONS = 1296; // 6^4
+    private static final int[] colorFreqCounter   = new int[10];
 
     /**
      * Converts a combination index to its Mastermind representation.
@@ -17,7 +17,7 @@ public class FeedbackTest {
      * 0 -> 1111, 1 -> 1112, 2 -> 1113, ..., 5 -> 1116, 6 -> 1121, etc.
      */
     private int indexToCombination(int index) {
-        int result = 0;
+        int result  = 0;
         int divisor = 1;
 
         for (int i = 0; i < DIGITS; i++) {
@@ -38,7 +38,7 @@ public class FeedbackTest {
     public void testIterationPerformance() {
         System.out.println("\n=== Iteration Performance Test ===");
         long startTime;
-        int totalCalls = 0;
+        int  totalCalls = 0;
 
         // Pre-generate all combinations OUTSIDE the timer
         int[] allCombinations = new int[TOTAL_COMBINATIONS];
@@ -52,7 +52,7 @@ public class FeedbackTest {
         startTime = System.nanoTime();
 
         // Run multiple times
-        for (int t=0; t<100; t++) {
+        for (int t = 0; t < 100; t++) {
             // Call single version 1,296 times, storing results in a 2D array
             for (int guessIdx = 0; guessIdx < TOTAL_COMBINATIONS; guessIdx++) {
                 int guess = allCombinations[guessIdx];
@@ -65,7 +65,7 @@ public class FeedbackTest {
             }
         }
 
-        long endTime = System.nanoTime();
+        long endTime  = System.nanoTime();
         long duration = (endTime - startTime) / 1_000_000;
 
         System.out.println("Total combinations processed: " + totalCalls);
@@ -80,11 +80,11 @@ public class FeedbackTest {
 
         // Run multiple times
         int limit = (int) Math.pow(6, 4);
-        for (int t=0; t<limit; t++) {
+        for (int t = 0; t < limit; t++) {
             getFeedbackQuick(1123, 3456);
         }
 
-        long endTime = System.nanoTime();
+        long endTime  = System.nanoTime();
         long duration = (endTime - startTime) / 1_000_000;
 
         System.out.println("Total combinations processed: " + limit);
@@ -128,20 +128,20 @@ public class FeedbackTest {
 
     @Test
     void testEnumerateFeedback() {
-        int d = 9;
+        int   d         = 9;
         int[] feedbacks = Feedback.enumerateFeedback(d);
 
         int[] expected = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,          // black = 0, white = 0..9  (10 values)
-            10, 11, 12, 13, 14, 15, 16, 17, 18,    // black = 1, white = 0..8  (9 values)
-            20, 21, 22, 23, 24, 25, 26, 27,        // black = 2, white = 0..7  (8 values)
-            30, 31, 32, 33, 34, 35, 36,            // black = 3, white = 0..6  (7 values)
-            40, 41, 42, 43, 44, 45,                // black = 4, white = 0..5  (6 values)
-            50, 51, 52, 53, 54,                    // black = 5, white = 0..4  (5 values)
-            60, 61, 62, 63,                        // black = 6, white = 0..3  (4 values)
-            70, 71, 72,                            // black = 7, white = 0..2  (3 values)
-            80, 81,                                // black = 8, white = 0..1  (2 values)
-            90                                     // black = 9, white = 0..0  (1 value)
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9,          // black = 0, white = 0..9  (10 values)
+                10, 11, 12, 13, 14, 15, 16, 17, 18,    // black = 1, white = 0..8  (9 values)
+                20, 21, 22, 23, 24, 25, 26, 27,        // black = 2, white = 0..7  (8 values)
+                30, 31, 32, 33, 34, 35, 36,            // black = 3, white = 0..6  (7 values)
+                40, 41, 42, 43, 44, 45,                // black = 4, white = 0..5  (6 values)
+                50, 51, 52, 53, 54,                    // black = 5, white = 0..4  (5 values)
+                60, 61, 62, 63,                        // black = 6, white = 0..3  (4 values)
+                70, 71, 72,                            // black = 7, white = 0..2  (3 values)
+                80, 81,                                // black = 8, white = 0..1  (2 values)
+                90                                     // black = 9, white = 0..0  (1 value)
         };
 
         assertEquals(55, feedbacks.length, "Size should be 55 for d=9");

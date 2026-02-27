@@ -26,7 +26,7 @@ public class GuessStrategy {
      * @param d       number of digits
      * @param turn    0-indexed turn number (0 = first guess)
      * @param secrets current remaining valid secrets (from SolutionSpace)
-     * @return        int[][] where [0]=guesses, [1]=secrets
+     * @return int[][] where [0]=guesses, [1]=secrets
      */
     public static int[][] select(int c, int d, int turn, int[] secrets) {
         if (turn == 0) return firstTurn(c, d, secrets);
@@ -71,7 +71,7 @@ public class GuessStrategy {
         }
 
         int[] randomSample = sample(c, d);
-        int sampleSize = randomSample.length;
+        int   sampleSize   = randomSample.length;
 
         // If still can't make it, use random sample for secrets
         if ((long) secrets.length * sampleSize <= THRESHOLD) {

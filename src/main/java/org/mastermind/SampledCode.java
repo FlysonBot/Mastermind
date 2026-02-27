@@ -16,14 +16,14 @@ public class SampledCode {
      * Generate a random Monte Carlo sample from all possible Mastermind code
      * with the specified sample size.
      *
-     * @param c             number of colors (<= 9)
-     * @param d             number of digits (<= 9)
-     * @param sampleSize    size of the sample
-     * @return              A random sample of all possible Mastermind code
+     * @param c          number of colors (<= 9)
+     * @param d          number of digits (<= 9)
+     * @param sampleSize size of the sample
+     * @return A random sample of all possible Mastermind code
      */
     public static int[] getSample(int c, int d, int sampleSize) {
         Random random = new Random();
-        int[] sample = new int[sampleSize];
+        int[]  sample = new int[sampleSize];
 
         for (int i = 0; i < sampleSize; i++) {
             int code = 0;
@@ -42,8 +42,8 @@ public class SampledCode {
      * for the purpose of estimating the distribution of feedback values
      * for a guess.
      *
-     * @param feedbackSize  number of possible feedback values in the game
-     * @return              Conservative estimation of the sample size
+     * @param feedbackSize number of possible feedback values in the game
+     * @return Conservative estimation of the sample size
      */
     public static int calcSampleSize(int feedbackSize) { return (int) (feedbackSize * Math.pow(1.96 / 0.05, 2)); }
 }

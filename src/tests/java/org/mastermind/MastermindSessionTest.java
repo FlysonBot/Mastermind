@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MastermindSessionTest {
 
-    private static final int C = 6;
-    private static final int D = 4;
+    private static final int C         = 6;
+    private static final int D         = 4;
     private static final int MAX_TURNS = 6;
 
     /**
@@ -34,19 +34,19 @@ public class MastermindSessionTest {
     /** Record two guesses, undo both at once, and verify the session is fully reset. */
     @Test
     void testUndoMultiple() {
-        int[] colorFreqCounter = new int[10];
-        MastermindSession session = new MastermindSession(C, D);
+        int[]             colorFreqCounter = new int[10];
+        MastermindSession session          = new MastermindSession(C, D);
 
         int spaceAtStart = session.getSolutionSpaceSize();
 
         // Record two arbitrary guesses with their real feedbacks against secret 1234
         int guess1 = 1122;
-        int fb1 = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
+        int fb1    = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
         session.recordGuess(guess1, fb1);
         int spaceAfter1 = session.getSolutionSpaceSize();
 
         int guess2 = 1344;
-        int fb2 = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
+        int fb2    = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
         session.recordGuess(guess2, fb2);
         int spaceAfter2 = session.getSolutionSpaceSize();
 
@@ -69,20 +69,20 @@ public class MastermindSessionTest {
      */
     @Test
     void testUndoPartial() {
-        int[] colorFreqCounter = new int[10];
-        MastermindSession session = new MastermindSession(C, D);
+        int[]             colorFreqCounter = new int[10];
+        MastermindSession session          = new MastermindSession(C, D);
 
         int guess1 = 1122;
-        int fb1 = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
+        int fb1    = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
         session.recordGuess(guess1, fb1);
         int spaceAfter1 = session.getSolutionSpaceSize();
 
         int guess2 = 1344;
-        int fb2 = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
+        int fb2    = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
         session.recordGuess(guess2, fb2);
 
         int guess3 = 1234;
-        int fb3 = Feedback.getFeedback(guess3, 1234, D, colorFreqCounter);
+        int fb3    = Feedback.getFeedback(guess3, 1234, D, colorFreqCounter);
         session.recordGuess(guess3, fb3);
         assertTrue(session.isSolved());
 
@@ -93,7 +93,7 @@ public class MastermindSessionTest {
         assertFalse(session.isSolved());
         assertEquals(spaceAfter1, session.getSolutionSpaceSize());
         assertEquals(guess1, session.getHistory().getFirst()[0]);
-        assertEquals(fb1,    session.getHistory().getFirst()[1]);
+        assertEquals(fb1, session.getHistory().getFirst()[1]);
     }
 
     /** Verify that undo throws when n is out of range. */
@@ -105,36 +105,37 @@ public class MastermindSessionTest {
     }
 
     private void runGame(int secret) {
-        MastermindSession session = new MastermindSession(C, D);
-        int[] colorFreqCounter = new int[10];
-        ExpectedSize expectedSize = new ExpectedSize(D);
-        int[] feedbackFreq = new int[100];
+        MastermindSession session          = new MastermindSession(C, D);
+        int[]             colorFreqCounter = new int[10];
+        ExpectedSize      expectedSize     = new ExpectedSize(D);
+        int[]             feedbackFreq     = new int[100];
 
         System.out.println("Secret: " + secret);
 
         while (!session.isSolved()) {
             assertFalse(session.getTurnCount() >= MAX_TURNS,
-                    "Solver exceeded " + MAX_TURNS + " turns for secret " + secret
-                    + " (still unsolved after turn " + session.getTurnCount() + ")");
+                        "Solver exceeded " + MAX_TURNS + " turns for secret " + secret
+                                + " (still unsolved after turn " + session.getTurnCount() + ")");
 
             int spaceBefore = session.getSolutionSpaceSize();
-            int guess = session.suggestGuess();
-            float expSize = expectedSize.calcExpectedSize(guess, session.getSolutionSpaceSecrets(), D, feedbackFreq);
+            int guess       = session.suggestGuess();
+            float expSize = expectedSize.calcExpectedSize(guess, session.getSolutionSpaceSecrets(), D,
+                                                          feedbackFreq);
 
             int feedback = Feedback.getFeedback(guess, secret, D, colorFreqCounter);
             session.recordGuess(guess, feedback);
 
-            int turn = session.getTurnCount();
+            int turn  = session.getTurnCount();
             int black = feedback / 10;
             int white = feedback % 10;
             System.out.printf("  Turn %d: guess=%d  space=%d  expected=%.2f  feedback=%db%dw%n",
-                    turn, guess, spaceBefore, expSize, black, white);
+                              turn, guess, spaceBefore, expSize, black, white);
         }
 
         System.out.println("  Solved in " + session.getTurnCount() + " turns.");
 
         assertTrue(session.isSolved(), "Game should be marked solved");
         assertTrue(session.getTurnCount() <= MAX_TURNS,
-                "Should solve within " + MAX_TURNS + " turns, took " + session.getTurnCount());
+                   "Should solve within " + MAX_TURNS + " turns, took " + session.getTurnCount());
     }
 }

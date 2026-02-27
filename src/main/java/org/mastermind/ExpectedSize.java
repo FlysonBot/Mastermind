@@ -30,17 +30,17 @@ public class ExpectedSize {
      * and not necessary the exact expected value.
      * </p>
      *
-     * @param guess         code, digits 1..c, length d
-     * @param secrets       list of codes, digits 1..c, length d
-     * @param d             number of digits (<= 9)
-     * @param feedbackFreq  int array of 0 with length 100
-     * @return              Sum of number of remaining solution for each secret
+     * @param guess        code, digits 1..c, length d
+     * @param secrets      list of codes, digits 1..c, length d
+     * @param d            number of digits (<= 9)
+     * @param feedbackFreq int array of 0 with length 100
+     * @return Sum of number of remaining solution for each secret
      */
     public long calcExpectedRank(int guess, int[] secrets, int d, int[] feedbackFreq) {
 
         // Calculate feedback for each secret
         int[] colorFreqCounter = new int[10];
-        for (int secret: secrets) {
+        for (int secret : secrets) {
             int feedback = Feedback.getFeedback(guess, secret, d, colorFreqCounter);
             feedbackFreq[feedback]++;
         }
@@ -48,7 +48,7 @@ public class ExpectedSize {
         // Find the sum of square
         long sum = 0;
         long freq;
-        for (int feedback: validFeedback) {
+        for (int feedback : validFeedback) {
             freq = feedbackFreq[feedback];
             sum += freq * freq;
             feedbackFreq[feedback] = 0;

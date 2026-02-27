@@ -7,8 +7,8 @@ package org.mastermind;
  * progress tracking and calculating the best next move.
  */
 public class SolutionSpace {
-    private final int d;
-    private int[] remainingSecrets;
+    private final int   d;
+    private       int[] remainingSecrets;
 
     public SolutionSpace(int c, int d) {
         this.d = d;
@@ -18,7 +18,7 @@ public class SolutionSpace {
     /**
      * Reset the solution space to all valid codes for the given number of colors.
      *
-     * @param c  number of colors
+     * @param c number of colors
      */
     public void reset(int c) {
         remainingSecrets = CodeCache.getAllValid(c, d).clone();
@@ -28,19 +28,19 @@ public class SolutionSpace {
      * Filter the solution space according to the obtained feedback from a guess.
      * After this operation, only the secrets whose feedback with the input guess
      * matches the obtained feedback would be kept.
-     * 
-     * @param guess             code, digits 1..c, length d
-     * @param obtainedFeedback  feedback value (black * 10 + white)
+     *
+     * @param guess            code, digits 1..c, length d
+     * @param obtainedFeedback feedback value (black * 10 + white)
      */
     public void filterSolution(int guess, int obtainedFeedback) {
         int limit = remainingSecrets.length;
-        int d = this.d;
+        int d     = this.d;
 
         // Update remainingSecrets so that still valid combinations are in the front
-        int replaceInd = 0;
-        int feedback;
+        int   feedback;
+        int   replaceInd       = 0;
         int[] colorFreqCounter = new int[10];
-        for (int i=0; i < limit; i++){
+        for (int i = 0; i < limit; i++) {
             feedback = Feedback.getFeedback(guess, remainingSecrets[i], d, colorFreqCounter);
 
             if (feedback == obtainedFeedback) {
@@ -56,12 +56,12 @@ public class SolutionSpace {
     }
 
     /**
-     * @return  int array of currently solution space (or valid secrets)
+     * @return int array of currently solution space (or valid secrets)
      */
     public int[] getSecrets() { return remainingSecrets; }
 
     /**
-     * @return  size of the current solution space (or valid secrets)
+     * @return size of the current solution space (or valid secrets)
      */
     public int getSize() { return remainingSecrets.length; }
 

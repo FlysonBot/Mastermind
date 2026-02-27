@@ -10,9 +10,9 @@ public class AllValidCode {
     /**
      * Generate all valid Mastermind code for a game.
      *
-     * @param c     number of colors (<= 9)
-     * @param d     number of digits (<= 9)
-     * @return      Array of all valid Mastermind code
+     * @param c number of colors (<= 9)
+     * @param d number of digits (<= 9)
+     * @return Array of all valid Mastermind code
      */
     public static int[] generateAllCodes(int c, int d) {
         // Total number of codes = c^d (e.g. 6 colors, 4 pegs = 1296 codes)

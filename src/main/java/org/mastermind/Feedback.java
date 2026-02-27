@@ -16,18 +16,18 @@ public class Feedback {
     /**
      * Calculate the Mastermind feedback for a guess and a secret.
      *
-     * @param guess             code, digits 1..c, length d
-     * @param secret            code, digits 1..c, length d
-     * @param d                 number of digits (<= 9)
-     * @param colorFreqCounter  int array of 0 with length c
-     * @return                  Feedback value (black * 10 + white)
+     * @param guess            code, digits 1..c, length d
+     * @param secret           code, digits 1..c, length d
+     * @param d                number of digits (<= 9)
+     * @param colorFreqCounter int array of 0 with length c
+     * @return Feedback value (black * 10 + white)
      */
     public static int getFeedback(int guess, int secret, int d, int[] colorFreqCounter) {
         int black = 0;
 
         for (int i = 0; i < d; i++) {
             // Extract digits
-            int currGuess = guess % 10;
+            int currGuess  = guess % 10;
             int currSecret = secret % 10;
             guess /= 10;
             secret /= 10;
@@ -69,10 +69,10 @@ public class Feedback {
      */
     public static int[] enumerateFeedback(int d) {
         int[] result = new int[calcFeedbackSize(d)];
-        int i=0;
+        int   i      = 0;
 
-        for (int black=0; black <= d; black++) {
-            for (int white=0; white <= d - black; white++) {
+        for (int black = 0; black <= d; black++) {
+            for (int white = 0; white <= d - black; white++) {
                 result[i] = black * 10 + white;
                 i++;
             }

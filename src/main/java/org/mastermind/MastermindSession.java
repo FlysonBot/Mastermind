@@ -15,18 +15,18 @@ import java.util.List;
  */
 public class MastermindSession {
 
-    private final int c;
-    private final int d;
-    private final int winFeedback;        // d*10 — all d pegs correct
+    private final int           c;
+    private final int           d;
+    private final int           winFeedback;        // d*10 — all d pegs correct
     private final SolutionSpace solutionSpace;
-    private final List<int[]> history;    // each element: {guess, feedback}
-    private boolean solved;
+    private final List<int[]>   history;    // each element: {guess, feedback}
+    private       boolean       solved;
 
     /**
      * Create a new Mastermind session.
      *
-     * @param c  number of colors (1–9)
-     * @param d  number of digit positions (1–9)
+     * @param c number of colors (1–9)
+     * @param d number of digit positions (1–9)
      */
     public MastermindSession(int c, int d) {
         this.c = c;
@@ -65,25 +65,25 @@ public class MastermindSession {
         if (solved) throw new IllegalStateException("Game is already solved.");
 
         int[] secrets = solutionSpace.getSecrets();
-        if (secrets.length == 1) return new long[] {secrets[0], 1L, 1L};
+        if (secrets.length == 1) return new long[] { secrets[0], 1L, 1L };
 
         int[][] searchSpace = GuessStrategy.select(c, d, history.size(), secrets);  // {guesses, secrets}
-        long[] result = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], d);
-        return new long[] {result[0], result[1], searchSpace[1].length};    // {guess, rank, secrets length}
+        long[]  result      = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], d);
+        return new long[] { result[0], result[1], searchSpace[1].length };    // {guess, rank, secrets length}
     }
 
     /**
      * Record a guess and its feedback, then update the solution space.
      *
-     * @param guess     the guessed code (digits 1..c, length d)
-     * @param feedback  feedback from the game master (black*10 + white)
+     * @param guess    the guessed code (digits 1..c, length d)
+     * @param feedback feedback from the game master (black*10 + white)
      * @throws IllegalStateException    if the game is already solved
      * @throws IllegalArgumentException if the feedback leaves no valid secrets
      */
     public void recordGuess(int guess, int feedback) {
         if (solved) throw new IllegalStateException("Game is already solved.");
 
-        history.add(new int[]{guess, feedback});
+        history.add(new int[] { guess, feedback });
         solutionSpace.filterSolution(guess, feedback);
 
         if (feedback == winFeedback) {
@@ -98,14 +98,14 @@ public class MastermindSession {
      * Undo the last {@code n} recorded guesses, reconstructing the solution space
      * by replaying the remaining history from scratch.
      *
-     * @param n  number of guesses to undo (must be &gt;= 1 and &lt;= turn count)
+     * @param n number of guesses to undo (must be &gt;= 1 and &lt;= turn count)
      * @throws IllegalArgumentException if {@code n} is out of range
      */
     public void undo(int n) {
         if (n < 1 || n > history.size())
             throw new IllegalArgumentException("n must be between 1 and " + history.size() + ".");
 
-        int keep = history.size() - n;
+        int         keep = history.size() - n;
         List<int[]> kept = new ArrayList<>(history.subList(0, keep));
 
         // Reconstruct solution space from the beginning
@@ -133,7 +133,7 @@ public class MastermindSession {
 
     /**
      * @return unmodifiable view of the guess history;
-     *         each element is a two-element array {@code {guess, feedback}}
+     * each element is a two-element array {@code {guess, feedback}}
      */
     public List<int[]> getHistory() { return Collections.unmodifiableList(history); }
 

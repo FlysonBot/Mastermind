@@ -1,11 +1,12 @@
 package org.mastermind;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class CanonicalCodeTest {
 
@@ -81,10 +82,10 @@ class CanonicalCodeTest {
         @Test
         @DisplayName("Verify array size matches Stirling Sum for (6, 9)")
         void testArraySize() {
-            int c = 9;
-            int d = 9;
-            int expectedSize = CanonicalCode.countCanonicalForms(c, d); // 21147
-            int[] results = CanonicalCode.enumerateCanonicalForms(c, d);
+            int   c            = 9;
+            int   d            = 9;
+            int   expectedSize = CanonicalCode.countCanonicalForms(c, d); // 21147
+            int[] results      = CanonicalCode.enumerateCanonicalForms(c, d);
 
             assertEquals(expectedSize, results.length);
             assertEquals(21147, results.length);
@@ -98,8 +99,8 @@ class CanonicalCodeTest {
             // 112 (uses 2 colors)
             // 121 (uses 2 colors)
             // 122 (uses 2 colors)
-            int[] expected = {111, 112, 121, 122};
-            int[] actual = CanonicalCode.enumerateCanonicalForms(2, 3);
+            int[] expected = { 111, 112, 121, 122 };
+            int[] actual   = CanonicalCode.enumerateCanonicalForms(2, 3);
 
             assertArrayEquals(expected, actual, "Should generate exactly 111, 112, 121, 122");
         }

@@ -14,9 +14,9 @@ public class CanonicalCode {
      * Calculate the number of Canonical forms in a Mastermind game using
      * Stirling number of the second kind.
      *
-     * @param c     number of colors (<= 9)
-     * @param d     number of digits (<= 9)
-     * @return      Number of Canonical form in Mastermind
+     * @param c number of colors (<= 9)
+     * @param d number of digits (<= 9)
+     * @return Number of Canonical form in Mastermind
      */
     public static int countCanonicalForms(int c, int d) {
         // Edge cases for empty sets or partitions
@@ -50,9 +50,9 @@ public class CanonicalCode {
     /**
      * Enumerate all Canonical forms in a Mastermind game.
      *
-     * @param c     number of colors (<= 9)
-     * @param d     number of digits (<= 9)
-     * @return      Array of all Canonical forms in Mastermind
+     * @param c number of colors (<= 9)
+     * @param d number of digits (<= 9)
+     * @return Array of all Canonical forms in Mastermind
      */
     public static int[] enumerateCanonicalForms(int c, int d) {
 
@@ -60,7 +60,7 @@ public class CanonicalCode {
         int[] results = new int[countCanonicalForms(c, d)];
 
         // 2. Use a tiny wrapper array for the index to pass by reference in recursion
-        int[] index = {0};
+        int[] index = { 0 };
 
         // 3. Start recursion
         backtrack(results, index, 0, 0, 0, c, d);

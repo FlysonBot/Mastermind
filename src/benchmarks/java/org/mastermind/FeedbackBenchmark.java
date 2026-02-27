@@ -2,6 +2,7 @@ package org.mastermind;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
+
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -10,17 +11,6 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 public class FeedbackBenchmark {
 
-    // 1. STATE CLASS (nested static class)
-    @State(Scope.Thread)
-    public static class BenchmarkState {
-        public int[] secrets = AllValidCode.generateAllCodes(6, 4);
-        public int[] freq = new int[10];
-        public int getFeedbackQuick(int guess, int secret) {
-            return Feedback.getFeedback(guess, secret, 4, freq);
-        }
-    }
-
-    // 2. BENCHMARK METHOD
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @Benchmark
     public void fixInputBenchmark(BenchmarkState state, Blackhole blackhole) {
@@ -31,7 +21,7 @@ public class FeedbackBenchmark {
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     @Benchmark
     public void oneVariedInputBenchmark(BenchmarkState state, Blackhole blackhole) {
-        for (int secret: state.secrets) {
+        for (int secret : state.secrets) {
             int feedback = state.getFeedbackQuick(1234, secret);
             blackhole.consume(feedback);
         }
@@ -40,11 +30,21 @@ public class FeedbackBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Benchmark
     public void doubleVariedInputBenchmark(BenchmarkState state, Blackhole blackhole) {
-        for (int guess: state.secrets) {
+        for (int guess : state.secrets) {
             for (int secret : state.secrets) {
                 int feedback = state.getFeedbackQuick(guess, secret);
                 blackhole.consume(feedback);
             }
+        }
+    }
+
+    @State(Scope.Thread)
+    public static class BenchmarkState {
+        public int[] secrets = AllValidCode.generateAllCodes(6, 4);
+        public int[] freq    = new int[10];
+
+        public int getFeedbackQuick(int guess, int secret) {
+            return Feedback.getFeedback(guess, secret, 4, freq);
         }
     }
 }
