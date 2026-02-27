@@ -15,7 +15,7 @@ public class ExpectedSizeTest {
     int[] secrets = AllValidCode.generateAllCodes(COLORS, DIGITS);
 
     private float calcExpectedSize(int guess, int[] secrets) {
-        return expectedSizeObj.calcExpectedSize(guess, secrets, DIGITS, feedbackFreq);
+        return expectedSizeObj.calcExpectedSize(guess, secrets, COLORS, DIGITS, feedbackFreq);
     }
 
     @Test

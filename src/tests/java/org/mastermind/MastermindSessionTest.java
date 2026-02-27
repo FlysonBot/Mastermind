@@ -43,12 +43,12 @@ public class MastermindSessionTest {
 
         // Record two arbitrary guesses with their real feedbacks against secret 1234
         int guess1 = 1122;
-        int fb1    = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
+        int fb1    = Feedback.getFeedback(guess1, 1234, C, D, colorFreqCounter);
         session.recordGuess(guess1, fb1);
         int spaceAfter1 = session.getSolutionSpaceSize();
 
         int guess2 = 1344;
-        int fb2    = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
+        int fb2    = Feedback.getFeedback(guess2, 1234, C, D, colorFreqCounter);
         session.recordGuess(guess2, fb2);
         int spaceAfter2 = session.getSolutionSpaceSize();
 
@@ -75,16 +75,16 @@ public class MastermindSessionTest {
         MastermindSession session          = new MastermindSession(C, D);
 
         int guess1 = 1122;
-        int fb1    = Feedback.getFeedback(guess1, 1234, D, colorFreqCounter);
+        int fb1    = Feedback.getFeedback(guess1, 1234, C, D, colorFreqCounter);
         session.recordGuess(guess1, fb1);
         int spaceAfter1 = session.getSolutionSpaceSize();
 
         int guess2 = 1344;
-        int fb2    = Feedback.getFeedback(guess2, 1234, D, colorFreqCounter);
+        int fb2    = Feedback.getFeedback(guess2, 1234, C, D, colorFreqCounter);
         session.recordGuess(guess2, fb2);
 
         int guess3 = 1234;
-        int fb3    = Feedback.getFeedback(guess3, 1234, D, colorFreqCounter);
+        int fb3    = Feedback.getFeedback(guess3, 1234, C, D, colorFreqCounter);
         session.recordGuess(guess3, fb3);
         assertTrue(session.isSolved());
 
@@ -121,10 +121,10 @@ public class MastermindSessionTest {
 
             int spaceBefore = session.getSolutionSpaceSize();
             int guess       = session.suggestGuess();
-            float expSize = expectedSize.calcExpectedSize(guess, session.getSolutionSpaceSecrets(), D,
+            float expSize = expectedSize.calcExpectedSize(guess, session.getSolutionSpaceSecrets(), C, D,
                                                           feedbackFreq);
 
-            int feedback = Feedback.getFeedback(guess, secret, D, colorFreqCounter);
+            int feedback = Feedback.getFeedback(guess, secret, C, D, colorFreqCounter);
             session.recordGuess(guess, feedback);
 
             int turn  = session.getTurnCount();

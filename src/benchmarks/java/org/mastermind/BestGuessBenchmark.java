@@ -17,14 +17,14 @@ public class BestGuessBenchmark {
     // Ordinary (Sequential) Version
     @Benchmark
     public void benchmarkOrdinaryVersion(BenchmarkState state, Blackhole blackhole) {
-        long[] bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 4, false);
+        long[] bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 6, 4, false);
         blackhole.consume(bestGuess);
     }
 
     // Parallel Version
     @Benchmark
     public void benchmarkParallelVersion(BenchmarkState state, Blackhole blackhole) {
-        long[] bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 4, true);
+        long[] bestGuess = BestGuess.findBestGuess(state.allCodes, state.allCodes, 6, 4, true);
         blackhole.consume(bestGuess);
     }
 

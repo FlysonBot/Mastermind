@@ -46,14 +46,14 @@ public class FeedbackBenchmark {
         public int[] freq    = new int[10];
 
         public int getFeedbackQuick(int guess, int secret) {
-            return Feedback.getFeedback(guess, secret, 4, freq);
+            return Feedback.getFeedback(guess, secret, 6, 4, freq);
         }
     }
 }
 
 /* Benchmark average:
 Benchmark                                     Mode  Cnt   Score   Error  Units
-FeedbackBenchmark.doubleVariedInputBenchmark  avgt    4  31.701 ± 0.710  ms/op
-FeedbackBenchmark.fixInputBenchmark           avgt    4  17.730 ± 0.594  ns/op
-FeedbackBenchmark.oneVariedInputBenchmark     avgt    4  22.019 ± 0.465  us/op
+FeedbackBenchmark.doubleVariedInputBenchmark  avgt    4  28.907 ± 1.257  ms/op
+FeedbackBenchmark.fixInputBenchmark           avgt    4  18.134 ± 0.729  ns/op
+FeedbackBenchmark.oneVariedInputBenchmark     avgt    4  23.219 ± 0.912  us/op
  */

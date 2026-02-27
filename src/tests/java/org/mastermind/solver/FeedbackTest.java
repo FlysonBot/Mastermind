@@ -31,7 +31,7 @@ public class FeedbackTest {
     }
 
     private int getFeedbackQuick(int guess, int secret) {
-        return Feedback.getFeedback(guess, secret, DIGITS, colorFreqCounter);
+        return Feedback.getFeedback(guess, secret, COLORS, DIGITS, colorFreqCounter);
     }
 
     @Test

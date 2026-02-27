@@ -41,7 +41,7 @@ public class Demo {
             int    guess       = (int) details[0];
             float expSize = expectedSize.convertSampleRankToExpectedSize(details[1], (int) details[2],
                                                                          spaceBefore);
-            int feedback = Feedback.getFeedback(guess, SECRET, D, colorFreqCounter);
+            int feedback = Feedback.getFeedback(guess, SECRET, C, D, colorFreqCounter);
 
             session.recordGuess(guess, feedback);
 

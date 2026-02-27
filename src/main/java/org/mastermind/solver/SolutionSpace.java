@@ -9,10 +9,12 @@ import org.mastermind.codes.CodeCache;
  * progress tracking and calculating the best next move.
  */
 public class SolutionSpace {
+    private final int   c;
     private final int   d;
     private       int[] remainingSecrets;
 
     public SolutionSpace(int c, int d) {
+        this.c = c;
         this.d = d;
         remainingSecrets = CodeCache.getAllValid(c, d).clone();
     }
@@ -43,7 +45,7 @@ public class SolutionSpace {
         int   replaceInd       = 0;
         int[] colorFreqCounter = new int[10];
         for (int i = 0; i < limit; i++) {
-            feedback = Feedback.getFeedback(guess, remainingSecrets[i], d, colorFreqCounter);
+            feedback = Feedback.getFeedback(guess, remainingSecrets[i], c, d, colorFreqCounter);
 
             if (feedback == obtainedFeedback) {
                 remainingSecrets[replaceInd] = remainingSecrets[i];

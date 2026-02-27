@@ -72,7 +72,7 @@ public class MastermindSession {
         if (secrets.length == 1) return new long[] { secrets[0], 1L, 1L };
 
         int[][] searchSpace = GuessStrategy.select(c, d, history.size(), secrets);  // {guesses, secrets}
-        long[]  result      = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], d);
+        long[]  result      = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], c, d);
         return new long[] { result[0], result[1], searchSpace[1].length };    // {guess, rank, secrets length}
     }
 

@@ -31,26 +31,27 @@ public class BestGuess {
      *
      * @param guesses all candidate guesses
      * @param secrets remaining possible secrets
+     * @param c       number of colors (<= 9)
      * @param d       number of digits
      * @return long[] where [0]=best guess, [1]=its rank (sum of squared partition sizes)
      */
-    public static long[] findBestGuess(int[] guesses, int[] secrets, int d) {
+    public static long[] findBestGuess(int[] guesses, int[] secrets, int c, int d) {
 
         // Determine whether multi-threading is needed
         if ((long) guesses.length * secrets.length < PARALLEL_THRESHOLD) {
-            return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length);
+            return findBestGuessAlgorithm(guesses, secrets, c, d, 0, guesses.length);
         }
 
         // Call the parallelized version of the algorithm
-        return findBestGuessParallel(guesses, secrets, d);
+        return findBestGuessParallel(guesses, secrets, c, d);
     }
 
-    public static long[] findBestGuess(int[] guesses, int[] secrets, int d, boolean parallel) {
-        if (!parallel) return findBestGuessAlgorithm(guesses, secrets, d, 0, guesses.length);
-        return findBestGuessParallel(guesses, secrets, d);
+    public static long[] findBestGuess(int[] guesses, int[] secrets, int c, int d, boolean parallel) {
+        if (!parallel) return findBestGuessAlgorithm(guesses, secrets, c, d, 0, guesses.length);
+        return findBestGuessParallel(guesses, secrets, c, d);
     }
 
-    private static long[] findBestGuessParallel(int[] guesses, int[] secrets, int d) {
+    private static long[] findBestGuessParallel(int[] guesses, int[] secrets, int c, int d) {
 
         // Calculate the chunk size with ceil(guesses.length / THREAD_COUNT)
         int chunkSize     = (guesses.length + THREAD_COUNT - 1) / THREAD_COUNT;
@@ -63,7 +64,7 @@ public class BestGuess {
         for (int t = 0; t < actualThreads; t++) {
             final int from = t * chunkSize;
             final int to   = Math.min(from + chunkSize, guesses.length);
-            futures.add(t, POOL.submit(() -> findBestGuessAlgorithm(guesses, secrets, d, from, to)));
+            futures.add(t, POOL.submit(() -> findBestGuessAlgorithm(guesses, secrets, c, d, from, to)));
         }
 
         // Find best guess from returned result
@@ -92,7 +93,7 @@ public class BestGuess {
         return new long[] { bestGuess, bestScore };
     }
 
-    private static long[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int d, int start, int end) {
+    private static long[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int c, int d, int start, int end) {
         ExpectedSize expectedSizeObj = new ExpectedSize(d);
         int[]        feedbackFreq    = new int[100];
 
@@ -102,7 +103,7 @@ public class BestGuess {
         for (int i = start; i < end; i++) {
             // Compute rank
             int  guess = guesses[i];
-            long score = expectedSizeObj.calcExpectedRank(guess, secrets, d, feedbackFreq);
+            long score = expectedSizeObj.calcExpectedRank(guess, secrets, c, d, feedbackFreq);
 
             // Update result if found a smaller rank
             if (score < bestScore) {
@@ -119,10 +120,11 @@ public class BestGuess {
      *
      * @param guesses all candidate guesses
      * @param secrets remaining possible secrets
+     * @param c       number of colors (<= 9)
      * @param d       number of digits
      * @return 2D array where each row is {guess, score}, sorted best to worst
      */
-    public static float[][] rankGuessesByExpectedSize(int[] guesses, int[] secrets, int d) {
+    public static float[][] rankGuessesByExpectedSize(int[] guesses, int[] secrets, int c, int d) {
         int       n            = guesses.length;
         float[]   scores       = new float[n];
         Integer[] indices      = new Integer[n]; // need Integer for custom comparator
@@ -132,7 +134,7 @@ public class BestGuess {
 
         // 1. Compute scores
         for (int i = 0; i < n; i++) {
-            scores[i] = expectedSizeObj.calcExpectedSize(guesses[i], secrets, d, feedbackFreq);
+            scores[i] = expectedSizeObj.calcExpectedSize(guesses[i], secrets, c, d, feedbackFreq);
             indices[i] = i;
         }
 

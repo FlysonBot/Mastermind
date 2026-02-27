@@ -27,7 +27,7 @@ public class ExpectedSizeBenchmark {
         private final ExpectedSize expectedSizeObj = new ExpectedSize(4);
 
         public long calcExpectedRank(int guess) {
-            return expectedSizeObj.calcExpectedRank(guess, secrets, 4, feedbackFreq);
+            return expectedSizeObj.calcExpectedRank(guess, secrets, 6, 4, feedbackFreq);
         }
     }
 }

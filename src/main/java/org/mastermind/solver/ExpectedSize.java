@@ -32,16 +32,17 @@ public class ExpectedSize {
      *
      * @param guess        code, digits 1..c, length d
      * @param secrets      list of codes, digits 1..c, length d
+     * @param c            number of colors (<= 9)
      * @param d            number of digits (<= 9)
      * @param feedbackFreq int array of 0 with length 100
      * @return Sum of number of remaining solution for each secret
      */
-    public long calcExpectedRank(int guess, int[] secrets, int d, int[] feedbackFreq) {
+    public long calcExpectedRank(int guess, int[] secrets, int c, int d, int[] feedbackFreq) {
 
         // Calculate feedback for each secret
         int[] colorFreqCounter = new int[10];
         for (int secret : secrets) {
-            int feedback = Feedback.getFeedback(guess, secret, d, colorFreqCounter);
+            int feedback = Feedback.getFeedback(guess, secret, c, d, colorFreqCounter);
             feedbackFreq[feedback]++;
         }
 
@@ -69,19 +70,19 @@ public class ExpectedSize {
         return rank * populationSize / (float) Math.pow(sampleSize, 2);
     }
 
-    public float calcExpectedSize(int guess, int[] secrets, int d, int[] feedbackFreq) {
-        return convertRankToExpectedSize(calcExpectedRank(guess, secrets, d, feedbackFreq), secrets.length);
+    public float calcExpectedSize(int guess, int[] secrets, int c, int d, int[] feedbackFreq) {
+        return convertRankToExpectedSize(calcExpectedRank(guess, secrets, c, d, feedbackFreq), secrets.length);
     }
 
-    public float calcExpectedProportion(int guess, int[] secrets, int d, int[] feedbackFreq) {
-        return convertRankToExpectedProportion(calcExpectedRank(guess, secrets, d, feedbackFreq), secrets.length);
+    public float calcExpectedProportion(int guess, int[] secrets, int c, int d, int[] feedbackFreq) {
+        return convertRankToExpectedProportion(calcExpectedRank(guess, secrets, c, d, feedbackFreq), secrets.length);
     }
 
     public float calcExpectedProportionFromSample(
-            int guess, int[] secrets, int d, int[] feedbackFreq, int populationSize
+            int guess, int[] secrets, int c, int d, int[] feedbackFreq, int populationSize
     ) {
         return convertSampleRankToExpectedSize(calcExpectedRank(
-                guess, secrets, d, feedbackFreq), secrets.length, populationSize
+                guess, secrets, c, d, feedbackFreq), secrets.length, populationSize
         );
     }
 }

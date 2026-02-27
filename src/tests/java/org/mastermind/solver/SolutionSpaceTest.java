@@ -18,13 +18,13 @@ public class SolutionSpaceTest {
         int[] colorFreqCounter = new int[10];
 
         // Compute the feedback for guess vs secret
-        int obtainedFeedback = Feedback.getFeedback(guess, secret, D, colorFreqCounter);
+        int obtainedFeedback = Feedback.getFeedback(guess, secret, C, D, colorFreqCounter);
 
         // Count how many of the 1296 codes produce the same feedback
         int[] allCodes      = CodeCache.getAllValid(C, D);
         int   expectedCount = 0;
         for (int s : allCodes) {
-            if (Feedback.getFeedback(guess, s, D, colorFreqCounter) == obtainedFeedback) {
+            if (Feedback.getFeedback(guess, s, C, D, colorFreqCounter) == obtainedFeedback) {
                 expectedCount++;
             }
         }
@@ -39,7 +39,7 @@ public class SolutionSpaceTest {
 
         // Every remaining secret must produce the same feedback with the guess
         for (int s : space.getSecrets()) {
-            int fb = Feedback.getFeedback(guess, s, D, colorFreqCounter);
+            int fb = Feedback.getFeedback(guess, s, C, D, colorFreqCounter);
             assertEquals(obtainedFeedback, fb,
                          "Remaining secret " + s + " should produce feedback " + obtainedFeedback);
         }

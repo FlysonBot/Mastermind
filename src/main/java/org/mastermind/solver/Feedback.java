@@ -18,11 +18,12 @@ public class Feedback {
      *
      * @param guess            code, digits 1..c, length d
      * @param secret           code, digits 1..c, length d
+     * @param c                number of colors (<= 9)
      * @param d                number of digits (<= 9)
      * @param colorFreqCounter int array of 0 with length c
      * @return Feedback value (black * 10 + white)
      */
-    public static int getFeedback(int guess, int secret, int d, int[] colorFreqCounter) {
+    public static int getFeedback(int guess, int secret, int c, int d, int[] colorFreqCounter) {
         int black = 0;
 
         for (int i = 0; i < d; i++) {
@@ -43,14 +44,10 @@ public class Feedback {
 
         // Sum absolute values and reset in one pass
         int colorFreqTotal = 0;
-        for (int i = 1; i <= 9; i++) {
+        for (int i = 1; i <= c; i++) {
             int freq = colorFreqCounter[i];
-            if (freq > 0) {
-                colorFreqTotal += freq;
-            } else {
-                colorFreqTotal -= freq;
-            }
             colorFreqCounter[i] = 0;
+            colorFreqTotal += (freq > 0) ? freq : -freq;
         }
 
         // black * 10 + d - black - colorFreqTotal / 2
