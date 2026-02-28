@@ -11,7 +11,7 @@ package org.mastermind.solver;
  * feedback is represented as a 2-digit integers where the first digit
  * represent the black counts, and the second represents the white.
  */
-public class Feedback {
+public final class Feedback {
 
     /**
      * Calculate the Mastermind feedback for a guess and a secret.
