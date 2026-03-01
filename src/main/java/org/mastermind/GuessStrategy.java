@@ -88,7 +88,7 @@ public class GuessStrategy {
     }
 
     private static int[] sample(int c, int d) {
-        int size = SampledCode.calcSampleSize(Feedback.calcFeedbackSize(d));
+        int size = SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(d));
         return SampledCode.getSample(c, d, size);
     }
 }

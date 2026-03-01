@@ -23,7 +23,7 @@ public class SampledCodeBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
         // feedbackSize for d=9: (9+1)*(9+2)/2 = 55
-        final int sampleSize = SampledCode.calcSampleSize(Feedback.calcFeedbackSize(9));
+        final int sampleSize = SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(9));
     }
 }
 
