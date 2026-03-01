@@ -18,8 +18,8 @@ public class Demo {
 
     // ── Adjust these defaults as needed ──────────────────────────────────────
     static int C      = 9;     // number of colors
-    static int D      = 6;     // number of digit positions
-    static int SECRET = 641899;  // the secret the solver tries to crack
+    static int D      = 9;     // number of digit positions
+    static int SECRET = 641899762;  // the secret the solver tries to crack
     // ─────────────────────────────────────────────────────────────────────────
 
     public static void main(String[] args) {
