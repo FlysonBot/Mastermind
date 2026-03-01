@@ -38,57 +38,71 @@ public class GuessStrategy {
     }
 
     /**
-     * First turn: always use canonical forms as guesses (exploit full color/position
-     * symmetry). Fall back to a Monte Carlo sample for secrets if the product exceeds
-     * the threshold.
+     * First turn: always use canonical forms as guesses (exploit full color/position symmetry).
+     * Fall back to a Monte Carlo sample for secrets if the product exceeds the threshold.
+     * Tries progressively looser tolerances: 0.001, 0.005, then 0.01.
      */
     private static int[][] firstTurn(int c, int d, int[] secrets) {
-        int[] canonicalCodes = CodeCache.getCanonical(c, d);
-        if ((long) canonicalCodes.length * secrets.length <= THRESHOLD) {
-            return new int[][] { canonicalCodes, secrets };
+        int[] canonical = CodeCache.getCanonical(c, d);
+
+        if (fits(canonical.length, secrets.length)) return pair(canonical, secrets);
+
+        for (double tolerance : new double[] { 0.001, 0.005 }) {
+            if (fits(canonical.length, secretSampleSize(d, tolerance))) {
+                return pair(canonical, secretSample(c, d, tolerance));
+            }
         }
-        return new int[][] { canonicalCodes, sample(c, d) };
+
+        return pair(canonical, secretSample(c, d, 0.01));
     }
 
     /**
      * Later turns: cascade through several levels of size reduction until the
-     * product fits within the threshold.
-     *
-     * <ol>
-     *   <li>All valid codes × remaining secrets — best guess quality.</li>
-     *   <li>Remaining secrets × remaining secrets — restrict guess space.</li>
-     *   <li>Remaining secrets × sampled secrets — estimate when both are large.</li>
-     *   <li>Sampled guesses × sampled secrets — final fallback.</li>
-     * </ol>
+     * search space fits within the threshold.
      */
     private static int[][] laterTurns(int c, int d, int[] secrets) {
-        int[] allValidCodes = CodeCache.getAllValid(c, d);
+        int[] allValid = CodeCache.getAllValid(c, d);
 
-        // If possible, go for the full search space
-        if ((long) allValidCodes.length * secrets.length <= THRESHOLD) {
-            return new int[][] { allValidCodes, secrets };
+        if (fits(allValid.length, secrets.length)) return pair(allValid, secrets);
+        if (fits(secrets.length, secrets.length)) return pair(secrets, secrets);
+
+        for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {
+            if (fits(secrets.length, secretSampleSize(d, tolerance))) {
+                return pair(secrets, secretSample(c, d, tolerance));
+            }
         }
 
-        // Otherwise, try restricting guess space to valid solution only
-        if ((long) secrets.length * secrets.length <= THRESHOLD) {
-            return new int[][] { secrets, secrets };
+        int[] sSample = secretSample(c, d, 0.01);
+        for (double percentile : new double[] { 0.001, 0.005, 0.01, 0.05 }) {
+            if (fits(secrets.length, guessSampleSize(percentile))) {
+                return pair(guessSample(c, d, percentile), sSample);
+            }
         }
 
-        int[] randomSample = sample(c, d);
-        int   sampleSize   = randomSample.length;
-
-        // If still can't make it, use random sample for secrets
-        if ((long) secrets.length * sampleSize <= THRESHOLD) {
-            // Remaining secrets × sampled secrets
-            return new int[][] { secrets, randomSample };
-        }
-
-        // As a last resort, use random sample for both guesses and secrets
-        return new int[][] { randomSample, randomSample };
+        return pair(guessSample(c, d, 0.01), sSample);
     }
 
-    private static int[] sample(int c, int d) {
-        int size = SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(d));
-        return SampledCode.getSample(c, d, size);
+    private static boolean fits(int guessSpaceSize, int secretSpaceSize) {
+        return (long) guessSpaceSize * secretSpaceSize <= THRESHOLD;
+    }
+
+    private static int[][] pair(int[] guesses, int[] secrets) {
+        return new int[][] { guesses, secrets };
+    }
+
+    private static int secretSampleSize(int d, double tolerance) {
+        return SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(d), tolerance);
+    }
+
+    private static int guessSampleSize(double percentileThreshold) {
+        return SampledCode.calcSampleSizeForGuesses(percentileThreshold, 0.999);
+    }
+
+    private static int[] secretSample(int c, int d, double tolerance) {
+        return SampledCode.getSample(c, d, secretSampleSize(d, tolerance));
+    }
+
+    private static int[] guessSample(int c, int d, double percentileThreshold) {
+        return SampledCode.getSample(c, d, guessSampleSize(percentileThreshold));
     }
 }
