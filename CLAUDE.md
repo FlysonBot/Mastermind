@@ -1,15 +1,18 @@
 ### Project Overview
+
 Mastermind solver using Java algorithms (performance) + Python UI (terminal).
 Goal: Efficiently solve c=9, d=9 cases.
 Status: Rewriting codebase; currently focused on Java algorithm only.
 
 ### Code Organization
+
 - **Active**: `./src/main/java/org/mastermind/` (algorithm)
 - **Tests**: `./src/tests/java/org/mastermind/` (JUnit 5)
 - **Benchmarks**: `./src/benchmarks/java/org/mastermind/` (JMH)
 - Everything else is legacy—ignore unless explicitly instructed.
 
 ### Algorithm Flow
+
 1. `Feedback.getFeedback()` — calculates feedback for guess vs. secret
 2. `ExpectedSize.calcExpectedRank()` — estimates solution space size after a guess
 3. `BestGuess.findBestGuess()` — finds optimal guess by evaluating all candidates
@@ -17,10 +20,13 @@ Status: Rewriting codebase; currently focused on Java algorithm only.
 5. `GuessStrategy.select()` — chooses which guesses and secrets arrays to pass into `BestGuess`
 6. `MastermindSession` — manages a full game: history, solution space, strategy-based suggestions, undo
 
-### Planned (Not Yet Implemented)
-- Additional strategies to reduce search space for large cases.
+### Next Move / Current Move
+
+- Run a 9x9 demo and profile the code to determine where the bottleneck is.
+- Continue micro-optimizing code to increase efficiency
 
 ### Preference
+
 - Stick to primitive type unless there is a reason not to.
 - Unless necessary, do not write extra class and objects. Be simple.
 - Do not run any tests or benchmark for me unless specifically instructed.

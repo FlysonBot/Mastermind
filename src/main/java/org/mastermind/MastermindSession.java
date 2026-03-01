@@ -113,7 +113,7 @@ public class MastermindSession {
         List<int[]> kept = new ArrayList<>(history.subList(0, keep));
 
         // Reconstruct solution space from the beginning
-        solutionSpace.reset(c);
+        solutionSpace.reset();
         for (int[] entry : kept) {
             solutionSpace.filterSolution(entry[0], entry[1]);
         }
