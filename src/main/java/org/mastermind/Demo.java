@@ -31,16 +31,17 @@ public class Demo {
 
         System.out.printf("Mastermind Demo  [c=%d, d=%d, secret=%d]%n%n", C, D, SECRET);
 
+        long              startTime        = System.nanoTime();
         MastermindSession session          = new MastermindSession(C, D);
+        ExpectedSize      expectedSizeObj  = new ExpectedSize(D);
         int[]             colorFreqCounter = new int[10];
-        ExpectedSize      expectedSize     = new ExpectedSize(D);
 
         while (!session.isSolved()) {
             int    spaceBefore = session.getSolutionSpaceSize();
             long[] details     = session.suggestGuessWithDetails();
             int    guess       = (int) details[0];
-            float expSize = expectedSize.convertSampleRankToExpectedSize(details[1], (int) details[2],
-                                                                         spaceBefore);
+            float expSize = expectedSizeObj.convertSampleRankToExpectedSize(details[1], (int) details[2],
+                                                                            spaceBefore);
             int feedback = Feedback.getFeedback(guess, SECRET, C, D, colorFreqCounter);
 
             session.recordGuess(guess, feedback);
@@ -52,7 +53,9 @@ public class Demo {
                               turn, guess, spaceBefore, expSize, black, white);
         }
 
+        double elapsedSec = (System.nanoTime() - startTime) / 1_000_000_000.0;
         System.out.printf("%nSolved in %d turn(s).%n", session.getTurnCount());
+        System.out.printf("Time: %.1f seconds%n", elapsedSec);
         BestGuess.shutdown();
     }
 }

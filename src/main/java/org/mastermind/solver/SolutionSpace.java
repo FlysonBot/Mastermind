@@ -4,6 +4,7 @@ import org.mastermind.codes.CodeCache;
 
 import java.util.BitSet;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 
 /**
  * Solution space refer to the set of remaining valid secrets
@@ -26,6 +27,7 @@ public class SolutionSpace {
     private final int    d;
     private final int[]  allValid;   // CodeCache.getAllValid(c, d) — index → code value
     private final BitSet remaining;  // bit i set  ⟺  allValid[i] is still a valid secret
+    private       int    size;       // cached cardinality of remaining
 
     public SolutionSpace(int c, int d) {
         this.c = c;
@@ -33,11 +35,13 @@ public class SolutionSpace {
         this.allValid = CodeCache.getAllValid(c, d);
         this.remaining = new BitSet(allValid.length);
         remaining.set(0, allValid.length);
+        this.size = allValid.length;
     }
 
     /** Reset the solution space to all valid codes */
     public void reset() {
         remaining.set(0, allValid.length);
+        size = allValid.length;
     }
 
     /**
@@ -55,8 +59,8 @@ public class SolutionSpace {
      * @param obtainedFeedback feedback value (black * 9 + d - colorFreqTotal/2)
      */
     public void filterSolution(int guess, int obtainedFeedback) {
-        if (remaining.cardinality() < PARALLEL_THRESHOLD) {
-            filterRange(guess, obtainedFeedback, 0, allValid.length);
+        if (size < PARALLEL_THRESHOLD) {
+            size -= filterRange(guess, obtainedFeedback, 0, allValid.length);
             return;
         }
 
@@ -65,10 +69,11 @@ public class SolutionSpace {
         int words        = (allValid.length + 63) >>> 6;          // number of 64-bit words
         int wordsPerTask = Math.max(1, (words + parallelism - 1) / parallelism);
 
-        int fromIndex = 0;
         // Submit all tasks except the last; run the last chunk on the calling thread.
-        java.util.concurrent.Future<?>[] futures   = new java.util.concurrent.Future<?>[parallelism];
-        int                              taskCount = 0;
+        @SuppressWarnings("unchecked")
+        Future<Integer>[] futures = new Future[parallelism];
+        int fromIndex = 0;
+        int taskCount = 0;
         while (fromIndex + wordsPerTask * 64 < allValid.length) {
             final int from = fromIndex;
             final int to   = fromIndex + wordsPerTask * 64;
@@ -76,27 +81,33 @@ public class SolutionSpace {
             fromIndex = to;
         }
 
-        // Run the tail on the calling thread.
-        filterRange(guess, obtainedFeedback, fromIndex, allValid.length);
+        // Run the tail on the calling thread and sum removed counts.
+        int removed = filterRange(guess, obtainedFeedback, fromIndex, allValid.length);
 
-        // Wait for all submitted tasks.
+        // Wait for all submitted tasks and accumulate removed counts.
         for (int i = 0; i < taskCount; i++) {
-            try { futures[i].get(); } catch (Exception e) { throw new RuntimeException(e); }
+            try { removed += futures[i].get(); } catch (Exception e) { throw new RuntimeException(e); }
         }
+        size -= removed;
     }
 
     /**
      * Single-threaded filter over {@code allValid[from..to)}.
      * Safe to call from multiple threads as long as the index ranges are word-aligned
      * (multiples of 64) and disjoint, since each BitSet word is only touched by one thread.
+     *
+     * @return number of bits cleared
      */
-    private void filterRange(int guess, int obtainedFeedback, int from, int to) {
+    private int filterRange(int guess, int obtainedFeedback, int from, int to) {
         int[] colorFreqCounter = new int[10];
+        int   removed          = 0;
         for (int i = remaining.nextSetBit(from); i >= 0 && i < to; i = remaining.nextSetBit(i + 1)) {
             if (Feedback.getFeedback(guess, allValid[i], c, d, colorFreqCounter) != obtainedFeedback) {
                 remaining.clear(i);
+                removed++;
             }
         }
+        return removed;
     }
 
     /**
@@ -106,7 +117,6 @@ public class SolutionSpace {
      * @return int array of currently valid secrets
      */
     public int[] getSecrets() {
-        int   size    = remaining.cardinality();
         int[] secrets = new int[size];
         int   j       = 0;
         for (int i = remaining.nextSetBit(0); i >= 0; i = remaining.nextSetBit(i + 1)) {
@@ -118,5 +128,5 @@ public class SolutionSpace {
     /**
      * @return size of the current solution space (or valid secrets)
      */
-    public int getSize() { return remaining.cardinality(); }
+    public int getSize() { return size; }
 }

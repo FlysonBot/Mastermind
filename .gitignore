@@ -11,7 +11,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
-profile.jfr
+*.jfr
+.profileconfig.json
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
