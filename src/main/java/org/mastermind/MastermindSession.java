@@ -68,10 +68,12 @@ public class MastermindSession {
     public long[] suggestGuessWithDetails() {
         if (solved) throw new IllegalStateException("Game is already solved.");
 
-        int[] secrets = solutionSpace.getSecrets();
-        if (secrets.length == 1) return new long[] { secrets[0], 1L, 1L };
+        if (solutionSpace.getSize() == 1) {
+            int[] only = solutionSpace.getSecrets();
+            return new long[] { only[0], 1L, 1L };
+        }
 
-        int[][] searchSpace = GuessStrategy.select(c, d, history.size(), secrets);  // {guesses, secrets}
+        int[][] searchSpace = GuessStrategy.select(c, d, history.size(), solutionSpace);  // {guesses, secrets}
         long[]  result      = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], c, d);
         return new long[] { result[0], result[1], searchSpace[1].length };    // {guess, rank, secrets length}
     }

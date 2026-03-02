@@ -3,6 +3,7 @@ package org.mastermind;
 import org.mastermind.codes.CodeCache;
 import org.mastermind.codes.SampledCode;
 import org.mastermind.solver.Feedback;
+import org.mastermind.solver.SolutionSpace;
 
 /**
  * Selects which arrays to pass as guesses and secrets to BestGuess for each turn.
@@ -26,15 +27,16 @@ public class GuessStrategy {
     /**
      * Select the guesses and secrets arrays for the current turn.
      *
-     * @param c       number of colors
-     * @param d       number of digits
-     * @param turn    0-indexed turn number (0 = first guess)
-     * @param secrets current remaining valid secrets (from SolutionSpace)
+     * @param c             number of colors
+     * @param d             number of digits
+     * @param turn          0-indexed turn number (0 = first guess)
+     * @param solutionSpace current solution space
      * @return int[][] where [0]=guesses, [1]=secrets
      */
-    public static int[][] select(int c, int d, int turn, int[] secrets) {
-        if (turn == 0) return firstTurn(c, d, secrets);
-        return laterTurns(c, d, secrets);
+    public static int[][] select(int c, int d, int turn, SolutionSpace solutionSpace) {
+        int secretsSize = solutionSpace.getSize();
+        if (turn == 0) return firstTurn(c, d, secretsSize, solutionSpace);
+        return laterTurns(c, d, secretsSize, solutionSpace);
     }
 
     /**
@@ -42,10 +44,10 @@ public class GuessStrategy {
      * Fall back to a Monte Carlo sample for secrets if the product exceeds the threshold.
      * Tries progressively looser tolerances: 0.001, 0.005, then 0.01.
      */
-    private static int[][] firstTurn(int c, int d, int[] secrets) {
+    private static int[][] firstTurn(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
         int[] canonical = CodeCache.getCanonical(c, d);
 
-        if (fits(canonical.length, secrets.length)) return pair(canonical, secrets);
+        if (fits(canonical.length, secretsSize)) return pair(canonical, solutionSpace.getSecrets());
 
         for (double tolerance : new double[] { 0.001, 0.005 }) {
             if (fits(canonical.length, secretSampleSize(d, tolerance))) {
@@ -60,21 +62,21 @@ public class GuessStrategy {
      * Later turns: cascade through several levels of size reduction until the
      * search space fits within the threshold.
      */
-    private static int[][] laterTurns(int c, int d, int[] secrets) {
+    private static int[][] laterTurns(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
         int[] allValid = CodeCache.getAllValid(c, d);
 
-        if (fits(allValid.length, secrets.length)) return pair(allValid, secrets);
-        if (fits(secrets.length, secrets.length)) return pair(secrets, secrets);
+        if (fits(allValid.length, secretsSize)) return pair(allValid, solutionSpace.getSecrets());
+        if (fits(secretsSize, secretsSize)) return pair(solutionSpace.getSecrets(), solutionSpace.getSecrets());
 
         for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {
-            if (fits(secrets.length, secretSampleSize(d, tolerance))) {
-                return pair(secrets, secretSample(c, d, tolerance));
+            if (fits(secretsSize, secretSampleSize(d, tolerance))) {
+                return pair(solutionSpace.getSecrets(), secretSample(c, d, tolerance));
             }
         }
 
         int[] sSample = secretSample(c, d, 0.01);
         for (double percentile : new double[] { 0.001, 0.005, 0.01, 0.05 }) {
-            if (fits(secrets.length, guessSampleSize(percentile))) {
+            if (fits(secretsSize, guessSampleSize(percentile))) {
                 return pair(guessSample(c, d, percentile), sSample);
             }
         }
