@@ -22,8 +22,8 @@ Status: Rewriting codebase; currently focused on Java algorithm only.
 
 ### Next Move / Current Move
 
-- Run a 9x9 demo and profile the code to determine where the bottleneck is.
-- Continue micro-optimizing code to increase efficiency
+- IMPORTANT: Currently trying to do large scale refactor class-by-class step-by-step to deprecate int[] array
+  for passing combinations around, and instead uses BitSet
 
 ### Preference
 

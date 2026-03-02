@@ -1,5 +1,7 @@
 package org.mastermind.codes;
 
+import java.util.BitSet;
+
 /**
  * Canonical forms refer to a specific subset of all Mastermind code
  * that starts with 1, digit ordered from small to large starting
@@ -66,6 +68,37 @@ public class CanonicalCode {
         backtrack(results, index, 0, 0, 0, c, d);
 
         return results;
+    }
+
+    /**
+     * Enumerate all Canonical forms as a BitSet, where bit i is set if
+     * codes[i] (from AllValidCode.generateAllCodes) is a canonical form.
+     *
+     * @param c number of colors (<= 9)
+     * @param d number of digits (<= 9)
+     * @return BitSet with bits set only at canonical form indices
+     */
+    public static BitSet enumerateCanonicalFormsBitSet(int c, int d) {
+        int    total  = (int) Math.pow(c, d);
+        BitSet bitSet = new BitSet(total);
+        backtrackBitSet(bitSet, c, d, 0, 0, 0);
+        return bitSet;
+    }
+
+    private static void backtrackBitSet(BitSet bitSet, int c, int d, int currentNum, int pos, int maxColorUsed) {
+        if (pos == d) {
+            bitSet.set(ConvertCode.toIndex(c, d, currentNum));
+            return;
+        }
+
+        for (int color = 1; color <= maxColorUsed; color++) {
+            backtrackBitSet(bitSet, c, d, (currentNum * 10) + color, pos + 1, maxColorUsed);
+        }
+
+        if (maxColorUsed < c) {
+            int nextColor = maxColorUsed + 1;
+            backtrackBitSet(bitSet, c, d, (currentNum * 10) + nextColor, pos + 1, nextColor);
+        }
     }
 
     private static void backtrack(int[] results, int[] index, int currentNum, int pos, int maxColorUsed, int c, int d) {

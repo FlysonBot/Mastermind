@@ -1,5 +1,7 @@
 package org.mastermind.codes;
 
+import java.util.BitSet;
+
 /**
  * A game of Mastermind has 2 parameters, c (number of colors)
  * and d (number of digits). A code is a valid Mastermind code
@@ -80,5 +82,24 @@ public class AllValidCode {
         }
 
         return codes;
+    }
+
+    /**
+     * Generate a BitSet representing the universe of all valid Mastermind codes.
+     * The BitSet has size c^d with every bit set, where bit index i corresponds
+     * to codes[i] from generateAllCodes(). All bits set means the full solution
+     * space is active (no codes have been eliminated yet).
+     *
+     * @param c number of colors (<= 9)
+     * @param d number of digits (<= 9)
+     * @return BitSet of size c^d with all bits set
+     */
+    public static BitSet generateAllCodesBitSet(int c, int d) {
+        int total = (int) Math.pow(c, d);
+
+        BitSet bitSet = new BitSet(total);
+        bitSet.set(0, total);
+
+        return bitSet;
     }
 }
