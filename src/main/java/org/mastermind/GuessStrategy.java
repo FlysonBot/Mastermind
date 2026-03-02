@@ -1,5 +1,6 @@
 package org.mastermind;
 
+import org.mastermind.codes.CanonicalCode;
 import org.mastermind.codes.CodeCache;
 import org.mastermind.codes.SampledCode;
 import org.mastermind.solver.Feedback;
@@ -45,7 +46,7 @@ public class GuessStrategy {
      * Tries progressively looser tolerances: 0.001, 0.005, then 0.01.
      */
     private static int[][] firstTurn(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
-        int[] canonical = CodeCache.getCanonical(c, d);
+        int[] canonical = CanonicalCode.enumerateCanonicalForms(c, d);
 
         if (fits(canonical.length, secretsSize)) return pair(canonical, solutionSpace.getSecrets());
 
@@ -63,9 +64,9 @@ public class GuessStrategy {
      * search space fits within the threshold.
      */
     private static int[][] laterTurns(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
-        int[] allValid = CodeCache.getAllValid(c, d);
 
-        if (fits(allValid.length, secretsSize)) return pair(allValid, solutionSpace.getSecrets());
+        if (fits((int) Math.pow(c, d), secretsSize))
+            return pair(CodeCache.getAllValid(c, d), solutionSpace.getSecrets());
         if (fits(secretsSize, secretsSize)) return pair(solutionSpace.getSecrets(), solutionSpace.getSecrets());
 
         for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {

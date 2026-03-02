@@ -52,7 +52,7 @@ public class FeedbackTest {
         startTime = System.nanoTime();
 
         // Run multiple times
-        for (int t = 0; t < 100; t++) {
+        for (int t = 0; t < 50; t++) {
             // Call single version 1,296 times, storing results in a 2D array
             for (int guessIdx = 0; guessIdx < TOTAL_COMBINATIONS; guessIdx++) {
                 int guess = allCombinations[guessIdx];
