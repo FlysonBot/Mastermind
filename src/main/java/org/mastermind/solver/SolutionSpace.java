@@ -125,4 +125,7 @@ public class SolutionSpace {
 
     /** @return size of the current solution space (or valid secrets) */
     public int getSize() { return size; }
+
+    /** @return the underlying BitSet of remaining valid secret indices */
+    public BitSet getRemaining() { return remaining; }
 }

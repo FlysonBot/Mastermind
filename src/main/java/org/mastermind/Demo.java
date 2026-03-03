@@ -1,5 +1,6 @@
 package org.mastermind;
 
+import org.mastermind.codes.ConvertCode;
 import org.mastermind.solver.ExpectedSize;
 import org.mastermind.solver.Feedback;
 
@@ -45,11 +46,17 @@ public class Demo {
 
             session.recordGuess(guessInd, feedback);
 
-            int turn  = session.getTurnCount();
-            int black = feedback / 10;
-            int white = feedback % 10;
-            System.out.printf("Turn %d: guessInd=%-10d  space=%-5d  expected=%.2f  feedback=%db%dw%n",
-                              turn, guessInd, spaceBefore, expSize, black, white);
+            int   turn       = session.getTurnCount();
+            int   spaceAfter = session.getSolutionSpaceSize();
+            int   black      = feedback / 10;
+            int   white      = feedback % 10;
+            float expElimPct = spaceBefore > 0 ? 100f * (spaceBefore - expSize) / spaceBefore : 0f;
+            float actElimPct = spaceBefore > 0 ? 100f * (spaceBefore - spaceAfter) / spaceBefore : 0f;
+            int   guessCode  = ConvertCode.toCode(C, D, guessInd);
+            System.out.printf(
+                    "Turn %d:  before=%-8d  expAfter=%-8.1f  actAfter=%-8d  expElim=%5.1f%%  actElim=%5.1f%%  " +
+                            "guess=%-12d  feedback=%db%dw%n",
+                    turn, spaceBefore, expSize, spaceAfter, expElimPct, actElimPct, guessCode, black, white);
         }
 
         double elapsedSec = (System.nanoTime() - startTime) / 1_000_000_000.0;

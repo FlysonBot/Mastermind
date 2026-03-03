@@ -52,11 +52,11 @@ public class GuessStrategy {
 
         for (double tolerance : new double[] { 0.001, 0.005 }) {
             if (fits(canonical.length, secretSampleSize(d, tolerance))) {
-                return pair(canonical, secretSample(c, d, tolerance));
+                return pair(canonical, secretSample(c, d, tolerance, solutionSpace));
             }
         }
 
-        return pair(canonical, secretSample(c, d, 0.01));
+        return pair(canonical, secretSample(c, d, 0.01, solutionSpace));
     }
 
     /**
@@ -71,11 +71,11 @@ public class GuessStrategy {
 
         for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {
             if (fits(secretsSize, secretSampleSize(d, tolerance))) {
-                return pair(solutionSpace.getSecrets(), secretSample(c, d, tolerance));
+                return pair(solutionSpace.getSecrets(), secretSample(c, d, tolerance, solutionSpace));
             }
         }
 
-        int[] sSample = secretSample(c, d, 0.01);
+        int[] sSample = secretSample(c, d, 0.01, solutionSpace);
         for (double percentile : new double[] { 0.001, 0.005, 0.01, 0.05 }) {
             if (fits(secretsSize, guessSampleSize(percentile))) {
                 return pair(guessSample(c, d, percentile), sSample);
@@ -101,8 +101,9 @@ public class GuessStrategy {
         return SampledCode.calcSampleSizeForGuesses(percentileThreshold, 0.999);
     }
 
-    private static int[] secretSample(int c, int d, double tolerance) {
-        return SampledCode.getSample(c, d, secretSampleSize(d, tolerance));
+    private static int[] secretSample(int c, int d, double tolerance, SolutionSpace solutionSpace) {
+        return SampledCode.getValidSample(solutionSpace.getRemaining(), solutionSpace.getSize(), c, d,
+                                          secretSampleSize(d, tolerance));
     }
 
     private static int[] guessSample(int c, int d, double percentileThreshold) {

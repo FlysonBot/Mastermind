@@ -1,5 +1,6 @@
 package org.mastermind.codes;
 
+import java.util.BitSet;
 import java.util.Random;
 
 /**
@@ -28,6 +29,41 @@ public class SampledCode {
 
         for (int i = 0; i < sampleSize; i++) {
             sample[i] = random.nextInt(total);
+        }
+
+        return sample;
+    }
+
+    /**
+     * Maximum validCount for which enumeration is used. Above this threshold,
+     * int[validCount] becomes too large (>20MB) and rejection sampling is used instead.
+     * At this threshold, fill rate is always high enough that rejection is fast.
+     * Empirically derived from timing tests across c=7-9, d=7-9 game sizes.
+     */
+    static final int MAX_ENUM = 5_000_000;
+
+    public static int[] getValidSample(BitSet remaining, int validCount, int c, int d, int sampleSize) {
+        int    total  = (int) Math.pow(c, d);
+        int[]  sample = new int[sampleSize];
+        Random random = new Random();
+
+        if (validCount <= MAX_ENUM) {
+            // Enumeration: bounded memory (≤20MB), fast scan, fast random access.
+            int[] valid = new int[validCount];
+            int   j     = 0;
+            for (int i = remaining.nextSetBit(0); i >= 0; i = remaining.nextSetBit(i + 1)) {
+                valid[j++] = i;
+            }
+            for (int i = 0; i < sampleSize; i++) {
+                sample[i] = valid[random.nextInt(validCount)];
+            }
+        } else {
+            // Rejection sampling: validCount is large so fill rate is high and rejection is fast.
+            for (int i = 0; i < sampleSize; i++) {
+                int idx;
+                do { idx = random.nextInt(total); } while (!remaining.get(idx));
+                sample[i] = idx;
+            }
         }
 
         return sample;

@@ -22,12 +22,11 @@ Status: Rewriting codebase; currently focused on Java algorithm only.
 
 ### Next Move / Current Move
 
-- IMPORTANT: Currently trying to do large scale refactor class-by-class step-by-step to deprecate int[] array
-  for passing combinations around, and instead uses BitSet
+- Implementation done, currently refactoring to improve performance.
 
 ### Preference
 
 - Stick to primitive type unless there is a reason not to.
 - Unless necessary, do not write extra class and objects. Be simple.
 - Do not run any tests or benchmark for me unless specifically instructed.
-- Do not remove the average performance footer in benchmarks when updating.
+- DO NOT TOUCH the average performance in benchmarks. Don't delete, don't modify, don't change, don't update.
