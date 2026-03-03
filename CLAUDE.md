@@ -30,3 +30,4 @@ Status: Rewriting codebase; currently focused on Java algorithm only.
 - Stick to primitive type unless there is a reason not to.
 - Unless necessary, do not write extra class and objects. Be simple.
 - Do not run any tests or benchmark for me unless specifically instructed.
+- Do not remove the average performance footer in benchmarks when updating.

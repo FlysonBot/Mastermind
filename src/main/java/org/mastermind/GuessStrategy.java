@@ -1,7 +1,7 @@
 package org.mastermind;
 
+import org.mastermind.codes.AllValidCode;
 import org.mastermind.codes.CanonicalCode;
-import org.mastermind.codes.CodeCache;
 import org.mastermind.codes.SampledCode;
 import org.mastermind.solver.Feedback;
 import org.mastermind.solver.SolutionSpace;
@@ -66,7 +66,7 @@ public class GuessStrategy {
     private static int[][] laterTurns(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
 
         if (fits((int) Math.pow(c, d), secretsSize))
-            return pair(CodeCache.getAllValid(c, d), solutionSpace.getSecrets());
+            return pair(AllValidCode.generateAllCodes(c, d), solutionSpace.getSecrets());
         if (fits(secretsSize, secretsSize)) return pair(solutionSpace.getSecrets(), solutionSpace.getSecrets());
 
         for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {

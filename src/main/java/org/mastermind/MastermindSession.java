@@ -48,7 +48,7 @@ public class MastermindSession {
      * against) is handled by {@link GuessStrategy}. If only one secret remains,
      * it is returned immediately without invoking the BestGuess search.
      *
-     * @return the recommended guess as an integer code (digits 1..c, length d)
+     * @return the recommended guess as a code index (0-based, base-c encoding)
      * @throws IllegalStateException if the game is already solved
      */
     public int suggestGuess() {
@@ -81,7 +81,7 @@ public class MastermindSession {
     /**
      * Record a guess and its feedback, then update the solution space.
      *
-     * @param guess    the guessed code (digits 1..c, length d)
+     * @param guess    the guess as a code index (0-based, base-c encoding)
      * @param feedback feedback from the game master (black*10 + white)
      * @throws IllegalStateException    if the game is already solved
      * @throws IllegalArgumentException if the feedback leaves no valid secrets

@@ -1,7 +1,5 @@
 package org.mastermind.solver;
 
-import org.mastermind.codes.ConvertCode;
-
 import java.util.BitSet;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -26,7 +24,7 @@ public class SolutionSpace {
     private final int    c;
     private final int    d;
     private final int    totalCodes;  // c^d
-    private final BitSet remaining;   // bit i set  ⟺  ConvertCode.toCode(c, d, i) is still a valid secret
+    private final BitSet remaining;   // bit i set  ⟺  index i is still a valid secret
     private       int    size;        // cached cardinality of remaining
 
     public SolutionSpace(int c, int d) {
@@ -55,12 +53,12 @@ public class SolutionSpace {
      * BitSet, so concurrent {@code clear()} calls on non-overlapping words are safe.
      * For small spaces the single-threaded path is used to avoid FJP overhead.
      *
-     * @param guess            code, digits 1..c, length d
+     * @param guessInd         index of the guess code (0-based, base-c encoding)
      * @param obtainedFeedback feedback value (black * 9 + d - colorFreqTotal/2)
      */
-    public void filterSolution(int guess, int obtainedFeedback) {
+    public void filterSolution(int guessInd, int obtainedFeedback) {
         if (size < PARALLEL_THRESHOLD) {
-            size -= filterRange(guess, obtainedFeedback, 0, totalCodes);
+            size -= filterRange(guessInd, obtainedFeedback, 0, totalCodes);
             return;
         }
 
@@ -77,12 +75,12 @@ public class SolutionSpace {
         while (fromIndex + wordsPerTask * 64 < totalCodes) {
             final int from = fromIndex;
             final int to   = fromIndex + wordsPerTask * 64;
-            futures[taskCount++] = POOL.submit(() -> filterRange(guess, obtainedFeedback, from, to));
+            futures[taskCount++] = POOL.submit(() -> filterRange(guessInd, obtainedFeedback, from, to));
             fromIndex = to;
         }
 
         // Run the tail on the calling thread and sum removed counts.
-        int removed = filterRange(guess, obtainedFeedback, fromIndex, totalCodes);
+        int removed = filterRange(guessInd, obtainedFeedback, fromIndex, totalCodes);
 
         // Wait for all submitted tasks and accumulate removed counts.
         for (int i = 0; i < taskCount; i++) {
@@ -98,11 +96,11 @@ public class SolutionSpace {
      *
      * @return number of bits cleared
      */
-    private int filterRange(int guess, int obtainedFeedback, int from, int to) {
-        int[] colorFreqCounter = new int[10];
+    private int filterRange(int guessInd, int obtainedFeedback, int from, int to) {
+        int[] colorFreqCounter = new int[c];
         int   removed          = 0;
         for (int i = remaining.nextSetBit(from); i >= 0 && i < to; i = remaining.nextSetBit(i + 1)) {
-            if (Feedback.getFeedback(guess, ConvertCode.toCode(c, d, i), c, d, colorFreqCounter) != obtainedFeedback) {
+            if (Feedback.getFeedback(guessInd, i, c, d, colorFreqCounter) != obtainedFeedback) {
                 remaining.clear(i);
                 removed++;
             }
@@ -111,22 +109,20 @@ public class SolutionSpace {
     }
 
     /**
-     * Materialize the remaining valid secrets as an int array.
+     * Materialize the remaining valid secrets as an int array of indices.
      * Called once per turn suggestion, not per filter.
      *
-     * @return int array of currently valid secrets
+     * @return int array of indices of currently valid secrets
      */
     public int[] getSecrets() {
-        int[] secrets = new int[size];
-        int   j       = 0;
+        int[] secretsInd = new int[size];
+        int   j          = 0;
         for (int i = remaining.nextSetBit(0); i >= 0; i = remaining.nextSetBit(i + 1)) {
-            secrets[j++] = ConvertCode.toCode(c, d, i);
+            secretsInd[j++] = i;
         }
-        return secrets;
+        return secretsInd;
     }
 
-    /**
-     * @return size of the current solution space (or valid secrets)
-     */
+    /** @return size of the current solution space (or valid secrets) */
     public int getSize() { return size; }
 }

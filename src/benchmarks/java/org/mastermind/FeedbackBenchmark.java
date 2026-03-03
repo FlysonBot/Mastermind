@@ -1,6 +1,6 @@
 package org.mastermind;
 
-import org.mastermind.codes.AllValidCode;
+import org.mastermind.codes.ConvertCode;
 import org.mastermind.solver.Feedback;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -16,15 +16,15 @@ public class FeedbackBenchmark {
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @Benchmark
     public void fixInputBenchmark(BenchmarkState state, Blackhole blackhole) {
-        int feedback = state.getFeedbackQuick(1234, 4263);
+        int feedback = state.getFeedbackQuick(BenchmarkState.ind(1234), BenchmarkState.ind(4263));
         blackhole.consume(feedback);
     }
 
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     @Benchmark
     public void oneVariedInputBenchmark(BenchmarkState state, Blackhole blackhole) {
-        for (int secret : state.secrets) {
-            int feedback = state.getFeedbackQuick(1234, secret);
+        for (int secretIdx = 0; secretIdx < state.total; secretIdx++) {
+            int feedback = state.getFeedbackQuick(BenchmarkState.ind(1234), secretIdx);
             blackhole.consume(feedback);
         }
     }
@@ -32,9 +32,9 @@ public class FeedbackBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Benchmark
     public void doubleVariedInputBenchmark(BenchmarkState state, Blackhole blackhole) {
-        for (int guess : state.secrets) {
-            for (int secret : state.secrets) {
-                int feedback = state.getFeedbackQuick(guess, secret);
+        for (int guessIdx = 0; guessIdx < state.total; guessIdx++) {
+            for (int secretIdx = 0; secretIdx < state.total; secretIdx++) {
+                int feedback = state.getFeedbackQuick(guessIdx, secretIdx);
                 blackhole.consume(feedback);
             }
         }
@@ -42,18 +42,21 @@ public class FeedbackBenchmark {
 
     @State(Scope.Thread)
     public static class BenchmarkState {
-        public int[] secrets = AllValidCode.generateAllCodes(6, 4);
-        public int[] freq    = new int[10];
+        static final int C = 6, D = 4;
+        public int   total = (int) Math.pow(C, D); // 1296
+        public int[] freq  = new int[C];
 
-        public int getFeedbackQuick(int guess, int secret) {
-            return Feedback.getFeedback(guess, secret, 6, 4, freq);
+        public static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
+
+        public int getFeedbackQuick(int guessIdx, int secretIdx) {
+            return Feedback.getFeedback(guessIdx, secretIdx, C, D, freq);
         }
     }
 }
 
 /* Benchmark average:
 Benchmark                                     Mode  Cnt   Score   Error  Units
-FeedbackBenchmark.doubleVariedInputBenchmark  avgt    4  28.907 ± 1.257  ms/op
-FeedbackBenchmark.fixInputBenchmark           avgt    4  18.134 ± 0.729  ns/op
-FeedbackBenchmark.oneVariedInputBenchmark     avgt    4  23.219 ± 0.912  us/op
+FeedbackBenchmark.doubleVariedInputBenchmark  avgt    4  29.915 ± 3.150  ms/op
+FeedbackBenchmark.fixInputBenchmark           avgt    4  18.171 ± 1.001  ns/op
+FeedbackBenchmark.oneVariedInputBenchmark     avgt    4  25.012 ± 0.728  us/op
  */

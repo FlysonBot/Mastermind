@@ -16,22 +16,22 @@ public final class Feedback {
     /**
      * Calculate the Mastermind feedback for a guess and a secret.
      *
-     * @param guess            code, digits 1..c, length d
-     * @param secret           code, digits 1..c, length d
+     * @param guessInd         index of the guess code (0-based, base-c encoding)
+     * @param secretInd        index of the secret code (0-based, base-c encoding)
      * @param c                number of colors (<= 9)
      * @param d                number of digits (<= 9)
      * @param colorFreqCounter int array of 0 with length c
      * @return Feedback value (black * 10 + white)
      */
-    public static int getFeedback(int guess, int secret, int c, int d, int[] colorFreqCounter) {
+    public static int getFeedback(int guessInd, int secretInd, int c, int d, int[] colorFreqCounter) {
         int black = 0;
 
         for (int i = 0; i < d; i++) {
-            // Extract digits
-            int currGuess  = guess % 10;
-            int currSecret = secret % 10;
-            guess /= 10;
-            secret /= 10;
+            // Extract digits (0..c-1)
+            int currGuess  = guessInd % c;
+            int currSecret = secretInd % c;
+            guessInd /= c;
+            secretInd /= c;
 
             // Increment counters
             if (currGuess == currSecret) {
@@ -44,7 +44,7 @@ public final class Feedback {
 
         // Sum absolute values and reset in one pass
         int colorFreqTotal = 0;
-        for (int i = 1; i <= c; i++) {
+        for (int i = 0; i < c; i++) {
             int freq = colorFreqCounter[i];
             colorFreqCounter[i] = 0;
             colorFreqTotal += (freq > 0) ? freq : -freq;

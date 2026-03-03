@@ -1,5 +1,6 @@
 package org.mastermind;
 
+import org.mastermind.codes.ConvertCode;
 import org.mastermind.solver.Feedback;
 import org.mastermind.solver.SolutionSpace;
 import org.openjdk.jmh.annotations.*;
@@ -20,7 +21,7 @@ public class SolutionSpaceBenchmark {
     @Benchmark
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void filterSerialFull(SmallState state) {
-        state.space.filterSolution(state.guess, state.feedback);
+        state.space.filterSolution(state.guessInd, state.feedback);
         state.space.reset();
     }
 
@@ -30,7 +31,7 @@ public class SolutionSpaceBenchmark {
     @Benchmark
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void filterParallelFull(LargeState state) {
-        state.space.filterSolution(state.guess, state.feedback);
+        state.space.filterSolution(state.guessInd, state.feedback);
         state.space.reset();
     }
 
@@ -56,15 +57,17 @@ public class SolutionSpaceBenchmark {
     public static class SmallState {
         static final int C = 6, D = 4;
         SolutionSpace space;
-        int           guess;
+        int           guessInd;
         int           feedback;
-        int[]         freq = new int[10];
+        int[]         freq = new int[C];
+
+        static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
 
         @Setup(Level.Trial)
         public void setup() {
             space = new SolutionSpace(C, D);
-            guess = 1122;
-            feedback = Feedback.getFeedback(guess, 3456, C, D, freq);
+            guessInd = ind(1122);
+            feedback = Feedback.getFeedback(guessInd, ind(3456), C, D, freq);
         }
 
         @Setup(Level.Invocation)
@@ -77,15 +80,17 @@ public class SolutionSpaceBenchmark {
     public static class LargeState {
         static final int C = 9, D = 5;
         SolutionSpace space;
-        int           guess;
+        int           guessInd;
         int           feedback;
-        int[]         freq = new int[10];
+        int[]         freq = new int[C];
+
+        static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
 
         @Setup(Level.Trial)
         public void setup() {
             space = new SolutionSpace(C, D);
-            guess = 11223;
-            feedback = Feedback.getFeedback(guess, 34567, C, D, freq);
+            guessInd = ind(11223);
+            feedback = Feedback.getFeedback(guessInd, ind(34567), C, D, freq);
         }
 
         @Setup(Level.Invocation)
@@ -97,8 +102,8 @@ public class SolutionSpaceBenchmark {
 
 /* Average Performance:
 Benchmark                                  Mode  Cnt   Score   Error  Units
-SolutionSpaceBenchmark.filterParallelFull  avgt    4   0.632 ± 0.672  ms/op
-SolutionSpaceBenchmark.filterSerialFull    avgt    4  30.677 ± 2.271  us/op
-SolutionSpaceBenchmark.getSecretsFull      avgt    4   6.024 ± 0.218  us/op
-SolutionSpaceBenchmark.getSize             avgt    4  17.925 ± 0.885  ns/op
+SolutionSpaceBenchmark.filterParallelFull  avgt    4   0.608 ± 0.195  ms/op
+SolutionSpaceBenchmark.filterSerialFull    avgt    4  38.088 ± 2.371  us/op
+SolutionSpaceBenchmark.getSecretsFull      avgt    4   5.723 ± 0.188  us/op
+SolutionSpaceBenchmark.getSize             avgt    4  18.442 ± 0.872  ns/op
  */

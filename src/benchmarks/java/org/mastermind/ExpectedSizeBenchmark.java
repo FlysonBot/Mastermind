@@ -1,6 +1,6 @@
 package org.mastermind;
 
-import org.mastermind.codes.AllValidCode;
+import org.mastermind.codes.ConvertCode;
 import org.mastermind.solver.ExpectedSize;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -16,33 +16,42 @@ public class ExpectedSizeBenchmark {
     @Benchmark
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void benchmarkTest(BenchmarkState state, Blackhole blackhole) {
-        long expectedSize = state.calcExpectedRank(1123);
+        long expectedSize = state.calcExpectedRank(BenchmarkState.ind(1123));
         blackhole.consume(expectedSize);
     }
 
     @Benchmark
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void variedTest(BenchmarkState state, Blackhole blackhole) {
-        for (int guess : state.secrets) {
-            long expectedSize = state.calcExpectedRank(guess);
+        for (int guessInd = 0; guessInd < state.total; guessInd++) {
+            long expectedSize = state.calcExpectedRank(guessInd);
             blackhole.consume(expectedSize);
         }
     }
 
     @State(Scope.Thread)
     public static class BenchmarkState {
-        private final int[]        secrets         = AllValidCode.generateAllCodes(6, 4);
+        static final int C = 6, D = 4;
+        private final int          total           = (int) Math.pow(C, D); // 1296
+        private final int[]        secretsInd;
         private final int[]        feedbackFreq    = new int[100];
-        private final ExpectedSize expectedSizeObj = new ExpectedSize(4);
+        private final ExpectedSize expectedSizeObj = new ExpectedSize(D);
 
-        public long calcExpectedRank(int guess) {
-            return expectedSizeObj.calcExpectedRank(guess, secrets, 6, 4, feedbackFreq);
+        public BenchmarkState() {
+            secretsInd = new int[total];
+            for (int i = 0; i < total; i++) secretsInd[i] = i;
+        }
+
+        static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
+
+        public long calcExpectedRank(int guessInd) {
+            return expectedSizeObj.calcExpectedRank(guessInd, secretsInd, C, D, feedbackFreq);
         }
     }
 }
 
 /* Benchmark Average:
 Benchmark                            Mode  Cnt   Score   Error  Units
-ExpectedSizeBenchmark.benchmarkTest  avgt    9  25.096 ± 1.178  us/op
-ExpectedSizeBenchmark.variedTest     avgt    9  34.095 ± 0.792  ms/op
+ExpectedSizeBenchmark.benchmarkTest  avgt    9  25.656 ± 1.551  us/op
+ExpectedSizeBenchmark.variedTest     avgt    9  32.383 ± 2.467  ms/op
  */

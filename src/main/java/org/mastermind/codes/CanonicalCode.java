@@ -1,7 +1,5 @@
 package org.mastermind.codes;
 
-import java.util.BitSet;
-
 /**
  * Canonical forms refer to a specific subset of all Mastermind code
  * that starts with 1, digit ordered from small to large starting
@@ -50,11 +48,11 @@ public class CanonicalCode {
     }
 
     /**
-     * Enumerate all Canonical forms in a Mastermind game.
+     * Enumerate all Canonical forms in a Mastermind game as code indices.
      *
      * @param c number of colors (<= 9)
      * @param d number of digits (<= 9)
-     * @return Array of all Canonical forms in Mastermind
+     * @return Array of indices (0-based, base-c encoding) of all Canonical forms
      */
     public static int[] enumerateCanonicalForms(int c, int d) {
 
@@ -64,59 +62,33 @@ public class CanonicalCode {
         // 2. Use a tiny wrapper array for the index to pass by reference in recursion
         int[] index = { 0 };
 
-        // 3. Start recursion
-        backtrack(results, index, 0, 0, 0, c, d);
+        // 3. Precompute positional powers: place[pos] = c^(d-1-pos) for left-to-right building
+        int[] place = new int[d];
+        place[d - 1] = 1;
+        for (int i = d - 2; i >= 0; i--) place[i] = place[i + 1] * c;
+
+        // 4. Start recursion
+        backtrack(results, index, 0, 0, 0, c, d, place);
 
         return results;
     }
 
-    /**
-     * Enumerate all Canonical forms as a BitSet, where bit i is set if
-     * codes[i] (from AllValidCode.generateAllCodes) is a canonical form.
-     *
-     * @param c number of colors (<= 9)
-     * @param d number of digits (<= 9)
-     * @return BitSet with bits set only at canonical form indices
-     */
-    public static BitSet enumerateCanonicalFormsBitSet(int c, int d) {
-        int    total  = (int) Math.pow(c, d);
-        BitSet bitSet = new BitSet(total);
-        backtrackBitSet(bitSet, c, d, 0, 0, 0);
-        return bitSet;
-    }
-
-    private static void backtrackBitSet(BitSet bitSet, int c, int d, int currentNum, int pos, int maxColorUsed) {
-        if (pos == d) {
-            bitSet.set(ConvertCode.toIndex(c, d, currentNum));
-            return;
-        }
-
-        for (int color = 1; color <= maxColorUsed; color++) {
-            backtrackBitSet(bitSet, c, d, (currentNum * 10) + color, pos + 1, maxColorUsed);
-        }
-
-        if (maxColorUsed < c) {
-            int nextColor = maxColorUsed + 1;
-            backtrackBitSet(bitSet, c, d, (currentNum * 10) + nextColor, pos + 1, nextColor);
-        }
-    }
-
-    private static void backtrack(int[] results, int[] index, int currentNum, int pos, int maxColorUsed, int c, int d) {
+    private static void backtrack(
+            int[] results, int[] index, int currentInd, int pos, int maxColorUsed, int c, int d, int[] place) {
         // Base case: Code is complete
         if (pos == d) {
-            results[index[0]++] = currentNum;
+            results[index[0]++] = currentInd;
             return;
         }
 
-        // Rule 1 & 2: Try existing colors
-        for (int color = 1; color <= maxColorUsed; color++) {
-            backtrack(results, index, (currentNum * 10) + color, pos + 1, maxColorUsed, c, d);
+        // Rule 1 & 2: Try existing colors (digit values 0..maxColorUsed-1 in index encoding)
+        for (int digitVal = 0; digitVal < maxColorUsed; digitVal++) {
+            backtrack(results, index, currentInd + digitVal * place[pos], pos + 1, maxColorUsed, c, d, place);
         }
 
-        // Rule 3: Try exactly one "new" color if limit c isn't reached
+        // Rule 3: Try exactly one "new" color if limit c isn't reached (digit value maxColorUsed)
         if (maxColorUsed < c) {
-            int nextColor = maxColorUsed + 1;
-            backtrack(results, index, (currentNum * 10) + nextColor, pos + 1, nextColor, c, d);
+            backtrack(results, index, currentInd + maxColorUsed * place[pos], pos + 1, maxColorUsed + 1, c, d, place);
         }
     }
 }

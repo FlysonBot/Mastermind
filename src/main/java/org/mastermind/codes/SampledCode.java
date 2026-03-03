@@ -13,25 +13,21 @@ import java.util.Random;
 public class SampledCode {
 
     /**
-     * Generate a random Monte Carlo sample from all possible Mastermind code
-     * with the specified sample size.
+     * Generate a random Monte Carlo sample of code indices from all possible
+     * Mastermind codes with the specified sample size.
      *
      * @param c          number of colors (<= 9)
      * @param d          number of digits (<= 9)
      * @param sampleSize size of the sample
-     * @return A random sample of all possible Mastermind code
+     * @return A random sample of code indices in [0, c^d)
      */
     public static int[] getSample(int c, int d, int sampleSize) {
         Random random = new Random();
+        int    total  = (int) Math.pow(c, d);
         int[]  sample = new int[sampleSize];
 
         for (int i = 0; i < sampleSize; i++) {
-            int code = 0;
-            for (int digit = 0; digit < d; digit++) {
-                int color = random.nextInt(c) + 1; // colors 1..c
-                code = code * 10 + color;
-            }
-            sample[i] = code;
+            sample[i] = random.nextInt(total);
         }
 
         return sample;

@@ -59,28 +59,26 @@ class CanonicalCodeTest {
     @Nested
     @DisplayName("Enumerate Canonical Forms")
     class CanonicalCodeForms {
+
         /**
-         * Helper to verify if a number is mathematically canonical.
-         * New colors must be the smallest available integer.
+         * Helper to verify if an index is canonical.
+         * Extracts digits left-to-right and checks no color is skipped.
          */
-        private boolean isCanonical(int code, int d) {
-            int maxSeen = 0;
-            int divisor = (int) Math.pow(10, d - 1);
-
-            while (divisor > 0) {
-                int digit = code / divisor; // Get the leftmost digit
-
-                if (digit > maxSeen + 1) return false;
-                if (digit > maxSeen) maxSeen = digit;
-
-                code %= divisor;    // Remove the leftmost digit
-                divisor /= 10;      // Move to the next place value
+        private boolean isCanonicalInd(int ind, int c, int d) {
+            int maxSeen = -1; // highest digit value seen so far (0-based)
+            int place   = (int) Math.pow(c, d - 1);
+            for (int pos = 0; pos < d; pos++) {
+                int digitVal = ind / place; // 0..c-1
+                ind %= place;
+                place /= c;
+                if (digitVal > maxSeen + 1) return false;
+                if (digitVal > maxSeen) maxSeen = digitVal;
             }
             return true;
         }
 
         @Test
-        @DisplayName("Verify array size matches Stirling Sum for (6, 9)")
+        @DisplayName("Verify array size matches Stirling Sum for (9, 9)")
         void testArraySize() {
             int   c            = 9;
             int   d            = 9;
@@ -92,54 +90,53 @@ class CanonicalCodeTest {
         }
 
         @Test
-        @DisplayName("Verify specific canonical forms for small c, d")
+        @DisplayName("Verify specific canonical form indices for small c, d")
         void testSmallEnumeration() {
-            // For c=2, d=3, canonical forms should be:
-            // 111 (uses 1 color)
-            // 112 (uses 2 colors)
-            // 121 (uses 2 colors)
-            // 122 (uses 2 colors)
-            int[] expected = { 111, 112, 121, 122 };
+            // For c=2, d=3, canonical forms are: 111, 112, 121, 122
+            // As indices (c=2): 0, 1, 2, 3
+            int[] expected = { 0, 1, 2, 3 };
             int[] actual   = CanonicalCode.enumerateCanonicalForms(2, 3);
 
-            assertArrayEquals(expected, actual, "Should generate exactly 111, 112, 121, 122");
+            assertArrayEquals(expected, actual);
         }
 
         @Test
-        @DisplayName("Verify Rule 1: All codes must start with 1")
+        @DisplayName("Verify Rule 1: All codes must start with color 1 (digitVal 0)")
         void testStartsWithOne() {
-            int[] results = CanonicalCode.enumerateCanonicalForms(6, 4);
-            for (int code : results) {
-                // A 4-digit number starting with 1 is between 1000 and 1999
-                assertTrue(code >= 1000 && code <= 1999, "Code " + code + " must start with 1");
+            int   c         = 6, d = 4;
+            int   threshold = (int) Math.pow(c, d - 1); // indices with leading digitVal 0 are < c^(d-1)
+            int[] results   = CanonicalCode.enumerateCanonicalForms(c, d);
+            for (int ind : results) {
+                assertTrue(ind < threshold, "Index " + ind + " does not start with digitVal 0 (color 1)");
             }
         }
 
         @Test
         @DisplayName("Verify Rule 2: No skipping colors (Canonical check)")
         void testNoSkippedColors() {
-            int[] results = CanonicalCode.enumerateCanonicalForms(6, 5);
-            for (int code : results) {
-                assertTrue(isCanonical(code, 5), "Code " + code + " violates canonical rules");
+            int   c       = 6, d = 5;
+            int[] results = CanonicalCode.enumerateCanonicalForms(c, d);
+            for (int ind : results) {
+                assertTrue(isCanonicalInd(ind, c, d), "Index " + ind + " violates canonical rules");
             }
         }
 
         @Test
         @DisplayName("Edge Case: c=1")
         void testSingleColor() {
-            // If only 1 color is allowed, every digit must be 1
+            // If only 1 color, every digit is 0 → index 0
             int[] results = CanonicalCode.enumerateCanonicalForms(1, 4);
             assertEquals(1, results.length);
-            assertEquals(1111, results[0]);
+            assertEquals(0, results[0]);
         }
 
         @Test
         @DisplayName("Edge Case: d=1")
         void testSingleDigit() {
-            // If length is 1, only '1' is possible
+            // If length is 1, only color 1 (digitVal 0) is possible → index 0
             int[] results = CanonicalCode.enumerateCanonicalForms(6, 1);
             assertEquals(1, results.length);
-            assertEquals(1, results[0]);
+            assertEquals(0, results[0]);
         }
     }
 }
