@@ -40,7 +40,5 @@ public class BestGuessTest {
     public void testParallelVersion() {
         int bestGuessInd = (int) BestGuess.findBestGuess(allInd, allInd, C, D, true)[0];
         assertEquals(ind(1123), bestGuessInd);
-
-        BestGuess.shutdown();
     }
 }

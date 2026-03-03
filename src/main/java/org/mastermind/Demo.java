@@ -1,6 +1,5 @@
 package org.mastermind;
 
-import org.mastermind.solver.BestGuess;
 import org.mastermind.solver.ExpectedSize;
 import org.mastermind.solver.Feedback;
 
@@ -56,6 +55,5 @@ public class Demo {
         double elapsedSec = (System.nanoTime() - startTime) / 1_000_000_000.0;
         System.out.printf("%nSolved in %d turn(s).%n", session.getTurnCount());
         System.out.printf("Time: %.1f seconds%n", elapsedSec);
-        BestGuess.shutdown();
     }
 }

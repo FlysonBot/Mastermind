@@ -19,10 +19,16 @@ import java.util.concurrent.Future;
  */
 public class BestGuess {
     private static final int             THREAD_COUNT       = Runtime.getRuntime().availableProcessors();
-    private static final ExecutorService POOL               = Executors.newFixedThreadPool(THREAD_COUNT);
+    private static final ExecutorService POOL;
     private static final long            PARALLEL_THRESHOLD = 3_000_000;
 
-    public static void shutdown() { POOL.shutdown(); }
+    static {
+        POOL = Executors.newFixedThreadPool(THREAD_COUNT, r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        });
+    }
 
     /**
      * Find the guess that will minimize the expected size of the solution space

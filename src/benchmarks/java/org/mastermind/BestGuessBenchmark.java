@@ -38,12 +38,6 @@ public class BestGuessBenchmark {
             allInd = new int[(int) Math.pow(C, D)];
             for (int i = 0; i < allInd.length; i++) allInd[i] = i;
         }
-
-        // TEARDOWN - Shutdown the thread pool after benchmarking
-        @TearDown(Level.Trial)
-        public void tearDown() {
-            BestGuess.shutdown();
-        }
     }
 }
 
