@@ -70,7 +70,7 @@ public class MastermindSession {
         if (history.isEmpty()) {
             long[] first = BestFirstGuess.of(c, d);
             return new long[] {
-                    ConvertCode.toIndex(c, d, (int) first[0]), first[1], (long) solutionSpace.getSecrets().length
+                    ConvertCode.toIndex(c, d, (int) first[0]), first[1], (long) solutionSpace.getSize()
             };
         }
 
