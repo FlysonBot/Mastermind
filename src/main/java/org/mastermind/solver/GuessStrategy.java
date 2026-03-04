@@ -1,7 +1,6 @@
 package org.mastermind.solver;
 
 import org.mastermind.codes.AllValidCode;
-import org.mastermind.codes.ConvertCode;
 import org.mastermind.codes.SampledCode;
 
 /**
@@ -13,8 +12,8 @@ import org.mastermind.codes.SampledCode;
  *   <li>{@code [1]} — secrets used to score each guess</li>
  * </ul>
  *
- * <p>Edit this class to change strategy behavior. {@link #select} dispatches to
- * a private method per turn phase; add new phases or conditions there.
+ * <p>Edit this class to change strategy behavior. {@link #select} delegates to
+ * {@code selectSearchSpace}, which cascades through size-reduction levels.
  *
  * <p>Threshold: {@code guesses.length × secrets.length} above which the
  * parallel BestGuess search exceeds ~1 second on the target machine.
@@ -28,23 +27,18 @@ public class GuessStrategy {
      *
      * @param c             number of colors
      * @param d             number of digits
-     * @param turn          0-indexed turn number (0 = first guess)
      * @param solutionSpace current solution space
      * @return int[][] where [0]=guesses, [1]=secrets
      */
-    public static int[][] select(int c, int d, int turn, SolutionSpace solutionSpace) {
-        if (turn == 0) {
-            int[] guess = { ConvertCode.toIndex(c, d, BestFirstGuess.of(c, d)) };
-            return pair(guess, solutionSpace.getSecrets());
-        }
-        return laterTurns(c, d, solutionSpace.getSize(), solutionSpace);
+    public static int[][] select(int c, int d, SolutionSpace solutionSpace) {
+        return selectSearchSpace(c, d, solutionSpace.getSize(), solutionSpace);
     }
 
     /**
-     * Later turns: cascade through several levels of size reduction until the
+     * Cascades through progressively smaller guess and secret arrays until the
      * search space fits within the threshold.
      */
-    private static int[][] laterTurns(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
+    private static int[][] selectSearchSpace(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
 
         if (fits((int) Math.pow(c, d), secretsSize))
             return pair(AllValidCode.generateAllCodes(c, d), solutionSpace.getSecrets());

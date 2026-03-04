@@ -1,9 +1,7 @@
 package org.mastermind;
 
-import org.mastermind.solver.BestGuess;
-import org.mastermind.solver.ExpectedSize;
-import org.mastermind.solver.GuessStrategy;
-import org.mastermind.solver.SolutionSpace;
+import org.mastermind.codes.ConvertCode;
+import org.mastermind.solver.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,12 +67,19 @@ public class MastermindSession {
     public long[] suggestGuessWithDetails() {
         if (solved) throw new IllegalStateException("Game is already solved.");
 
+        if (history.isEmpty()) {
+            long[] first = BestFirstGuess.of(c, d);
+            return new long[] {
+                    ConvertCode.toIndex(c, d, (int) first[0]), first[1], (long) solutionSpace.getSecrets().length
+            };
+        }
+
         if (solutionSpace.getSize() == 1) {
             int[] only = solutionSpace.getSecrets();
             return new long[] { only[0], 1L, 1L };
         }
 
-        int[][] searchSpace = GuessStrategy.select(c, d, history.size(), solutionSpace);  // {guesses, secrets}
+        int[][] searchSpace = GuessStrategy.select(c, d, solutionSpace);  // {guesses, secrets}
         long[]  result      = BestGuess.findBestGuess(searchSpace[0], searchSpace[1], c, d);
         return new long[] { result[0], result[1], searchSpace[1].length };    // {guess, rank, secrets length}
     }
