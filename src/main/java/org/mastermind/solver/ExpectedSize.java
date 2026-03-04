@@ -63,7 +63,7 @@ public class ExpectedSize {
     }
 
     public float convertSampleRankToExpectedSize(long rank, int sampleSize, int populationSize) {
-        return rank * populationSize / (float) Math.pow(sampleSize, 2);
+        return (float) rank * (float) populationSize / (float) Math.pow(sampleSize, 2);
     }
 
     public float calcExpectedSize(int guessInd, int[] secretsInd, int c, int d, int[] feedbackFreq) {
