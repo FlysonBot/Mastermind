@@ -1,10 +1,9 @@
-package org.mastermind;
+package org.mastermind.solver;
 
 import org.mastermind.codes.AllValidCode;
 import org.mastermind.codes.CanonicalCode;
 import org.mastermind.codes.ConvertCode;
 import org.mastermind.codes.SampledCode;
-import org.mastermind.solver.ExpectedSize;
 
 /**
  * Provides the best first guess for any supported Mastermind configuration,
@@ -188,7 +187,9 @@ public class BestFirstGuess {
             for (int d = 2; d <= 9; d++) {
                 System.out.printf("                case %d -> %d;%n", d, bestCode[c][d]);
             }
-            System.out.printf("                default -> throw new IllegalArgumentException(\"Unsupported game size: c=\" + c + \", d=\" + d);%n");
+            System.out.printf(
+                    "                default -> throw new IllegalArgumentException(\"Unsupported game size: c=\" + c " +
+                            "+ \", d=\" + d);%n");
             System.out.printf("            };%n");
         }
         System.out.println("// --- copy above ---");

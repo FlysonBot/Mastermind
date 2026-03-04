@@ -2,6 +2,7 @@ package org.mastermind;
 
 import org.mastermind.solver.BestGuess;
 import org.mastermind.solver.ExpectedSize;
+import org.mastermind.solver.GuessStrategy;
 import org.mastermind.solver.SolutionSpace;
 
 import java.util.ArrayList;

@@ -1,10 +1,8 @@
-package org.mastermind;
+package org.mastermind.solver;
 
 import org.mastermind.codes.AllValidCode;
 import org.mastermind.codes.ConvertCode;
 import org.mastermind.codes.SampledCode;
-import org.mastermind.solver.Feedback;
-import org.mastermind.solver.SolutionSpace;
 
 /**
  * Selects which arrays to pass as guesses and secrets to BestGuess for each turn.

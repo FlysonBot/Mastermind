@@ -1,7 +1,6 @@
-package org.mastermind;
+package org.mastermind.solver;
 
 import org.mastermind.codes.ConvertCode;
-import org.mastermind.solver.ExpectedSize;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 

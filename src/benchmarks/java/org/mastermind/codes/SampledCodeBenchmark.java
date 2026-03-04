@@ -1,6 +1,5 @@
-package org.mastermind;
+package org.mastermind.codes;
 
-import org.mastermind.codes.SampledCode;
 import org.mastermind.solver.Feedback;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;

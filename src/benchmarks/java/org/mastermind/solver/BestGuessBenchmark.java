@@ -1,6 +1,5 @@
-package org.mastermind;
+package org.mastermind.solver;
 
-import org.mastermind.solver.BestGuess;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
