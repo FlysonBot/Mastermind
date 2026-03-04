@@ -50,9 +50,9 @@ public class GuessStrategy {
 
         if (fits(canonical.length, secretsSize)) return pair(canonical, solutionSpace.getSecrets());
 
-        for (double tolerance : new double[] { 0.001, 0.005 }) {
-            if (fits(canonical.length, secretSampleSize(d, tolerance))) {
-                return pair(canonical, secretSample(c, d, tolerance, solutionSpace));
+        for (double divisor : new double[] { 10, 25, 50, 100, 150, 200, 225, 250, 300 }) {
+            if (fits(canonical.length, (int) (secretsSize / divisor))) {
+                return pair(canonical, secretSample(c, d, (int) (secretsSize / divisor), solutionSpace));
             }
         }
 
