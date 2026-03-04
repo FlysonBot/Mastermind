@@ -1,7 +1,7 @@
 package org.mastermind;
 
 import org.mastermind.codes.AllValidCode;
-import org.mastermind.codes.CanonicalCode;
+import org.mastermind.codes.ConvertCode;
 import org.mastermind.codes.SampledCode;
 import org.mastermind.solver.Feedback;
 import org.mastermind.solver.SolutionSpace;
@@ -35,28 +35,11 @@ public class GuessStrategy {
      * @return int[][] where [0]=guesses, [1]=secrets
      */
     public static int[][] select(int c, int d, int turn, SolutionSpace solutionSpace) {
-        int secretsSize = solutionSpace.getSize();
-        if (turn == 0) return firstTurn(c, d, secretsSize, solutionSpace);
-        return laterTurns(c, d, secretsSize, solutionSpace);
-    }
-
-    /**
-     * First turn: always use canonical forms as guesses (exploit full color/position symmetry).
-     * Fall back to a Monte Carlo sample for secrets if the product exceeds the threshold.
-     * Tries progressively looser tolerances: 0.001, 0.005, then 0.01.
-     */
-    private static int[][] firstTurn(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
-        int[] canonical = CanonicalCode.enumerateCanonicalForms(c, d);
-
-        if (fits(canonical.length, secretsSize)) return pair(canonical, solutionSpace.getSecrets());
-
-        for (double divisor : new double[] { 10, 25, 50, 100, 150, 200, 225, 250, 300 }) {
-            if (fits(canonical.length, (int) (secretsSize / divisor))) {
-                return pair(canonical, secretSample(c, d, (int) (secretsSize / divisor), solutionSpace));
-            }
+        if (turn == 0) {
+            int[] guess = { ConvertCode.toIndex(c, d, BestFirstGuess.of(c, d)) };
+            return pair(guess, solutionSpace.getSecrets());
         }
-
-        return pair(canonical, secretSample(c, d, 0.01, solutionSpace));
+        return laterTurns(c, d, solutionSpace.getSize(), solutionSpace);
     }
 
     /**
