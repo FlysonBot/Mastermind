@@ -7,7 +7,7 @@ package org.mastermind.compute;
  * black and white counts. The black counts is the number of digits
  * in guess and secret that shares the same value at the same position.
  * The white counts is the number of digits in guess and secret that
- * shares the same  value at a different positon. In this program,
+ * shares the same value at a different positon. In this program,
  * feedback is represented as a 2-digit integers where the first digit
  * represent the black counts, and the second represents the white.
  */

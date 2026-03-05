@@ -41,6 +41,16 @@ public class SampledCode {
         return sample;
     }
 
+    /**
+     * Generate a random Monte Carlo sample of code indices from the current valid secrets.
+     *
+     * @param remaining  BitSet of valid secret indices
+     * @param validCount number of set bits in {@code remaining}
+     * @param c          number of colors (<= 9)
+     * @param d          number of digits (<= 9)
+     * @param sampleSize size of the sample
+     * @return A random sample of valid code indices
+     */
     public static int[] getValidSample(BitSet remaining, int validCount, int c, int d, int sampleSize) {
         int   total  = (int) Math.pow(c, d);
         int[] sample = new int[sampleSize];
@@ -93,7 +103,6 @@ public class SampledCode {
      * @param tolerance    Maximum acceptable inflation as a fraction of S (e.g., 0.05)
      * @return The required number of random secrets to sample.
      */
-
     public static int calcSampleSizeForSecrets(int feedbackSize, double tolerance) {
         return (int) Math.ceil((feedbackSize - 1) / tolerance);
     }

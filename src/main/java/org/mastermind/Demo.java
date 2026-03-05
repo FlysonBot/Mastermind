@@ -12,7 +12,7 @@ import org.mastermind.compute.Feedback;
  * <p>
  * Examples:
  * java Demo              # uses defaults below
- * java Demo 6 4 1234     # c=6, d=4, secret=1234
+ * java Demo 6 4 1234     # c=6, d=4, secretInd=1234
  */
 public class Demo {
 

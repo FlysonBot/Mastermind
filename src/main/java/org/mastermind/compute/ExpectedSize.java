@@ -58,14 +58,39 @@ public class ExpectedSize {
         return sum;
     }
 
+    /**
+     * Convert a rank to the true expected size.
+     *
+     * @param rank  value returned by {@link #calcExpectedRank}
+     * @param total total number of secrets (size of the solution space)
+     * @return expected solution space size after the guess
+     */
     public float convertRankToExpectedSize(long rank, int total) {
         return (float) rank / total;
     }
 
+    /**
+     * Convert a sample-based rank to an estimated expected size for the full population.
+     *
+     * @param rank           value returned by {@link #calcExpectedRank} computed on the sample
+     * @param sampleSize     number of secrets in the sample
+     * @param populationSize total number of secrets in the full solution space
+     * @return estimated expected solution space size after the guess
+     */
     public float convertSampleRankToExpectedSize(long rank, int sampleSize, int populationSize) {
         return (float) rank * (float) populationSize / (float) Math.pow(sampleSize, 2);
     }
 
+    /**
+     * Calculate the expected solution space size directly (rank divided by total).
+     *
+     * @param guessInd     index of the guess code (0-based, base-c encoding)
+     * @param secretsInd   list of secret indices (0-based, base-c encoding)
+     * @param c            number of colors (<= 9)
+     * @param d            number of digits (<= 9)
+     * @param feedbackFreq int array of 0 with length 100
+     * @return expected solution space size after the guess
+     */
     public float calcExpectedSize(int guessInd, int[] secretsInd, int c, int d, int[] feedbackFreq) {
         return convertRankToExpectedSize(calcExpectedRank(guessInd, secretsInd, c, d, feedbackFreq), secretsInd.length);
     }

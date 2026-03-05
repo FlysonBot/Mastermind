@@ -59,7 +59,7 @@ public class SolutionSpace {
      * comparisons from scratch for every secret index.
      *
      * @param guessInd         index of the guess code (0-based, base-c encoding)
-     * @param obtainedFeedback feedback value (black * 9 + d - colorFreqTotal/2)
+     * @param obtainedFeedback feedback value (black * 10 + white)
      */
     public void filterSolution(int guessInd, int obtainedFeedback) {
         // Read and update flag

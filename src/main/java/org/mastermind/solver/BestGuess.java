@@ -10,14 +10,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- * This is a strategy to find the best guess for Mastermind by searching
- * through the space of all candidate guesses and secrets array to find
- * the guess that minimize the average number of remaining solutions to
- * the puzzle. Due to the nature of Mastermind, sometimes the search
- * space can be huge. To optimize for performance, the program create a
- * thread for each CPU thread precent on the machine. The algorithm go
- * multi-threading when the search space exceed a threshold, which is a
- * heuristic value for when the algorithm will take longer than
+ * Finds the best guess for Mastermind by searching through the space of all
+ * candidate guesses and secrets to find the guess that minimizes the average
+ * number of remaining solutions. Due to the nature of Mastermind, the search
+ * space can be large. To optimize performance, one thread per available CPU is
+ * created. Multi-threading is used when the search space exceeds a threshold,
+ * which is a heuristic for when the algorithm would otherwise take longer than
  * 50 milliseconds to run.
  */
 public class BestGuess {
