@@ -39,6 +39,16 @@ public class ExpectedSizeTest {
     }
 
     @Test
+    public void testCalcExpectedRankFirstMatchesFullRank() {
+        int[] guesses = { ind(1122), ind(1123), ind(1234) };
+        for (int guessInd : guesses) {
+            long rankFull = expectedSizeObj.calcExpectedRank(guessInd, secretsInd, COLORS, DIGITS, feedbackFreq);
+            long rankInc  = expectedSizeObj.calcExpectedRankFirst(guessInd, COLORS, DIGITS, TOTAL, feedbackFreq);
+            assertEquals(rankFull, rankInc, "calcExpectedRankFirst mismatch for guess index " + guessInd);
+        }
+    }
+
+    @Test
     public void testExpectedSizeSymmetry() {
         // Guesses with the same color multiset should yield the same expected size
         float base = calcExpectedSize(ind(1122));
