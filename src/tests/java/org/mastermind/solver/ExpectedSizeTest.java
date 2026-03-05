@@ -49,6 +49,16 @@ public class ExpectedSizeTest {
     }
 
     @Test
+    public void testConvertSampleRankToExpectedSize() {
+        // Use full population as the "sample" (sampleSize == total).
+        // Then sampleRank == fullRank, and the conversion must recover the exact expected size.
+        int   guessInd     = ind(1234);
+        long  fullRank     = expectedSizeObj.calcExpectedRank(guessInd, secretsInd, COLORS, DIGITS, feedbackFreq);
+        float expectedSize = calcExpectedSize(guessInd);
+        assertEquals(expectedSize, expectedSizeObj.convertSampleRankToExpectedSize(fullRank, TOTAL, TOTAL), DELTA);
+    }
+
+    @Test
     public void testExpectedSizeSymmetry() {
         // Guesses with the same color multiset should yield the same expected size
         float base = calcExpectedSize(ind(1122));

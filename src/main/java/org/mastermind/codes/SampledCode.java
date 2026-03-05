@@ -14,6 +14,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SampledCode {
 
     /**
+     * Maximum validCount for which enumeration is used. Above this threshold,
+     * int[validCount] becomes too large (>20MB) and rejection sampling is used instead.
+     * At this threshold, fill rate is always high enough that rejection is fast.
+     * Empirically derived from timing tests across c=7-9, d=7-9 game sizes.
+     */
+    static final int MAX_ENUM = 5_000_000;
+
+    /**
      * Generate a random Monte Carlo sample of code indices from all possible
      * Mastermind codes with the specified sample size.
      *
@@ -23,8 +31,8 @@ public class SampledCode {
      * @return A random sample of code indices in [0, c^d)
      */
     public static int[] getSample(int c, int d, int sampleSize) {
-        int    total  = (int) Math.pow(c, d);
-        int[]  sample = new int[sampleSize];
+        int   total  = (int) Math.pow(c, d);
+        int[] sample = new int[sampleSize];
 
         for (int i = 0; i < sampleSize; i++) {
             sample[i] = ThreadLocalRandom.current().nextInt(total);
@@ -33,17 +41,9 @@ public class SampledCode {
         return sample;
     }
 
-    /**
-     * Maximum validCount for which enumeration is used. Above this threshold,
-     * int[validCount] becomes too large (>20MB) and rejection sampling is used instead.
-     * At this threshold, fill rate is always high enough that rejection is fast.
-     * Empirically derived from timing tests across c=7-9, d=7-9 game sizes.
-     */
-    static final int MAX_ENUM = 5_000_000;
-
     public static int[] getValidSample(BitSet remaining, int validCount, int c, int d, int sampleSize) {
-        int    total  = (int) Math.pow(c, d);
-        int[]  sample = new int[sampleSize];
+        int   total  = (int) Math.pow(c, d);
+        int[] sample = new int[sampleSize];
 
         if (validCount <= MAX_ENUM) {
             // Enumeration: bounded memory (≤20MB), fast scan, fast random access.
@@ -96,17 +96,6 @@ public class SampledCode {
 
     public static int calcSampleSizeForSecrets(int feedbackSize, double tolerance) {
         return (int) Math.ceil((feedbackSize - 1) / tolerance);
-    }
-
-    /**
-     * Calculates the required sample size with a default tolerance of 0.05 (5%).
-     *
-     * @param feedbackSize Number of possible feedback values K (e.g., 55)
-     * @return The required number of random secrets to sample.
-     * @see #calcSampleSizeForSecrets(int, double)
-     */
-    public static int calcSampleSizeForSecrets(int feedbackSize) {
-        return calcSampleSizeForSecrets(feedbackSize, 0.01);
     }
 
     /**

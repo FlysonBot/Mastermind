@@ -73,7 +73,7 @@ public class SampledCodeBenchmark {
 
     @State(Scope.Thread)
     public static class BaseState {
-        final int sampleSize = SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(9));
+        final int sampleSize = SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(9), 0.01);
     }
 
     // Enumeration path (validCount <= MAX_ENUM = 5M)
