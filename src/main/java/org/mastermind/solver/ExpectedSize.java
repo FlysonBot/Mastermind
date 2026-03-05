@@ -83,6 +83,7 @@ public class ExpectedSize {
      * @return Sum of squared feedback frequencies (same semantics as {@link #calcExpectedRank})
      */
     public long calcExpectedRankFirst(int guessInd, int c, int d, int total, int[] feedbackFreq) {
+        // Set up incremental feedback state
         FeedbackIncremental.State init             = FeedbackIncremental.setupIncremental(guessInd, 0, c, d);
         int[]                     guessDigits      = init.guessDigits();
         int[]                     secretDigits     = init.secretDigits();
@@ -90,8 +91,10 @@ public class ExpectedSize {
         int                       black            = init.black();
         int                       colorFreqTotal   = init.colorFreqTotal();
 
+        // Handle secret index 0 (setup already computed its feedback)
         feedbackFreq[black * 9 + d - (colorFreqTotal >>> 1)]++;
 
+        // Iterate remaining secrets incrementally, updating secretDigits and feedback state in place
         int[] result = new int[3];
         for (int secretInd = 1; secretInd < total; secretInd++) {
             FeedbackIncremental.getFeedbackIncremental(guessDigits, secretDigits, black, colorFreqCounter,
@@ -101,6 +104,7 @@ public class ExpectedSize {
             feedbackFreq[result[0]]++;
         }
 
+        // Sum squared frequencies and reset feedbackFreq for reuse
         long sum = 0;
         long freq;
         for (int feedback : validFeedback) {

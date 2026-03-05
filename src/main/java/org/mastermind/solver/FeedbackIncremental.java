@@ -78,7 +78,7 @@ public final class FeedbackIncremental {
      * @param colorFreqTotal   current sum of |colorFreqCounter[i]|, updated in-place
      * @param c                number of colors
      * @param d                number of digits
-     * @param result           int[2] output buffer: result[0]=feedback, result[1]=new black count,
+     * @param result           int[3] output buffer: result[0]=feedback, result[1]=new black count,
      *                         result[2]=new colorFreqTotal
      */
     public static void getFeedbackIncremental(
@@ -123,9 +123,12 @@ public final class FeedbackIncremental {
                 colorFreqCounter[newDigit] = v - 1;
             }
 
-            if (newDigit != 0) break; // no carry
+            // When newDigit != 0, no carry propagates to the next position,
+            // meaning all higher positions are unchanged. Break early.
+            if (newDigit != 0) break;
         }
 
+        // Update result
         result[0] = black * 9 + d - (colorFreqTotal >>> 1);
         result[1] = black;
         result[2] = colorFreqTotal;

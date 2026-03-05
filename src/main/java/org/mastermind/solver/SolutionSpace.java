@@ -88,7 +88,7 @@ public class SolutionSpace {
             final int from = fromIndex;
             final int to   = fromIndex + wordsPerTask * 64;
 
-            // Submit the task
+            // Submit the task with the appropriate function
             futures[taskCount++] = isFirst ?
                     POOL.submit(() -> filterRangeFirst(guessInd, obtainedFeedback, from, to)) :
                     POOL.submit(() -> filterRange(guessInd, obtainedFeedback, from, to));

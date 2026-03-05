@@ -58,7 +58,8 @@ public class CanonicalCode {
     }
 
     private static void generatePartitions(
-            int[] results, int[] index, int[] parts, int depth, int remaining, int maxVal, int maxParts, int[] place) {
+            int[] results, int[] index, int[] parts, int depth, int remaining, int maxVal, int maxParts, int[] place
+    ) {
         if (remaining == 0) {
             results[index[0]++] = buildIndex(parts, depth, place);
             return;
@@ -73,6 +74,10 @@ public class CanonicalCode {
     }
 
     private static int buildIndex(int[] parts, int numParts, int[] place) {
+        // Maps a partition (color frequency array) to its lex-smallest representative index.
+        // Color 0 gets the highest frequency and occupies the leftmost positions,
+        // color 1 gets the next frequency, and so on. This ensures all codes with the
+        // same partition map to the same canonical representative.
         int ind = 0;
         int pos = 0;
         for (int color = 0; color < numParts; color++) {

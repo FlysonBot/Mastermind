@@ -44,14 +44,22 @@ public class GuessStrategy {
             return pair(AllValidCode.generateAllCodes(c, d), solutionSpace.getSecrets());
         if (fits(secretsSize, secretsSize)) return pair(solutionSpace.getSecrets(), solutionSpace.getSecrets());
 
-        for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {
+        // Sample secrets with progressively looser tolerances (smaller sample = faster search).
+        // Tolerance controls how accurately the sample estimates expected partition sizes;
+        // Values are heuristically tuned for speed vs. quality.
+        // When tolerance 10X, sample size 0.1X
+        for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {  // 10X, 5X, 1X
             if (fits(secretsSize, secretSampleSize(d, tolerance))) {
                 return pair(solutionSpace.getSecrets(), secretSample(c, d, tolerance, solutionSpace));
             }
         }
 
+        // Fall back to also sampling guesses, using progressively larger percentile thresholds
+        // (higher percentile = smaller sample needed, since a random element more likely falls
+        // within a larger top portion of the distribution).
+        // When percentile 10X, sample size ~0.1X
         int[] sSample = secretSample(c, d, 0.01, solutionSpace);
-        for (double percentile : new double[] { 0.001, 0.005, 0.01, 0.05 }) {
+        for (double percentile : new double[] { 0.001, 0.005, 0.01, 0.05 }) {   // 50X, 10X, 5X, 1X
             if (fits(secretsSize, guessSampleSize(percentile))) {
                 return pair(guessSample(c, d, percentile), sSample);
             }
@@ -60,10 +68,12 @@ public class GuessStrategy {
         return pair(guessSample(c, d, 0.01), sSample);
     }
 
+    /** Returns true if the guesses and secrets arrays fit within the threshold. */
     private static boolean fits(int guessSpaceSize, int secretSpaceSize) {
         return (long) guessSpaceSize * secretSpaceSize <= THRESHOLD;
     }
 
+    /** Pack the input guesses and secrets into int[][] */
     private static int[][] pair(int[] guesses, int[] secrets) {
         return new int[][] { guesses, secrets };
     }

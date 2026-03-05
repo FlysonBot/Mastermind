@@ -9,13 +9,14 @@ import java.util.concurrent.Future;
 
 /**
  * This is a strategy to find the best guess for Mastermind by searching
- * through the space of all valid guesses and secrets to find the guess
- * that minimize the average number of remaining solutions to the puzzle.
- * Due to the nature of Mastermind, sometimes the search space can be huge.
- * To optimize for performance, the program create a thread for each CPU
- * thread precent on the machine. The algorithm go multi-threading when
- * the search space exceed a threshold, which is a heuristic value for
- * when the algorithm will take longer than 50 milliseconds to run.
+ * through the space of all candidate guesses and secrets array to find
+ * the guess that minimize the average number of remaining solutions to
+ * the puzzle. Due to the nature of Mastermind, sometimes the search
+ * space can be huge. To optimize for performance, the program create a
+ * thread for each CPU thread precent on the machine. The algorithm go
+ * multi-threading when the search space exceed a threshold, which is a
+ * heuristic value for when the algorithm will take longer than
+ * 50 milliseconds to run.
  */
 public class BestGuess {
     private static final int             THREAD_COUNT       = Runtime.getRuntime().availableProcessors();
@@ -51,6 +52,7 @@ public class BestGuess {
         return findBestGuessParallel(guessesInd, secretsInd, c, d);
     }
 
+    // Provide a way to force specific algorithm choice for benchmarking
     public static long[] findBestGuess(int[] guessesInd, int[] secretsInd, int c, int d, boolean parallel) {
         if (!parallel) return findBestGuessAlgorithm(guessesInd, secretsInd, c, d, 0, guessesInd.length);
         return findBestGuessParallel(guessesInd, secretsInd, c, d);
@@ -62,7 +64,7 @@ public class BestGuess {
         int chunkSize     = (guessesInd.length + THREAD_COUNT - 1) / THREAD_COUNT;
         int actualThreads = (guessesInd.length + chunkSize - 1) / chunkSize;
 
-        // Holder for function's output result
+        // Initialize futures list (holder for pending thread outputs)
         List<Future<long[]>> futures = new ArrayList<>(actualThreads);
 
         // Submit work to each threads

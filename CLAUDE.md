@@ -2,7 +2,8 @@
 
 Mastermind solver using Java algorithms (performance) + Python UI (terminal).
 Goal: Efficiently solve c=9, d=9 cases.
-Status: Rewriting codebase; currently focused on Java algorithm only.
+Status: Java algorithm complete and performing well (~2s for a full 9x9 solve). Currently in cleanup phase (comments,
+tests, chores). Python UI not yet started.
 
 ### Code Organization
 
@@ -20,9 +21,10 @@ Status: Rewriting codebase; currently focused on Java algorithm only.
 5. `GuessStrategy.select()` — chooses which guesses and secrets arrays to pass into `BestGuess`
 6. `MastermindSession` — manages a full game: history, solution space, strategy-based suggestions, undo
 
-### Next Move / Current Move
+### Current Focus
 
-- Implementation done, currently refactoring to improve performance.
+- Java side mostly done; touching up code quality, expanding test coverage, misc chores.
+- Next major phase: Python UI.
 
 ### Preference
 
