@@ -41,4 +41,17 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <finalName>mastermind-solver</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

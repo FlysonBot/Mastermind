@@ -2,14 +2,18 @@
 
 Mastermind solver using Java algorithms (performance) + Python UI (terminal).
 Goal: Efficiently solve c=9, d=9 cases.
-Status: Java algorithm complete and performing well (~2s for a full 9x9 solve). Currently in cleanup phase (comments,
-tests, chores). Python UI not yet started.
+Status: Java algorithm complete. Python UI in progress.
 
 ### Code Organization
 
-- **Active**: `./src/main/java/org/mastermind/` (algorithm)
-- **Tests**: `./src/tests/java/org/mastermind/` (JUnit 5)
-- **Benchmarks**: `./src/benchmarks/java/org/mastermind/` (JMH)
+- **Java algorithm**: `./src/main/java/org/mastermind/`
+- **Java tests**: `./src/tests/java/org/mastermind/` (JUnit 5)
+- **Java benchmarks**: `./src/benchmarks/java/org/mastermind/` (JMH)
+- **Python UI**: `./src/main/python/mastermind/`
+  - `jvm.py` — starts the JVM and imports Java classes
+  - `main.py` — entry point and game loop
+  - `ui.py` — terminal rendering and input parsing
+- **Build**: `make build-java` → `target/mastermind-solver.jar`
 - Everything else is legacy—ignore unless explicitly instructed.
 
 ### Algorithm Flow
@@ -23,8 +27,7 @@ tests, chores). Python UI not yet started.
 
 ### Current Focus
 
-- Java side mostly done; touching up code quality, expanding test coverage, misc chores.
-- Next major phase: Python UI.
+- Python UI (terminal). Java side is complete.
 
 ### Preference
 
