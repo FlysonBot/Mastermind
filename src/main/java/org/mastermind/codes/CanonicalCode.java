@@ -52,36 +52,36 @@ public class CanonicalCode {
         place[d - 1] = 1;
         for (int i = d - 2; i >= 0; i--) place[i] = place[i + 1] * c;
 
-        int[] parts = new int[c];
-        generatePartitions(results, index, parts, 0, d, d, c, place);
+        int[] freq = new int[c];
+        generateFrequencies(results, index, freq, 0, d, d, place);
         return results;
     }
 
-    private static void generatePartitions(
-            int[] results, int[] index, int[] parts, int depth, int remaining, int maxVal, int maxParts, int[] place
+    private static void generateFrequencies(
+            int[] results, int[] index, int[] freq, int color, int remaining, int maxFreq, int[] place
     ) {
         if (remaining == 0) {
-            results[index[0]++] = buildIndex(parts, depth, place);
+            results[index[0]++] = buildIndex(freq, color, place);
             return;
         }
-        if (depth == maxParts) return;
+        if (color == freq.length) return;
 
-        int limit = Math.min(maxVal, remaining);
-        for (int part = limit; part >= 1; part--) {
-            parts[depth] = part;
-            generatePartitions(results, index, parts, depth + 1, remaining - part, part, maxParts, place);
+        int limit = Math.min(maxFreq, remaining);
+        for (int f = limit; f >= 1; f--) {
+            freq[color] = f;
+            generateFrequencies(results, index, freq, color + 1, remaining - f, f, place);
         }
     }
 
-    private static int buildIndex(int[] parts, int numParts, int[] place) {
+    private static int buildIndex(int[] freq, int numColors, int[] place) {
         // Maps a partition (color frequency array) to its lex-smallest representative index.
         // Color 0 gets the highest frequency and occupies the leftmost positions,
         // color 1 gets the next frequency, and so on. This ensures all codes with the
         // same partition map to the same canonical representative.
         int ind = 0;
         int pos = 0;
-        for (int color = 0; color < numParts; color++) {
-            for (int f = 0; f < parts[color]; f++) {
+        for (int color = 0; color < numColors; color++) {
+            for (int f = 0; f < freq[color]; f++) {
                 ind += color * place[pos++];
             }
         }
