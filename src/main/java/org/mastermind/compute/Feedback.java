@@ -64,6 +64,7 @@ public final class Feedback {
 
         // black * 10 + white
         // black * 10 + d - black - colorFreqTotal / 2
+        // black * 9 + d - colorFreqTotal / 2
         return black * 9 + d - (colorFreqTotal >>> 1);
     }
 

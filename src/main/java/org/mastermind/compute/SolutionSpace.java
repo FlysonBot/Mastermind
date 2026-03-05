@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
  * secrets in bulk (64 per word), making repeated filtering fast even
  * when the initial space is large (e.g., 9×9 = 387 M codes).
  */
-public class SolutionSpace {
+public final class SolutionSpace {
     /** Minimum number of set bits before parallel filtering is used. */
     private static final int          PARALLEL_THRESHOLD = 16384;
     private static final ForkJoinPool POOL               = ForkJoinPool.commonPool();

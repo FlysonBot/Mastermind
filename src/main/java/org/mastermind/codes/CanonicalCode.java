@@ -11,7 +11,7 @@ package org.mastermind.codes;
  * multiset of color frequencies, or "bucket." For c=9, d=9 this gives just 30
  * canonical forms, down from 387,420,489 total codes.
  */
-public class CanonicalCode {
+public final class CanonicalCode {
     /**
      * Count the number of canonical forms (integer partitions of d with at most c parts).
      *

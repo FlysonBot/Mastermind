@@ -5,7 +5,7 @@ import org.mastermind.codes.ConvertCode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SolutionSpaceTest {
+class SolutionSpaceTest {
 
     private static final int C     = 6;
     private static final int D     = 4;

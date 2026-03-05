@@ -13,7 +13,7 @@ package org.mastermind.codes;
  * index 1    → code 1112
  * index 1295 → code 6666
  */
-public class ConvertCode {
+public final class ConvertCode {
 
     /**
      * Convert a code int to its index in the AllValidCode array.

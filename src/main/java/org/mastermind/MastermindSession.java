@@ -20,7 +20,7 @@ import java.util.List;
  * which can be edited independently to change strategy behavior.
  * </p>
  */
-public class MastermindSession {
+public final class MastermindSession {
 
     private final int           c;
     private final int           d;

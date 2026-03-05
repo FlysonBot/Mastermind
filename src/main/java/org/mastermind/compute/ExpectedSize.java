@@ -14,7 +14,7 @@ package org.mastermind.compute;
  * ranking does, it is possible to simplify the calculation to just
  * return the sum of frequency square without any division.
  */
-public class ExpectedSize {
+public final class ExpectedSize {
     private final int[] validFeedback;
 
     public ExpectedSize(int d) {

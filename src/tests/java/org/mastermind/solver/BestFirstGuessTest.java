@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BestFirstGuessTest {
+class BestFirstGuessTest {
 
     @Test
-    public void allValidGamesReturnNonNullResult() {
+    void allValidGamesReturnNonNullResult() {
         for (int c = 2; c <= 9; c++) {
             for (int d = 1; d <= 9; d++) {
                 long[] result = BestFirstGuess.of(c, d);
@@ -20,14 +20,14 @@ public class BestFirstGuessTest {
     }
 
     @Test
-    public void invalidColorsThrowException() {
+    void invalidColorsThrowException() {
         assertThrows(IllegalArgumentException.class, () -> BestFirstGuess.of(1, 4));
         assertThrows(IllegalArgumentException.class, () -> BestFirstGuess.of(10, 4));
         assertThrows(IllegalArgumentException.class, () -> BestFirstGuess.of(0, 4));
     }
 
     @Test
-    public void invalidDigitsThrowException() {
+    void invalidDigitsThrowException() {
         assertThrows(IllegalArgumentException.class, () -> BestFirstGuess.of(4, 0));
         assertThrows(IllegalArgumentException.class, () -> BestFirstGuess.of(4, 10));
     }

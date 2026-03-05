@@ -6,7 +6,7 @@ import org.mastermind.codes.ConvertCode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BestGuessTest {
+class BestGuessTest {
 
     private static final int   C = 6;
     private static final int   D = 4;
@@ -15,7 +15,7 @@ public class BestGuessTest {
     private static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         allInd = new int[(int) Math.pow(C, D)];
         for (int i = 0; i < allInd.length; i++) allInd[i] = i;
     }
@@ -26,7 +26,7 @@ public class BestGuessTest {
      * Verifies that the result matches the expected best guess of 1123.
      */
     @Test
-    public void testOrdinaryVersion() {
+    void testOrdinaryVersion() {
         int bestGuessInd = (int) BestGuess.findBestGuess(allInd, allInd, C, D, false)[0];
         assertEquals(ind(1123), bestGuessInd);
     }
@@ -37,7 +37,7 @@ public class BestGuessTest {
      * Verifies that the result matches the expected best guess of 1123.
      */
     @Test
-    public void testParallelVersion() {
+    void testParallelVersion() {
         int bestGuessInd = (int) BestGuess.findBestGuess(allInd, allInd, C, D, true)[0];
         assertEquals(ind(1123), bestGuessInd);
     }

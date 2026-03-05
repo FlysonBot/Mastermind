@@ -20,7 +20,7 @@ import org.mastermind.compute.SolutionSpace;
  * <p>Threshold: {@code guesses.length × secrets.length} above which the
  * parallel BestGuess search exceeds ~1 second on the target machine.
  */
-public class GuessStrategy {
+public final class GuessStrategy {
 
     private static final long THRESHOLD = 130_000_000L;
 

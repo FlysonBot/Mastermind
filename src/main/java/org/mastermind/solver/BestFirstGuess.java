@@ -10,7 +10,7 @@ import org.mastermind.compute.ExpectedSize;
  * Use {@link #of(int, int)} at runtime. Run {@link BestFirstGuessCalculator#main(String[])} once to
  * regenerate the hardcoded values after algorithm changes.
  */
-public class BestFirstGuess {
+public final class BestFirstGuess {
 
     /**
      * Returns the best first guess and its true rank for a Mastermind game of c colors and d digits.

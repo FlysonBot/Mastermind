@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * sample of secrets instead of iterating through all possible
  * secrets, allowing for faster computation for larger game.
  */
-public class SampledCode {
+public final class SampledCode {
 
     /**
      * Maximum validCount for which enumeration is used. Above this threshold,

@@ -6,7 +6,7 @@ package org.mastermind.codes;
  * if it has exactly d digits, and uses values between 1 and c
  * inclusively for each digit.
  */
-public class AllValidCode {
+public final class AllValidCode {
     /**
      * Generate all valid Mastermind code indices for a game.
      *

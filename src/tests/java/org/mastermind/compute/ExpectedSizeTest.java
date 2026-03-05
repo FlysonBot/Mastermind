@@ -5,7 +5,7 @@ import org.mastermind.codes.ConvertCode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ExpectedSizeTest {
+class ExpectedSizeTest {
 
     private static final int          COLORS          = 6;
     private static final int          DIGITS          = 4;
@@ -29,7 +29,7 @@ public class ExpectedSizeTest {
     }
 
     @Test
-    public void testExpectedSize() {
+    void testExpectedSize() {
         assertEquals(204.5355f, calcExpectedSize(ind(1122)), DELTA);
         assertEquals(185.2685f, calcExpectedSize(ind(1123)), DELTA);
         assertEquals(188.1898f, calcExpectedSize(ind(1234)), DELTA);
@@ -39,7 +39,7 @@ public class ExpectedSizeTest {
     }
 
     @Test
-    public void testCalcExpectedRankFirstMatchesFullRank() {
+    void testCalcExpectedRankFirstMatchesFullRank() {
         int[] guesses = { ind(1122), ind(1123), ind(1234) };
         for (int guessInd : guesses) {
             long rankFull = expectedSizeObj.calcExpectedRank(guessInd, secretsInd, COLORS, DIGITS, feedbackFreq);
@@ -49,7 +49,7 @@ public class ExpectedSizeTest {
     }
 
     @Test
-    public void testConvertSampleRankToExpectedSize() {
+    void testConvertSampleRankToExpectedSize() {
         // Use full population as the "sample" (sampleSize == total).
         // Then sampleRank == fullRank, and the conversion must recover the exact expected size.
         int   guessInd     = ind(1234);
@@ -59,7 +59,7 @@ public class ExpectedSizeTest {
     }
 
     @Test
-    public void testExpectedSizeSymmetry() {
+    void testExpectedSizeSymmetry() {
         // Guesses with the same color multiset should yield the same expected size
         float base = calcExpectedSize(ind(1122));
         assertEquals(base, calcExpectedSize(ind(1212)), DELTA);

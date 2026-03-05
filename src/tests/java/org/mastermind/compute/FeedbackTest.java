@@ -5,7 +5,7 @@ import org.mastermind.codes.ConvertCode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FeedbackTest {
+class FeedbackTest {
 
     private static final int   COLORS             = 6;  // c parameter
     private static final int   DIGITS             = 4;  // d parameter
@@ -19,7 +19,7 @@ public class FeedbackTest {
     }
 
     @Test
-    public void testIterationPerformance() {
+    void testIterationPerformance() {
         System.out.println("\n=== Iteration Performance Test ===");
         long startTime;
         int  totalCalls = 0;
@@ -46,7 +46,7 @@ public class FeedbackTest {
     }
 
     @Test
-    public void testSingleCombinationPerformance() {
+    void testSingleCombinationPerformance() {
         System.out.println("\n=== Fixed Input Performance Test ===");
         long startTime = System.nanoTime();
 
@@ -65,7 +65,7 @@ public class FeedbackTest {
     }
 
     @Test
-    public void testEdgeCases() {
+    void testEdgeCases() {
         System.out.println("\n=== Edge Cases Test ===");
 
         // Perfect match

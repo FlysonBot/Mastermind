@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
  * which is a heuristic for when the algorithm would otherwise take longer than
  * 50 milliseconds to run.
  */
-public class BestGuess {
+public final class BestGuess {
     private static final int             THREAD_COUNT       = Runtime.getRuntime().availableProcessors();
     private static final ExecutorService POOL;
     private static final long            PARALLEL_THRESHOLD = 3_000_000;
