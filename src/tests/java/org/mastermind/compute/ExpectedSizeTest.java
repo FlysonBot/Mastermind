@@ -1,4 +1,4 @@
-package org.mastermind.solver;
+package org.mastermind.compute;
 
 import org.junit.jupiter.api.Test;
 import org.mastermind.codes.ConvertCode;

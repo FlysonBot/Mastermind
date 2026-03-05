@@ -1,5 +1,7 @@
 package org.mastermind.solver;
 
+import org.mastermind.compute.ExpectedSize;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;

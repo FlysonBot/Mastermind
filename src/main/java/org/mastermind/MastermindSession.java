@@ -1,7 +1,11 @@
 package org.mastermind;
 
 import org.mastermind.codes.ConvertCode;
-import org.mastermind.solver.*;
+import org.mastermind.compute.ExpectedSize;
+import org.mastermind.compute.SolutionSpace;
+import org.mastermind.solver.BestFirstGuess;
+import org.mastermind.solver.BestGuess;
+import org.mastermind.solver.GuessStrategy;
 
 import java.util.ArrayList;
 import java.util.Collections;

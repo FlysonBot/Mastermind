@@ -1,4 +1,4 @@
-package org.mastermind.solver;
+package org.mastermind.compute;
 
 import java.util.BitSet;
 import java.util.concurrent.ForkJoinPool;

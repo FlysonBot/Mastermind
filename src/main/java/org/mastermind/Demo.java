@@ -1,8 +1,8 @@
 package org.mastermind;
 
 import org.mastermind.codes.ConvertCode;
-import org.mastermind.solver.ExpectedSize;
-import org.mastermind.solver.Feedback;
+import org.mastermind.compute.ExpectedSize;
+import org.mastermind.compute.Feedback;
 
 /**
  * Demo: auto-solves a single Mastermind game and prints each turn.

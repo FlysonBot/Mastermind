@@ -1,4 +1,4 @@
-package org.mastermind.solver;
+package org.mastermind.compute;
 
 import org.mastermind.codes.ConvertCode;
 import org.openjdk.jmh.annotations.*;

@@ -1,4 +1,4 @@
-package org.mastermind.solver;
+package org.mastermind.compute;
 
 /**
  * Incremental feedback computation for sequential secret iteration.

@@ -2,6 +2,7 @@ package org.mastermind.solver;
 
 import org.mastermind.codes.AllValidCode;
 import org.mastermind.codes.ConvertCode;
+import org.mastermind.compute.ExpectedSize;
 
 /**
  * Provides the best first guess for any supported Mastermind configuration.

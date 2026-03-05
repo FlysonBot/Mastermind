@@ -3,6 +3,7 @@ package org.mastermind.solver;
 import org.mastermind.codes.CanonicalCode;
 import org.mastermind.codes.ConvertCode;
 import org.mastermind.codes.SampledCode;
+import org.mastermind.compute.ExpectedSize;
 
 /**
  * Offline calculator for regenerating the hardcoded table in {@link BestFirstGuess}.

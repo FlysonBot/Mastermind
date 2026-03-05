@@ -2,9 +2,9 @@ package org.mastermind;
 
 import org.junit.jupiter.api.Test;
 import org.mastermind.codes.ConvertCode;
+import org.mastermind.compute.ExpectedSize;
+import org.mastermind.compute.Feedback;
 import org.mastermind.solver.BestFirstGuess;
-import org.mastermind.solver.ExpectedSize;
-import org.mastermind.solver.Feedback;
 
 import static org.junit.jupiter.api.Assertions.*;
 

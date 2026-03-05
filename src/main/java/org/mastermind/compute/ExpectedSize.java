@@ -1,4 +1,4 @@
-package org.mastermind.solver;
+package org.mastermind.compute;
 
 /**
  * In Mastermind, after each guess, the solution space is reduced
