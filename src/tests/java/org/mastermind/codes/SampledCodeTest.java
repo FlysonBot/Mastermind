@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.BitSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SampledCodeTest {
@@ -40,5 +42,47 @@ class SampledCodeTest {
         long  uniqueCount = java.util.Arrays.stream(result).distinct().count();
         assertTrue(uniqueCount > 100,
                    "Expected high variety in samples, got only " + uniqueCount + " unique indices");
+    }
+
+    // --- getValidSample ---
+
+    @Test
+    void testGetValidSampleEnumerationPathOnlyReturnsSetBits() {
+        // validCount <= MAX_ENUM: enumeration path
+        BitSet remaining = new BitSet(10);
+        remaining.set(1);
+        remaining.set(3);
+        remaining.set(7);
+        int[] result = SampledCode.getValidSample(remaining, 3, 2, 4, 50);
+        for (int idx : result) {
+            assertTrue(remaining.get(idx), "Index " + idx + " is not a set bit");
+        }
+    }
+
+    @Test
+    void testGetValidSampleRejectionPathOnlyReturnsSetBits() {
+        // validCount > MAX_ENUM: rejection sampling path.
+        // We fake this by constructing a BitSet where all bits are set and validCount > MAX_ENUM.
+        int    total     = SampledCode.MAX_ENUM + 1;
+        BitSet remaining = new BitSet(total);
+        remaining.set(0, total); // all bits set so rejection always succeeds immediately
+        int[] result = SampledCode.getValidSample(remaining, total, 9, 7, 50);
+        for (int idx : result) {
+            assertTrue(idx >= 0 && idx < total, "Index " + idx + " out of range");
+            assertTrue(remaining.get(idx), "Index " + idx + " is not a set bit");
+        }
+    }
+
+    @Test
+    void testGetValidSampleWithSampleSizeExceedingValidCount() {
+        // Sampling with replacement: duplicates are expected, should not throw
+        BitSet remaining = new BitSet(10);
+        remaining.set(2);
+        remaining.set(5);
+        int[] result = SampledCode.getValidSample(remaining, 2, 2, 4, 100);
+        assertEquals(100, result.length);
+        for (int idx : result) {
+            assertTrue(remaining.get(idx), "Index " + idx + " is not a set bit");
+        }
     }
 }
