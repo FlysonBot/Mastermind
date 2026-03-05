@@ -21,11 +21,12 @@ public class SolutionSpace {
     private static final int          PARALLEL_THRESHOLD = 16384;
     private static final ForkJoinPool POOL               = ForkJoinPool.commonPool();
 
-    private final int    c;
-    private final int    d;
-    private final int    totalCodes;  // c^d
-    private final BitSet remaining;   // bit i set  ⟺  index i is still a valid secret
-    private       int    size;        // cached cardinality of remaining
+    private final int     c;
+    private final int     d;
+    private final int     totalCodes;           // c^d
+    private final BitSet  remaining;            // bit i set  ⟺  index i is still a valid secret
+    private       int     size;                 // cached cardinality of remaining
+    private       boolean isFirstFilter = true; // flag to use specialized function for first filter
 
     public SolutionSpace(int c, int d) {
         this.c = c;
@@ -40,6 +41,7 @@ public class SolutionSpace {
     public void reset() {
         remaining.set(0, totalCodes);
         size = totalCodes;
+        isFirstFilter = true;
     }
 
     /**
@@ -53,21 +55,31 @@ public class SolutionSpace {
      * BitSet, so concurrent {@code clear()} calls on non-overlapping words are safe.
      * For small spaces the single-threaded path is used to avoid FJP overhead.
      *
+     * <p>The first call uses an incremental path that avoids recomputing all digit
+     * comparisons from scratch for every secret index.
+     *
      * @param guessInd         index of the guess code (0-based, base-c encoding)
      * @param obtainedFeedback feedback value (black * 9 + d - colorFreqTotal/2)
      */
     public void filterSolution(int guessInd, int obtainedFeedback) {
+        // Read and update flag
+        final boolean isFirst = isFirstFilter;
+        if (isFirst) isFirstFilter = false;
+
+        // When size is small, go single-threaded
         if (size < PARALLEL_THRESHOLD) {
-            size -= filterRange(guessInd, obtainedFeedback, 0, totalCodes);
+            size -= isFirst ?
+                    filterRangeFirst(guessInd, obtainedFeedback, 0, totalCodes) :
+                    filterRange(guessInd, obtainedFeedback, 0, totalCodes);
             return;
         }
 
         // Split into word-aligned (multiple-of-64) chunks for safe concurrent access.
         int parallelism  = POOL.getParallelism();
-        int words        = (totalCodes + 63) >>> 6;          // number of 64-bit words
+        int words        = (totalCodes + 63) >>> 6;
         int wordsPerTask = Math.max(1, (words + parallelism - 1) / parallelism);
 
-        // Submit all tasks except the last; run the last chunk on the calling thread.
+        // Multi-threaded route
         @SuppressWarnings("unchecked")
         Future<Integer>[] futures = new Future[parallelism];
         int fromIndex = 0;
@@ -75,17 +87,26 @@ public class SolutionSpace {
         while (fromIndex + wordsPerTask * 64 < totalCodes) {
             final int from = fromIndex;
             final int to   = fromIndex + wordsPerTask * 64;
-            futures[taskCount++] = POOL.submit(() -> filterRange(guessInd, obtainedFeedback, from, to));
+
+            // Submit the task
+            futures[taskCount++] = isFirst ?
+                    POOL.submit(() -> filterRangeFirst(guessInd, obtainedFeedback, from, to)) :
+                    POOL.submit(() -> filterRange(guessInd, obtainedFeedback, from, to));
+
             fromIndex = to;
         }
 
-        // Run the tail on the calling thread and sum removed counts.
-        int removed = filterRange(guessInd, obtainedFeedback, fromIndex, totalCodes);
+        // Handle the last chunk in main thread
+        int removed = isFirst ?
+                filterRangeFirst(guessInd, obtainedFeedback, fromIndex, totalCodes) :
+                filterRange(guessInd, obtainedFeedback, fromIndex, totalCodes);
 
-        // Wait for all submitted tasks and accumulate removed counts.
+        // Sum up the removed count from other threads
         for (int i = 0; i < taskCount; i++) {
             try { removed += futures[i].get(); } catch (Exception e) { throw new RuntimeException(e); }
         }
+
+        // Update size
         size -= removed;
     }
 
@@ -99,12 +120,54 @@ public class SolutionSpace {
     private int filterRange(int guessInd, int obtainedFeedback, int from, int to) {
         int[] colorFreqCounter = new int[c];
         int   removed          = 0;
+
+        // Call getFeedback for each secret
         for (int i = remaining.nextSetBit(from); i >= 0 && i < to; i = remaining.nextSetBit(i + 1)) {
             if (Feedback.getFeedback(guessInd, i, c, d, colorFreqCounter) != obtainedFeedback) {
                 remaining.clear(i);
                 removed++;
             }
         }
+        return removed;
+    }
+
+    /**
+     * Incremental single-threaded filter over a contiguous {@code [from, to)} range
+     * (used only for the first filter when all bits are set). Iterates every index
+     * with a plain for-loop and computes feedback incrementally via
+     * {@link FeedbackIncremental#getFeedbackIncremental}.
+     *
+     * @return number of bits cleared
+     */
+    private int filterRangeFirst(int guessInd, int obtainedFeedback, int from, int to) {
+        FeedbackIncremental.State init             = FeedbackIncremental.setupIncremental(guessInd, from, c, d);
+        int[]                     guessDigits      = init.guessDigits();
+        int[]                     secretDigits     = init.secretDigits();
+        int[]                     colorFreqCounter = init.colorFreqCounter();
+        int                       black            = init.black();
+        int                       colorFreqTotal   = init.colorFreqTotal();
+        int                       feedback0        = black * 9 + d - (colorFreqTotal >>> 1);
+
+        // Handle the first secret in chunk
+        int removed = 0;
+        if (feedback0 != obtainedFeedback) {
+            remaining.clear(from);
+            removed++;
+        }
+
+        // Handle the remaining secrets
+        int[] result = new int[3];
+        for (int i = from + 1; i < to; i++) {
+            FeedbackIncremental.getFeedbackIncremental(guessDigits, secretDigits, black, colorFreqCounter,
+                                                       colorFreqTotal, c, d, result);
+            black = result[1];
+            colorFreqTotal = result[2];
+            if (result[0] != obtainedFeedback) {
+                remaining.clear(i);
+                removed++;
+            }
+        }
+
         return removed;
     }
 

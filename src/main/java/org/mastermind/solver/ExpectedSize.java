@@ -69,4 +69,46 @@ public class ExpectedSize {
     public float calcExpectedSize(int guessInd, int[] secretsInd, int c, int d, int[] feedbackFreq) {
         return convertRankToExpectedSize(calcExpectedRank(guessInd, secretsInd, c, d, feedbackFreq), secretsInd.length);
     }
+
+    /**
+     * Incremental variant of {@link #calcExpectedRank} for the full secret space (0..c^d-1).
+     * Instead of an arbitrary secrets array, iterates all indices sequentially and uses
+     * {@link FeedbackIncremental} to avoid recomputing digit decompositions from scratch.
+     *
+     * @param guessInd     index of the guess code (0-based, base-c encoding)
+     * @param c            number of colors (<= 9)
+     * @param d            number of digits (<= 9)
+     * @param total        c^d (total number of codes)
+     * @param feedbackFreq int array of 0 with length 100
+     * @return Sum of squared feedback frequencies (same semantics as {@link #calcExpectedRank})
+     */
+    public long calcExpectedRankFirst(int guessInd, int c, int d, int total, int[] feedbackFreq) {
+        FeedbackIncremental.State init             = FeedbackIncremental.setupIncremental(guessInd, 0, c, d);
+        int[]                     guessDigits      = init.guessDigits();
+        int[]                     secretDigits     = init.secretDigits();
+        int[]                     colorFreqCounter = init.colorFreqCounter();
+        int                       black            = init.black();
+        int                       colorFreqTotal   = init.colorFreqTotal();
+
+        feedbackFreq[black * 9 + d - (colorFreqTotal >>> 1)]++;
+
+        int[] result = new int[3];
+        for (int secretInd = 1; secretInd < total; secretInd++) {
+            FeedbackIncremental.getFeedbackIncremental(guessDigits, secretDigits, black, colorFreqCounter,
+                                                       colorFreqTotal, c, d, result);
+            black = result[1];
+            colorFreqTotal = result[2];
+            feedbackFreq[result[0]]++;
+        }
+
+        long sum = 0;
+        long freq;
+        for (int feedback : validFeedback) {
+            freq = feedbackFreq[feedback];
+            sum += freq * freq;
+            feedbackFreq[feedback] = 0;
+        }
+
+        return sum;
+    }
 }

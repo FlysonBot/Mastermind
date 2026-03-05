@@ -94,6 +94,60 @@ public class FeedbackTest {
     }
 
     @Test
+    void testGetFeedbackIncrementalMatchesGetFeedback() {
+        // For every guess in the 6x4 space, iterate all secrets sequentially using
+        // getFeedbackIncremental and verify each result matches getFeedback.
+        int   c            = COLORS, d = DIGITS, total = TOTAL_COMBINATIONS;
+        int[] colorFreqRef = new int[c];
+        int[] result       = new int[3];
+
+        for (int guessInd = 0; guessInd < total; guessInd++) {
+            // Pre-extract guess digits
+            int[] guessDigits = new int[d];
+            int   tmp         = guessInd;
+            for (int p = 0; p < d; p++) {
+                guessDigits[p] = tmp % c;
+                tmp /= c;
+            }
+
+            // Bootstrap incremental state at secretInd=0
+            int[] colorFreqCounter = new int[c];
+            int   feedback0        = Feedback.getFeedback(guessInd, 0, c, d, colorFreqCounter);
+            int   black0           = 0;
+            int[] secretDigits     = new int[d];
+            for (int p = 0; p < d; p++) {
+                int gs = guessDigits[p], ss = 0;
+                secretDigits[p] = ss;
+                if (gs == ss) black0++;
+                else {
+                    colorFreqCounter[gs]++;
+                    colorFreqCounter[ss]--;
+                }
+            }
+            assertEquals(Feedback.getFeedback(guessInd, 0, c, d, colorFreqRef), feedback0,
+                         "Bootstrap mismatch at guessInd=" + guessInd + " secretInd=0");
+
+            int colorFreqTotal = 0;
+            for (int i = 0; i < c; i++) {
+                int f = colorFreqCounter[i];
+                colorFreqTotal += f > 0 ? f : -f;
+            }
+
+            int black = black0;
+            for (int secretInd = 1; secretInd < total; secretInd++) {
+                FeedbackIncremental.getFeedbackIncremental(guessDigits, secretDigits, black, colorFreqCounter,
+                                                           colorFreqTotal, c,
+                                                           d, result);
+                black = result[1];
+                colorFreqTotal = result[2];
+                int expected = Feedback.getFeedback(guessInd, secretInd, c, d, colorFreqRef);
+                assertEquals(expected, result[0],
+                             "Mismatch at guessInd=" + guessInd + " secretInd=" + secretInd);
+            }
+        }
+    }
+
+    @Test
     void testCalcFeedbackSize() {
         assertEquals(55, Feedback.calcFeedbackSize(9));
     }

@@ -96,11 +96,18 @@ public class MastermindSession {
         if (solved) throw new IllegalStateException("Game is already solved.");
 
         history.add(new int[] { guess, feedback });
-        solutionSpace.filterSolution(guess, feedback);
 
+        // If game is solved, skip filtering directly
         if (feedback == winFeedback) {
             solved = true;
-        } else if (solutionSpace.getSize() == 0) {
+            return;
+        }
+
+        // Otherwise filter solution space
+        solutionSpace.filterSolution(guess, feedback);
+
+        // Handle error case when no solution remains
+        if (solutionSpace.getSize() == 0) {
             throw new IllegalArgumentException(
                     "No valid secrets remain. The feedback provided may be inconsistent with prior guesses.");
         }
