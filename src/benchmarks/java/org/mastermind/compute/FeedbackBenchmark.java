@@ -104,7 +104,7 @@ public class FeedbackBenchmark {
     }
 }
 
-/* Benchmark average:
+/* Average Performance:
 Benchmark                                     Mode  Cnt   Score   Error  Units
 FeedbackBenchmark.doubleVariedInputBenchmark          avgt    4  30.815 ± 3.831  ms/op
 FeedbackBenchmark.fixInputBenchmark                   avgt    4  18.644 ± 0.701  ns/op

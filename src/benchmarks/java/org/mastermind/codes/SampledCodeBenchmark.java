@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 public class SampledCodeBenchmark {
 
-    // ── Benchmarks ────────────────────────────────────────────────────────────
+    // ── Helper ────────────────────────────────────────────────────────────────
 
     private static BitSet buildBitSet(double fillRate) {
         int    total = (int) Math.pow(9, 9);
@@ -33,6 +33,8 @@ public class SampledCodeBenchmark {
         }
         return bs;
     }
+
+    // ── Benchmarks ────────────────────────────────────────────────────────────
 
     @Benchmark
     public void sample_enum_1pct(Fill1pct state, Blackhole bh) {
@@ -64,12 +66,12 @@ public class SampledCodeBenchmark {
         bh.consume(SampledCode.getValidSample(state.remaining, state.validCount, 9, 9, state.sampleSize));
     }
 
-    // ── States ────────────────────────────────────────────────────────────────
-
     @Benchmark
     public void sample_reject_100pct(Fill100pct state, Blackhole bh) {
         bh.consume(SampledCode.getValidSample(state.remaining, state.validCount, 9, 9, state.sampleSize));
     }
+
+    // ── States ────────────────────────────────────────────────────────────────
 
     @State(Scope.Thread)
     public static class BaseState {
@@ -119,8 +121,6 @@ public class SampledCodeBenchmark {
         final BitSet remaining  = buildBitSet(0.500);
         final int    validCount = remaining.cardinality();
     }
-
-    // ── Helper ────────────────────────────────────────────────────────────────
 
     @State(Scope.Thread)
     public static class Fill100pct extends BaseState {

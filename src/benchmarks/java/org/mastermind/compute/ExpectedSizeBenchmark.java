@@ -49,7 +49,7 @@ public class ExpectedSizeBenchmark {
     }
 }
 
-/* Benchmark Average:
+/* Average Performance:
 Benchmark                            Mode  Cnt   Score   Error  Units
 ExpectedSizeBenchmark.benchmarkTest  avgt    9  25.656 ± 1.551  us/op
 ExpectedSizeBenchmark.variedTest     avgt    9  32.383 ± 2.467  ms/op
