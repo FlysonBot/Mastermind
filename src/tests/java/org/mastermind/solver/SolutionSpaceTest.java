@@ -14,6 +14,36 @@ public class SolutionSpaceTest {
     private static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
 
     @Test
+    void testFilterSolutionTwice() {
+        int   guess1Idx        = ind(1123);
+        int   guess2Idx        = ind(2456);
+        int   secretIdx        = ind(4563);
+        int[] colorFreqCounter = new int[C];
+
+        int feedback1 = Feedback.getFeedback(guess1Idx, secretIdx, C, D, colorFreqCounter);
+        int feedback2 = Feedback.getFeedback(guess2Idx, secretIdx, C, D, colorFreqCounter);
+
+        // Build reference: indices consistent with both feedbacks
+        int expectedCount = 0;
+        for (int s = 0; s < TOTAL; s++) {
+            if (Feedback.getFeedback(guess1Idx, s, C, D, colorFreqCounter) == feedback1
+                    && Feedback.getFeedback(guess2Idx, s, C, D, colorFreqCounter) == feedback2) {
+                expectedCount++;
+            }
+        }
+
+        SolutionSpace space = new SolutionSpace(C, D);
+        space.filterSolution(guess1Idx, feedback1);
+        space.filterSolution(guess2Idx, feedback2);
+
+        assertEquals(expectedCount, space.getSize());
+        for (int s : space.getSecrets()) {
+            assertEquals(feedback1, Feedback.getFeedback(guess1Idx, s, C, D, colorFreqCounter));
+            assertEquals(feedback2, Feedback.getFeedback(guess2Idx, s, C, D, colorFreqCounter));
+        }
+    }
+
+    @Test
     void testFilterSolution() {
         int   guessIdx         = ind(1123);
         int   secretIdx        = ind(4563);
