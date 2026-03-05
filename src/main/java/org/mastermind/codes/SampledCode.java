@@ -1,7 +1,7 @@
 package org.mastermind.codes;
 
 import java.util.BitSet;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The Monte Carlo method is a way to estimate population parameters
@@ -23,12 +23,11 @@ public class SampledCode {
      * @return A random sample of code indices in [0, c^d)
      */
     public static int[] getSample(int c, int d, int sampleSize) {
-        Random random = new Random();
         int    total  = (int) Math.pow(c, d);
         int[]  sample = new int[sampleSize];
 
         for (int i = 0; i < sampleSize; i++) {
-            sample[i] = random.nextInt(total);
+            sample[i] = ThreadLocalRandom.current().nextInt(total);
         }
 
         return sample;
@@ -45,7 +44,6 @@ public class SampledCode {
     public static int[] getValidSample(BitSet remaining, int validCount, int c, int d, int sampleSize) {
         int    total  = (int) Math.pow(c, d);
         int[]  sample = new int[sampleSize];
-        Random random = new Random();
 
         if (validCount <= MAX_ENUM) {
             // Enumeration: bounded memory (≤20MB), fast scan, fast random access.
@@ -55,13 +53,13 @@ public class SampledCode {
                 valid[j++] = i;
             }
             for (int i = 0; i < sampleSize; i++) {
-                sample[i] = valid[random.nextInt(validCount)];
+                sample[i] = valid[ThreadLocalRandom.current().nextInt(validCount)];
             }
         } else {
             // Rejection sampling: validCount is large so fill rate is high and rejection is fast.
             for (int i = 0; i < sampleSize; i++) {
                 int idx;
-                do { idx = random.nextInt(total); } while (!remaining.get(idx));
+                do { idx = ThreadLocalRandom.current().nextInt(total); } while (!remaining.get(idx));
                 sample[i] = idx;
             }
         }
