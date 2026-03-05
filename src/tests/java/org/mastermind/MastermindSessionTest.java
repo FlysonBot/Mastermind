@@ -2,6 +2,7 @@ package org.mastermind;
 
 import org.junit.jupiter.api.Test;
 import org.mastermind.codes.ConvertCode;
+import org.mastermind.solver.BestFirstGuess;
 import org.mastermind.solver.ExpectedSize;
 import org.mastermind.solver.Feedback;
 
@@ -28,6 +29,25 @@ public class MastermindSessionTest {
     @Test
     void testSolveSecret6666() {
         runGame(ind(6666));
+    }
+
+    /**
+     * On an empty history, suggestGuessWithDetails should return the precomputed
+     * best first guess with the correct rank and the full solution space size.
+     */
+    @Test
+    void testSuggestGuessWithDetailsOnEmptyHistory() {
+        MastermindSession session = new MastermindSession(C, D);
+        long[]            details = session.suggestGuessWithDetails();
+
+        long[] best          = BestFirstGuess.of(C, D);
+        int    expectedGuess = ConvertCode.toIndex(C, D, (int) best[0]);
+        long   expectedRank  = best[1];
+        int    expectedSpace = (int) Math.pow(C, D);
+
+        assertEquals(expectedGuess, details[0], "First guess index should match BestFirstGuess table");
+        assertEquals(expectedRank, details[1], "Rank should match precomputed BestFirstGuess rank");
+        assertEquals(expectedSpace, details[2], "Secrets length should be the full solution space");
     }
 
     /** Simulate a full game with secret 1562 (arbitrary mid-range code). */
