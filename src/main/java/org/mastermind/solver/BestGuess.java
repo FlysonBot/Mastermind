@@ -1,7 +1,6 @@
 package org.mastermind.solver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -10,66 +9,74 @@ import java.util.concurrent.Future;
 
 /**
  * This is a strategy to find the best guess for Mastermind by searching
- * through the space of all valid guesses and secrets to find the guess
- * that minimize the average number of remaining solutions to the puzzle.
- * Due to the nature of Mastermind, sometimes the search space can be huge.
- * To optimize for performance, the program create a thread for each CPU
- * thread precent on the machine. The algorithm go multi-threading when
- * the search space exceed a threshold, which is a heuristic value for
- * when the algorithm will take longer than 50 milliseconds to run.
+ * through the space of all candidate guesses and secrets array to find
+ * the guess that minimize the average number of remaining solutions to
+ * the puzzle. Due to the nature of Mastermind, sometimes the search
+ * space can be huge. To optimize for performance, the program create a
+ * thread for each CPU thread precent on the machine. The algorithm go
+ * multi-threading when the search space exceed a threshold, which is a
+ * heuristic value for when the algorithm will take longer than
+ * 50 milliseconds to run.
  */
 public class BestGuess {
     private static final int             THREAD_COUNT       = Runtime.getRuntime().availableProcessors();
-    private static final ExecutorService POOL               = Executors.newFixedThreadPool(THREAD_COUNT);
+    private static final ExecutorService POOL;
     private static final long            PARALLEL_THRESHOLD = 3_000_000;
 
-    public static void shutdown() { POOL.shutdown(); }
+    static {
+        POOL = Executors.newFixedThreadPool(THREAD_COUNT, r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        });
+    }
 
     /**
      * Find the guess that will minimize the expected size of the solution space
      * after guessing.
      *
-     * @param guesses all candidate guesses
-     * @param secrets remaining possible secrets
-     * @param c       number of colors (<= 9)
-     * @param d       number of digits
-     * @return long[] where [0]=best guess, [1]=its rank (sum of squared partition sizes)
+     * @param guessesInd all candidate guess indices (0-based, base-c encoding)
+     * @param secretsInd remaining possible secret indices (0-based, base-c encoding)
+     * @param c          number of colors (<= 9)
+     * @param d          number of digits
+     * @return long[] where [0]=best guess index, [1]=its rank (sum of squared partition sizes)
      */
-    public static long[] findBestGuess(int[] guesses, int[] secrets, int c, int d) {
+    public static long[] findBestGuess(int[] guessesInd, int[] secretsInd, int c, int d) {
 
         // Determine whether multi-threading is needed
-        if ((long) guesses.length * secrets.length < PARALLEL_THRESHOLD) {
-            return findBestGuessAlgorithm(guesses, secrets, c, d, 0, guesses.length);
+        if ((long) guessesInd.length * secretsInd.length < PARALLEL_THRESHOLD) {
+            return findBestGuessAlgorithm(guessesInd, secretsInd, c, d, 0, guessesInd.length);
         }
 
         // Call the parallelized version of the algorithm
-        return findBestGuessParallel(guesses, secrets, c, d);
+        return findBestGuessParallel(guessesInd, secretsInd, c, d);
     }
 
-    public static long[] findBestGuess(int[] guesses, int[] secrets, int c, int d, boolean parallel) {
-        if (!parallel) return findBestGuessAlgorithm(guesses, secrets, c, d, 0, guesses.length);
-        return findBestGuessParallel(guesses, secrets, c, d);
+    // Provide a way to force specific algorithm choice for benchmarking
+    public static long[] findBestGuess(int[] guessesInd, int[] secretsInd, int c, int d, boolean parallel) {
+        if (!parallel) return findBestGuessAlgorithm(guessesInd, secretsInd, c, d, 0, guessesInd.length);
+        return findBestGuessParallel(guessesInd, secretsInd, c, d);
     }
 
-    private static long[] findBestGuessParallel(int[] guesses, int[] secrets, int c, int d) {
+    private static long[] findBestGuessParallel(int[] guessesInd, int[] secretsInd, int c, int d) {
 
-        // Calculate the chunk size with ceil(guesses.length / THREAD_COUNT)
-        int chunkSize     = (guesses.length + THREAD_COUNT - 1) / THREAD_COUNT;
-        int actualThreads = (guesses.length + chunkSize - 1) / chunkSize;
+        // Calculate the chunk size with ceil(guessesInd.length / THREAD_COUNT)
+        int chunkSize     = (guessesInd.length + THREAD_COUNT - 1) / THREAD_COUNT;
+        int actualThreads = (guessesInd.length + chunkSize - 1) / chunkSize;
 
-        // Holder for function's output result
+        // Initialize futures list (holder for pending thread outputs)
         List<Future<long[]>> futures = new ArrayList<>(actualThreads);
 
         // Submit work to each threads
         for (int t = 0; t < actualThreads; t++) {
             final int from = t * chunkSize;
-            final int to   = Math.min(from + chunkSize, guesses.length);
-            futures.add(t, POOL.submit(() -> findBestGuessAlgorithm(guesses, secrets, c, d, from, to)));
+            final int to   = Math.min(from + chunkSize, guessesInd.length);
+            futures.add(t, POOL.submit(() -> findBestGuessAlgorithm(guessesInd, secretsInd, c, d, from, to)));
         }
 
         // Find best guess from returned result
-        int  bestGuess = -1;
-        long bestScore = Long.MAX_VALUE;
+        int  bestGuessInd = -1;
+        long bestScore    = Long.MAX_VALUE;
 
         for (Future<long[]> future : futures) {
             try {
@@ -78,7 +85,7 @@ public class BestGuess {
 
                 // Update best guess if found better score
                 if (result[1] < bestScore) {
-                    bestGuess = (int) result[0];
+                    bestGuessInd = (int) result[0];
                     bestScore = result[1];
                 }
 
@@ -90,65 +97,28 @@ public class BestGuess {
             }
         }
 
-        return new long[] { bestGuess, bestScore };
+        return new long[] { bestGuessInd, bestScore };
     }
 
-    private static long[] findBestGuessAlgorithm(int[] guesses, int[] secrets, int c, int d, int start, int end) {
+    private static long[] findBestGuessAlgorithm(int[] guessesInd, int[] secretsInd, int c, int d, int start, int end) {
         ExpectedSize expectedSizeObj = new ExpectedSize(d);
         int[]        feedbackFreq    = new int[100];
 
-        int  bestGuess = -1;
-        long bestScore = Long.MAX_VALUE;
+        int  bestGuessInd = -1;
+        long bestScore    = Long.MAX_VALUE;
 
         for (int i = start; i < end; i++) {
             // Compute rank
-            int  guess = guesses[i];
-            long score = expectedSizeObj.calcExpectedRank(guess, secrets, c, d, feedbackFreq);
+            int  guessInd = guessesInd[i];
+            long score    = expectedSizeObj.calcExpectedRank(guessInd, secretsInd, c, d, feedbackFreq);
 
             // Update result if found a smaller rank
             if (score < bestScore) {
                 bestScore = score;
-                bestGuess = guess;
+                bestGuessInd = guessInd;
             }
         }
 
-        return new long[] { bestGuess, bestScore };
-    }
-
-    /**
-     * Rank all guesses by the expected size of the solution space after each guess.
-     *
-     * @param guesses all candidate guesses
-     * @param secrets remaining possible secrets
-     * @param c       number of colors (<= 9)
-     * @param d       number of digits
-     * @return 2D array where each row is {guess, score}, sorted best to worst
-     */
-    public static float[][] rankGuessesByExpectedSize(int[] guesses, int[] secrets, int c, int d) {
-        int       n            = guesses.length;
-        float[]   scores       = new float[n];
-        Integer[] indices      = new Integer[n]; // need Integer for custom comparator
-        int[]     feedbackFreq = new int[100];
-
-        ExpectedSize expectedSizeObj = new ExpectedSize(d);
-
-        // 1. Compute scores
-        for (int i = 0; i < n; i++) {
-            scores[i] = expectedSizeObj.calcExpectedSize(guesses[i], secrets, c, d, feedbackFreq);
-            indices[i] = i;
-        }
-
-        // 2. Sort indices by score (ascending)
-        Arrays.sort(indices, (a, b) -> Float.compare(scores[a], scores[b]));
-
-        // 3. Build ranked {guess, score} array
-        float[][] ranked = new float[n][2];
-        for (int i = 0; i < n; i++) {
-            int idx = indices[i];
-            ranked[i][0] = guesses[idx];
-            ranked[i][1] = scores[idx];
-        }
-
-        return ranked;
+        return new long[] { bestGuessInd, bestScore };
     }
 }

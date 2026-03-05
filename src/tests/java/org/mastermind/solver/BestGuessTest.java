@@ -2,24 +2,22 @@ package org.mastermind.solver;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mastermind.codes.AllValidCode;
+import org.mastermind.codes.ConvertCode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BestGuessTest {
 
-    private static final int   EXPECTED_BEST_GUESS = 1123;
-    private final        int   c                   = 6;
-    private final        int   d                   = 4;
-    private              int[] allCodes;
+    private static final int   C = 6;
+    private static final int   D = 4;
+    private              int[] allInd;
 
-    /**
-     * Setup method that runs before each test.
-     * Generates all valid codes (6 pegs, 4 colors) - same as benchmark.
-     */
+    private static int ind(int code) { return ConvertCode.toIndex(C, D, code); }
+
     @BeforeEach
     public void setUp() {
-        allCodes = AllValidCode.generateAllCodes(c, d);
+        allInd = new int[(int) Math.pow(C, D)];
+        for (int i = 0; i < allInd.length; i++) allInd[i] = i;
     }
 
     /**
@@ -29,11 +27,8 @@ public class BestGuessTest {
      */
     @Test
     public void testOrdinaryVersion() {
-        // Act: Call the ordinary version with parallel = false
-        int bestGuess = (int) BestGuess.findBestGuess(allCodes, allCodes, c, d, false)[0];
-
-        // Assert: Verify the result matches the expected value
-        assertEquals(EXPECTED_BEST_GUESS, bestGuess);
+        int bestGuessInd = (int) BestGuess.findBestGuess(allInd, allInd, C, D, false)[0];
+        assertEquals(ind(1123), bestGuessInd);
     }
 
     /**
@@ -43,12 +38,7 @@ public class BestGuessTest {
      */
     @Test
     public void testParallelVersion() {
-        // Act: Call the parallel version with parallel = true
-        int bestGuess = (int) BestGuess.findBestGuess(allCodes, allCodes, c, d, true)[0];
-
-        // Assert: Verify the result matches the expected value
-        assertEquals(EXPECTED_BEST_GUESS, bestGuess);
-
-        BestGuess.shutdown();
+        int bestGuessInd = (int) BestGuess.findBestGuess(allInd, allInd, C, D, true)[0];
+        assertEquals(ind(1123), bestGuessInd);
     }
 }

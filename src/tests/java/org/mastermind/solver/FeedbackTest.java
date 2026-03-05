@@ -1,6 +1,7 @@
 package org.mastermind.solver;
 
 import org.junit.jupiter.api.Test;
+import org.mastermind.codes.ConvertCode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,27 +12,10 @@ public class FeedbackTest {
     private static final int   TOTAL_COMBINATIONS = 1296; // 6^4
     private static final int[] colorFreqCounter   = new int[10];
 
-    /**
-     * Converts a combination index to its Mastermind representation.
-     * For example, with 6 colors and 4 digits:
-     * 0 -> 1111, 1 -> 1112, 2 -> 1113, ..., 5 -> 1116, 6 -> 1121, etc.
-     */
-    private int indexToCombination(int index) {
-        int result  = 0;
-        int divisor = 1;
+    private static int ind(int code) { return ConvertCode.toIndex(COLORS, DIGITS, code); }
 
-        for (int i = 0; i < DIGITS; i++) {
-            int digit = (index % COLORS) + 1;
-            result += digit * divisor;
-            divisor *= 10;
-            index /= COLORS;
-        }
-
-        return result;
-    }
-
-    private int getFeedbackQuick(int guess, int secret) {
-        return Feedback.getFeedback(guess, secret, COLORS, DIGITS, colorFreqCounter);
+    private int getFeedbackQuick(int guessInd, int secretInd) {
+        return Feedback.getFeedback(guessInd, secretInd, COLORS, DIGITS, colorFreqCounter);
     }
 
     @Test
@@ -40,26 +24,14 @@ public class FeedbackTest {
         long startTime;
         int  totalCalls = 0;
 
-        // Pre-generate all combinations OUTSIDE the timer
-        int[] allCombinations = new int[TOTAL_COMBINATIONS];
-        for (int i = 0; i < TOTAL_COMBINATIONS; i++) {
-            allCombinations[i] = indexToCombination(i);
-        }
-
-        int[] secrets = new int[TOTAL_COMBINATIONS];
-        System.arraycopy(allCombinations, 0, secrets, 0, TOTAL_COMBINATIONS);
-
         startTime = System.nanoTime();
 
         // Run multiple times
-        for (int t = 0; t < 100; t++) {
-            // Call single version 1,296 times, storing results in a 2D array
+        for (int t = 0; t < 50; t++) {
+            // Call getFeedback for all (guess, secret) index pairs
             for (int guessIdx = 0; guessIdx < TOTAL_COMBINATIONS; guessIdx++) {
-                int guess = allCombinations[guessIdx];
-
                 for (int secretIdx = 0; secretIdx < TOTAL_COMBINATIONS; secretIdx++) {
-                    int secret = secrets[secretIdx];
-                    getFeedbackQuick(guess, secret);
+                    getFeedbackQuick(guessIdx, secretIdx);
                     totalCalls++;
                 }
             }
@@ -81,7 +53,7 @@ public class FeedbackTest {
         // Run multiple times
         int limit = (int) Math.pow(6, 4);
         for (int t = 0; t < limit; t++) {
-            getFeedbackQuick(1123, 3456);
+            getFeedbackQuick(ind(1123), ind(3456));
         }
 
         long endTime  = System.nanoTime();
@@ -97,28 +69,82 @@ public class FeedbackTest {
         System.out.println("\n=== Edge Cases Test ===");
 
         // Perfect match
-        int result1 = getFeedbackQuick(1111, 1111);
+        int result1 = getFeedbackQuick(ind(1111), ind(1111));
         assertEquals(4, result1 / 10, "Perfect match should have 4 blacks");
         assertEquals(0, result1 % 10, "Perfect match should have 0 whites");
         System.out.println("✓ Perfect match (1111 vs 1111): " + result1 / 10 + " black, " + result1 % 10 + " white");
 
         // No match
-        int result2 = getFeedbackQuick(1111, 2222);
+        int result2 = getFeedbackQuick(ind(1111), ind(2222));
         assertEquals(0, result2 / 10, "No match should have 0 blacks");
         assertEquals(0, result2 % 10, "No match should have 0 whites");
         System.out.println("✓ No match (1111 vs 2222): " + result2 / 10 + " black, " + result2 % 10 + " white");
 
         // All whites
-        int result3 = getFeedbackQuick(1234, 4321);
+        int result3 = getFeedbackQuick(ind(1234), ind(4321));
         assertEquals(0, result3 / 10, "All whites case should have 0 blacks");
         assertEquals(4, result3 % 10, "All whites case should have 4 whites");
         System.out.println("✓ All whites (1234 vs 4321): " + result3 / 10 + " black, " + result3 % 10 + " white");
 
         // Mixed
-        int result4 = getFeedbackQuick(5566, 5655);
+        int result4 = getFeedbackQuick(ind(5566), ind(5655));
         assertEquals(1, result4 / 10, "Mixed case blacks");
         assertEquals(2, result4 % 10, "Mixed case whites");
-        System.out.println("✓ Mixed (1122 vs 1211): " + result4 / 10 + " black, " + result4 % 10 + " white");
+        System.out.println("✓ Mixed (5566 vs 5655): " + result4 / 10 + " black, " + result4 % 10 + " white");
+    }
+
+    @Test
+    void testGetFeedbackIncrementalMatchesGetFeedback() {
+        // For every guess in the 6x4 space, iterate all secrets sequentially using
+        // getFeedbackIncremental and verify each result matches getFeedback.
+        int   c            = COLORS, d = DIGITS, total = TOTAL_COMBINATIONS;
+        int[] colorFreqRef = new int[c];
+        int[] result       = new int[3];
+
+        for (int guessInd = 0; guessInd < total; guessInd++) {
+            // Pre-extract guess digits
+            int[] guessDigits = new int[d];
+            int   tmp         = guessInd;
+            for (int p = 0; p < d; p++) {
+                guessDigits[p] = tmp % c;
+                tmp /= c;
+            }
+
+            // Bootstrap incremental state at secretInd=0
+            int[] colorFreqCounter = new int[c];
+            int   feedback0        = Feedback.getFeedback(guessInd, 0, c, d, colorFreqCounter);
+            int   black0           = 0;
+            int[] secretDigits     = new int[d];
+            for (int p = 0; p < d; p++) {
+                int gs = guessDigits[p], ss = 0;
+                secretDigits[p] = ss;
+                if (gs == ss) black0++;
+                else {
+                    colorFreqCounter[gs]++;
+                    colorFreqCounter[ss]--;
+                }
+            }
+            assertEquals(Feedback.getFeedback(guessInd, 0, c, d, colorFreqRef), feedback0,
+                         "Bootstrap mismatch at guessInd=" + guessInd + " secretInd=0");
+
+            int colorFreqTotal = 0;
+            for (int i = 0; i < c; i++) {
+                int f = colorFreqCounter[i];
+                colorFreqTotal += f > 0 ? f : -f;
+            }
+
+            int black = black0;
+            for (int secretInd = 1; secretInd < total; secretInd++) {
+                FeedbackIncremental.getFeedbackIncremental(guessDigits, secretDigits, black, colorFreqCounter,
+                                                           colorFreqTotal, c,
+                                                           d, result);
+                black = result[1];
+                colorFreqTotal = result[2];
+                int expected = Feedback.getFeedback(guessInd, secretInd, c, d, colorFreqRef);
+                assertEquals(expected, result[0],
+                             "Mismatch at guessInd=" + guessInd + " secretInd=" + secretInd);
+            }
+        }
     }
 
     @Test

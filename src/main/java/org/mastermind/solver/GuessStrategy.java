@@ -1,0 +1,97 @@
+package org.mastermind.solver;
+
+import org.mastermind.codes.AllValidCode;
+import org.mastermind.codes.SampledCode;
+
+/**
+ * Selects which arrays to pass as guesses and secrets to BestGuess for each turn.
+ *
+ * <p>Returns {@code int[][] { guesses, secrets }} where:
+ * <ul>
+ *   <li>{@code [0]} — candidate guesses to evaluate</li>
+ *   <li>{@code [1]} — secrets used to score each guess</li>
+ * </ul>
+ *
+ * <p>Edit this class to change strategy behavior. {@link #select} delegates to
+ * {@code selectSearchSpace}, which cascades through size-reduction levels.
+ *
+ * <p>Threshold: {@code guesses.length × secrets.length} above which the
+ * parallel BestGuess search exceeds ~1 second on the target machine.
+ */
+public class GuessStrategy {
+
+    private static final long THRESHOLD = 130_000_000L;
+
+    /**
+     * Select the guesses and secrets arrays for the current turn.
+     *
+     * @param c             number of colors
+     * @param d             number of digits
+     * @param solutionSpace current solution space
+     * @return int[][] where [0]=guesses, [1]=secrets
+     */
+    public static int[][] select(int c, int d, SolutionSpace solutionSpace) {
+        return selectSearchSpace(c, d, solutionSpace.getSize(), solutionSpace);
+    }
+
+    /**
+     * Cascades through progressively smaller guess and secret arrays until the
+     * search space fits within the threshold.
+     */
+    private static int[][] selectSearchSpace(int c, int d, int secretsSize, SolutionSpace solutionSpace) {
+
+        if (fits((int) Math.pow(c, d), secretsSize))
+            return pair(AllValidCode.generateAllCodes(c, d), solutionSpace.getSecrets());
+        if (fits(secretsSize, secretsSize)) return pair(solutionSpace.getSecrets(), solutionSpace.getSecrets());
+
+        // Sample secrets with progressively looser tolerances (smaller sample = faster search).
+        // Tolerance controls how accurately the sample estimates expected partition sizes;
+        // Values are heuristically tuned for speed vs. quality.
+        // When tolerance 10X, sample size 0.1X
+        for (double tolerance : new double[] { 0.001, 0.005, 0.01 }) {  // 10X, 5X, 1X
+            if (fits(secretsSize, secretSampleSize(d, tolerance))) {
+                return pair(solutionSpace.getSecrets(), secretSample(c, d, tolerance, solutionSpace));
+            }
+        }
+
+        // Fall back to also sampling guesses, using progressively larger percentile thresholds
+        // (higher percentile = smaller sample needed, since a random element more likely falls
+        // within a larger top portion of the distribution).
+        // When percentile 10X, sample size ~0.1X
+        int[] sSample = secretSample(c, d, 0.01, solutionSpace);
+        for (double percentile : new double[] { 0.001, 0.005, 0.01, 0.05 }) {   // 50X, 10X, 5X, 1X
+            if (fits(secretsSize, guessSampleSize(percentile))) {
+                return pair(guessSample(c, d, percentile), sSample);
+            }
+        }
+
+        return pair(guessSample(c, d, 0.01), sSample);
+    }
+
+    /** Returns true if the guesses and secrets arrays fit within the threshold. */
+    private static boolean fits(int guessSpaceSize, int secretSpaceSize) {
+        return (long) guessSpaceSize * secretSpaceSize <= THRESHOLD;
+    }
+
+    /** Pack the input guesses and secrets into int[][] */
+    private static int[][] pair(int[] guesses, int[] secrets) {
+        return new int[][] { guesses, secrets };
+    }
+
+    private static int secretSampleSize(int d, double tolerance) {
+        return SampledCode.calcSampleSizeForSecrets(Feedback.calcFeedbackSize(d), tolerance);
+    }
+
+    private static int guessSampleSize(double percentileThreshold) {
+        return SampledCode.calcSampleSizeForGuesses(percentileThreshold, 0.999);
+    }
+
+    private static int[] secretSample(int c, int d, double tolerance, SolutionSpace solutionSpace) {
+        return SampledCode.getValidSample(solutionSpace.getRemaining(), solutionSpace.getSize(), c, d,
+                                          secretSampleSize(d, tolerance));
+    }
+
+    private static int[] guessSample(int c, int d, double percentileThreshold) {
+        return SampledCode.getSample(c, d, guessSampleSize(percentileThreshold));
+    }
+}

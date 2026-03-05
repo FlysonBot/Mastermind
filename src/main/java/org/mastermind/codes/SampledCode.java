@@ -1,6 +1,7 @@
 package org.mastermind.codes;
 
-import java.util.Random;
+import java.util.BitSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The Monte Carlo method is a way to estimate population parameters
@@ -13,25 +14,54 @@ import java.util.Random;
 public class SampledCode {
 
     /**
-     * Generate a random Monte Carlo sample from all possible Mastermind code
-     * with the specified sample size.
+     * Maximum validCount for which enumeration is used. Above this threshold,
+     * int[validCount] becomes too large (>20MB) and rejection sampling is used instead.
+     * At this threshold, fill rate is always high enough that rejection is fast.
+     * Empirically derived from timing tests across c=7-9, d=7-9 game sizes.
+     */
+    static final int MAX_ENUM = 5_000_000;
+
+    /**
+     * Generate a random Monte Carlo sample of code indices from all possible
+     * Mastermind codes with the specified sample size.
      *
      * @param c          number of colors (<= 9)
      * @param d          number of digits (<= 9)
      * @param sampleSize size of the sample
-     * @return A random sample of all possible Mastermind code
+     * @return A random sample of code indices in [0, c^d)
      */
     public static int[] getSample(int c, int d, int sampleSize) {
-        Random random = new Random();
-        int[]  sample = new int[sampleSize];
+        int   total  = (int) Math.pow(c, d);
+        int[] sample = new int[sampleSize];
 
         for (int i = 0; i < sampleSize; i++) {
-            int code = 0;
-            for (int digit = 0; digit < d; digit++) {
-                int color = random.nextInt(c) + 1; // colors 1..c
-                code = code * 10 + color;
+            sample[i] = ThreadLocalRandom.current().nextInt(total);
+        }
+
+        return sample;
+    }
+
+    public static int[] getValidSample(BitSet remaining, int validCount, int c, int d, int sampleSize) {
+        int   total  = (int) Math.pow(c, d);
+        int[] sample = new int[sampleSize];
+
+        if (validCount <= MAX_ENUM) {
+            // Enumeration: bounded memory (≤20MB), fast scan, fast random access.
+            int[] valid = new int[validCount];
+            int   j     = 0;
+            for (int i = remaining.nextSetBit(0); i >= 0; i = remaining.nextSetBit(i + 1)) {
+                valid[j++] = i;
             }
-            sample[i] = code;
+            for (int i = 0; i < sampleSize; i++) {
+                sample[i] = valid[ThreadLocalRandom.current().nextInt(validCount)];
+            }
+        } else {
+            // Rejection sampling: validCount is large so fill rate is high and rejection is fast.
+            for (int i = 0; i < sampleSize; i++) {
+                int idx;
+                do { idx = ThreadLocalRandom.current().nextInt(total); } while (!remaining.get(idx));
+                sample[i] = idx;
+            }
         }
 
         return sample;
@@ -66,17 +96,6 @@ public class SampledCode {
 
     public static int calcSampleSizeForSecrets(int feedbackSize, double tolerance) {
         return (int) Math.ceil((feedbackSize - 1) / tolerance);
-    }
-
-    /**
-     * Calculates the required sample size with a default tolerance of 0.05 (5%).
-     *
-     * @param feedbackSize Number of possible feedback values K (e.g., 55)
-     * @return The required number of random secrets to sample.
-     * @see #calcSampleSizeForSecrets(int, double)
-     */
-    public static int calcSampleSizeForSecrets(int feedbackSize) {
-        return calcSampleSizeForSecrets(feedbackSize, 0.01);
     }
 
     /**
