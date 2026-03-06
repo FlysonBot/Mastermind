@@ -1,8 +1,8 @@
-from mastermind.jvm import MastermindSession, ConvertCode
+from mastermind.demo import demo
 
 
 def main():
-    pass
+    demo()
 
 
 if __name__ == "__main__":
