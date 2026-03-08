@@ -1,6 +1,6 @@
 import sys
 import time
-from jpype.types import JArray, JInt
+from jpype.types import JInt
 from mastermind.jvm import MastermindSession, ConvertCode, ExpectedSize, Feedback
 
 # ── Adjust these settings as needed ──────────────────────────────────────
@@ -23,7 +23,7 @@ def demo():
     start = time.perf_counter()
     session = MastermindSession(c, d)
     exp_size = ExpectedSize(d)
-    color_freq = JArray(JInt)(c)  # type: ignore
+    color_freq: list[int] = JInt[c]
 
     while not session.isSolved():
         space_before = session.getSolutionSpaceSize()
