@@ -9,10 +9,8 @@ Status: Java algorithm complete. Python UI in progress.
 - **Java algorithm**: `./src/main/java/org/mastermind/`
 - **Java tests**: `./src/tests/java/org/mastermind/` (JUnit 5)
 - **Java benchmarks**: `./src/benchmarks/java/org/mastermind/` (JMH)
-- **Python UI**: `./src/main/python/mastermind/`
-  - `jvm.py` — starts the JVM and imports Java classes
-  - `main.py` — entry point and game loop
-  - `ui.py` — terminal rendering and input parsing
+- **Python program**: `./src/main/python/mastermind/` (entry point: `main.py`)
+- **Python tests**: `./src/tests/python/mastermind/` (pytest)
 - **Build**: `make build-java` → `target/mastermind-solver.jar`
 - Everything else is legacy—ignore unless explicitly instructed.
 
@@ -24,6 +22,13 @@ Status: Java algorithm complete. Python UI in progress.
 4. `SolutionSpace` — tracks remaining valid solutions
 5. `GuessStrategy.select()` — chooses which guesses and secrets arrays to pass into `BestGuess`
 6. `MastermindSession` — manages a full game: history, solution space, strategy-based suggestions, undo
+
+### Program Features
+
+- Explain game rules
+- Allow player to play Mastermind on their own to understand how the game work
+- Allow player to choose a code and see the algorithm solve it
+- Allow plyer to use the algorithm to help them play a game of their own
 
 ### Current Focus
 
