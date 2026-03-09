@@ -9,11 +9,14 @@ MAX_TRIES = 10
 
 def _parse_code(raw: str) -> int | None:
     raw = raw.strip()
+
     if len(raw) != D or not raw.isdigit():
         return None
+
     for ch in raw:
         if not (1 <= int(ch) <= C):
             return None
+
     return int(ConvertCode.toIndex(C, D, int(raw)))
 
 
@@ -22,12 +25,15 @@ def _parse_feedback(raw: str) -> int | None:
     raw = raw.strip().lower().replace(" ", "")
     # Accept formats: "2b1w", "21", "2b1", "2 1"
     import re
+
     m = re.fullmatch(r"(\d)b?(\d)w?", raw)
     if not m:
         return None
+
     black, white = int(m.group(1)), int(m.group(2))
     if black + white > D or black < 0 or white < 0:
         return None
+
     return black * 10 + white
 
 
@@ -42,7 +48,6 @@ def play():
     print("then enter the feedback you received.\n")
 
     session = MastermindSession(C, D)
-    color_freq: list[int] = JInt[C]
 
     for attempt in range(1, MAX_TRIES + 1):
         suggestion_ind = int(session.suggestGuess())
@@ -55,9 +60,11 @@ def play():
             if raw == "":
                 guess_ind = suggestion_ind
                 break
+
             guess_ind = _parse_code(raw)
             if guess_ind is not None:
                 break
+
             print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
 
         # Ask for feedback
@@ -66,6 +73,7 @@ def play():
             feedback = _parse_feedback(raw)
             if feedback is not None:
                 break
+
             print("  Invalid. Enter blacks and whites, e.g. '2b1w', '21', or '2 1'.")
 
         black = feedback // 10
@@ -78,12 +86,14 @@ def play():
 
         try:
             session.recordGuess(guess_ind, feedback)
+
         except jpype.JException as e:
             if "No valid secrets remain" in str(e):
                 print("\nNo valid codes match the feedback history — your inputs may be inconsistent.")
                 print("Please double-check your guesses and feedback, then start over.")
             else:
                 raise
+
             return
 
         remaining = session.getSolutionSpaceSize()

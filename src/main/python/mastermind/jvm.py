@@ -11,6 +11,7 @@ if jre is None:
     matches = glob.glob("/data/data/com.termux/files/usr/lib/jvm/java-21-openjdk*/lib/server/libjvm.so")
     if not matches:
         raise RuntimeError("libjvm.so not found. Is openjdk-21 installed via pkg?")
+
     jvmpath = matches[0]
 
 else:

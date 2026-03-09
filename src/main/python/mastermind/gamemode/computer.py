@@ -9,11 +9,14 @@ MAX_TRIES = 10
 
 def _parse_code(raw: str) -> int | None:
     raw = raw.strip()
+
     if len(raw) != D or not raw.isdigit():
         return None
+
     for ch in raw:
         if not (1 <= int(ch) <= C):
             return None
+
     return int(ConvertCode.toIndex(C, D, int(raw)))
 
 
@@ -33,8 +36,10 @@ def play():
             secret_ind = _parse_code(raw)
             if secret_ind is not None:
                 break
+
             print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
         print("\nCode set. Watch the computer solve it!\n")
+
     else:
         secret_ind = random.randrange(C ** D)
         print("I have set a secret code. Now I will solve it...\n")

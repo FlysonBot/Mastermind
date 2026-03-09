@@ -25,9 +25,9 @@ from jdk.enums import Architecture, OperatingSystem
 
 _ROOT = Path(__file__).parents[1]
 _SRC_JAVA = _ROOT / "src" / "main" / "java"
-_CLASSES  = _ROOT / "target" / "classes"
-_OUT_JAR  = _ROOT / "src" / "main" / "mastermind-solver.jar"
-_OUT_JRE  = _ROOT / "src" / "main" / "jre"
+_CLASSES = _ROOT / "target" / "classes"
+_OUT_JAR = _ROOT / "src" / "main" / "mastermind-solver.jar"
+_OUT_JRE = _ROOT / "src" / "main" / "jre"
 
 # JDKs are cached in the system temp dir: persists across builds, auto-cleaned by the OS
 _JDK_CACHE = Path(tempfile.gettempdir()) / "mastermind-jdk"
@@ -36,26 +36,28 @@ _JDK_CACHE = Path(tempfile.gettempdir()) / "mastermind-jdk"
 
 # Supported target platforms: (name, OperatingSystem, Architecture)
 _PLATFORMS = [
-    ("linux-x64",   OperatingSystem.LINUX,   Architecture.X64),
-    ("windows-x64", OperatingSystem.WINDOWS,  Architecture.X64),
-    ("mac-x64",     OperatingSystem.MAC,      Architecture.X64),
-    ("mac-aarch64", OperatingSystem.MAC,      Architecture.AARCH64),
+    ("linux-x64", OperatingSystem.LINUX, Architecture.X64),
+    ("windows-x64", OperatingSystem.WINDOWS, Architecture.X64),
+    ("mac-x64", OperatingSystem.MAC, Architecture.X64),
+    ("mac-aarch64", OperatingSystem.MAC, Architecture.AARCH64),
 ]
 
 # Maps (os, arch) as reported by Python to a platform name
 _HOST_PLATFORM_MAP = {
-    ("linux",   "x86_64"):  "linux-x64",
-    ("linux",   "amd64"):   "linux-x64",
-    ("windows", "amd64"):   "windows-x64",
-    ("windows", "x86_64"):  "windows-x64",
-    ("darwin",  "x86_64"):  "mac-x64",
-    ("darwin",  "amd64"):   "mac-x64",
-    ("darwin",  "arm64"):   "mac-aarch64",
-    ("darwin",  "aarch64"): "mac-aarch64",
+    ("linux", "x86_64"): "linux-x64",
+    ("linux", "amd64"): "linux-x64",
+    ("windows", "amd64"): "windows-x64",
+    ("windows", "x86_64"): "windows-x64",
+    ("darwin", "x86_64"): "mac-x64",
+    ("darwin", "amd64"): "mac-x64",
+    ("darwin", "arm64"): "mac-aarch64",
+    ("darwin", "aarch64"): "mac-aarch64",
 }
+
 
 def _host_platform():
     return _HOST_PLATFORM_MAP.get((platform.system().lower(), platform.machine().lower()))
+
 
 # --- JAR build ---
 
@@ -71,20 +73,25 @@ def build_jar():
 
 def _resolve_javac_and_jar():
     """Return (javac, jar) paths — from system if available, else from cached/downloaded JDK."""
-    javac    = shutil.which("javac")
+    javac = shutil.which("javac")
     jar_tool = shutil.which("jar")
+
     if javac and jar_tool:
         print(f"Using system javac: {javac}")
         return Path(javac), Path(jar_tool)
 
     if not _JDK_CACHE.exists():
         _download_jdk(_JDK_CACHE)
-    javac    = next(_JDK_CACHE.rglob("javac"), None)
-    jar_tool = next(_JDK_CACHE.rglob("jar"),   None)
+
+    javac = next(_JDK_CACHE.rglob("javac"), None)
+    jar_tool = next(_JDK_CACHE.rglob("jar"), None)
+
     if not javac:
         raise RuntimeError("javac not found in downloaded JDK")
+
     if not jar_tool:
         raise RuntimeError("jar not found in downloaded JDK")
+
     return javac, jar_tool
 
 
@@ -109,6 +116,7 @@ def _compile(javac: Path, jar_tool: Path):
     shutil.copy2(tmp_jar, _OUT_JAR)
     print(f"JAR copied to {_OUT_JAR.relative_to(_ROOT)}")
 
+
 # --- JRE build ---
 
 def build_jre():
@@ -117,6 +125,7 @@ def build_jre():
     Skips platforms whose zip already exists."""
     _OUT_JRE.mkdir(parents=True, exist_ok=True)
     jlink = _resolve_jlink()
+
     for platform_name, os_enum, arch_enum in _PLATFORMS:
         _build_platform_jre(platform_name, os_enum, arch_enum, jlink)
 
@@ -140,9 +149,11 @@ def _resolve_jlink():
         # Host platform's JDK won't be downloaded during the loop — fetch jlink now
         if not _JDK_CACHE.exists():
             _download_jdk(_JDK_CACHE)
+
         jlink = next(_JDK_CACHE.rglob("jlink"), None)
         if not jlink:
             raise RuntimeError("jlink not found in host JDK")
+
         return jlink
 
     return None  # will be set from the host platform's JDK during the loop
@@ -151,8 +162,8 @@ def _resolve_jlink():
 def _build_platform_jre(platform_name, os_enum, arch_enum, jlink):
     """Build, compress, and cache the JRE for a single target platform."""
     target_jdk = Path(tempfile.gettempdir()) / f"mastermind-jdk-{platform_name}"
-    out_jre    = _OUT_JRE / platform_name
-    out_zip    = _OUT_JRE / f"{platform_name}.zip"
+    out_jre = _OUT_JRE / platform_name
+    out_zip = _OUT_JRE / f"{platform_name}.zip"
 
     if out_zip.exists():
         print(f"Skipping {platform_name} — {out_zip.relative_to(_ROOT)} already exists")
@@ -209,6 +220,7 @@ def _jlink_jre(jlink: Path, target_jdk: Path, out_jre: Path, platform_name: str)
     for line in proc.stderr.splitlines():
         if "objcopy" not in line and "strip-native-debug-symbols" not in line:
             print(line, file=sys.stderr)
+
     if proc.returncode != 0:
         raise subprocess.CalledProcessError(proc.returncode, proc.args)
 
@@ -220,17 +232,20 @@ def _compress_jre(jre_dir: Path, out_zip: Path):
     """Zip a JRE directory using LZMA compression."""
     print(f"Compressing to {out_zip.relative_to(_ROOT)}...")
     t = time.time()
+
     with zipfile.ZipFile(out_zip, "w", compression=zipfile.ZIP_LZMA) as zf:
         for file in jre_dir.rglob("*"):
             zf.write(file, file.relative_to(jre_dir))
+
     size_mb = out_zip.stat().st_size / 1024 / 1024
     print(f"Compressed. ({time.time() - t:.1f}s, {size_mb:.1f} MB)")
+
 
 # --- JDK download ---
 
 def _download_jdk(path: Path, os=None, arch=None, label="host"):
     kwargs = {"version": "21", "path": str(path)}
-    if os   is not None: kwargs["operating_system"] = os
+    if os is not None: kwargs["operating_system"] = os
     if arch is not None: kwargs["arch"] = arch
 
     print(f"Downloading {label} JDK...")
@@ -238,6 +253,7 @@ def _download_jdk(path: Path, os=None, arch=None, label="host"):
     install_jdk.install(**kwargs)
     size_mb = sum(f.stat().st_size for f in path.rglob("*") if f.is_file()) / 1024 / 1024
     print(f"{label} JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)")
+
 
 # --- Entry point ---
 
@@ -248,5 +264,6 @@ if __name__ == "__main__":
 
     if sys.argv[1] == "jar":
         build_jar()
+
     elif sys.argv[1] == "jre":
         build_jre()

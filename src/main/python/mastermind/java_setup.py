@@ -17,26 +17,27 @@ from pathlib import Path
 
 # --- Paths ---
 
-_ROOT         = Path(__file__).parents[4]
-_SRC_JAVA     = _ROOT / "src" / "main" / "java"
-_CLASSES      = _ROOT / "target" / "classes"
-_JDK          = _ROOT / "target" / "java-jdk"
-_BUNDLED_JAR  = _ROOT / "src" / "main" / "mastermind-solver.jar"
-_BUNDLED_JRE  = _ROOT / "src" / "main" / "jre"
-_CACHED_JRE   = _ROOT / "target" / "mastermind-jre"
+_ROOT = Path(__file__).parents[4]
+_SRC_JAVA = _ROOT / "src" / "main" / "java"
+_CLASSES = _ROOT / "target" / "classes"
+_JDK = _ROOT / "target" / "java-jdk"
+_BUNDLED_JAR = _ROOT / "src" / "main" / "mastermind-solver.jar"
+_BUNDLED_JRE = _ROOT / "src" / "main" / "jre"
+_CACHED_JRE = _ROOT / "target" / "mastermind-jre"
 
 # --- Platform config ---
 
 _PLATFORM_MAP = {
-    ("linux",   "x86_64"):  "linux-x64",
-    ("linux",   "amd64"):   "linux-x64",
-    ("windows", "amd64"):   "windows-x64",
-    ("windows", "x86_64"):  "windows-x64",
-    ("darwin",  "x86_64"):  "mac-x64",
-    ("darwin",  "amd64"):   "mac-x64",
-    ("darwin",  "arm64"):   "mac-aarch64",
-    ("darwin",  "aarch64"): "mac-aarch64",
+    ("linux", "x86_64"): "linux-x64",
+    ("linux", "amd64"): "linux-x64",
+    ("windows", "amd64"): "windows-x64",
+    ("windows", "x86_64"): "windows-x64",
+    ("darwin", "x86_64"): "mac-x64",
+    ("darwin", "amd64"): "mac-x64",
+    ("darwin", "arm64"): "mac-aarch64",
+    ("darwin", "aarch64"): "mac-aarch64",
 }
+
 
 # --- Public API ---
 
@@ -55,9 +56,11 @@ def _ensure_android():
         print("Java is not installed. Please run:")
         print("    pkg install openjdk-21")
         sys.exit(1)
+
     if not _BUNDLED_JAR.exists():
         print("Bundled JAR not found. Please re-clone or re-download the repository.")
         sys.exit(1)
+
     return None, _BUNDLED_JAR
 
 
@@ -75,6 +78,7 @@ def _ensure_desktop():
         if not jre:
             _build_jre()
             jre = _CACHED_JRE
+
         if not jar:
             _build_jar()
             jar = _BUNDLED_JAR
@@ -90,8 +94,9 @@ def _resolve_jre():
         return _CACHED_JRE
 
     os_name = platform.system().lower()
-    arch    = platform.machine().lower()
-    name    = _PLATFORM_MAP.get((os_name, arch))
+    arch = platform.machine().lower()
+    name = _PLATFORM_MAP.get((os_name, arch))
+
     if name:
         zip_path = _BUNDLED_JRE / f"{name}.zip"
         if zip_path.exists():
@@ -107,12 +112,16 @@ def _extract_jre(zip_path: Path):
     print(f"Extracting JRE from {zip_path.name}...")
     t = time.time()
     _CACHED_JRE.mkdir(parents=True, exist_ok=True)
+
     with zipfile.ZipFile(zip_path, "r") as zf:
         zf.extractall(_CACHED_JRE)
+
     # Restore execute permissions on binaries (lost during zip on Unix)
     for f in (_CACHED_JRE / "bin").iterdir():
         f.chmod(f.stat().st_mode | 0o111)
+
     print(f"JRE extracted. ({time.time() - t:.1f}s)")
+
 
 # --- Fallback: build from downloaded JDK ---
 
@@ -129,6 +138,7 @@ def _build_jre():
     jlink = next(_JDK.rglob("jlink"), None)
     if not jlink:
         raise RuntimeError("jlink not found in downloaded JDK")
+
     print("Building trimmed JRE...")
     t = time.time()
     subprocess.run(
@@ -140,8 +150,8 @@ def _build_jre():
 
 
 def _build_jar():
-    javac    = next(_JDK.rglob("javac"), None)
-    jar_tool = next(_JDK.rglob("jar"),   None)
+    javac = next(_JDK.rglob("javac"), None)
+    jar_tool = next(_JDK.rglob("jar"), None)
     if not javac:    raise RuntimeError("javac not found in downloaded JDK")
     if not jar_tool: raise RuntimeError("jar not found in downloaded JDK")
 

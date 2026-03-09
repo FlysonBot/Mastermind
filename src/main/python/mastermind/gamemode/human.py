@@ -10,11 +10,14 @@ MAX_TRIES = 10
 def _parse_guess(raw: str) -> int | None:
     """Return the index of the guess, or None if invalid."""
     raw = raw.strip()
+
     if len(raw) != D or not raw.isdigit():
         return None
+
     for ch in raw:
         if not (1 <= int(ch) <= C):
             return None
+
     return int(ConvertCode.toIndex(C, D, int(raw)))
 
 
@@ -31,11 +34,14 @@ def play():
     if choice == "2":
         while True:
             raw = input(f"Enter your secret code ({D} digits, each 1–{C}): ").strip()
+
             secret_ind = _parse_guess(raw)
             if secret_ind is not None:
                 break
+
             print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
         print("\nCode set. Hand the keyboard to the guesser!\n")
+
     else:
         total_codes = C ** D
         secret_ind = random.randrange(total_codes)
@@ -48,9 +54,11 @@ def play():
     for attempt in range(1, MAX_TRIES + 1):
         while True:
             raw = input(f"Guess {attempt}/{MAX_TRIES}: ").strip()
+
             guess_ind = _parse_guess(raw)
             if guess_ind is not None:
                 break
+
             print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
 
         feedback = int(Feedback.getFeedback(guess_ind, secret_ind, C, D, color_freq))
