@@ -1,4 +1,5 @@
 import random
+
 from jpype.types import JInt
 from mastermind.jvm import ConvertCode, Feedback, MastermindSession
 
@@ -41,7 +42,7 @@ def play():
         print("\nCode set. Watch the computer solve it!\n")
 
     else:
-        secret_ind = random.randrange(C ** D)
+        secret_ind = random.randrange(C**D)
         print("I have set a secret code. Now I will solve it...\n")
 
     session = MastermindSession(C, D)
@@ -53,7 +54,9 @@ def play():
         black = feedback // 10
         white = feedback % 10
 
-        print(f"Guess {attempt}/{MAX_TRIES}: {_display(guess_ind)}  →  {black} black, {white} white")
+        print(
+            f"Guess {attempt}/{MAX_TRIES}: {_display(guess_ind)}  →  {black} black, {white} white"
+        )
 
         session.recordGuess(guess_ind, feedback)
 
@@ -61,7 +64,9 @@ def play():
             print(f"\nI solved it in {attempt} {'tries' if attempt != 1 else 'try'}!")
             return
 
-    print(f"\nI failed to solve it within {MAX_TRIES} tries. The secret was: {_display(secret_ind)}")
+    print(
+        f"\nI failed to solve it within {MAX_TRIES} tries. The secret was: {_display(secret_ind)}"
+    )
 
 
 if __name__ == "__main__":

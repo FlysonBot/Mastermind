@@ -1,4 +1,5 @@
 import random
+
 from jpype.types import JInt
 from mastermind.jvm import ConvertCode, Feedback
 
@@ -29,7 +30,9 @@ def play():
     print(f"=== Mastermind  [c={C}, d={D}, tries={MAX_TRIES}] ===\n")
     print(f"Colors: 1–{C},  Code length: {D} digits\n")
 
-    choice = input("Who sets the secret code?\n  1) I (computer)\n  2) You (playing with someone else)\n> ").strip()
+    choice = input(
+        "Who sets the secret code?\n  1) I (computer)\n  2) You (playing with someone else)\n> "
+    ).strip()
 
     if choice == "2":
         while True:
@@ -43,7 +46,7 @@ def play():
         print("\nCode set. Hand the keyboard to the guesser!\n")
 
     else:
-        total_codes = C ** D
+        total_codes = C**D
         secret_ind = random.randrange(total_codes)
         print("I have set a secret code. Go ahead and guess it.\n")
 
@@ -73,7 +76,9 @@ def play():
 
     print()
     if won:
-        print(f"Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}!\n\n")
+        print(
+            f"Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}!\n\n"
+        )
     else:
         print(f"Out of tries! The secret code was: {_display(secret_ind)}\n\n")
 

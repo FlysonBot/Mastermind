@@ -1,7 +1,8 @@
 import sys
 import time
+
 from jpype.types import JInt
-from mastermind.jvm import MastermindSession, ConvertCode, ExpectedSize, Feedback
+from mastermind.jvm import ConvertCode, ExpectedSize, Feedback, MastermindSession
 
 # ── Adjust these settings as needed ──────────────────────────────────────
 C = 9
@@ -41,10 +42,14 @@ def demo():
         black = int(feedback) // 10
         white = int(feedback) % 10
         exp_elim = (
-            100 * (space_before - float(exp)) / space_before if space_before > 0 else 0.0
+            100 * (space_before - float(exp)) / space_before
+            if space_before > 0
+            else 0.0
         )
         act_elim = (
-            100 * (space_before - space_after) / space_before if space_before > 0 else 0.0
+            100 * (space_before - space_after) / space_before
+            if space_before > 0
+            else 0.0
         )
         guess_code = ConvertCode.toCode(c, d, guess_ind)
 

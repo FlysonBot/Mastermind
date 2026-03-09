@@ -56,10 +56,13 @@ _HOST_PLATFORM_MAP = {
 
 
 def _host_platform():
-    return _HOST_PLATFORM_MAP.get((platform.system().lower(), platform.machine().lower()))
+    return _HOST_PLATFORM_MAP.get(
+        (platform.system().lower(), platform.machine().lower())
+    )
 
 
 # --- JAR build ---
+
 
 def build_jar():
     """Compile Java sources into a JAR and copy it to src/main/.
@@ -119,6 +122,7 @@ def _compile(javac: Path, jar_tool: Path):
 
 # --- JRE build ---
 
+
 def build_jre():
     """Cross-compile trimmed JREs for all supported platforms.
     Each JRE is compressed with LZMA into src/main/jre/<platform>.zip.
@@ -141,7 +145,8 @@ def _resolve_jlink():
 
     host = _host_platform()
     needs_build = [
-        name for name, _, _ in _PLATFORMS
+        name
+        for name, _, _ in _PLATFORMS
         if not (_OUT_JRE / f"{name}.zip").exists() and not (_OUT_JRE / name).exists()
     ]
 
@@ -173,7 +178,7 @@ def _build_platform_jre(platform_name, os_enum, arch_enum, jlink):
 
     # Compress and clean up a leftover raw folder from a previous interrupted run
     if out_jre.exists():
-        print(f"Found existing raw JRE folder, compressing...")
+        print("Found existing raw JRE folder, compressing...")
         _compress_jre(out_jre, out_zip)
         shutil.rmtree(out_jre)
         return
@@ -200,19 +205,23 @@ def _jlink_jre(jlink: Path, target_jdk: Path, out_jre: Path, platform_name: str)
     if not jmods:
         raise RuntimeError(f"jmods directory not found in {platform_name} JDK")
 
-    print(f"Linking trimmed JRE...")
+    print("Linking trimmed JRE...")
     t = time.time()
     proc = subprocess.run(
         [
             str(jlink),
-            "--module-path", str(jmods),
-            "--add-modules", "java.base",
-            "--output", str(out_jre),
+            "--module-path",
+            str(jmods),
+            "--add-modules",
+            "java.base",
+            "--output",
+            str(out_jre),
             "--strip-debug",
             "--no-header-files",
             "--no-man-pages",
         ],
-        capture_output=True, text=True,
+        capture_output=True,
+        text=True,
     )
     # objcopy errors appear when cross-compiling between OS families (e.g. Linux→Mac)
     # because objcopy doesn't understand the foreign binary format. Safe to suppress —
@@ -224,7 +233,9 @@ def _jlink_jre(jlink: Path, target_jdk: Path, out_jre: Path, platform_name: str)
     if proc.returncode != 0:
         raise subprocess.CalledProcessError(proc.returncode, proc.args)
 
-    raw_mb = sum(f.stat().st_size for f in out_jre.rglob("*") if f.is_file()) / 1024 / 1024
+    raw_mb = (
+        sum(f.stat().st_size for f in out_jre.rglob("*") if f.is_file()) / 1024 / 1024
+    )
     print(f"JRE linked. ({time.time() - t:.1f}s, {raw_mb:.0f} MB uncompressed)")
 
 
@@ -243,15 +254,20 @@ def _compress_jre(jre_dir: Path, out_zip: Path):
 
 # --- JDK download ---
 
+
 def _download_jdk(path: Path, os=None, arch=None, label="host"):
     kwargs = {"version": "21", "path": str(path)}
-    if os is not None: kwargs["operating_system"] = os
-    if arch is not None: kwargs["arch"] = arch
+    if os is not None:
+        kwargs["operating_system"] = os
+    if arch is not None:
+        kwargs["arch"] = arch
 
     print(f"Downloading {label} JDK...")
     t = time.time()
     install_jdk.install(**kwargs)
-    size_mb = sum(f.stat().st_size for f in path.rglob("*") if f.is_file()) / 1024 / 1024
+    size_mb = (
+        sum(f.stat().st_size for f in path.rglob("*") if f.is_file()) / 1024 / 1024
+    )
     print(f"{label} JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)")
 
 

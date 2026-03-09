@@ -1,6 +1,5 @@
+from mastermind.gamemode import assisted, computer, human
 from mastermind.rules import show_rules
-from mastermind.gamemode import human, computer, assisted
-
 
 _BANNER = """
 ╔════════════════════════════════════════════════════════════════════════════════════════╗

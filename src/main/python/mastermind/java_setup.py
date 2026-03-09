@@ -41,6 +41,7 @@ _PLATFORM_MAP = {
 
 # --- Public API ---
 
+
 def ensure_ready():
     """Return (jre_path, jar_path), setting up whatever is missing."""
     if platform.system().lower() == "android":
@@ -49,6 +50,7 @@ def ensure_ready():
 
 
 # --- Platform-specific setup ---
+
 
 def _ensure_android():
     """On Android/Termux, verify the system JDK is present and return (None, jar)."""
@@ -108,6 +110,7 @@ def _resolve_jre():
 
 # --- JRE extraction ---
 
+
 def _extract_jre(zip_path: Path):
     print(f"Extracting JRE from {zip_path.name}...")
     t = time.time()
@@ -125,12 +128,16 @@ def _extract_jre(zip_path: Path):
 
 # --- Fallback: build from downloaded JDK ---
 
+
 def _download_jdk():
     import jdk  # install-jdk library
+
     print("Downloading JDK...")
     t = time.time()
     jdk.install(version="21", path=str(_JDK))
-    size_mb = sum(f.stat().st_size for f in _JDK.rglob("*") if f.is_file()) / 1024 / 1024
+    size_mb = (
+        sum(f.stat().st_size for f in _JDK.rglob("*") if f.is_file()) / 1024 / 1024
+    )
     print(f"JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)")
 
 
@@ -142,8 +149,16 @@ def _build_jre():
     print("Building trimmed JRE...")
     t = time.time()
     subprocess.run(
-        [str(jlink), "--add-modules", "java.base", "--output", str(_CACHED_JRE),
-         "--strip-debug", "--no-header-files", "--no-man-pages"],
+        [
+            str(jlink),
+            "--add-modules",
+            "java.base",
+            "--output",
+            str(_CACHED_JRE),
+            "--strip-debug",
+            "--no-header-files",
+            "--no-man-pages",
+        ],
         check=True,
     )
     print(f"JRE ready. ({time.time() - t:.1f}s)")
@@ -152,8 +167,10 @@ def _build_jre():
 def _build_jar():
     javac = next(_JDK.rglob("javac"), None)
     jar_tool = next(_JDK.rglob("jar"), None)
-    if not javac:    raise RuntimeError("javac not found in downloaded JDK")
-    if not jar_tool: raise RuntimeError("jar not found in downloaded JDK")
+    if not javac:
+        raise RuntimeError("javac not found in downloaded JDK")
+    if not jar_tool:
+        raise RuntimeError("jar not found in downloaded JDK")
 
     sources = [str(p) for p in _SRC_JAVA.rglob("*.java")]
     _CLASSES.mkdir(parents=True, exist_ok=True)
@@ -163,7 +180,15 @@ def _build_jar():
     t = time.time()
     subprocess.run([str(javac), "-d", str(_CLASSES)] + sources, check=True)
     subprocess.run(
-        [str(jar_tool), "--create", "--file", str(_BUNDLED_JAR), "-C", str(_CLASSES), "."],
+        [
+            str(jar_tool),
+            "--create",
+            "--file",
+            str(_BUNDLED_JAR),
+            "-C",
+            str(_CLASSES),
+            ".",
+        ],
         check=True,
     )
     print(f"JAR ready. ({time.time() - t:.1f}s)")

@@ -1,5 +1,4 @@
 import jpype
-from jpype.types import JInt
 from mastermind.jvm import ConvertCode, MastermindSession
 
 C = 6
@@ -77,11 +76,12 @@ def play():
             print("  Invalid. Enter blacks and whites, e.g. '2b1w', '21', or '2 1'.")
 
         black = feedback // 10
-        white = feedback % 10
 
         if black == D:
             session.recordGuess(guess_ind, feedback)
-            print(f"\nPerfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}!")
+            print(
+                f"\nPerfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}!"
+            )
             return
 
         try:
@@ -89,7 +89,9 @@ def play():
 
         except jpype.JException as e:
             if "No valid secrets remain" in str(e):
-                print("\nNo valid codes match the feedback history — your inputs may be inconsistent.")
+                print(
+                    "\nNo valid codes match the feedback history — your inputs may be inconsistent."
+                )
                 print("Please double-check your guesses and feedback, then start over.")
             else:
                 raise
@@ -97,9 +99,13 @@ def play():
             return
 
         remaining = session.getSolutionSpaceSize()
-        print(f"  ({remaining} possible code{'s' if remaining != 1 else ''} remaining)\n")
+        print(
+            f"  ({remaining} possible code{'s' if remaining != 1 else ''} remaining)\n"
+        )
 
-    print(f"\nOut of turns. The algorithm could not determine the code — try again from the start.")
+    print(
+        "\nOut of turns. The algorithm could not determine the code — try again from the start."
+    )
 
 
 if __name__ == "__main__":
