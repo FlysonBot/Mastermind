@@ -1,8 +1,8 @@
-from mastermind.demo import demo
+from mastermind.welcome import welcome
 
 
 def main():
-    demo()
+    welcome()
 
 
 if __name__ == "__main__":

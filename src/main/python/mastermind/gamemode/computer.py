@@ -25,7 +25,7 @@ def play():
     print(f"=== Mastermind  [c={C}, d={D}, tries={MAX_TRIES}] ===\n")
     print(f"Colors: 1–{C},  Code length: {D} digits\n")
 
-    choice = input("Who sets the secret code?\n  1) Computer\n  2) Me\n> ").strip()
+    choice = input("Who sets the secret code?\n  1) I (computer)\n  2) You\n> ").strip()
 
     if choice == "2":
         while True:
@@ -37,7 +37,7 @@ def play():
         print("\nCode set. Watch the computer solve it!\n")
     else:
         secret_ind = random.randrange(C ** D)
-        print("Computer has set a secret code. Now it will solve it...\n")
+        print("I have set a secret code. Now I will solve it...\n")
 
     session = MastermindSession(C, D)
     color_freq: list[int] = JInt[C]
@@ -53,10 +53,10 @@ def play():
         session.recordGuess(guess_ind, feedback)
 
         if black == D:
-            print(f"\nSolved in {attempt} {'tries' if attempt != 1 else 'try'}!")
+            print(f"\nI solved it in {attempt} {'tries' if attempt != 1 else 'try'}!")
             return
 
-    print(f"\nFailed to solve within {MAX_TRIES} tries. The secret was: {_display(secret_ind)}")
+    print(f"\nI failed to solve it within {MAX_TRIES} tries. The secret was: {_display(secret_ind)}")
 
 
 if __name__ == "__main__":

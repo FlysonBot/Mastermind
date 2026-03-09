@@ -26,7 +26,7 @@ def play():
     print(f"=== Mastermind  [c={C}, d={D}, tries={MAX_TRIES}] ===\n")
     print(f"Colors: 1–{C},  Code length: {D} digits\n")
 
-    choice = input("Who sets the secret code?\n  1) Computer\n  2) Me (playing with someone else)\n> ").strip()
+    choice = input("Who sets the secret code?\n  1) I (computer)\n  2) You (playing with someone else)\n> ").strip()
 
     if choice == "2":
         while True:
@@ -39,7 +39,7 @@ def play():
     else:
         total_codes = C ** D
         secret_ind = random.randrange(total_codes)
-        print("Computer has set a secret code.\n")
+        print("I have set a secret code. Go ahead and guess it.\n")
 
     color_freq: list[int] = JInt[C]
     won = False
@@ -65,9 +65,9 @@ def play():
 
     print()
     if won:
-        print(f"Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}!")
+        print(f"Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}!\n\n")
     else:
-        print(f"Out of tries! The secret code was: {_display(secret_ind)}")
+        print(f"Out of tries! The secret code was: {_display(secret_ind)}\n\n")
 
 
 if __name__ == "__main__":

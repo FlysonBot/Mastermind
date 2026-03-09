@@ -5,6 +5,7 @@ __pycache__/
 /.env
 *egg-info/
 out/
+mastermind-jre/
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
