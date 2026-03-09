@@ -29,6 +29,7 @@ classifiers = [
 
 # Dependencies
 dependencies = [
+    "install-jdk>=1.1.0",
     "JPype1>=1.5.0",
     #"appdirs>=1.4.4",
     #"clear-screen>=0.1.14",
