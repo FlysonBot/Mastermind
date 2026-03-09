@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/FlysonBot/Mastermind/main/docs/source/_static/Mastermind Logo.svg" width="350">
+<img src="https://raw.githubusercontent.com/FlysonBot/Mastermind/main/Mastermind Logo.svg" width="350">
 </p>
 
 | **Testing:** | [![Testing Status](https://img.shields.io/github/actions/workflow/status/FlysonBot/Mastermind/coverage.yaml?label=test)](https://github.com/FlysonBot/Mastermind/actions/workflows/coverage.yaml) [![Test Coverage](https://coveralls.io/repos/github/FlysonBot/Mastermind/badge.svg?branch=main)](https://coveralls.io/github/FlysonBot/Mastermind?branch=main) [![Docs Deploy Status](https://img.shields.io/github/actions/workflow/status/FlysonBot/Mastermind/deploy_sphinx.yaml?label=docs)](https://flysonbot.github.io/Mastermind/) [![CodeFactor](https://www.codefactor.io/repository/github/flysonbot/mastermind/badge/main)](https://www.codefactor.io/repository/github/flysonbot/mastermind/overview/main) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/af7ee6c4fbc945f88a41ef8edbea682d)](https://app.codacy.com/gh/FlysonBot/Mastermind/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)|
