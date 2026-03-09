@@ -9,21 +9,19 @@ requires-python = ">=3.12"
 authors = [{ name = "FlysonBot" }]
 
 # Descriptions
-description = "A Python package that simulates the Mastermind game with an AI solver."
+description = "A Python package that simulates the Mastermind game with a powerful solver, with support for game for up to 9 colors and 9 pegs."
 readme = "README.md"
 
 # Tags
-keywords = ["mastermind", "game", "ai", "puzzle"]
+keywords = ["mastermind", "game", "puzzle"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
-    "Framework :: Pytest",
-    "Framework :: Sphinx",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Education",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Games/Entertainment :: Puzzle Games",
 ]
 
@@ -31,12 +29,6 @@ classifiers = [
 dependencies = [
     "install-jdk>=1.1.0",
     "JPype1>=1.5.0",
-    #"appdirs>=1.4.4",
-    #"clear-screen>=0.1.14",
-    #"pandas>=2.2.2",
-    #"attrs>=24.3.0",
-    #"cattrs>=24.1.2",
-    #"shortuuid>=1.0.13",
 ]
 
 [project.urls]
@@ -44,13 +36,6 @@ Homepage = "https://github.com/FlysonBot/Mastermind"
 Documentation = "https://flysonbot.github.io/Mastermind/"
 Repository = "https://github.com/FlysonBot/Mastermind"
 Issues = "https://github.com/FlysonBot/Mastermind/issues"
-Changelog = "https://github.com/FlysonBot/Mastermind/blob/main/CHANGELOG.md"
-
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
-]
 
 [tool.setuptools]
 packages = ["mastermind"]
@@ -58,3 +43,9 @@ package-dir = { "" = "src/main/python" }
 
 [project.scripts]
 mastermind = "mastermind.main:main"
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true

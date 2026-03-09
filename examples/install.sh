@@ -4,7 +4,7 @@ check_python() {
     # Check for Python installation
     if ! command -v python3 &>/dev/null; then
         echo "Python is not installed."
-        read -r -p "Do you want to install Python 3.10.12? (y/n): " install_python
+        read -r -p "Do you want to install Python 3.12? (y/n): " install_python
         if [[ "$install_python" == "y" ]]; then
             install_python
         else
@@ -13,9 +13,9 @@ check_python() {
         fi
     else
         PYTHON_VERSION=$(python3 --version | grep -oP '\d+\.\d+')
-        if (( $(echo "$PYTHON_VERSION < 3.10" | bc -l) )); then
-            echo "Python version is less than 3.10."
-            read -r -p "Do you want to update to Python 3.10.12? (y/n): " update_python
+        if (( $(echo "$PYTHON_VERSION < 3.12" | bc -l) )); then
+            echo "Python version is less than 3.12."
+            read -r -p "Do you want to update to Python 3.12? (y/n): " update_python
             if [[ "$update_python" == "y" ]]; then
                 install_python
             else
@@ -27,12 +27,12 @@ check_python() {
 }
 
 install_python() {
-    echo "Installing Python 3.10.12..."
+    echo "Installing Python 3.12..."
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo apt update
-        sudo apt install -y python3.10 python3-pip
+        sudo apt install -y python3.12 python3-pip
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        brew install python@3.10
+        brew install python@3.12
     else
         echo "Unsupported OS for automatic Python installation."
         exit 1

@@ -6,7 +6,7 @@ rem Check for Python installation
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo Python is not installed.
-    set /p install_python="Do you want to install Python 3.10.12? (y/n): "
+    set /p install_python="Do you want to install Python 3.12? (y/n): "
     if /i "%install_python%"=="y" (
         call :install_python
     ) else (
@@ -15,9 +15,9 @@ if %errorlevel% neq 0 (
     )
 ) else (
     for /f "tokens=2 delims=." %%a in ('python --version') do (
-        if %%a lss 10 (
-            echo Python version is less than 3.10.
-            set /p update_python="Do you want to update to Python 3.10.12? (y/n): "
+        if %%a lss 12 (
+            echo Python version is less than 3.12.
+            set /p update_python="Do you want to update to Python 3.12? (y/n): "
             if /i "%update_python%"=="y" (
                 call :install_python
             ) else (
@@ -31,8 +31,8 @@ if %errorlevel% neq 0 (
 )
 
 :install_python
-echo Installing Python 3.10.12 using winget...
-start /wait winget install Python.Python.3.10 --silent
+echo Installing Python 3.12 using winget...
+start /wait winget install Python.Python.3.12 --silent
 goto :upgrade_pip
 
 :upgrade_pip
