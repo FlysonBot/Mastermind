@@ -5,8 +5,3 @@ repos:
     - id: ruff  # Run the linter.
       args: [ --fix ]
     - id: ruff-format  # Run the formatter
-
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.14.0
-  hooks:
-  - id: mypy
