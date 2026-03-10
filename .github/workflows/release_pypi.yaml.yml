@@ -34,4 +34,4 @@ jobs:
         run: uv run --isolated --all-extras --with dist/*.tar.gz python src/main/python/mastermind/demo.py
 
       - name: Upload release
-        run: uv publish --trusted-publishing --index testpypi always
+        run: uv publish --trusted-publishing always
