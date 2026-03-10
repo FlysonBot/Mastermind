@@ -1,5 +1,5 @@
 <p align="center">
-<img src="Mastermind Logo.svg" width="350" title="Mastermind Logo" alt="Mastermind Logo">
+<img src="https://raw.githubusercontent.com/FlysonBot/Mastermind/main/Mastermind%20Logo.svg" width="350" title="Mastermind Logo" alt="Mastermind Logo">
 </p>
 
 | **Version:** | [![GitHub tag](https://img.shields.io/github/tag/FlysonBot/Mastermind?include_prereleases=&sort=semver&color=blue)](https://github.com/FlysonBot/Mastermind/tags) [![GitHub Release](https://img.shields.io/github/v/release/FlysonBot/Mastermind?include_prereleases)](https://github.com/FlysonBot/Mastermind/releases) [![Python Version](https://img.shields.io/pypi/pyversions/mastermind-ai)](https://www.python.org/downloads/) [![PyPI - Version](https://img.shields.io/pypi/v/mastermind-ai)](https://pypi.org/project/mastermind-ai/) |
