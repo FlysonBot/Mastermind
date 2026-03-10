@@ -17,13 +17,14 @@ from pathlib import Path
 
 # --- Paths ---
 
-_ROOT = Path(__file__).parents[4]
+_PKG = Path(__file__).parent
+_ROOT = _PKG.parents[3]  # repo root, only valid in dev (not in installed package)
 _SRC_JAVA = _ROOT / "src" / "main" / "java"
 _CLASSES = _ROOT / "target" / "classes"
 _JDK = _ROOT / "target" / "java-jdk"
-_BUNDLED_JAR = _ROOT / "src" / "main" / "mastermind-solver.jar"
-_BUNDLED_JRE = _ROOT / "src" / "main" / "jre"
-_CACHED_JRE = _ROOT / "target" / "mastermind-jre"
+_BUNDLED_JAR = _PKG / "mastermind-solver.jar"
+_BUNDLED_JRE = _PKG / "jre"
+_CACHED_JRE = _PKG / "mastermind-jre"
 
 # --- Platform config ---
 
