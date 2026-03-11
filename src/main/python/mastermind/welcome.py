@@ -1,7 +1,10 @@
+import os
+import shutil
+
 from mastermind.gamemode import assisted, computer, human
 from mastermind.rules import show_rules
 
-_BANNER = """
+_BANNER_WIDE = """
 ╔════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                        ║
 ║  ███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗██████╗   ║
@@ -14,6 +17,51 @@ _BANNER = """
 ╚════════════════════════════════════════════════════════════════════════════════════════╝
 """
 
+_BANNER_MEDIUM = """
+╔══════════════════════════════════════════════════════════╗
+║                                                          ║
+║         ▗  ▖ ▗▖  ▄▄ ▄▄▄▖▗▄▄▖▗▄▄ ▗  ▖▗▄▄ ▗▖ ▖▗▄▖          ║
+║         ▐▌▐▌ ▐▌ ▐▘ ▘ ▐  ▐   ▐ ▝▌▐▌▐▌ ▐  ▐▚ ▌▐ ▝▖         ║
+║         ▐▐▌▌ ▌▐ ▝▙▄  ▐  ▐▄▄▖▐▄▄▘▐▐▌▌ ▐  ▐▐▖▌▐  ▌         ║
+║         ▐▝▘▌ ▙▟   ▝▌ ▐  ▐   ▐ ▝▖▐▝▘▌ ▐  ▐ ▌▌▐  ▌         ║
+║         ▐  ▌▐  ▌▝▄▟▘ ▐  ▐▄▄▖▐  ▘▐  ▌▗▟▄ ▐ ▐▌▐▄▞          ║
+║                                                          ║
+║              ·  ·  · SOLVE THE CODE ·  ·  ·              ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+"""
+
+_BANNER_SMALL = """
+╔══════════════════════════════════════╗
+║                                      ║
+║     ┏┳┓┏━┓┏━┓╺┳╸┏━╸┏━┓┏┳┓╻┏┓╻╺┳┓     ║
+║     ┃┃┃┣━┫┗━┓ ┃ ┣╸ ┣┳┛┃┃┃┃┃┗┫ ┃┃     ║
+║     ╹ ╹╹ ╹┗━┛ ╹ ┗━╸╹┗╸╹ ╹╹╹ ╹╺┻┛     ║
+║                                      ║
+╚══════════════════════════════════════╝
+"""
+
+
+def _terminal_width():
+    cols_env = os.environ.get("COLUMNS")
+    if cols_env and cols_env.isdigit():
+        return int(cols_env)
+    for fd in (1, 2, 0):  # stdout, stderr, stdin
+        try:
+            return os.get_terminal_size(fd).columns
+        except OSError:
+            pass
+    return shutil.get_terminal_size().columns
+
+
+def _banner():
+    cols = _terminal_width()
+    if cols >= 90:
+        return _BANNER_WIDE
+    if cols >= 60:
+        return _BANNER_MEDIUM
+    return _BANNER_SMALL
+
 _MENU = """\
   1) Play  —  You guess the code
   2) Watch —  I solve the code
@@ -24,7 +72,7 @@ _MENU = """\
 
 
 def welcome():
-    print(_BANNER)
+    print(_banner())
 
     while True:
         print(_MENU)
