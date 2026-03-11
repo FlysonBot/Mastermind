@@ -1,5 +1,5 @@
 <p align="center">
-<img src="Mastermind Logo.svg" width="350" title="Mastermind Logo" alt="Mastermind Logo">
+<img src="https://raw.githubusercontent.com/FlysonBot/Mastermind/main/Mastermind%20Logo.svg" width="350" title="Mastermind Logo" alt="Mastermind Logo">
 </p>
 
 | **Version:** | [![GitHub tag](https://img.shields.io/github/tag/FlysonBot/Mastermind?include_prereleases=&sort=semver&color=blue)](https://github.com/FlysonBot/Mastermind/tags) [![GitHub Release](https://img.shields.io/github/v/release/FlysonBot/Mastermind?include_prereleases)](https://github.com/FlysonBot/Mastermind/releases) [![Python Version](https://img.shields.io/pypi/pyversions/mastermind-ai)](https://www.python.org/downloads/) [![PyPI - Version](https://img.shields.io/pypi/v/mastermind-ai)](https://pypi.org/project/mastermind-ai/) |
@@ -16,11 +16,14 @@
 
 # Mastermind
 
-> A terminal Mastermind solver with 4 game modes, powered by a high-performance Java algorithm. Install with pip and run from your terminal — no configuration needed.
+> A terminal Mastermind game with 4 modes and a built-in magic solver. Install with pip and play in seconds — no
+> configuration needed.
 
 ## What is Mastermind?
 
-Mastermind is a code-breaking game for two players. The first player (the code-setter) creates a secret code, which the second player (the code-cracker) tries to guess. The code-cracker has a limited number of attempts to guess the code correctly. After each guess, the code-setter provides feedback indicating how many pegs are the right color in the right place, and how many are the right color but in the wrong place. The code-cracker uses this feedback to refine their guesses until they crack the code or run out of attempts.
+Mastermind is a classic code-breaking game: one player hides a secret code, the other tries to crack it. After each
+guess, you get feedback on how close you are — and you have to use that to narrow it down before you run out of
+attempts. Simple to learn, surprisingly deep to master.
 
 ## Features
 

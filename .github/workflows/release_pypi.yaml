@@ -3,9 +3,11 @@ name: Upload Python Package
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   release-build:
@@ -19,6 +21,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.12"
+          activate-environment: 'true'
           enable-cache: true
 
       - name: Install dependencies
@@ -34,4 +37,4 @@ jobs:
         run: uv run --isolated --all-extras --with dist/*.tar.gz python src/main/python/mastermind/demo.py
 
       - name: Upload release
-        run: uv publish --trusted-publishing --index testpypi always
+        run: uv publish --trusted-publishing always
