@@ -2,7 +2,7 @@
 
 Mastermind solver using Java algorithms (performance) + Python UI (terminal).
 Goal: Efficiently solve c=9, d=9 cases.
-Status: Java algorithm complete. Python UI in progress.
+Status: MVP shipped to PyPI. Now improving the Python UI.
 
 ### Code Organization
 
@@ -12,7 +12,6 @@ Status: Java algorithm complete. Python UI in progress.
 - **Python program**: `./src/main/python/mastermind/` (entry point: `main.py`)
 - **Python tests**: `./src/tests/python/mastermind/` (pytest)
 - **Build**: `make build-java` → `target/mastermind-solver.jar`
-- Everything else is legacy—ignore unless explicitly instructed.
 
 ### Algorithm Flow
 
@@ -23,16 +22,28 @@ Status: Java algorithm complete. Python UI in progress.
 5. `GuessStrategy.select()` — chooses which guesses and secrets arrays to pass into `BestGuess`
 6. `MastermindSession` — manages a full game: history, solution space, strategy-based suggestions, undo
 
-### Program Features
+### UI Flow
 
-- Explain game rules
-- Allow player to play Mastermind on their own to understand how the game work
-- Allow player to choose a code and see the algorithm solve it
-- Allow plyer to use the algorithm to help them play a game of their own
+Entry: `main.py` → `java_setup.ensure_ready()` → `welcome.welcome()` (main menu loop)
+
+#### Gamemodes (`gamemode/`):
+
+- **Play** (`human.py`) — Player guesses a code. Secret is set by computer or another person; player enters guesses and
+  receives black/white feedback.
+- **Watch** (`computer.py`) — Algorithm solves the code. Secret is set by computer or the player; algorithm suggests and
+  plays each guess automatically.
+- **Assist** (`assisted.py`) — Player is playing a real-life game; algorithm suggests the best guess each turn. Player
+  enters their actual guess and the feedback they received; algorithm tracks the solution space and narrows it down.
+
+#### Other modules:
+
+- `welcome.py` — Banner and main menu loop
+- `jvm.py` — JPype bridge to the Java JAR
+- `java_setup.py` — Ensures JRE and JAR are present before starting
 
 ### Current Focus
 
-- Python UI (terminal). Java side is complete.
+- Improve Python UI using rich.
 
 ### Preference
 

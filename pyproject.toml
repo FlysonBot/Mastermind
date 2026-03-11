@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mastermind-ai"
-version = "2.0.2-beta"
+version = "2.0.3b0"
 requires-python = ">=3.12"
 authors = [{ name = "FlysonBot" }]
 
@@ -37,9 +37,10 @@ Documentation = "https://flysonbot.github.io/Mastermind/"
 Repository = "https://github.com/FlysonBot/Mastermind"
 Issues = "https://github.com/FlysonBot/Mastermind/issues"
 
+[tool.setuptools.packages.find]
+where = ["src/main/python"]
+
 [tool.setuptools]
-packages = ["mastermind"]
-package-dir = { "" = "src/main/python" }
 package-data = { mastermind = ["*.jar", "jre/*.zip"] }
 
 [project.scripts]
