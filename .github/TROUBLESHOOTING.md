@@ -16,9 +16,29 @@ Check your Python version:
 python --version
 ```
 
-You need Python 3.12 or higher. If you see an error or an older version, [download and install Python](https://www.python.org/downloads/).
+You need Python 3.12 or higher. If you see an error or an older version, install Python using one of the following
+methods:
 
-## 3. pip
+- **Windows** / **Mac**: [Download and install Python](https://www.python.org/downloads/).
+- **Linux** (Debian/Ubuntu):
+  ```bash
+  sudo apt update && sudo apt install python3
+  ```
+- **Android/Termux**:
+  ```bash
+  pkg install python
+  ```
+
+## 3. Python not found after installation
+
+If you installed Python but the `python` command still isn't found, your system PATH may not include Python. Try these
+steps:
+
+- **Windows**: During installation, make sure to check **"Add Python to PATH"**. If you missed it, reinstall and enable
+  that option.
+- **Mac / Linux**: Try `python3` instead of `python`.
+
+## 4. pip
 
 Check that pip is available:
 
@@ -26,19 +46,23 @@ Check that pip is available:
 pip --version
 ```
 
-If you get an error, reinstall Python (pip is included by default).
-
-## 4. Java error on Android/Termux
-
-If you see a Java-related error on Android/Termux, install OpenJDK 21 first:
+If you get an error, try `pip3` instead. If neither works, run:
 
 ```bash
-pkg install openjdk-21
+python -m ensurepip --upgrade
 ```
 
-Java is bundled for Linux, Windows, and macOS — this step is only needed on Termux.
+If that still doesn't work, reinstall Python (pip is included by default).
 
-## 5. Still having trouble?
+## 6. Java error on Android/Termux
+
+If you're installing from Android/Termux, install the following first:
+
+```bash
+pkg install x11-repo sdl2 openjdk-21
+```
+
+## 7. Still having trouble?
 
 Open an issue on [GitHub](https://github.com/FlysonBot/Mastermind/issues) and include the error message and your platform. We'll help you out.
 
