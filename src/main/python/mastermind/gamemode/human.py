@@ -1,8 +1,9 @@
 import random
 
 from jpype.types import JInt
-from mastermind.jvm import ConvertCode, Feedback
+from mastermind.jvm import Feedback
 from mastermind.ui import console, pause
+from mastermind.ui.convert_code import display, parse_code
 from rich.prompt import Prompt
 from rich.rule import Rule
 
@@ -10,23 +11,6 @@ C = 6
 D = 4
 MAX_TRIES = 10
 
-
-def _parse_guess(raw: str) -> int | None:
-    """Return the index of the guess, or None if invalid."""
-    raw = raw.strip()
-
-    if len(raw) != D or not raw.isdigit():
-        return None
-
-    for ch in raw:
-        if not (1 <= int(ch) <= C):
-            return None
-
-    return int(ConvertCode.toIndex(C, D, int(raw)))
-
-
-def _display(index: int) -> str:
-    return str(int(ConvertCode.toCode(C, D, index)))
 
 
 def play():
@@ -49,7 +33,7 @@ def play():
                 f"Enter your secret code ([cyan]{D} digits, each 1–{C}[/cyan])",
                 console=console,
             )
-            secret_ind = _parse_guess(raw)
+            secret_ind = parse_code(raw, C, D)
             if secret_ind is not None:
                 break
             console.print(
@@ -69,7 +53,7 @@ def play():
     for attempt in range(1, MAX_TRIES + 1):
         while True:
             raw = Prompt.ask(f"▸ Guess {attempt}/{MAX_TRIES}", console=console)
-            guess_ind = _parse_guess(raw)
+            guess_ind = parse_code(raw, C, D)
             if guess_ind is not None:
                 break
             console.print(
@@ -92,7 +76,7 @@ def play():
         )
     else:
         console.print(
-            f"[red]✗ Out of tries![/red] The secret code was: [cyan]{_display(secret_ind)}[/cyan]\n"
+            f"[red]✗ Out of tries![/red] The secret code was: [cyan]{display(secret_ind, C, D)}[/cyan]\n"
         )
     pause()
 

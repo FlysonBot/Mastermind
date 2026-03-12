@@ -1,8 +1,9 @@
 import random
 
 from jpype.types import JInt
-from mastermind.jvm import ConvertCode, Feedback, MastermindSession
+from mastermind.jvm import Feedback, MastermindSession
 from mastermind.ui import console, pause
+from mastermind.ui.convert_code import display, parse_code
 from rich.prompt import Prompt
 from rich.rule import Rule
 
@@ -10,22 +11,6 @@ C = 6
 D = 4
 MAX_TRIES = 10
 
-
-def _parse_code(raw: str) -> int | None:
-    raw = raw.strip()
-
-    if len(raw) != D or not raw.isdigit():
-        return None
-
-    for ch in raw:
-        if not (1 <= int(ch) <= C):
-            return None
-
-    return int(ConvertCode.toIndex(C, D, int(raw)))
-
-
-def _display(index: int) -> str:
-    return str(int(ConvertCode.toCode(C, D, index)))
 
 
 def play():
@@ -48,7 +33,7 @@ def play():
                 f"Enter your secret code ([cyan]{D} digits, each 1–{C}[/cyan])",
                 console=console,
             )
-            secret_ind = _parse_code(raw)
+            secret_ind = parse_code(raw, C, D)
             if secret_ind is not None:
                 break
             console.print(
@@ -70,7 +55,7 @@ def play():
         white = feedback % 10
 
         console.print(
-            f"  ▸ Guess {attempt}/{MAX_TRIES}: [cyan]{_display(guess_ind)}[/cyan]"
+            f"  ▸ Guess {attempt}/{MAX_TRIES}: [cyan]{display(guess_ind, C, D)}[/cyan]"
             f"  →  [bold]{black} black[/bold], {white} white"
         )
 
@@ -85,7 +70,7 @@ def play():
 
     console.print(
         f"\n[red]✗ I failed to solve it within {MAX_TRIES} tries.[/red]"
-        f" The secret was: [cyan]{_display(secret_ind)}[/cyan]\n"
+        f" The secret was: [cyan]{display(secret_ind, C, D)}[/cyan]\n"
     )
     pause()
 

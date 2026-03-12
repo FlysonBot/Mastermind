@@ -1,27 +1,15 @@
 import re
 
 import jpype
-from mastermind.jvm import ConvertCode, MastermindSession
+from mastermind.jvm import MastermindSession
 from mastermind.ui import console, pause
+from mastermind.ui.convert_code import display, parse_code
 from rich.prompt import Prompt
 from rich.rule import Rule
 
 C = 6
 D = 4
 MAX_TRIES = 10
-
-
-def _parse_code(raw: str) -> int | None:
-    raw = raw.strip()
-
-    if len(raw) != D or not raw.isdigit():
-        return None
-
-    for ch in raw:
-        if not (1 <= int(ch) <= C):
-            return None
-
-    return int(ConvertCode.toIndex(C, D, int(raw)))
 
 
 def _parse_feedback(raw: str) -> int | None:
@@ -39,10 +27,6 @@ def _parse_feedback(raw: str) -> int | None:
     return black * 10 + white
 
 
-def _display(index: int) -> str:
-    return str(int(ConvertCode.toCode(C, D, index)))
-
-
 def play():
     console.print()
     console.print(Rule("[bold]Mastermind (Assist)[/bold]"))
@@ -58,7 +42,7 @@ def play():
 
     for attempt in range(1, MAX_TRIES + 1):
         suggestion_ind = int(session.suggestGuess())
-        suggestion_str = _display(suggestion_ind)
+        suggestion_str = display(suggestion_ind, C, D)
         console.print(
             f"\n▸ Turn {attempt}/{MAX_TRIES}  —  💡 Suggested guess: [cyan]{suggestion_str}[/cyan]"
         )
@@ -74,7 +58,7 @@ def play():
                 guess_ind = suggestion_ind
                 break
 
-            guess_ind = _parse_code(raw)
+            guess_ind = parse_code(raw, C, D)
             if guess_ind is not None:
                 break
 

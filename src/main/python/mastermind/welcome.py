@@ -1,6 +1,6 @@
 from mastermind.gamemode import assisted, computer, human
-from mastermind.rules import show_rules
 from mastermind.ui import console
+from mastermind.ui.rules import show_rules
 from rich.prompt import Prompt
 from rich.rule import Rule
 

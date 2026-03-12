@@ -1,4 +1,4 @@
-from mastermind.ui import console, pause
+from mastermind.ui.console import console, pause
 from rich.console import Group
 from rich.panel import Panel
 from rich.rule import Rule
