@@ -2,8 +2,9 @@ import re
 
 import jpype
 from mastermind.jvm import ConvertCode, MastermindSession
-from mastermind.ui import console
+from mastermind.ui import console, pause
 from rich.prompt import Prompt
+from rich.rule import Rule
 
 C = 6
 D = 4
@@ -43,9 +44,10 @@ def _display(index: int) -> str:
 
 
 def play():
-    console.print(
-        f"\n[bold]Mastermind Assistant[/bold]  c={C}, d={D}, tries={MAX_TRIES}\n"
-    )
+    console.print()
+    console.print(Rule("[bold]Mastermind (Assist)[/bold]"))
+    console.print(Rule(f"[dim]c={C}  d={D}  tries={MAX_TRIES}[/dim]", style="dim"))
+    console.print()
     console.print("I'll suggest the best guess each turn.")
     console.print(
         "Enter the guess you actually played (or press Enter to use my suggestion),"
@@ -58,17 +60,17 @@ def play():
         suggestion_ind = int(session.suggestGuess())
         suggestion_str = _display(suggestion_ind)
         console.print(
-            f"Turn {attempt}/{MAX_TRIES}  —  Suggested guess: [cyan]{suggestion_str}[/cyan]"
+            f"\n▸ Turn {attempt}/{MAX_TRIES}  —  Suggested guess: [cyan]{suggestion_str}[/cyan]"
         )
 
         # Ask what guess was actually played
         while True:
             raw = Prompt.ask(
-                f"  Your guess [Enter = [cyan]{suggestion_str}[/cyan]]",
-                default="",
+                "  Your guess",
+                default=suggestion_str,
                 console=console,
             )
-            if raw == "":
+            if raw == suggestion_str:
                 guess_ind = suggestion_ind
                 break
 
@@ -100,6 +102,7 @@ def play():
             console.print(
                 f"\n[bold green]Perfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
             )
+            pause()
             return
 
         try:
@@ -116,16 +119,18 @@ def play():
             else:
                 raise
 
+            pause()
             return
 
         remaining = session.getSolutionSpaceSize()
         console.print(
-            f"  ({remaining} possible code{'s' if remaining != 1 else ''} remaining)\n"
+            f"  [dim]({remaining} possible code{'s' if remaining != 1 else ''} remaining)[/dim]\n"
         )
 
     console.print(
         "\n[red]Out of turns. The algorithm could not determine the code — try again from the start.[/red]\n"
     )
+    pause()
 
 
 if __name__ == "__main__":

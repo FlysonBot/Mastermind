@@ -2,6 +2,7 @@ from mastermind.gamemode import assisted, computer, human
 from mastermind.rules import show_rules
 from mastermind.ui import console
 from rich.prompt import Prompt
+from rich.rule import Rule
 
 _BANNER_WIDE = """\
 ╔════════════════════════════════════════════════════════════════════════════════════════╗
@@ -51,9 +52,10 @@ def _banner():
 
 
 def welcome():
-    console.print(f"\n[bold cyan]{_banner()}[/bold cyan]\n")
-
     while True:
+        console.print(f"\n[bold cyan]{_banner()}[/bold cyan]\n")
+        console.print(Rule("[dim]Main Menu[/dim]", style="dim"))
+        console.print()
         console.print("  [bold]1)[/bold] Play   [dim]—  You guess the code[/dim]")
         console.print("  [bold]2)[/bold] Watch  [dim]—  I solve the code[/dim]")
         console.print(

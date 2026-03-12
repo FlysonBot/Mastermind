@@ -2,8 +2,9 @@ import random
 
 from jpype.types import JInt
 from mastermind.jvm import ConvertCode, Feedback, MastermindSession
-from mastermind.ui import console
+from mastermind.ui import console, pause
 from rich.prompt import Prompt
+from rich.rule import Rule
 
 C = 6
 D = 4
@@ -28,11 +29,16 @@ def _display(index: int) -> str:
 
 
 def play():
-    console.print(f"\n[bold]Mastermind[/bold]  c={C}, d={D}, tries={MAX_TRIES}\n")
+    console.print()
+    console.print(Rule("[bold]Mastermind (Watch)[/bold]"))
+    console.print(Rule(f"[dim]c={C}  d={D}  tries={MAX_TRIES}[/dim]", style="dim"))
+    console.print()
 
     choice = Prompt.ask(
         "Who sets the secret code?\n  [bold]1)[/bold] I (computer)\n  [bold]2)[/bold] You\n",
         choices=["1", "2"],
+        show_choices=False,
+        default="1",
         console=console,
     )
 
@@ -52,7 +58,7 @@ def play():
 
     else:
         secret_ind = random.randrange(C**D)
-        console.print("I have set a secret code. Now I will solve it...\n")
+        console.print("\nI have set a secret code. Now I will solve it...\n")
 
     session = MastermindSession(C, D)
     color_freq: list[int] = JInt[C]
@@ -64,7 +70,7 @@ def play():
         white = feedback % 10
 
         console.print(
-            f"  Guess {attempt}/{MAX_TRIES}: [cyan]{_display(guess_ind)}[/cyan]"
+            f"  ▸ Guess {attempt}/{MAX_TRIES}: [cyan]{_display(guess_ind)}[/cyan]"
             f"  →  [bold]{black} black[/bold], {white} white"
         )
 
@@ -74,12 +80,14 @@ def play():
             console.print(
                 f"\n[bold green]I solved it in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
             )
+            pause()
             return
 
     console.print(
         f"\n[red]I failed to solve it within {MAX_TRIES} tries.[/red]"
         f" The secret was: [cyan]{_display(secret_ind)}[/cyan]\n"
     )
+    pause()
 
 
 if __name__ == "__main__":

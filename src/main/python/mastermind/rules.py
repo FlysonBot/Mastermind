@@ -1,4 +1,4 @@
-from mastermind.ui import console
+from mastermind.ui import console, pause
 from rich.console import Group
 from rich.panel import Panel
 from rich.rule import Rule
@@ -40,9 +40,9 @@ def show_rules():
                     "\n After each guess, the [red]code-setter[/red] gives feedback using two"
                     "\n numbers:"
                     "\n"
-                    "\n   [bold on orange4]BLACK[/bold on orange4]  — a digit is the correct color AND in the correct"
+                    "\n   [bold #ffffff on #1a1a1a]BLACK[/bold #ffffff on #1a1a1a]  — a digit is the correct color AND in the correct"
                     "\n             position."
-                    "\n   [bold on navy_blue]WHITE[/bold on navy_blue]  — a digit is the correct color but in the WRONG"
+                    "\n   [bold #1a1a1a on #f0f0f0]WHITE[/bold #1a1a1a on #f0f0f0]  — a digit is the correct color but in the WRONG"
                     "\n             position."
                     "\n"
                     "\n A digit can only be counted once. Blacks take priority."
@@ -53,10 +53,10 @@ def show_rules():
                     "\n   Secret:  1 2 3 4"
                     "\n   Guess:   1 3 5 4"
                     "\n"
-                    "\n   Position 1: guess=1, secret=1  → [bold on orange4]BLACK[/bold on orange4]  [green]✓[/green] (right place)"
+                    "\n   Position 1: guess=1, secret=1  → [bold #ffffff on #1a1a1a]BLACK[/bold #ffffff on #1a1a1a]  [green]✓[/green] (right place)"
                     "\n   Position 2: guess=3, secret=2  → 3 is not in the secret at all"
                     "\n   Position 3: guess=5, secret=3  → 5 is not in the secret at all"
-                    "\n   Position 4: guess=4, secret=4  → [bold on orange4]BLACK[/bold on orange4]  [green]✓[/green] (right place)"
+                    "\n   Position 4: guess=4, secret=4  → [bold #ffffff on #1a1a1a]BLACK[/bold #ffffff on #1a1a1a]  [green]✓[/green] (right place)"
                     "\n   The 3 from position 2 is not in the secret, so no white."
                     "\n"
                     "\n   Feedback:  2 black,  0 white"
@@ -67,9 +67,9 @@ def show_rules():
                     "\n   Secret:  1 2 3 4"
                     "\n   Guess:   4 1 2 6"
                     "\n"
-                    "\n   Position 1: guess=4, secret=1  → 4 is elsewhere (pos 4) → [bold on navy_blue]WHITE[/bold on navy_blue]"
-                    "\n   Position 2: guess=1, secret=2  → 1 is elsewhere (pos 1) → [bold on navy_blue]WHITE[/bold on navy_blue]"
-                    "\n   Position 3: guess=2, secret=3  → 2 is elsewhere (pos 2) → [bold on navy_blue]WHITE[/bold on navy_blue]"
+                    "\n   Position 1: guess=4, secret=1  → 4 is elsewhere (pos 4) → [bold #1a1a1a on #f0f0f0]WHITE[/bold #1a1a1a on #f0f0f0]"
+                    "\n   Position 2: guess=1, secret=2  → 1 is elsewhere (pos 1) → [bold #1a1a1a on #f0f0f0]WHITE[/bold #1a1a1a on #f0f0f0]"
+                    "\n   Position 3: guess=2, secret=3  → 2 is elsewhere (pos 2) → [bold #1a1a1a on #f0f0f0]WHITE[/bold #1a1a1a on #f0f0f0]"
                     "\n   Position 4: guess=6, secret=4  → 6 not in secret"
                     "\n"
                     "\n   Feedback:  0 black,  3 white"
@@ -80,10 +80,10 @@ def show_rules():
                     "\n   Secret:  1 1 2 3"
                     "\n   Guess:   1 4 1 5"
                     "\n"
-                    "\n   Position 1: guess=1, secret=1  → [bold on orange4]BLACK[/bold on orange4]  [green]✓[/green]"
+                    "\n   Position 1: guess=1, secret=1  → [bold #ffffff on #1a1a1a]BLACK[/bold #ffffff on #1a1a1a]  [green]✓[/green]"
                     "\n   Position 2: guess=4, secret=1  → 4 not in secret"
                     "\n   Position 3: guess=1, secret=2  → there is a second 1 in the"
-                    "\n                                     secret (pos 2), so → [bold on navy_blue]WHITE[/bold on navy_blue]"
+                    "\n                                     secret (pos 2), so → [bold #1a1a1a on #f0f0f0]WHITE[/bold #1a1a1a on #f0f0f0]"
                     "\n   Position 4: guess=5, secret=3  → 5 not in secret"
                     "\n"
                     "\n   Feedback:  1 black,  1 white"
@@ -117,6 +117,7 @@ def show_rules():
         )
     )
     console.print()
+    pause()
 
 
 if __name__ == "__main__":
