@@ -60,7 +60,7 @@ def play():
         suggestion_ind = int(session.suggestGuess())
         suggestion_str = _display(suggestion_ind)
         console.print(
-            f"\n▸ Turn {attempt}/{MAX_TRIES}  —  Suggested guess: [cyan]{suggestion_str}[/cyan]"
+            f"\n▸ Turn {attempt}/{MAX_TRIES}  —  💡 Suggested guess: [cyan]{suggestion_str}[/cyan]"
         )
 
         # Ask what guess was actually played
@@ -79,7 +79,7 @@ def play():
                 break
 
             console.print(
-                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+                f"  [red]! Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
             )
 
         # Ask for feedback
@@ -92,7 +92,7 @@ def play():
                 break
 
             console.print(
-                "  [red]Invalid. Enter blacks and whites, e.g. '2b1w', '21', or '2 1'.[/red]"
+                "  [red]! Invalid. Enter blacks and whites, e.g. '2b1w', '21', or '2 1'.[/red]"
             )
 
         black = feedback // 10
@@ -100,7 +100,7 @@ def play():
         if black == D:
             session.recordGuess(guess_ind, feedback)
             console.print(
-                f"\n[bold green]Perfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
+                f"\n[bold green]✓ Perfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
             )
             pause()
             return
@@ -111,7 +111,7 @@ def play():
         except jpype.JException as e:
             if "No valid secrets remain" in str(e):
                 console.print(
-                    "\n[red]No valid codes match the feedback history — your inputs may be inconsistent.[/red]"
+                    "\n[red]✗ No valid codes match the feedback history — your inputs may be inconsistent.[/red]"
                 )
                 console.print(
                     "Please double-check your guesses and feedback, then start over.\n"
@@ -128,7 +128,7 @@ def play():
         )
 
     console.print(
-        "\n[red]Out of turns. The algorithm could not determine the code — try again from the start.[/red]\n"
+        "\n[red]✗ Out of turns. The algorithm could not determine the code — try again from the start.[/red]\n"
     )
     pause()
 

@@ -14,9 +14,9 @@ def show_rules():
                     "\n Mastermind is a code-breaking game for two players: a"
                     "\n [red]code-setter[/red] and a [red]code-breaker[/red]."
                     "\n"
-                    "\n   • The [red]code-setter[/red] picks a secret code — a sequence of"
+                    "\n   ▸ The [red]code-setter[/red] picks a secret code — a sequence of"
                     "\n     colored pegs (here represented as digits 1–6)."
-                    "\n   • The [red]code-breaker[/red] tries to guess it in as few attempts"
+                    "\n   ▸ The [red]code-breaker[/red] tries to guess it in as few attempts"
                     "\n     as possible, using feedback after each guess."
                     "\n"
                 ),
@@ -95,18 +95,18 @@ def show_rules():
                 ),
                 Rule("[bold]STRATEGY TIPS[/bold]", style="dim"),
                 (
-                    "\n   • A feedback of 0 black, 0 white means none of your guessed"
+                    "\n   ▸ A feedback of 0 black, 0 white means none of your guessed"
                     "\n     digits appear in the secret at all — very useful!"
-                    "\n   • Use early guesses to test many different digits at once."
-                    "\n   • Narrow down positions with follow-up guesses based on the"
+                    "\n   ▸ Use early guesses to test many different digits at once."
+                    "\n   ▸ Narrow down positions with follow-up guesses based on the"
                     "\n     white clues you receive."
                     "\n"
                 ),
                 Rule("[bold]WINNING AND LOSING[/bold]", style="dim"),
                 (
-                    "\n   • 4 black, 0 white = perfect guess → [green]you win![/green]"
-                    "\n   • Guess correctly within 10 tries → [red]code-breaker[/red] wins."
-                    "\n   • Fail to guess within 10 tries   → [red]code-setter[/red] wins,"
+                    "\n   ▸ 4 black, 0 white = perfect guess → [green]you win![/green]"
+                    "\n   ▸ Guess correctly within 10 tries → [red]code-breaker[/red] wins."
+                    "\n   ▸ Fail to guess within 10 tries   → [red]code-setter[/red] wins,"
                     "\n     and the secret is revealed."
                     "\n"
                 ),

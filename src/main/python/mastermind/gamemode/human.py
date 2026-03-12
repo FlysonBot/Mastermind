@@ -53,7 +53,7 @@ def play():
             if secret_ind is not None:
                 break
             console.print(
-                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+                f"  [red]! Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
             )
         console.print("\n[green]Code set.[/green] Hand the keyboard to the guesser!\n")
 
@@ -73,7 +73,7 @@ def play():
             if guess_ind is not None:
                 break
             console.print(
-                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+                f"  [red]! Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
             )
 
         feedback = int(Feedback.getFeedback(guess_ind, secret_ind, C, D, color_freq))
@@ -86,14 +86,13 @@ def play():
             won = True
             break
 
-    console.print()
     if won:
         console.print(
-            f"[bold green]Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
+            f"[bold green]✓ Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
         )
     else:
         console.print(
-            f"[red]Out of tries![/red] The secret code was: [cyan]{_display(secret_ind)}[/cyan]\n"
+            f"[red]✗ Out of tries![/red] The secret code was: [cyan]{_display(secret_ind)}[/cyan]\n"
         )
     pause()
 

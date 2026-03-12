@@ -52,7 +52,7 @@ def play():
             if secret_ind is not None:
                 break
             console.print(
-                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+                f"  [red]! Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
             )
         console.print("\n[green]Code set.[/green] Watch the computer solve it!\n")
 
@@ -78,13 +78,13 @@ def play():
 
         if black == D:
             console.print(
-                f"\n[bold green]I solved it in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
+                f"\n[bold green]✓ I solved it in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
             )
             pause()
             return
 
     console.print(
-        f"\n[red]I failed to solve it within {MAX_TRIES} tries.[/red]"
+        f"\n[red]✗ I failed to solve it within {MAX_TRIES} tries.[/red]"
         f" The secret was: [cyan]{_display(secret_ind)}[/cyan]\n"
     )
     pause()
