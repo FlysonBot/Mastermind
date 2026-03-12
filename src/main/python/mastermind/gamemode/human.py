@@ -12,7 +12,6 @@ D = 4
 MAX_TRIES = 10
 
 
-
 def play():
     console.print()
     console.print(Rule("[bold]Mastermind (Play)[/bold]"))
