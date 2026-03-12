@@ -1,7 +1,10 @@
 from mastermind.gamemode import assisted, computer, human
-from mastermind.rules import show_rules
+from mastermind.ui import console
+from mastermind.ui.rules import show_rules
+from rich.prompt import Prompt
+from rich.rule import Rule
 
-_BANNER = """
+_BANNER_WIDE = """\
 ╔════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                        ║
 ║  ███╗   ███╗ █████╗ ███████╗████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗██████╗   ║
@@ -11,42 +14,76 @@ _BANNER = """
 ║  ██║ ╚═╝ ██║██║  ██║███████║   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██████╔╝  ║
 ║  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═════╝   ║
 ║                                                                                        ║
-╚════════════════════════════════════════════════════════════════════════════════════════╝
+╚════════════════════════════════════════════════════════════════════════════════════════╝\
 """
 
-_MENU = """\
-  1) Play  —  You guess the code
-  2) Watch —  I solve the code
-  3) Assist — You play in real life, I suggest guesses
-  4) Rules —  How to play Mastermind
-  5) Quit
+_BANNER_MEDIUM = """\
+╔══════════════════════════════════════════════════════════╗
+║                                                          ║
+║         ▗  ▖ ▗▖  ▄▄ ▄▄▄▖▗▄▄▖▗▄▄ ▗  ▖▗▄▄ ▗▖ ▖▗▄▖          ║
+║         ▐▌▐▌ ▐▌ ▐▘ ▘ ▐  ▐   ▐ ▝▌▐▌▐▌ ▐  ▐▚ ▌▐ ▝▖         ║
+║         ▐▐▌▌ ▌▐ ▝▙▄  ▐  ▐▄▄▖▐▄▄▘▐▐▌▌ ▐  ▐▐▖▌▐  ▌         ║
+║         ▐▝▘▌ ▙▟   ▝▌ ▐  ▐   ▐ ▝▖▐▝▘▌ ▐  ▐ ▌▌▐  ▌         ║
+║         ▐  ▌▐  ▌▝▄▟▘ ▐  ▐▄▄▖▐  ▘▐  ▌▗▟▄ ▐ ▐▌▐▄▞          ║
+║                                                          ║
+║              ·  ·  · SOLVE THE CODE ·  ·  ·              ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝\
 """
+
+_BANNER_SMALL = """\
+╔══════════════════════════════════════╗
+║                                      ║
+║     ┏┳┓┏━┓┏━┓╺┳╸┏━╸┏━┓┏┳┓╻┏┓╻╺┳┓     ║
+║     ┃┃┃┣━┫┗━┓ ┃ ┣╸ ┣┳┛┃┃┃┃┃┗┫ ┃┃     ║
+║     ╹ ╹╹ ╹┗━┛ ╹ ┗━╸╹┗╸╹ ╹╹╹ ╹╺┻┛     ║
+║                                      ║
+╚══════════════════════════════════════╝\
+"""
+
+
+def _banner():
+    cols = console.width
+    if cols >= 90:
+        return _BANNER_WIDE
+    if cols >= 60:
+        return _BANNER_MEDIUM
+    return _BANNER_SMALL
 
 
 def welcome():
-    print(_BANNER)
-
     while True:
-        print(_MENU)
-        choice = input("> ").strip()
+        console.print(f"\n[bold cyan]{_banner()}[/bold cyan]\n")
+        console.print(Rule("[dim]Main Menu[/dim]", style="dim"))
+        console.print()
+        console.print("  [bold]1)[/bold] Play   [dim]—  You guess the code[/dim]")
+        console.print("  [bold]2)[/bold] Watch  [dim]—  I solve the code[/dim]")
+        console.print(
+            "  [bold]3)[/bold] Assist [dim]—  You play in real life, I suggest guesses[/dim]"
+        )
+        console.print("  [bold]4)[/bold] Rules  [dim]—  How to play Mastermind[/dim]")
+        console.print("  [bold]5)[/bold] Quit")
+        console.print()
+
+        choice = Prompt.ask("[bold]>[/bold]", console=console).strip()
 
         match choice:
             case "1":
-                print()
+                console.print()
                 human.play()
             case "2":
-                print()
+                console.print()
                 computer.play()
             case "3":
-                print()
+                console.print()
                 assisted.play()
             case "4":
                 show_rules()
             case "5":
-                print("\nGoodbye!\n")
+                console.print("\n[dim]Goodbye![/dim]\n")
                 break
             case _:
-                print("  Please enter 1–5.\n")
+                console.print("  [red]Please enter 1–5.[/red]\n")
 
 
 if __name__ == "__main__":

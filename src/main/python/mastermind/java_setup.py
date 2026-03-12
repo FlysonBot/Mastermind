@@ -15,6 +15,8 @@ import time
 import zipfile
 from pathlib import Path
 
+from mastermind.ui import console
+
 # --- Paths ---
 
 _PKG = Path(__file__).parent
@@ -56,12 +58,14 @@ def ensure_ready():
 def _ensure_android():
     """On Android/Termux, verify the system JDK is present and return (None, jar)."""
     if not shutil.which("java"):
-        print("Java is not installed. Please run:")
-        print("    pkg install openjdk-21")
+        console.print("[red]Java is not installed.[/red] Please run:")
+        console.print("    [cyan]pkg install openjdk-21[/cyan]")
         sys.exit(1)
 
     if not _BUNDLED_JAR.exists():
-        print("Bundled JAR not found. Please re-clone or re-download the repository.")
+        console.print(
+            "[red]Bundled JAR not found.[/red] Please re-clone or re-download the repository."
+        )
         sys.exit(1)
 
     return None, _BUNDLED_JAR
@@ -69,26 +73,26 @@ def _ensure_android():
 
 def _ensure_desktop():
     """Return (jre, jar), extracting or building the JRE/JAR as needed."""
-    jre = _resolve_jre()
-    jar = _BUNDLED_JAR if _BUNDLED_JAR.exists() else None
+    jre_path = _resolve_jre()
+    jar_path = _BUNDLED_JAR if _BUNDLED_JAR.exists() else None
 
-    if jre and jar:
-        return jre, jar
+    if jre_path and jar_path:
+        return jre_path, jar_path
 
     # Fallback: download a JDK to build whatever is missing
     _download_jdk()
     try:
-        if not jre:
+        if not jre_path:
             _build_jre()
-            jre = _CACHED_JRE
+            jre_path = _CACHED_JRE
 
-        if not jar:
+        if not jar_path:
             _build_jar()
-            jar = _BUNDLED_JAR
+            jar_path = _BUNDLED_JAR
     finally:
         shutil.rmtree(_JDK, ignore_errors=True)
 
-    return jre, jar
+    return jre_path, jar_path
 
 
 def _resolve_jre():
@@ -113,18 +117,18 @@ def _resolve_jre():
 
 
 def _extract_jre(zip_path: Path):
-    print(f"Extracting JRE from {zip_path.name}...")
     t = time.time()
-    _CACHED_JRE.mkdir(parents=True, exist_ok=True)
+    with console.status(f"Extracting JRE from [cyan]{zip_path.name}[/cyan]..."):
+        _CACHED_JRE.mkdir(parents=True, exist_ok=True)
 
-    with zipfile.ZipFile(zip_path, "r") as zf:
-        zf.extractall(_CACHED_JRE)
+        with zipfile.ZipFile(zip_path, "r") as zf:
+            zf.extractall(_CACHED_JRE)
 
-    # Restore execute permissions on binaries (lost during zip on Unix)
-    for f in (_CACHED_JRE / "bin").iterdir():
-        f.chmod(f.stat().st_mode | 0o111)
+        # Restore execute permissions on binaries (lost during zip on Unix)
+        for f in (_CACHED_JRE / "bin").iterdir():
+            f.chmod(f.stat().st_mode | 0o111)
 
-    print(f"JRE extracted. ({time.time() - t:.1f}s)")
+    console.print(f"[green]✓[/green] JRE extracted. ({time.time() - t:.1f}s)")
 
 
 # --- Fallback: build from downloaded JDK ---
@@ -133,13 +137,15 @@ def _extract_jre(zip_path: Path):
 def _download_jdk():
     import jdk  # install-jdk library
 
-    print("Downloading JDK...")
     t = time.time()
-    jdk.install(version="21", path=str(_JDK))
+    with console.status("Downloading JDK..."):
+        jdk.install(version="21", path=str(_JDK))
     size_mb = (
         sum(f.stat().st_size for f in _JDK.rglob("*") if f.is_file()) / 1024 / 1024
     )
-    print(f"JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)")
+    console.print(
+        f"[green]✓[/green] JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)"
+    )
 
 
 def _build_jre():
@@ -147,22 +153,22 @@ def _build_jre():
     if not jlink:
         raise RuntimeError("jlink not found in downloaded JDK")
 
-    print("Building trimmed JRE...")
     t = time.time()
-    subprocess.run(
-        [
-            str(jlink),
-            "--add-modules",
-            "java.base",
-            "--output",
-            str(_CACHED_JRE),
-            "--strip-debug",
-            "--no-header-files",
-            "--no-man-pages",
-        ],
-        check=True,
-    )
-    print(f"JRE ready. ({time.time() - t:.1f}s)")
+    with console.status("Building trimmed JRE..."):
+        subprocess.run(
+            [
+                str(jlink),
+                "--add-modules",
+                "java.base",
+                "--output",
+                str(_CACHED_JRE),
+                "--strip-debug",
+                "--no-header-files",
+                "--no-man-pages",
+            ],
+            check=True,
+        )
+    console.print(f"[green]✓[/green] JRE ready. ({time.time() - t:.1f}s)")
 
 
 def _build_jar():
@@ -177,25 +183,25 @@ def _build_jar():
     _CLASSES.mkdir(parents=True, exist_ok=True)
     _BUNDLED_JAR.parent.mkdir(parents=True, exist_ok=True)
 
-    print("Compiling Java sources...")
     t = time.time()
-    subprocess.run([str(javac), "-d", str(_CLASSES)] + sources, check=True)
-    subprocess.run(
-        [
-            str(jar_tool),
-            "--create",
-            "--file",
-            str(_BUNDLED_JAR),
-            "-C",
-            str(_CLASSES),
-            ".",
-        ],
-        check=True,
-    )
-    print(f"JAR ready. ({time.time() - t:.1f}s)")
+    with console.status("Compiling Java sources..."):
+        subprocess.run([str(javac), "-d", str(_CLASSES)] + sources, check=True)
+        subprocess.run(
+            [
+                str(jar_tool),
+                "--create",
+                "--file",
+                str(_BUNDLED_JAR),
+                "-C",
+                str(_CLASSES),
+                ".",
+            ],
+            check=True,
+        )
+    console.print(f"[green]✓[/green] JAR ready. ({time.time() - t:.1f}s)")
 
 
 if __name__ == "__main__":
     jre, jar = ensure_ready()
-    print(f"JRE: {jre}")
-    print(f"JAR: {jar}")
+    console.print(f"JRE: {jre}")
+    console.print(f"JAR: {jar}")
