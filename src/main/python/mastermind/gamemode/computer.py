@@ -2,6 +2,8 @@ import random
 
 from jpype.types import JInt
 from mastermind.jvm import ConvertCode, Feedback, MastermindSession
+from mastermind.ui import console
+from rich.prompt import Prompt
 
 C = 6
 D = 4
@@ -26,24 +28,31 @@ def _display(index: int) -> str:
 
 
 def play():
-    print(f"=== Mastermind  [c={C}, d={D}, tries={MAX_TRIES}] ===\n")
-    print(f"Colors: 1–{C},  Code length: {D} digits\n")
+    console.print(f"\n[bold]Mastermind[/bold]  c={C}, d={D}, tries={MAX_TRIES}\n")
 
-    choice = input("Who sets the secret code?\n  1) I (computer)\n  2) You\n> ").strip()
+    choice = Prompt.ask(
+        "Who sets the secret code?\n  [bold]1)[/bold] I (computer)\n  [bold]2)[/bold] You\n",
+        choices=["1", "2"],
+        console=console,
+    )
 
     if choice == "2":
         while True:
-            raw = input(f"Enter your secret code ({D} digits, each 1–{C}): ").strip()
+            raw = Prompt.ask(
+                f"Enter your secret code ([cyan]{D} digits, each 1–{C}[/cyan])",
+                console=console,
+            )
             secret_ind = _parse_code(raw)
             if secret_ind is not None:
                 break
-
-            print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
-        print("\nCode set. Watch the computer solve it!\n")
+            console.print(
+                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+            )
+        console.print("\n[green]Code set.[/green] Watch the computer solve it!\n")
 
     else:
         secret_ind = random.randrange(C**D)
-        print("I have set a secret code. Now I will solve it...\n")
+        console.print("I have set a secret code. Now I will solve it...\n")
 
     session = MastermindSession(C, D)
     color_freq: list[int] = JInt[C]
@@ -54,18 +63,22 @@ def play():
         black = feedback // 10
         white = feedback % 10
 
-        print(
-            f"Guess {attempt}/{MAX_TRIES}: {_display(guess_ind)}  →  {black} black, {white} white"
+        console.print(
+            f"  Guess {attempt}/{MAX_TRIES}: [cyan]{_display(guess_ind)}[/cyan]"
+            f"  →  [bold]{black} black[/bold], {white} white"
         )
 
         session.recordGuess(guess_ind, feedback)
 
         if black == D:
-            print(f"\nI solved it in {attempt} {'tries' if attempt != 1 else 'try'}!")
+            console.print(
+                f"\n[bold green]I solved it in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
+            )
             return
 
-    print(
-        f"\nI failed to solve it within {MAX_TRIES} tries. The secret was: {_display(secret_ind)}"
+    console.print(
+        f"\n[red]I failed to solve it within {MAX_TRIES} tries.[/red]"
+        f" The secret was: [cyan]{_display(secret_ind)}[/cyan]\n"
     )
 
 

@@ -2,6 +2,8 @@ import random
 
 from jpype.types import JInt
 from mastermind.jvm import ConvertCode, Feedback
+from mastermind.ui import console
+from rich.prompt import Prompt
 
 C = 6
 D = 4
@@ -27,28 +29,32 @@ def _display(index: int) -> str:
 
 
 def play():
-    print(f"=== Mastermind  [c={C}, d={D}, tries={MAX_TRIES}] ===\n")
-    print(f"Colors: 1–{C},  Code length: {D} digits\n")
+    console.print(f"\n[bold]Mastermind[/bold]  c={C}, d={D}, tries={MAX_TRIES}\n")
 
-    choice = input(
-        "Who sets the secret code?\n  1) I (computer)\n  2) You (playing with someone else)\n> "
-    ).strip()
+    choice = Prompt.ask(
+        "Who sets the secret code?\n  [bold]1)[/bold] I (computer)\n  [bold]2)[/bold] You (playing with someone else)\n",
+        choices=["1", "2"],
+        console=console,
+    )
 
     if choice == "2":
         while True:
-            raw = input(f"Enter your secret code ({D} digits, each 1–{C}): ").strip()
-
+            raw = Prompt.ask(
+                f"Enter your secret code ([cyan]{D} digits, each 1–{C}[/cyan])",
+                console=console,
+            )
             secret_ind = _parse_guess(raw)
             if secret_ind is not None:
                 break
-
-            print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
-        print("\nCode set. Hand the keyboard to the guesser!\n")
+            console.print(
+                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+            )
+        console.print("\n[green]Code set.[/green] Hand the keyboard to the guesser!\n")
 
     else:
         total_codes = C**D
         secret_ind = random.randrange(total_codes)
-        print("I have set a secret code. Go ahead and guess it.\n")
+        console.print("I have set a secret code. Go ahead and guess it.\n")
 
     color_freq: list[int] = JInt[C]
     won = False
@@ -56,31 +62,33 @@ def play():
     attempt = 0
     for attempt in range(1, MAX_TRIES + 1):
         while True:
-            raw = input(f"Guess {attempt}/{MAX_TRIES}: ").strip()
-
+            raw = Prompt.ask(f"Guess {attempt}/{MAX_TRIES}", console=console)
             guess_ind = _parse_guess(raw)
             if guess_ind is not None:
                 break
-
-            print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
+            console.print(
+                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+            )
 
         feedback = int(Feedback.getFeedback(guess_ind, secret_ind, C, D, color_freq))
         black = feedback // 10
         white = feedback % 10
 
-        print(f"  Feedback: {black} black, {white} white")
+        console.print(f"  Feedback: [bold]{black} black[/bold], {white} white")
 
         if black == D:
             won = True
             break
 
-    print()
+    console.print()
     if won:
-        print(
-            f"Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}!\n\n"
+        console.print(
+            f"[bold green]Congratulations! You cracked the code in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
         )
     else:
-        print(f"Out of tries! The secret code was: {_display(secret_ind)}\n\n")
+        console.print(
+            f"[red]Out of tries![/red] The secret code was: [cyan]{_display(secret_ind)}[/cyan]\n"
+        )
 
 
 if __name__ == "__main__":

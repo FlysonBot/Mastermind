@@ -1,5 +1,9 @@
+import re
+
 import jpype
 from mastermind.jvm import ConvertCode, MastermindSession
+from mastermind.ui import console
+from rich.prompt import Prompt
 
 C = 6
 D = 4
@@ -23,8 +27,6 @@ def _parse_feedback(raw: str) -> int | None:
     """Parse 'XbYw' or 'X Y' into feedback int (black*10 + white)."""
     raw = raw.strip().lower().replace(" ", "")
     # Accept formats: "2b1w", "21", "2b1", "2 1"
-    import re
-
     m = re.fullmatch(r"(\d)b?(\d)w?", raw)
     if not m:
         return None
@@ -41,21 +43,31 @@ def _display(index: int) -> str:
 
 
 def play():
-    print(f"=== Mastermind Assistant  [c={C}, d={D}, tries={MAX_TRIES}] ===\n")
-    print("I'll suggest the best guess each turn.")
-    print("Enter the guess you actually played (or press Enter to use my suggestion),")
-    print("then enter the feedback you received.\n")
+    console.print(
+        f"\n[bold]Mastermind Assistant[/bold]  c={C}, d={D}, tries={MAX_TRIES}\n"
+    )
+    console.print("I'll suggest the best guess each turn.")
+    console.print(
+        "Enter the guess you actually played (or press Enter to use my suggestion),"
+    )
+    console.print("then enter the feedback you received.\n")
 
     session = MastermindSession(C, D)
 
     for attempt in range(1, MAX_TRIES + 1):
         suggestion_ind = int(session.suggestGuess())
         suggestion_str = _display(suggestion_ind)
-        print(f"Turn {attempt}/{MAX_TRIES}  —  Suggested guess: {suggestion_str}")
+        console.print(
+            f"Turn {attempt}/{MAX_TRIES}  —  Suggested guess: [cyan]{suggestion_str}[/cyan]"
+        )
 
         # Ask what guess was actually played
         while True:
-            raw = input(f"  Your guess (Enter = {suggestion_str}): ").strip()
+            raw = Prompt.ask(
+                f"  Your guess [Enter = [cyan]{suggestion_str}[/cyan]]",
+                default="",
+                console=console,
+            )
             if raw == "":
                 guess_ind = suggestion_ind
                 break
@@ -64,23 +76,29 @@ def play():
             if guess_ind is not None:
                 break
 
-            print(f"  Invalid. Use exactly {D} digits, each between 1 and {C}.")
+            console.print(
+                f"  [red]Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+            )
 
         # Ask for feedback
         while True:
-            raw = input("  Feedback (blacks whites, e.g. '2b1w' or '2 1'): ")
+            raw = Prompt.ask(
+                "  Feedback (blacks whites, e.g. '2b1w' or '2 1')", console=console
+            )
             feedback = _parse_feedback(raw)
             if feedback is not None:
                 break
 
-            print("  Invalid. Enter blacks and whites, e.g. '2b1w', '21', or '2 1'.")
+            console.print(
+                "  [red]Invalid. Enter blacks and whites, e.g. '2b1w', '21', or '2 1'.[/red]"
+            )
 
         black = feedback // 10
 
         if black == D:
             session.recordGuess(guess_ind, feedback)
-            print(
-                f"\nPerfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}!"
+            console.print(
+                f"\n[bold green]Perfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
             )
             return
 
@@ -89,22 +107,24 @@ def play():
 
         except jpype.JException as e:
             if "No valid secrets remain" in str(e):
-                print(
-                    "\nNo valid codes match the feedback history — your inputs may be inconsistent."
+                console.print(
+                    "\n[red]No valid codes match the feedback history — your inputs may be inconsistent.[/red]"
                 )
-                print("Please double-check your guesses and feedback, then start over.")
+                console.print(
+                    "Please double-check your guesses and feedback, then start over.\n"
+                )
             else:
                 raise
 
             return
 
         remaining = session.getSolutionSpaceSize()
-        print(
+        console.print(
             f"  ({remaining} possible code{'s' if remaining != 1 else ''} remaining)\n"
         )
 
-    print(
-        "\nOut of turns. The algorithm could not determine the code — try again from the start."
+    console.print(
+        "\n[red]Out of turns. The algorithm could not determine the code — try again from the start.[/red]\n"
     )
 
 
