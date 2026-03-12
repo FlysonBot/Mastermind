@@ -39,6 +39,7 @@ def play():
     console.print("then enter the feedback you received.\n")
 
     session = MastermindSession(c, d)
+    prev_remaining = c**d
 
     for attempt in range(1, max_tries + 1):
         suggestion_ind = int(session.suggestGuess())
@@ -107,8 +108,11 @@ def play():
             return
 
         remaining = session.getSolutionSpaceSize()
+        eliminated = round((1 - remaining / prev_remaining) * 100)
+        prev_remaining = remaining
         console.print(
-            f"  [dim]({remaining} possible code{'s' if remaining != 1 else ''} remaining)[/dim]\n"
+            f"  [dim](eliminated {eliminated}%"
+            f", {remaining} possible code{'s' if remaining != 1 else ''} remaining)[/dim]\n"
         )
 
     console.print(
