@@ -114,14 +114,24 @@ def _compile(javac: Path, jar_tool: Path):
 
     with console.status("Packaging JAR..."):
         subprocess.run(
-            [str(jar_tool), "--create", "--file", str(tmp_jar), "-C", str(_CLASSES), "."],
+            [
+                str(jar_tool),
+                "--create",
+                "--file",
+                str(tmp_jar),
+                "-C",
+                str(_CLASSES),
+                ".",
+            ],
             check=True,
         )
     console.print(f"[green]✓[/green] JAR built. ({time.time() - t:.1f}s)")
 
     _OUT_JAR.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(tmp_jar, _OUT_JAR)
-    console.print(f"[green]✓[/green] JAR copied to [cyan]{_OUT_JAR.relative_to(_ROOT)}[/cyan]")
+    console.print(
+        f"[green]✓[/green] JAR copied to [cyan]{_OUT_JAR.relative_to(_ROOT)}[/cyan]"
+    )
 
 
 # --- JRE build ---
@@ -175,7 +185,9 @@ def _build_platform_jre(platform_name, os_enum, arch_enum, jlink):
     out_zip = _OUT_JRE / f"{platform_name}.zip"
 
     if out_zip.exists():
-        console.print(f"[dim]Skipping {platform_name} — {out_zip.relative_to(_ROOT)} already exists[/dim]")
+        console.print(
+            f"[dim]Skipping {platform_name} — {out_zip.relative_to(_ROOT)} already exists[/dim]"
+        )
         return
 
     console.print(f"\n[bold]Building JRE for {platform_name}[/bold]")
@@ -240,7 +252,9 @@ def _jlink_jre(jlink: Path, target_jdk: Path, out_jre: Path, platform_name: str)
     raw_mb = (
         sum(f.stat().st_size for f in out_jre.rglob("*") if f.is_file()) / 1024 / 1024
     )
-    console.print(f"[green]✓[/green] JRE linked. ({time.time() - t:.1f}s, {raw_mb:.0f} MB uncompressed)")
+    console.print(
+        f"[green]✓[/green] JRE linked. ({time.time() - t:.1f}s, {raw_mb:.0f} MB uncompressed)"
+    )
 
 
 def _compress_jre(jre_dir: Path, out_zip: Path):
@@ -252,7 +266,9 @@ def _compress_jre(jre_dir: Path, out_zip: Path):
                 zf.write(file, file.relative_to(jre_dir))
 
     size_mb = out_zip.stat().st_size / 1024 / 1024
-    console.print(f"[green]✓[/green] Compressed. ({time.time() - t:.1f}s, {size_mb:.1f} MB)")
+    console.print(
+        f"[green]✓[/green] Compressed. ({time.time() - t:.1f}s, {size_mb:.1f} MB)"
+    )
 
 
 # --- JDK download ---
@@ -271,7 +287,9 @@ def _download_jdk(path: Path, os=None, arch=None, label="host"):
     size_mb = (
         sum(f.stat().st_size for f in path.rglob("*") if f.is_file()) / 1024 / 1024
     )
-    console.print(f"[green]✓[/green] {label} JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)")
+    console.print(
+        f"[green]✓[/green] {label} JDK ready. ({time.time() - t:.1f}s, {size_mb:.0f} MB)"
+    )
 
 
 # --- Entry point ---
