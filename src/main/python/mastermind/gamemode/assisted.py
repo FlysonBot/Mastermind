@@ -4,24 +4,20 @@ import jpype
 from mastermind.jvm import MastermindSession
 from mastermind.ui import console, pause
 from mastermind.ui.convert_code import display, parse_code
+from mastermind.ui.prompts import ask_game_settings
 from rich.prompt import Prompt
 from rich.rule import Rule
 
-C = 6
-D = 4
-MAX_TRIES = 10
 
-
-def _parse_feedback(raw: str) -> int | None:
+def _parse_feedback(raw: str, d: int) -> int | None:
     """Parse 'XbYw' or 'X Y' into feedback int (black*10 + white)."""
     raw = raw.strip().lower().replace(" ", "")
-    # Accept formats: "2b1w", "21", "2b1", "2 1"
     m = re.fullmatch(r"(\d)b?(\d)w?", raw)
     if not m:
         return None
 
     black, white = int(m.group(1)), int(m.group(2))
-    if black + white > D or black < 0 or white < 0:
+    if black + white > d or black < 0 or white < 0:
         return None
 
     return black * 10 + white
@@ -30,21 +26,25 @@ def _parse_feedback(raw: str) -> int | None:
 def play():
     console.print()
     console.print(Rule("[bold]Mastermind (Assist)[/bold]"))
-    console.print(Rule(f"[dim]c={C}  d={D}  tries={MAX_TRIES}[/dim]", style="dim"))
     console.print()
+
+    c, d, max_tries = ask_game_settings()
+    console.print(Rule(f"[dim]c={c}  d={d}  tries={max_tries}[/dim]", style="dim"))
+    console.print()
+
     console.print("I'll suggest the best guess each turn.")
     console.print(
         "Enter the guess you actually played (or press Enter to use my suggestion),"
     )
     console.print("then enter the feedback you received.\n")
 
-    session = MastermindSession(C, D)
+    session = MastermindSession(c, d)
 
-    for attempt in range(1, MAX_TRIES + 1):
+    for attempt in range(1, max_tries + 1):
         suggestion_ind = int(session.suggestGuess())
-        suggestion_str = display(suggestion_ind, C, D)
+        suggestion_str = display(suggestion_ind, c, d)
         console.print(
-            f"\n▸ Turn {attempt}/{MAX_TRIES}  —  💡 Suggested guess: [cyan]{suggestion_str}[/cyan]"
+            f"\n▸ Turn {attempt}/{max_tries}  —  💡 Suggested guess: [cyan]{suggestion_str}[/cyan]"
         )
 
         # Ask what guess was actually played
@@ -58,12 +58,12 @@ def play():
                 guess_ind = suggestion_ind
                 break
 
-            guess_ind = parse_code(raw, C, D)
+            guess_ind = parse_code(raw, c, d)
             if guess_ind is not None:
                 break
 
             console.print(
-                f"  [red]! Invalid. Use exactly {D} digits, each between 1 and {C}.[/red]"
+                f"  [red]! Invalid. Use exactly {d} digits, each between 1 and {c}.[/red]"
             )
 
         # Ask for feedback
@@ -71,7 +71,7 @@ def play():
             raw = Prompt.ask(
                 "  Feedback (blacks whites, e.g. '2b1w' or '2 1')", console=console
             )
-            feedback = _parse_feedback(raw)
+            feedback = _parse_feedback(raw, d)
             if feedback is not None:
                 break
 
@@ -81,7 +81,7 @@ def play():
 
         black = feedback // 10
 
-        if black == D:
+        if black == d:
             session.recordGuess(guess_ind, feedback)
             console.print(
                 f"\n[bold green]✓ Perfect! Solved in {attempt} {'tries' if attempt != 1 else 'try'}![/bold green]\n"
