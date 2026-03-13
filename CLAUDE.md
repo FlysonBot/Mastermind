@@ -2,7 +2,7 @@
 
 Mastermind solver using Java algorithms (performance) + Python UI (terminal).
 Goal: Efficiently solve c=9, d=9 cases.
-Status: MVP shipped to PyPI. Now improving the Python UI.
+Status: Feature complete and shippable. Future edits will likely be small improvements.
 
 ### Code Organization
 
@@ -43,7 +43,7 @@ Entry: `main.py` → `java_setup.ensure_ready()` → `welcome.welcome()` (main m
 
 ### Current Focus
 
-- Improve Python UI using rich.
+- No particular focus.
 
 ### Preference
 
