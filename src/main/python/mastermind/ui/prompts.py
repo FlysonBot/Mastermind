@@ -47,7 +47,8 @@ def ask_secret(c: int, d: int, human_follow_up: str, computer_follow_up: str) ->
     if choice == "2":
         while True:
             raw = Prompt.ask(
-                f"Enter your secret code ([cyan]{d} digits, each 1–{c}[/cyan])",
+                f"Enter your secret code ([cyan]{d} digits, each 1–{c}[/cyan], hidden)",
+                password=True,
                 console=console,
             )
             secret_ind = parse_code(raw, c, d)
