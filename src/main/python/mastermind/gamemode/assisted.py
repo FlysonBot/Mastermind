@@ -40,7 +40,9 @@ def play():
     console.print("[dim]Enter 'u' at any prompt to undo.[/dim]\n")
 
     session = MastermindSession(c, d)
-    prev_remaining: list[int] = [c**d]  # index 0 = before turn 1, index i = after turn i
+    prev_remaining: list[int] = [
+        c**d
+    ]  # index 0 = before turn 1, index i = after turn i
     suggestions: dict[int, tuple[int, str]] = {}  # attempt -> (ind, str)
 
     attempt = 1
