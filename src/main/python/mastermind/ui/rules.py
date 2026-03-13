@@ -15,24 +15,24 @@ def show_rules():
                     "\n [red]code-setter[/red] and a [red]code-breaker[/red]."
                     "\n"
                     "\n   ▸ The [red]code-setter[/red] picks a secret code — a sequence of"
-                    "\n     colored pegs (here represented as digits 1–6)."
+                    "\n     colored pegs (here represented as digits)."
                     "\n   ▸ The [red]code-breaker[/red] tries to guess it in as few attempts"
                     "\n     as possible, using feedback after each guess."
                     "\n"
                 ),
                 Rule("[bold]THE CODE[/bold]", style="dim"),
                 (
-                    "\n A code is a sequence of 4 digits, each between 1 and 6."
+                    "\n A code is a sequence of digits, each between 1 and the number of colors."
                     "\n Repetition is allowed."
                     "\n"
-                    "\n   Examples of valid codes:  [cyan]1234   6611   3333   2416[/cyan]"
+                    "\n   Examples of valid codes (c=6, d=4):  [cyan]1234   6611   3333   2416[/cyan]"
                     "\n"
                 ),
                 Rule("[bold]THE GOAL[/bold]", style="dim"),
                 (
                     "\n The [red]code-breaker[/red] wins by guessing the exact secret code"
-                    "\n within 10 tries. If they run out of tries, the [red]code-setter[/red]"
-                    "\n wins and the secret is revealed."
+                    "\n within the allowed number of tries. If they run out, the"
+                    "\n [red]code-setter[/red] wins and the secret is revealed."
                     "\n"
                 ),
                 Rule("[bold]FEEDBACK: BLACKS AND WHITES[/bold]", style="dim"),
@@ -99,14 +99,14 @@ def show_rules():
                     "\n     digits appear in the secret at all — very useful!"
                     "\n   ▸ Use early guesses to test many different digits at once."
                     "\n   ▸ Narrow down positions with follow-up guesses based on the"
-                    "\n     white clues you receive."
+                    "\n     black and white clues you receive."
                     "\n"
                 ),
                 Rule("[bold]WINNING AND LOSING[/bold]", style="dim"),
                 (
-                    "\n   ▸ 4 black, 0 white = perfect guess → [green]you win![/green]"
-                    "\n   ▸ Guess correctly within 10 tries → [red]code-breaker[/red] wins."
-                    "\n   ▸ Fail to guess within 10 tries   → [red]code-setter[/red] wins,"
+                    "\n   ▸ All black, 0 white = perfect guess   → [green]you win![/green]"
+                    "\n   ▸ Guess correctly within the try limit → [red]code-breaker[/red] wins."
+                    "\n   ▸ Fail to guess in time                → [red]code-setter[/red] wins,"
                     "\n     and the secret is revealed."
                     "\n"
                 ),
