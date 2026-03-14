@@ -15,7 +15,7 @@ readme = "README.md"
 # Tags
 keywords = ["mastermind", "game", "puzzle"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Education",
