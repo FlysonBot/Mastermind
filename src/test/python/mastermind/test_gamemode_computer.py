@@ -171,5 +171,5 @@ class TestComputerPlay:
             play()
 
             printed_lines = [str(c) for c in console.print.call_args_list]
-            guess_lines = [l for l in printed_lines if "Guess" in l]
+            guess_lines = [line for line in printed_lines if "Guess" in line]
             assert len(guess_lines) == 2

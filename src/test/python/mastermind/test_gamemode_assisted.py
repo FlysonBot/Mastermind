@@ -96,7 +96,7 @@ class TestAssistedPlay:
             patch(BASE_PATCHES["parse_code"]) as parse_code,
             patch(BASE_PATCHES["display"], return_value="1234"),
             patch(BASE_PATCHES["console"]) as console,
-            patch(BASE_PATCHES["pause"]) as pause,
+            patch(BASE_PATCHES["pause"]),
             patch(BASE_PATCHES["jpype_exc"], _FakeJException),
         ):
             ask_settings.return_value = (6, 4, 10)
@@ -334,7 +334,7 @@ class TestAssistedPlay:
             patch(BASE_PATCHES["parse_code"]),
             patch(BASE_PATCHES["display"], return_value="1234"),
             patch(BASE_PATCHES["console"]) as console,
-            patch(BASE_PATCHES["pause"]) as pause,
+            patch(BASE_PATCHES["pause"]),
             patch(BASE_PATCHES["jpype_exc"], _FakeJException),
         ):
             ask_settings.return_value = (6, 4, 10)
