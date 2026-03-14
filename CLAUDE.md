@@ -7,10 +7,10 @@ Status: Feature complete and shippable. Future edits will likely be small improv
 ### Code Organization
 
 - **Java algorithm**: `./src/main/java/org/mastermind/`
-- **Java tests**: `./src/tests/java/org/mastermind/` (JUnit 5)
+- **Java tests**: `./src/test/java/org/mastermind/` (JUnit 5)
 - **Java benchmarks**: `./src/benchmarks/java/org/mastermind/` (JMH)
 - **Python program**: `./src/main/python/mastermind/` (entry point: `main.py`)
-- **Python tests**: `./src/tests/python/mastermind/` (pytest)
+- **Python tests**: `./src/test/python/mastermind/` (pytest)
 - **Build**: `make build-java` → `target/mastermind-solver.jar`
 
 ### Algorithm Flow

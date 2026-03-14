@@ -43,7 +43,7 @@ where = ["src/main/python"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src/main/python"]
-testpaths = ["src/tests/python"]
+testpaths = ["src/test/python"]
 
 [dependency-groups]
 dev = [
