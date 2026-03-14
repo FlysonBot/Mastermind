@@ -2,15 +2,15 @@
 
 Mastermind solver using Java algorithms (performance) + Python UI (terminal).
 Goal: Efficiently solve c=9, d=9 cases.
-Status: MVP shipped to PyPI. Now improving the Python UI.
+Status: Feature complete and shippable. Future edits will likely be small improvements.
 
 ### Code Organization
 
 - **Java algorithm**: `./src/main/java/org/mastermind/`
-- **Java tests**: `./src/tests/java/org/mastermind/` (JUnit 5)
+- **Java tests**: `./src/test/java/org/mastermind/` (JUnit 5)
 - **Java benchmarks**: `./src/benchmarks/java/org/mastermind/` (JMH)
 - **Python program**: `./src/main/python/mastermind/` (entry point: `main.py`)
-- **Python tests**: `./src/tests/python/mastermind/` (pytest)
+- **Python tests**: `./src/test/python/mastermind/` (pytest)
 - **Build**: `make build-java` → `target/mastermind-solver.jar`
 
 ### Algorithm Flow
@@ -43,7 +43,7 @@ Entry: `main.py` → `java_setup.ensure_ready()` → `welcome.welcome()` (main m
 
 ### Current Focus
 
-- Improve Python UI using rich.
+- No particular focus.
 
 ### Preference
 

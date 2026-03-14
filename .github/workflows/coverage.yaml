@@ -1,0 +1,93 @@
+name: Update Test Coverage
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.12"
+          activate-environment: 'true'
+          enable-cache: true
+
+      - name: Install dependencies
+        run: |
+          uv sync --all-extras
+          uv pip install coverage
+
+      - name: Run Tests with Coverage
+        run: coverage run -m pytest
+
+      - name: Generate XML Coverage
+        run: coverage xml
+
+      - name: Upload Python coverage artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: python-coverage
+          path: coverage.xml
+
+  java:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run Java Tests with Coverage
+        run: mvn test
+
+      - name: Upload Java coverage artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: java-coverage
+          path: target/site/jacoco/jacoco.xml
+
+  upload:
+    runs-on: ubuntu-latest
+    needs: [ python, java ]
+
+    steps:
+      - name: Download Python coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: python-coverage
+
+      - name: Download Java coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: java-coverage
+          path: jacoco
+
+      - name: Upload to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          files: coverage.xml jacoco/jacoco.xml
+          format: cobertura
+
+      - name: Upload Python report to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml
+
+      - name: Upload Java report to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: jacoco/jacoco.xml

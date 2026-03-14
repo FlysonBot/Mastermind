@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mastermind-ai"
-version = "2.1.0b0"
+version = "2.2.0"
 requires-python = ">=3.12"
 authors = [{ name = "FlysonBot" }]
 
@@ -15,7 +15,7 @@ readme = "README.md"
 # Tags
 keywords = ["mastermind", "game", "puzzle"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Education",
@@ -40,6 +40,15 @@ Issues = "https://github.com/FlysonBot/Mastermind/issues"
 
 [tool.setuptools.packages.find]
 where = ["src/main/python"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src/main/python"]
+testpaths = ["src/test/python"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
 
 [tool.setuptools]
 package-data = { mastermind = ["*.jar", "jre/*.zip"] }
