@@ -68,6 +68,13 @@ def _ensure_android():
         )
         sys.exit(1)
 
+    console.print(
+        "[yellow]Note:[/yellow] You're currently running this application on Android. "
+        "openjdk-21 has a known bug on this platform that may cause occasional pointer tag "
+        "crashes. This is not a bug in this application and cannot be fixed. If it happens, "
+        "simply restart the app."
+    )
+
     return None, _BUNDLED_JAR
 
 

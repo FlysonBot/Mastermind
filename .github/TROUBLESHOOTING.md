@@ -62,7 +62,14 @@ If you're installing from Android/Termux, install the following first:
 pkg install x11-repo sdl2 openjdk-21
 ```
 
-## 7. Still having trouble?
+## 7. Pointer tag crash on Android/Termux
+
+If you see an error like `Pointer tag for 0x... was truncated` and the app aborts, this is a
+known bug in openjdk-21 on Android and is not caused by this application. Simply restart the
+app. If it happens frequently, try running `pkg upgrade openjdk-21` to get the latest patched
+version.
+
+## 8. Still having trouble?
 
 Open an issue on [GitHub](https://github.com/FlysonBot/Mastermind/issues) and include the error message and your platform. We'll help you out.
 
