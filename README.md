@@ -14,7 +14,6 @@
 
 **Links:**
 
-- [Documentation](https://flysonbot.github.io/Mastermind/)
 - [Source Code](https://github.com/FlysonBot/Mastermind)
 - [Releases](https://github.com/FlysonBot/Mastermind/releases)
 - [Bug Reports](https://github.com/FlysonBot/Mastermind/issues)
