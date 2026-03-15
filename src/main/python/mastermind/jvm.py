@@ -18,8 +18,13 @@ if jre is None:
 else:
     jvmpath = str(jre / "lib" / "server" / "libjvm.so")
 
+_jvm_flags = ["-Xlog:os+container=off"]
+if jre is None:
+    # Android/Termux: SerialGC avoids pointer-tagging conflicts with MTE on ARM64
+    _jvm_flags.append("-XX:+UseSerialGC")
+
 jpype.startJVM(
-    "-Xlog:os+container=off",
+    *_jvm_flags,
     jvmpath=jvmpath,
     classpath=[str(jar)],
     convertStrings=False,
