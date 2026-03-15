@@ -34,7 +34,6 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/FlysonBot/Mastermind"
-Documentation = "https://flysonbot.github.io/Mastermind/"
 Repository = "https://github.com/FlysonBot/Mastermind"
 Issues = "https://github.com/FlysonBot/Mastermind/issues"
 
