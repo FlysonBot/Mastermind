@@ -1,8 +1,9 @@
 import random
 
+from rich.prompt import IntPrompt, Prompt
+
 from mastermind.ui.console import console
 from mastermind.ui.convert_code import parse_code
-from rich.prompt import IntPrompt, Prompt
 
 
 def ask_game_settings() -> tuple[int, int, int]:
