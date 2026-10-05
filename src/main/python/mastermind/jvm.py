@@ -1,4 +1,5 @@
 import jpype
+
 from mastermind.java_setup import ensure_ready
 
 jre, jar = ensure_ready()

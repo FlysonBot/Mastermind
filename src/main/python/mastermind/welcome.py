@@ -1,8 +1,9 @@
+from rich.prompt import Prompt
+from rich.rule import Rule
+
 from mastermind.gamemode import assisted, computer, human
 from mastermind.ui import console
 from mastermind.ui.rules import show_rules
-from rich.prompt import Prompt
-from rich.rule import Rule
 
 _BANNER_WIDE = """\
 ╔════════════════════════════════════════════════════════════════════════════════════════╗
