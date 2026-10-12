@@ -1,12 +1,13 @@
 import re
 
 import jpype
+from rich.prompt import IntPrompt, Prompt
+from rich.rule import Rule
+
 from mastermind.jvm import MastermindSession
 from mastermind.ui import console, pause
 from mastermind.ui.convert_code import display, parse_code
 from mastermind.ui.prompts import ask_game_settings
-from rich.prompt import IntPrompt, Prompt
-from rich.rule import Rule
 
 
 def _parse_feedback(raw: str, d: int) -> int | None:
