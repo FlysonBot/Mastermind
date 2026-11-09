@@ -1,9 +1,10 @@
 from jpype.types import JInt
+from rich.rule import Rule
+
 from mastermind.jvm import Feedback, MastermindSession
 from mastermind.ui import console, pause
 from mastermind.ui.convert_code import display
 from mastermind.ui.prompts import ask_game_settings, ask_secret
-from rich.rule import Rule
 
 
 def play():
